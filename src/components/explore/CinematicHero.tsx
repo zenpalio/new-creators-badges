@@ -191,12 +191,13 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
         if (!isActive) return null;
         return (
         <div
-          key={s.name + i}
-          className="absolute inset-0"
+          key={s.name + i + "-" + active}
+          className="absolute inset-0 hero-slide-enter"
           style={{
             transform: dragX ? `translate3d(${dragX}px,0,0)` : undefined,
             transition: dragging ? "none" : "transform 300ms ease-out",
             willChange: dragging ? "transform" : undefined,
+            ["--hero-dir" as any]: dir === 1 ? "1" : "-1",
           }}
           aria-hidden={!isActive}
         >
