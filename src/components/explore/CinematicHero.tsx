@@ -101,6 +101,14 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
   const [width, setWidth] = useState(0);
   const activeRef = useRef(active);
   useEffect(() => { activeRef.current = active; }, [active]);
+  useEffect(() => {
+    const onResize = () => {
+      const el = sectionRef.current;
+      if (el) { widthRef.current = el.clientWidth; setWidth(el.clientWidth); }
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   const resetGesture = () => {
     startX.current = null;
