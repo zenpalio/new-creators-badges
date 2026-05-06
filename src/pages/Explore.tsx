@@ -751,7 +751,7 @@ const Explore = () => {
 
           {/* Your babes */}
           <section>
-            <SectionTitle icon={Heart} title="Your babes are waiting" action="See all" />
+            <SectionTitle title="Your babes are waiting" action="See all" />
             <TagRow tags={babeCategories} />
             <HScroll>
               {yourBabes.map((b, i) => (
@@ -762,7 +762,7 @@ const Explore = () => {
 
           {/* Featured stories */}
           <section className="mt-4">
-            <SectionTitle icon={BookOpen} title="Featured stories" action="See all" />
+            <SectionTitle title="Featured stories" action="See all" />
             <HScroll>
               {featuredStories.map((s) => (
                 <StoryContentCard key={s.id} {...s} />
@@ -805,7 +805,7 @@ const Explore = () => {
 
 
           <section className="mt-4">
-            <SectionTitle icon={Video} title="Top trending videos" action="See all" />
+            <SectionTitle title="Top trending videos" action="See all" />
             <TagRow tags={videoCategories} />
             <HScroll>
               {trendingVideos.map((v) => (
@@ -836,7 +836,7 @@ const Explore = () => {
 
           {/* Top creators */}
           <section className="mt-4">
-            <SectionTitle icon={Crown} title="Top creators" action="See all" />
+            <SectionTitle title="Top creators" action="See all" />
             <HScroll>
               {topCreators.map((c) => (
                 <CreatorRankCard
@@ -853,7 +853,7 @@ const Explore = () => {
 
           {/* Your following */}
           <section className="mt-4">
-            <SectionTitle icon={UserCircle2} title="Your following" action="See all" />
+            <SectionTitle title="Your following" action="See all" />
             <TagRow tags={followingUsernames} />
             <HScroll>
               {yourFollowing.map((b, i) => (
@@ -869,7 +869,7 @@ const Explore = () => {
 
           {/* Trending this week */}
           <section className="mt-4">
-            <SectionTitle icon={Flame} title="Check out this week trending babes" action="See all" />
+            <SectionTitle title="Check out this week trending babes" action="See all" />
             <TagRow tags={trendingTags} />
             <HScroll>
               {trendingBabes.map((b, i) => (
@@ -885,7 +885,7 @@ const Explore = () => {
 
           {/* New story episodes */}
           <section className="mt-4">
-            <SectionTitle icon={BookOpen} title="New story episodes" action="See all" />
+            <SectionTitle title="New story episodes" action="See all" />
             <HScroll>
               {newEpisodes.map((s) => (
                 <StoryContentCard key={s.id} {...s} />
@@ -895,7 +895,7 @@ const Explore = () => {
 
           {/* Rising creators */}
           <section className="mt-4">
-            <SectionTitle icon={TrendingUp} title="Rising creators this week" action="See all" />
+            <SectionTitle title="Rising creators this week" action="See all" />
             <HScroll>
               {risingCreators.map((c) => (
                 <CreatorRankCard
@@ -912,7 +912,7 @@ const Explore = () => {
 
           {/* What's new — news row */}
           <section className="mt-4">
-            <SectionTitle icon={Newspaper} title="What's new" action="See all" />
+            <SectionTitle title="What's new" action="See all" />
             <HScroll>
               {whatsNewItems.map((n, i) => {
                 const newsCard = (
@@ -973,7 +973,7 @@ const Explore = () => {
 
           {/* New releases */}
           <section className="mt-4">
-            <SectionTitle icon={ImageIcon} title="New releases" action="See all" />
+            <SectionTitle title="New releases" action="See all" />
             <TagRow tags={newReleaseTags} />
             <HScroll>
               {newBabes.map((b, i) => (
@@ -990,7 +990,7 @@ const Explore = () => {
           {/* Start creating */}
 
           <section className="mt-4">
-            <SectionTitle icon={Sparkles} title="Start creating" />
+            <SectionTitle title="Start creating" />
             {(() => {
               const cardClass =
                 "group relative flex w-full shrink-0 flex-col gap-2.5 overflow-hidden rounded-2xl border border-white/5 bg-grey-dark-1 p-4 text-left transition-all hover:-translate-y-0.5 hover:border-white/10";
