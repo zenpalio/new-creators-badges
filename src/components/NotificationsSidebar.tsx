@@ -160,13 +160,21 @@ const NotificationsSidebar = ({ open, onClose, notifications, announcements }: N
             </button>
             <button
               onClick={() => setTab("whats-new")}
-              className={`rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
+              className={`relative rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
                 tab === "whats-new"
                   ? "bg-muted text-foreground"
                   : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
               }`}
             >
-              What's new?
+              <span className="inline-flex items-center gap-1.5">
+                What's new?
+                {announcements.length > 0 && tab !== "whats-new" && (
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-70" />
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+                  </span>
+                )}
+              </span>
             </button>
           </div>
 
