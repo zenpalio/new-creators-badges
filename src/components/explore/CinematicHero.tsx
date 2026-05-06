@@ -89,16 +89,22 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
   const go = (i: number) => setActive((i + slides.length) % slides.length);
   const slide = slides[active];
 
-  // Mobile swipe: touch-only, no drag-follow state, and no scroll blocking.
+  // Mobile swipe: touch-only with a slight follow effect.
   const sectionRef = useRef<HTMLElement | null>(null);
   const touchStart = useRef<{ x: number; y: number; at: number } | null>(null);
   const touchLast = useRef<{ x: number; y: number } | null>(null);
+  const lockedHorizontal = useRef(false);
   const activeRef = useRef(active);
+  const [dragX, setDragX] = useState(0);
+  const [dragging, setDragging] = useState(false);
   useEffect(() => { activeRef.current = active; }, [active]);
 
   const clearTouch = () => {
     touchStart.current = null;
     touchLast.current = null;
+    lockedHorizontal.current = false;
+    setDragX(0);
+    setDragging(false);
     setPaused(false);
   };
 
@@ -107,6 +113,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
     const touch = event.touches[0];
     touchStart.current = { x: touch.clientX, y: touch.clientY, at: Date.now() };
     touchLast.current = { x: touch.clientX, y: touch.clientY };
+    lockedHorizontal.current = false;
     setPaused(true);
   };
 
@@ -118,9 +125,21 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
     const dy = touch.clientY - start.y;
     touchLast.current = { x: touch.clientX, y: touch.clientY };
 
-    // If the gesture is vertical, release it immediately so normal page scroll wins.
-    if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx) * 1.15) {
-      clearTouch();
+    if (!lockedHorizontal.current) {
+      if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx) * 1.15) {
+        clearTouch();
+        return;
+      }
+      if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+        lockedHorizontal.current = true;
+        setDragging(true);
+      }
+    }
+
+    if (lockedHorizontal.current) {
+      // Slight follow with rubber-band damping
+      const damped = Math.sign(dx) * Math.min(Math.abs(dx) * 0.5, 80);
+      setDragX(damped);
     }
   };
 
@@ -166,6 +185,11 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
         <div
           key={s.name + i}
           className="absolute inset-0"
+          style={{
+            transform: dragX ? `translate3d(${dragX}px,0,0)` : undefined,
+            transition: dragging ? "none" : "transform 300ms ease-out",
+            willChange: dragging ? "transform" : undefined,
+          }}
           aria-hidden={!isActive}
         >
           {(() => {
