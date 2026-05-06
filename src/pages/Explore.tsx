@@ -1,4 +1,4 @@
-import { Bell, Sparkles, Video, Image as ImageIcon, ArrowUpRight, Play, ChevronRight, Menu, X, Compass, Users, Heart, Settings, LogOut, BookOpen, Crown, Newspaper, Coins } from "lucide-react";
+import { Bell, Sparkles, Video, Image as ImageIcon, ArrowUpRight, Play, ChevronRight, Menu, X, Compass, Users, Heart, Settings, LogOut, BookOpen, Crown, Newspaper, Coins, UserCircle2, TrendingUp, Flame, type LucideIcon } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import BabeCard from "@/components/explore/BabeCard";
 import HScroll from "@/components/explore/HScroll";
@@ -586,9 +586,20 @@ const mockNotifications = [
 
 
 // ---- Section header ----
-const SectionTitle = ({ title, action }: { title: string; action?: string }) => (
+const SectionTitle = ({
+  title,
+  action,
+  icon: Icon,
+}: {
+  title: string;
+  action?: string;
+  icon?: LucideIcon;
+}) => (
   <div className="mb-3 flex items-end justify-between">
-    <h2 className="text-xl font-bold leading-tight text-white">{title}</h2>
+    <h2 className="flex items-center gap-2 text-xl font-bold leading-tight text-white">
+      {Icon && <Icon className="h-5 w-5 text-grey-light-3" strokeWidth={1.75} />}
+      {title}
+    </h2>
     {action && (
       <button className="flex items-center gap-1 text-xs font-medium text-grey-light-3 hover:text-white transition-colors">
         {action}
@@ -708,7 +719,7 @@ const Explore = () => {
 
           {/* Your babes */}
           <section>
-            <SectionTitle title="Your babes are waiting" action="See all" />
+            <SectionTitle icon={Heart} title="Your babes are waiting" action="See all" />
             <TagRow tags={babeCategories} />
             <HScroll>
               {yourBabes.map((b, i) => (
@@ -719,7 +730,7 @@ const Explore = () => {
 
           {/* Featured stories */}
           <section className="mt-4">
-            <SectionTitle title="Featured stories" action="See all" />
+            <SectionTitle icon={BookOpen} title="Featured stories" action="See all" />
             <HScroll>
               {featuredStories.map((s) => (
                 <StoryContentCard key={s.id} {...s} />
@@ -762,7 +773,7 @@ const Explore = () => {
 
 
           <section className="mt-4">
-            <SectionTitle title="Top trending videos" action="See all" />
+            <SectionTitle icon={Video} title="Top trending videos" action="See all" />
             <TagRow tags={videoCategories} />
             <HScroll>
               {trendingVideos.map((v) => (
@@ -793,7 +804,7 @@ const Explore = () => {
 
           {/* Top creators */}
           <section className="mt-4">
-            <SectionTitle title="Top creators" action="See all" />
+            <SectionTitle icon={Crown} title="Top creators" action="See all" />
             <HScroll>
               {topCreators.map((c) => (
                 <CreatorRankCard
@@ -810,7 +821,7 @@ const Explore = () => {
 
           {/* Your following */}
           <section className="mt-4">
-            <SectionTitle title="Your following" action="See all" />
+            <SectionTitle icon={UserCircle2} title="Your following" action="See all" />
             <TagRow tags={followingUsernames} />
             <HScroll>
               {yourFollowing.map((b, i) => (
@@ -826,7 +837,7 @@ const Explore = () => {
 
           {/* Trending this week */}
           <section className="mt-4">
-            <SectionTitle title="Check out this week trending babes" action="See all" />
+            <SectionTitle icon={Flame} title="Check out this week trending babes" action="See all" />
             <TagRow tags={trendingTags} />
             <HScroll>
               {trendingBabes.map((b, i) => (
@@ -842,7 +853,7 @@ const Explore = () => {
 
           {/* New story episodes */}
           <section className="mt-4">
-            <SectionTitle title="New story episodes" action="See all" />
+            <SectionTitle icon={BookOpen} title="New story episodes" action="See all" />
             <HScroll>
               {newEpisodes.map((s) => (
                 <StoryContentCard key={s.id} {...s} />
@@ -852,7 +863,7 @@ const Explore = () => {
 
           {/* Rising creators */}
           <section className="mt-4">
-            <SectionTitle title="Rising creators this week" action="See all" />
+            <SectionTitle icon={TrendingUp} title="Rising creators this week" action="See all" />
             <HScroll>
               {risingCreators.map((c) => (
                 <CreatorRankCard
@@ -869,7 +880,7 @@ const Explore = () => {
 
           {/* What's new — news row */}
           <section className="mt-4">
-            <SectionTitle title="What's new" action="See all" />
+            <SectionTitle icon={Newspaper} title="What's new" action="See all" />
             <HScroll>
               {whatsNewItems.map((n, i) => {
                 const newsCard = (
@@ -930,7 +941,7 @@ const Explore = () => {
 
           {/* New releases */}
           <section className="mt-4">
-            <SectionTitle title="New releases" action="See all" />
+            <SectionTitle icon={ImageIcon} title="New releases" action="See all" />
             <TagRow tags={newReleaseTags} />
             <HScroll>
               {newBabes.map((b, i) => (
@@ -947,7 +958,7 @@ const Explore = () => {
           {/* Start creating */}
 
           <section className="mt-4">
-            <SectionTitle title="Start creating" />
+            <SectionTitle icon={Sparkles} title="Start creating" />
             {(() => {
               const cardClass =
                 "group relative flex w-full shrink-0 flex-col gap-2.5 overflow-hidden rounded-2xl border border-white/5 bg-grey-dark-1 p-4 text-left transition-all hover:-translate-y-0.5 hover:border-white/10";
