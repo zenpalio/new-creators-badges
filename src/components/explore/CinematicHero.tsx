@@ -47,8 +47,6 @@ interface Props {
 const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Props) => {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
-  const startRef = useRef<number>(performance.now());
-  const [progress, setProgress] = useState(0);
 
   // Build a normalized media list per slide (always at least the imageUrl)
   const slideMedia = useMemo<HeroMedia[][]>(
@@ -79,31 +77,19 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
     return () => window.clearInterval(id);
   }, [active, paused, slideMedia, mediaIntervalMs]);
 
-  // Auto-rotate slides with progress
+  // Auto-rotate slides. Progress is CSS-driven so the hero doesn't re-render every frame.
   useEffect(() => {
-    if (paused) return;
-    startRef.current = performance.now();
-    setProgress(0);
-    let raf = 0;
-    const tick = (t: number) => {
-      const p = Math.min(1, (t - startRef.current) / intervalMs);
-      setProgress(p);
-      if (p >= 1) {
-        setActive((a) => (a + 1) % slides.length);
-      } else {
-        raf = requestAnimationFrame(tick);
-      }
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    if (paused || slides.length <= 1) return;
+    const id = window.setTimeout(() => {
+      setActive((a) => (a + 1) % slides.length);
+    }, intervalMs);
+    return () => window.clearTimeout(id);
   }, [active, paused, intervalMs, slides.length]);
 
   const go = (i: number) => setActive((i + slides.length) % slides.length);
   const slide = slides[active];
 
-  // Pointer-based swipe (mobile) — live drag with snap on release.
-  // Uses native non-passive touchmove so we can preventDefault once the
-  // gesture is clearly horizontal (prevents fighting page scroll).
+  // Pointer-based swipe — only takes over after a very clear horizontal gesture.
   const sectionRef = useRef<HTMLElement | null>(null);
   const startX = useRef<number | null>(null);
   const startY = useRef<number | null>(null);
@@ -115,14 +101,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
   const activeRef = useRef(active);
   useEffect(() => { activeRef.current = active; }, [active]);
 
-  const endGesture = (commitDx: number | null) => {
-    const w = widthRef.current || 1;
-    if (commitDx != null && lockedAxis.current === "x") {
-      const ratio = Math.abs(commitDx) / w;
-      if (ratio > 0.12 || Math.abs(commitDx) > 50) {
-        go(activeRef.current + (commitDx < 0 ? 1 : -1));
-      }
-    }
+  const resetGesture = () => {
     startX.current = null;
     startY.current = null;
     lockedAxis.current = null;
@@ -130,6 +109,17 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
     setIsDragging(0);
     setDragX(0);
     setPaused(false);
+  };
+
+  const endGesture = (commitDx: number | null) => {
+    const w = widthRef.current || 1;
+    if (commitDx != null && lockedAxis.current === "x") {
+      const ratio = Math.abs(commitDx) / w;
+      if (ratio > 0.18 || Math.abs(commitDx) > 72) {
+        go(activeRef.current + (commitDx < 0 ? 1 : -1));
+      }
+    }
+    resetGesture();
   };
 
   useEffect(() => {
@@ -142,7 +132,6 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
       lockedAxis.current = null;
       activePointerId.current = pointerId;
       widthRef.current = el.clientWidth || 1;
-      setPaused(true);
     };
 
     const onMove = (clientX: number, clientY: number, e: Event) => {
@@ -154,10 +143,13 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
         const ay = Math.abs(dy);
         // Require a clear horizontal intent before locking — bias toward
         // letting the page scroll vertically.
-        if (ax > 10 && ax > ay * 1.3) {
+        if (ax > 18 && ax > ay * 1.7) {
           lockedAxis.current = "x";
-        } else if (ay > 10 && ay > ax) {
+          setPaused(true);
+        } else if (ay > 8 && ay > ax * 0.7) {
           lockedAxis.current = "y";
+          resetGesture();
+          return;
         }
       }
       if (lockedAxis.current === "x") {
@@ -168,54 +160,26 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
       }
     };
 
-    const onTouchStart = (e: TouchEvent) => {
-      const t = e.touches[0];
-      onStart(t.clientX, t.clientY, null);
-    };
-    const onTouchMove = (e: TouchEvent) => {
-      const t = e.touches[0];
-      onMove(t.clientX, t.clientY, e);
-    };
-    const onTouchEnd = (e: TouchEvent) => {
-      if (startX.current == null) return endGesture(null);
-      const t = e.changedTouches[0];
-      const dx = t.clientX - startX.current;
-      endGesture(dx);
-    };
-    const onTouchCancel = () => endGesture(null);
-
-    // Pointer events for mouse / pen — touch is handled above.
     const onPointerDown = (e: PointerEvent) => {
-      if (e.pointerType === "touch") return;
-      if (e.button !== 0) return;
+      if (e.pointerType === "mouse" && e.button !== 0) return;
       onStart(e.clientX, e.clientY, e.pointerId);
     };
     const onPointerMove = (e: PointerEvent) => {
-      if (e.pointerType === "touch") return;
       if (activePointerId.current !== e.pointerId) return;
       onMove(e.clientX, e.clientY, e);
     };
     const onPointerUp = (e: PointerEvent) => {
-      if (e.pointerType === "touch") return;
       if (activePointerId.current !== e.pointerId) return;
       const dx = startX.current == null ? 0 : e.clientX - startX.current;
       endGesture(startX.current == null ? null : dx);
     };
 
-    el.addEventListener("touchstart", onTouchStart, { passive: true });
-    el.addEventListener("touchmove", onTouchMove, { passive: false });
-    el.addEventListener("touchend", onTouchEnd, { passive: true });
-    el.addEventListener("touchcancel", onTouchCancel, { passive: true });
     el.addEventListener("pointerdown", onPointerDown);
     window.addEventListener("pointermove", onPointerMove);
     window.addEventListener("pointerup", onPointerUp);
     window.addEventListener("pointercancel", onPointerUp);
 
     return () => {
-      el.removeEventListener("touchstart", onTouchStart);
-      el.removeEventListener("touchmove", onTouchMove);
-      el.removeEventListener("touchend", onTouchEnd);
-      el.removeEventListener("touchcancel", onTouchCancel);
       el.removeEventListener("pointerdown", onPointerDown);
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
@@ -859,14 +823,11 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
           >
             <span className={`block h-1 overflow-hidden rounded-full bg-white/25 transition-all w-full`}>
               <span
-                className="block h-full bg-white transition-[width] duration-150 ease-linear"
+                className={`block h-full origin-left bg-white ${i === active ? "hero-progress-fill" : ""}`}
                 style={{
-                  width:
-                    i < active
-                      ? "100%"
-                      : i === active
-                      ? `${progress * 100}%`
-                      : "0%",
+                  width: i <= active ? "100%" : "0%",
+                  animationDuration: i === active ? `${intervalMs}ms` : undefined,
+                  animationPlayState: paused ? "paused" : "running",
                 }}
               />
             </span>
