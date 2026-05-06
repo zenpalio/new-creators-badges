@@ -578,9 +578,9 @@ const announcements = whatsNewItems
   }));
 
 const mockNotifications = [
-  { id: "n1", actor: "energetic_lion_0991", initials: "EN", action: "liked video of", target: "Mia" },
-  { id: "n2", actor: "calm_beaver_6740", initials: "CA", action: "liked video of", target: "Ellie – The Reclusive Stepsister" },
-  { id: "n3", actor: "amiable_leopard_8696", initials: "AM", action: "liked", target: "Nyx", thumbnail: "https://picsum.photos/seed/nyx/80" },
+  { id: "n1", actor: "energetic_lion_0991", initials: "EN", action: "liked video of", target: "Mia", unread: true },
+  { id: "n2", actor: "calm_beaver_6740", initials: "CA", action: "liked video of", target: "Ellie – The Reclusive Stepsister", unread: true },
+  { id: "n3", actor: "amiable_leopard_8696", initials: "AM", action: "liked", target: "Nyx", thumbnail: "https://picsum.photos/seed/nyx/80", unread: true },
   { id: "n4", actor: "cheerful_ibis_4482", initials: "CH", action: "liked video of", target: "Ella" },
   { id: "n5", actor: "charming_capybara_7956", initials: "CH", action: "liked", target: "Hikari" },
   { id: "n6", actor: "Sandwiches", initials: "SA", action: "liked video of", target: "Elipses..." },
