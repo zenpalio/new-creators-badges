@@ -437,7 +437,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
             <div className="hidden items-center gap-4 text-xs text-white/70 md:flex">
               {slide.meta.messages && (
                 <span className="flex items-center gap-1.5">
-                  <MessageSquare className="h-3.5 w-3.5" />
+                  <ChatIcon className="h-3.5 w-3.5" />
                   {slide.meta.messages} chats
                 </span>
               )}

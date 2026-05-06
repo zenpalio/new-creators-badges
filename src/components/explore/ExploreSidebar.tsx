@@ -90,7 +90,7 @@ const ExploreSidebar = () => {
 
         {/* Latest conversations */}
         <div className="mt-5 flex items-center gap-2 px-2 text-[13px] font-medium text-grey-light-4">
-          <MessageSquare className="h-4 w-4" />
+          <ChatIcon className="h-4 w-4" />
           Latest conversations
         </div>
         <div className="mt-2 flex flex-col gap-[2px]">
