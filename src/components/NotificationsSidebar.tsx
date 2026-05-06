@@ -35,11 +35,12 @@ export type Notification = {
 interface NotificationsSidebarProps {
   open: boolean;
   onClose: () => void;
+  onReopen?: () => void;
   notifications: Notification[];
   announcements: Announcement[];
 }
 
-const NotificationsSidebar = ({ open, onClose, notifications, announcements }: NotificationsSidebarProps) => {
+const NotificationsSidebar = ({ open, onClose, onReopen, notifications, announcements }: NotificationsSidebarProps) => {
   const [tab, setTab] = useState<"notifications" | "whats-new">("notifications");
   const [openAnnouncement, setOpenAnnouncement] = useState<Announcement | null>(null);
   const [readIds, setReadIds] = useState<Set<string>>(new Set());
@@ -138,7 +139,10 @@ const NotificationsSidebar = ({ open, onClose, notifications, announcements }: N
                 {announcements.map((a) => (
                   <li key={a.id}>
                     <button
-                      onClick={() => setOpenAnnouncement(a)}
+                      onClick={() => {
+                        setOpenAnnouncement(a);
+                        onClose();
+                      }}
                       className="flex w-full flex-col gap-1 border-b border-border/30 px-5 py-3.5 text-left transition-colors hover:bg-muted/30"
                     >
                       <div className="flex items-center gap-2 text-[10px] font-medium">
@@ -204,7 +208,12 @@ const NotificationsSidebar = ({ open, onClose, notifications, announcements }: N
       <AnnouncementDialog
         announcement={openAnnouncement}
         open={!!openAnnouncement}
-        onOpenChange={(o) => !o && setOpenAnnouncement(null)}
+        onOpenChange={(o) => {
+          if (!o) {
+            setOpenAnnouncement(null);
+            onReopen?.();
+          }
+        }}
       />
     </>
   );
