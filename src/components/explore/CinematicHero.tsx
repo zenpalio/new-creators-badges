@@ -121,13 +121,13 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
     const dx = e.touches[0].clientX - touchStartX.current;
     const dy = e.touches[0].clientY - touchStartY.current;
     if (lockedAxis.current == null) {
-      if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
+      if (Math.abs(dx) > 6 || Math.abs(dy) > 6) {
         lockedAxis.current = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
       }
     }
     if (lockedAxis.current === "x") {
       setIsDragging(1);
-      // resistance at edges
+      // Add resistance — slide follows finger 1:1, but feels snappier on release
       setDragX(dx);
     }
   };
@@ -143,7 +143,8 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
     touchStartY.current = null;
     setIsDragging(0);
     setDragX(0);
-    if (lockedAxis.current === "x" && (ratio > 0.18 || Math.abs(dx) > 80)) {
+    // Lower threshold: 12% width or 50px is enough to advance
+    if (lockedAxis.current === "x" && (ratio > 0.12 || Math.abs(dx) > 50)) {
       go(active + (dx < 0 ? 1 : -1));
     }
     lockedAxis.current = null;
@@ -152,6 +153,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
 
   return (
     <section
+      ref={(el) => { if (el) widthRef.current = el.clientWidth; }}
       className="relative w-full shrink-0 overflow-hidden touch-pan-y"
       style={{ height: "clamp(520px, 78vh, 760px)" }}
       onMouseEnter={() => setPaused(true)}
@@ -163,18 +165,33 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
       aria-roledescription="carousel"
     >
       {/* Layered backdrops — crossfade */}
-      {slides.map((s, i) => (
+      {slides.map((s, i) => {
+        const w = widthRef.current || 1;
+        const prevIdx = (active - 1 + slides.length) % slides.length;
+        const nextIdx = (active + 1) % slides.length;
+        const isActive = i === active;
+        const isPrev = i === prevIdx;
+        const isNext = i === nextIdx;
+        let style: React.CSSProperties | undefined;
+        let opacity = isActive ? 1 : 0;
+        if (isDragging) {
+          if (isActive) {
+            style = { transform: `translate3d(${dragX}px,0,0)` };
+            opacity = 1;
+          } else if (isPrev && dragX > 0) {
+            style = { transform: `translate3d(${dragX - w}px,0,0)` };
+            opacity = Math.min(1, dragX / w);
+          } else if (isNext && dragX < 0) {
+            style = { transform: `translate3d(${dragX + w}px,0,0)` };
+            opacity = Math.min(1, -dragX / w);
+          }
+        }
+        return (
         <div
           key={s.name + i}
-          className={`absolute inset-0 ${isDragging ? "" : "transition-all duration-1000 ease-out"} ${
-            i === active ? "opacity-100" : "opacity-0"
-          }`}
-          style={
-            i === active && isDragging
-              ? { transform: `translate3d(${dragX}px,0,0)` }
-              : undefined
-          }
-          aria-hidden={i !== active}
+          className={`absolute inset-0 ${isDragging ? "" : "transition-all duration-1000 ease-out"}`}
+          style={{ ...style, opacity }}
+          aria-hidden={!isActive}
         >
           {(() => {
             const list = slideMedia[i];
@@ -636,7 +653,8 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
             }}
           />
         </div>
-      ))}
+        );
+      })}
 
       {/* Content */}
       <div
@@ -760,25 +778,29 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
       </button>
 
       {/* Progress indicators */}
-      <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">
+      <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1.5 md:gap-2">
         {slides.map((_, i) => (
           <button
             key={i}
             onClick={() => go(i)}
-            className="group h-1 w-10 overflow-hidden rounded-full bg-white/20"
+            className={`group relative flex items-center justify-center transition-all ${
+              i === active ? "w-10" : "w-2"
+            } h-6 md:h-4 md:w-10`}
             aria-label={`Go to slide ${i + 1}`}
           >
-            <span
-              className="block h-full bg-white transition-[width] duration-150 ease-linear"
-              style={{
-                width:
-                  i < active
-                    ? "100%"
-                    : i === active
-                    ? `${progress * 100}%`
-                    : "0%",
-              }}
-            />
+            <span className={`block h-1 overflow-hidden rounded-full bg-white/25 transition-all w-full`}>
+              <span
+                className="block h-full bg-white transition-[width] duration-150 ease-linear"
+                style={{
+                  width:
+                    i < active
+                      ? "100%"
+                      : i === active
+                      ? `${progress * 100}%`
+                      : "0%",
+                }}
+              />
+            </span>
           </button>
         ))}
       </div>
