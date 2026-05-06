@@ -831,6 +831,7 @@ const Explore = () => {
                       loading="lazy"
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/70 to-transparent" />
                     <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 transition-opacity group-hover:opacity-100">
                       <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 backdrop-blur">
                         <Play className="h-5 w-5 fill-black text-black" />
