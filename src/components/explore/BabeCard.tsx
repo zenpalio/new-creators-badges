@@ -1,5 +1,5 @@
-import { MessageSquare } from "lucide-react";
 import LikeButton from "./LikeButton";
+import ChatIcon from "@/components/icons/ChatIcon";
 
 interface BabeCardProps {
   name: string;
