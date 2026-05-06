@@ -668,7 +668,14 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
       <div
         className="relative z-10 mx-auto flex h-full max-w-[1600px] items-end px-6 pb-20 md:items-center md:pb-0"
       >
-        <div key={slide.name} className="max-w-xl animate-fade-in space-y-4">
+        <div
+          key={slide.name}
+          className={`max-w-xl animate-fade-in space-y-4 ${
+            slide.layout === "story" || slide.layout === "creators" || slide.layout === "premium"
+              ? "hidden md:block"
+              : ""
+          }`}
+        >
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-white/80 backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
             {slide.badge ?? "Featured today"}
