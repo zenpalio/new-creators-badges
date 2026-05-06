@@ -191,7 +191,14 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
 
   return (
     <section
-      ref={(el) => { sectionRef.current = el; if (el) widthRef.current = el.clientWidth; }}
+      ref={(el) => {
+        sectionRef.current = el;
+        if (el) {
+          const cw = el.clientWidth;
+          widthRef.current = cw;
+          if (cw && cw !== width) setWidth(cw);
+        }
+      }}
       className="relative w-full shrink-0 overflow-hidden touch-pan-y select-none"
       style={{ height: "clamp(520px, 78vh, 760px)" }}
       onMouseEnter={() => setPaused(true)}
@@ -200,7 +207,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
     >
       {/* Layered backdrops — slide horizontally, no crossfade */}
       {slides.map((s, i) => {
-        const w = widthRef.current || 1;
+        const w = width || widthRef.current || 1;
         const prevIdx = (active - 1 + slides.length) % slides.length;
         const nextIdx = (active + 1) % slides.length;
         const isActive = i === active;
