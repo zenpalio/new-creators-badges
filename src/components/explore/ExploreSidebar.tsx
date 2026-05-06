@@ -9,6 +9,7 @@ import {
   ChevronLeft,
   Coins,
 } from "lucide-react";
+import ChatIcon from "@/components/icons/ChatIcon";
 
 const navTop = [
   { label: "Home", href: "/", icon: Home, exact: true },
