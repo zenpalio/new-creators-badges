@@ -609,7 +609,7 @@ const SectionTitle = ({
   action?: string;
   icon?: LucideIcon;
 }) => {
-  const [active, setActive] = React.useState(false);
+  const [active, setActive] = useState(false);
   const iconName = (Icon as any)?.displayName || (Icon as any)?.render?.displayName || "";
   const activeStyle = iconActiveStyles[iconName] || { color: "text-primary", fill: true };
   return (
