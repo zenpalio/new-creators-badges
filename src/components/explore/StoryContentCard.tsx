@@ -24,6 +24,7 @@ const StoryContentCard = ({
   totalScenes = 0,
   avgRating = 0,
   ratingCount = 0,
+  likes,
   onClick,
 }: StoryContentCardProps) => {
   return (
