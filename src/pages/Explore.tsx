@@ -302,6 +302,44 @@ const heroSlides: HeroSlide[] = [
       { rank: 3, name: "DarkFantasy", avatarUrl: "https://picsum.photos/seed/creator-darkfantasy/400/600", subtitle: "Grandmaster · 740K fans" },
     ],
   },
+  {
+    name: "Unlock Premium",
+    tagline: "Faster, hotter, unlimited",
+    description: "Skip the queue, get unlimited messages, exclusive babes, and pro-grade scene tools. Cancel anytime.",
+    imageUrl: "https://picsum.photos/seed/premium-bg/1200/800",
+    badge: "Limited offer",
+    cta: "Get Premium",
+    layout: "premium",
+    accent: "hsl(45 90% 55%)",
+    premiumPlan: {
+      price: "$9.99",
+      period: "mo",
+      perks: [
+        "Unlimited messages with every babe",
+        "Early access to new characters & stories",
+        "HD video generation, no watermarks",
+        "Priority queue + 2× faster image gen",
+      ],
+    },
+  },
+  {
+    name: "Scene Builder",
+    tagline: "Direct your own cinematic moments",
+    description: "Drop in characters, set the mood, and let our new Scene Builder render full multi-shot scenes in seconds.",
+    imageUrl: "https://picsum.photos/seed/feature-bg/1200/800",
+    badge: "Just shipped",
+    cta: "Try Scene Builder",
+    layout: "feature",
+    accent: "hsl(213 100% 55%)",
+    featureMeta: {
+      eyebrow: "New feature",
+      bullets: [
+        "Multi-character scenes with consistent looks",
+        "Pose, lighting & mood presets",
+        "Export as a 6-shot reel or single keyframe",
+      ],
+    },
+  },
 ];
 
 
