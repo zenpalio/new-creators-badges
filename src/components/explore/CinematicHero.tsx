@@ -226,15 +226,11 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
 
   return (
     <section
-      ref={(el) => { if (el) widthRef.current = el.clientWidth; }}
-      className="relative w-full shrink-0 overflow-hidden touch-pan-y"
+      ref={(el) => { sectionRef.current = el; if (el) widthRef.current = el.clientWidth; }}
+      className="relative w-full shrink-0 overflow-hidden touch-pan-y select-none"
       style={{ height: "clamp(520px, 78vh, 760px)" }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
-      onTouchCancel={onTouchEnd}
       aria-roledescription="carousel"
     >
       {/* Layered backdrops — crossfade */}
