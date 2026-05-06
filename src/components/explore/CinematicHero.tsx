@@ -121,13 +121,13 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
     const dx = e.touches[0].clientX - touchStartX.current;
     const dy = e.touches[0].clientY - touchStartY.current;
     if (lockedAxis.current == null) {
-      if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
+      if (Math.abs(dx) > 6 || Math.abs(dy) > 6) {
         lockedAxis.current = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
       }
     }
     if (lockedAxis.current === "x") {
       setIsDragging(1);
-      // resistance at edges
+      // Add resistance — slide follows finger 1:1, but feels snappier on release
       setDragX(dx);
     }
   };
@@ -143,7 +143,8 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
     touchStartY.current = null;
     setIsDragging(0);
     setDragX(0);
-    if (lockedAxis.current === "x" && (ratio > 0.18 || Math.abs(dx) > 80)) {
+    // Lower threshold: 12% width or 50px is enough to advance
+    if (lockedAxis.current === "x" && (ratio > 0.12 || Math.abs(dx) > 50)) {
       go(active + (dx < 0 ? 1 : -1));
     }
     lockedAxis.current = null;
