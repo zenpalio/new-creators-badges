@@ -1,12 +1,6 @@
 import { useState } from "react";
 import { CheckCheck, X } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import AnnouncementDialog from "@/components/AnnouncementDialog";
 
 type AnnouncementSection = {
   emoji: string;
