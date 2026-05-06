@@ -668,34 +668,13 @@ const iconActiveStyles: Record<string, { color: string; fill: boolean }> = {
 const SectionTitle = ({
   title,
   action,
-  icon: Icon,
 }: {
   title: string;
   action?: string;
   icon?: LucideIcon;
-}) => {
-  const [active, setActive] = useState(false);
-  const iconName = (Icon as any)?.displayName || (Icon as any)?.render?.displayName || "";
-  const activeStyle = iconActiveStyles[iconName] || { color: "text-primary", fill: true };
-  return (
+}) => (
   <div className="mb-3 flex items-end justify-between">
-    <h2 className="flex items-center gap-2 text-xl font-bold leading-tight text-white">
-      {Icon && (
-        <button
-          type="button"
-          onClick={() => setActive((a) => !a)}
-          className="transition-transform hover:scale-110 active:scale-95"
-          aria-label="Toggle"
-        >
-          <Icon
-            className={`h-5 w-5 transition-colors ${active ? activeStyle.color : "text-grey-light-3"}`}
-            strokeWidth={1.75}
-            fill={active && activeStyle.fill ? "currentColor" : "none"}
-          />
-        </button>
-      )}
-      {title}
-    </h2>
+    <h2 className="text-xl font-bold leading-tight text-white">{title}</h2>
     {action && (
       <button className="flex items-center gap-1 text-xs font-medium text-grey-light-3 hover:text-white transition-colors">
         {action}
@@ -703,8 +682,7 @@ const SectionTitle = ({
       </button>
     )}
   </div>
-  );
-};
+);
 
 // ---- Tag pill row ----
 const TagRow = ({ tags }: { tags: string[] }) => (
