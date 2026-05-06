@@ -35,11 +35,12 @@ export type Notification = {
 interface NotificationsSidebarProps {
   open: boolean;
   onClose: () => void;
+  onReopen?: () => void;
   notifications: Notification[];
   announcements: Announcement[];
 }
 
-const NotificationsSidebar = ({ open, onClose, notifications, announcements }: NotificationsSidebarProps) => {
+const NotificationsSidebar = ({ open, onClose, onReopen, notifications, announcements }: NotificationsSidebarProps) => {
   const [tab, setTab] = useState<"notifications" | "whats-new">("notifications");
   const [openAnnouncement, setOpenAnnouncement] = useState<Announcement | null>(null);
   const [readIds, setReadIds] = useState<Set<string>>(new Set());
