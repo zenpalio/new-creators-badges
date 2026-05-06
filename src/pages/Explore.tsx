@@ -633,6 +633,7 @@ const sidebarLinks = [
 const Explore = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [inlineAnnouncement, setInlineAnnouncement] = useState<typeof announcements[number] | null>(null);
   const mainRef = useRef<HTMLElement>(null);
   const [headerHidden, setHeaderHidden] = useState(false);
 
