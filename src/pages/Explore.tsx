@@ -586,9 +586,20 @@ const mockNotifications = [
 
 
 // ---- Section header ----
-const SectionTitle = ({ title, action }: { title: string; action?: string }) => (
+const SectionTitle = ({
+  title,
+  action,
+  icon: Icon,
+}: {
+  title: string;
+  action?: string;
+  icon?: LucideIcon;
+}) => (
   <div className="mb-3 flex items-end justify-between">
-    <h2 className="text-xl font-bold leading-tight text-white">{title}</h2>
+    <h2 className="flex items-center gap-2 text-xl font-bold leading-tight text-white">
+      {Icon && <Icon className="h-5 w-5 text-grey-light-3" strokeWidth={1.75} />}
+      {title}
+    </h2>
     {action && (
       <button className="flex items-center gap-1 text-xs font-medium text-grey-light-3 hover:text-white transition-colors">
         {action}
