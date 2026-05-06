@@ -1,7 +1,5 @@
 import { ArrowUpRight, type LucideIcon } from "lucide-react";
 
-type Pill = { label: string };
-
 export type PromoBannerVariant = "premium" | "tokens" | "gift" | "feature";
 
 type PromoBannerProps = {
@@ -11,9 +9,7 @@ type PromoBannerProps = {
   eyebrow?: string;
   title: string;
   description?: string;
-  pills?: Pill[];
   cta?: string;
-  badge?: string | number;
   href?: string;
 };
 
@@ -21,53 +17,113 @@ const variantStyles: Record<
   PromoBannerVariant,
   {
     container: string;
-    iconBox: string;
-    iconColor: string;
-    title: string;
     eyebrow: string;
-    pillDot: string;
+    accent: string; // for the vertical accent bar + arrow
     cta: string;
+    pattern: React.ReactNode;
   }
 > = {
   premium: {
-    container:
-      "border-primary/30 bg-gradient-to-r from-primary/15 via-primary/5 to-transparent hover:border-primary/50",
-    iconBox: "border-primary/30 bg-primary/10",
-    iconColor: "text-primary",
-    title: "text-white",
-    eyebrow: "text-primary",
-    pillDot: "bg-primary",
-    cta: "bg-primary text-primary-foreground hover:opacity-90",
+    container: "bg-white text-black",
+    eyebrow: "text-black/60",
+    accent: "bg-black",
+    cta: "bg-black text-white hover:bg-black/85",
+    pattern: (
+      <svg
+        aria-hidden
+        viewBox="0 0 200 120"
+        className="absolute inset-y-0 right-0 h-full w-[55%] text-black/[0.06]"
+        preserveAspectRatio="xMaxYMid slice"
+      >
+        {Array.from({ length: 14 }).map((_, i) => (
+          <line
+            key={i}
+            x1={i * 16}
+            y1="0"
+            x2={i * 16 + 60}
+            y2="120"
+            stroke="currentColor"
+            strokeWidth="1"
+          />
+        ))}
+      </svg>
+    ),
   },
   tokens: {
-    container:
-      "border-[hsl(45_95%_55%)]/30 bg-gradient-to-r from-[hsl(45_95%_55%)]/15 via-[hsl(45_95%_55%)]/5 to-transparent hover:border-[hsl(45_95%_55%)]/50",
-    iconBox: "border-[hsl(45_95%_55%)]/30 bg-[hsl(45_95%_55%)]/10",
-    iconColor: "text-[hsl(45_95%_55%)]",
-    title: "text-white",
-    eyebrow: "text-[hsl(45_95%_55%)]",
-    pillDot: "bg-[hsl(45_95%_55%)]",
-    cta: "bg-[hsl(45_95%_55%)] text-black hover:opacity-90",
+    container: "bg-black text-white",
+    eyebrow: "text-white/55",
+    accent: "bg-white",
+    cta: "bg-white text-black hover:bg-white/90",
+    pattern: (
+      <svg
+        aria-hidden
+        viewBox="0 0 200 120"
+        className="absolute inset-y-0 right-0 h-full w-[55%] text-white/[0.07]"
+        preserveAspectRatio="xMaxYMid slice"
+      >
+        {Array.from({ length: 7 }).map((_, row) =>
+          Array.from({ length: 12 }).map((_, col) => (
+            <circle
+              key={`${row}-${col}`}
+              cx={col * 18 + 8}
+              cy={row * 18 + 8}
+              r="2"
+              fill="currentColor"
+            />
+          )),
+        )}
+      </svg>
+    ),
   },
   gift: {
-    container:
-      "border-[hsl(0_85%_60%)]/40 bg-gradient-to-r from-[hsl(0_85%_60%)]/15 via-[hsl(0_85%_60%)]/5 to-transparent hover:border-[hsl(0_85%_60%)]/60",
-    iconBox: "border-[hsl(0_85%_60%)]/30 bg-[hsl(0_85%_60%)]/10",
-    iconColor: "text-[hsl(0_85%_65%)]",
-    title: "text-white",
-    eyebrow: "text-[hsl(0_85%_65%)]",
-    pillDot: "bg-[hsl(0_85%_60%)]",
-    cta: "bg-[hsl(0_85%_60%)] text-white hover:opacity-90",
+    container: "bg-[#0e0e0e] text-white",
+    eyebrow: "text-white/55",
+    accent: "bg-white",
+    cta: "bg-white text-black hover:bg-white/90",
+    pattern: (
+      <svg
+        aria-hidden
+        viewBox="0 0 200 120"
+        className="absolute inset-y-0 right-0 h-full w-[55%] text-white/[0.06]"
+        preserveAspectRatio="xMaxYMid slice"
+      >
+        {Array.from({ length: 12 }).map((_, i) => (
+          <path
+            key={i}
+            d={`M${i * 18},120 L${i * 18 + 30},0`}
+            stroke="currentColor"
+            strokeWidth="1"
+          />
+        ))}
+      </svg>
+    ),
   },
   feature: {
-    container:
-      "border-[hsl(280_85%_65%)]/30 bg-gradient-to-r from-[hsl(280_85%_65%)]/15 via-[hsl(280_85%_65%)]/5 to-transparent hover:border-[hsl(280_85%_65%)]/50",
-    iconBox: "border-[hsl(280_85%_65%)]/30 bg-[hsl(280_85%_65%)]/10",
-    iconColor: "text-[hsl(280_85%_70%)]",
-    title: "text-white",
-    eyebrow: "text-[hsl(280_85%_70%)]",
-    pillDot: "bg-[hsl(280_85%_65%)]",
-    cta: "bg-[hsl(280_85%_65%)] text-white hover:opacity-90",
+    container: "bg-white text-black",
+    eyebrow: "text-black/55",
+    accent: "bg-black",
+    cta: "bg-black text-white hover:bg-black/85",
+    pattern: (
+      <svg
+        aria-hidden
+        viewBox="0 0 200 120"
+        className="absolute inset-y-0 right-0 h-full w-[55%] text-black/[0.07]"
+        preserveAspectRatio="xMaxYMid slice"
+      >
+        {Array.from({ length: 6 }).map((_, i) => (
+          <rect
+            key={i}
+            x={i * 32 + 4}
+            y="6"
+            width="24"
+            height="108"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1"
+          />
+        ))}
+      </svg>
+    ),
   },
 };
 
@@ -78,9 +134,7 @@ const PromoBanner = ({
   eyebrow,
   title,
   description,
-  pills,
   cta = "Learn more",
-  badge,
   href = "#",
 }: PromoBannerProps) => {
   const s = variantStyles[variant];
@@ -88,63 +142,48 @@ const PromoBanner = ({
   return (
     <a
       href={href}
-      className={`group flex w-full items-center gap-4 rounded-2xl border px-4 py-3 transition-colors md:gap-5 md:px-5 md:py-4 ${s.container}`}
+      className={`group relative flex w-full items-center gap-4 overflow-hidden rounded-2xl border border-white/[0.04] px-5 py-4 transition-transform hover:-translate-y-[1px] md:gap-5 md:px-6 md:py-5 ${s.container}`}
     >
-      {/* Icon / Emoji */}
-      <div className={`relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border md:h-12 md:w-12 ${s.iconBox} ${s.iconColor}`}>
+      {/* Decorative pattern */}
+      {s.pattern}
+
+      {/* Vertical accent bar + glyph */}
+      <div className="relative z-10 flex shrink-0 items-center gap-3">
+        <span className={`block h-10 w-[3px] rounded-full ${s.accent}`} />
         {emoji ? (
           <span className="text-2xl leading-none" aria-hidden>
             {emoji}
           </span>
         ) : Icon ? (
-          <Icon className="h-5 w-5 md:h-[22px] md:w-[22px]" strokeWidth={1.75} />
+          <Icon className="h-5 w-5 md:h-[22px] md:w-[22px]" strokeWidth={1.5} />
         ) : null}
-        {badge !== undefined && (
-          <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[hsl(0_85%_60%)] px-1.5 text-[10px] font-bold text-white shadow">
-            {badge}
-          </span>
-        )}
       </div>
 
       {/* Text */}
-      <div className="min-w-0 flex-1">
-        <h3 className={`truncate text-sm font-semibold md:text-base ${s.title}`}>
-          {title}
-        </h3>
+      <div className="relative z-10 min-w-0 flex-1">
         {eyebrow && (
-          <p className={`mt-0.5 text-[10px] font-bold uppercase tracking-wider ${s.eyebrow}`}>
+          <p className={`text-[10px] font-semibold uppercase tracking-[0.18em] ${s.eyebrow}`}>
             {eyebrow}
           </p>
         )}
-        {description && !eyebrow && (
-          <p className="mt-0.5 line-clamp-2 text-xs leading-snug text-grey-light-3 md:text-[13px]">
+        <h3 className="mt-0.5 truncate text-[15px] font-semibold leading-tight md:text-base">
+          {title}
+        </h3>
+        {description && (
+          <p className="mt-0.5 line-clamp-1 text-xs leading-snug opacity-70 md:text-[13px]">
             {description}
           </p>
         )}
       </div>
 
-      {/* Pills */}
-      {pills && pills.length > 0 && (
-        <div className="hidden shrink-0 items-center gap-2 lg:flex">
-          {pills.map((p) => (
-            <span
-              key={p.label}
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-white"
-            >
-              <span className={`h-1.5 w-1.5 rounded-full ${s.pillDot}`} />
-              {p.label}
-            </span>
-          ))}
-        </div>
-      )}
-
       {/* CTA */}
       <span
-        className={`hidden shrink-0 items-center justify-center gap-1 rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wide transition-opacity sm:inline-flex ${s.cta}`}
+        className={`relative z-10 hidden shrink-0 items-center justify-center gap-1.5 rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors sm:inline-flex ${s.cta}`}
       >
         {cta}
+        <ArrowUpRight className="h-3.5 w-3.5" />
       </span>
-      <ArrowUpRight className="h-4 w-4 shrink-0 text-grey-light-3 transition-colors group-hover:text-white sm:hidden" />
+      <ArrowUpRight className="relative z-10 h-4 w-4 shrink-0 opacity-70 sm:hidden" />
     </a>
   );
 };
