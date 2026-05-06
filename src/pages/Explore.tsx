@@ -586,6 +586,20 @@ const mockNotifications = [
 
 
 // ---- Section header ----
+const iconActiveStyles: Record<string, { color: string; fill: boolean }> = {
+  Heart: { color: "text-pink-500", fill: true },
+  Crown: { color: "text-yellow-400", fill: true },
+  Flame: { color: "text-orange-500", fill: true },
+  Sparkles: { color: "text-blue-400", fill: true },
+  Star: { color: "text-yellow-400", fill: true },
+  BookOpen: { color: "text-amber-400", fill: false },
+  Video: { color: "text-blue-400", fill: false },
+  ImageIcon: { color: "text-emerald-400", fill: false },
+  TrendingUp: { color: "text-green-400", fill: false },
+  Newspaper: { color: "text-cyan-400", fill: false },
+  UserCircle2: { color: "text-violet-400", fill: true },
+};
+
 const SectionTitle = ({
   title,
   action,
@@ -594,10 +608,27 @@ const SectionTitle = ({
   title: string;
   action?: string;
   icon?: LucideIcon;
-}) => (
+}) => {
+  const [active, setActive] = useState(false);
+  const iconName = (Icon as any)?.displayName || (Icon as any)?.render?.displayName || "";
+  const activeStyle = iconActiveStyles[iconName] || { color: "text-primary", fill: true };
+  return (
   <div className="mb-3 flex items-end justify-between">
     <h2 className="flex items-center gap-2 text-xl font-bold leading-tight text-white">
-      {Icon && <Icon className="h-5 w-5 text-grey-light-3" strokeWidth={1.75} />}
+      {Icon && (
+        <button
+          type="button"
+          onClick={() => setActive((a) => !a)}
+          className="transition-transform hover:scale-110 active:scale-95"
+          aria-label="Toggle"
+        >
+          <Icon
+            className={`h-5 w-5 transition-colors ${active ? activeStyle.color : "text-grey-light-3"}`}
+            strokeWidth={1.75}
+            fill={active && activeStyle.fill ? "currentColor" : "none"}
+          />
+        </button>
+      )}
       {title}
     </h2>
     {action && (
@@ -607,7 +638,8 @@ const SectionTitle = ({
       </button>
     )}
   </div>
-);
+  );
+};
 
 // ---- Tag pill row ----
 const TagRow = ({ tags }: { tags: string[] }) => (
