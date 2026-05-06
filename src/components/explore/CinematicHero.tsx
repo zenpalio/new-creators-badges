@@ -590,11 +590,11 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
               ) : (
                 <Play className="h-4 w-4 fill-black" />
               )}
-              {slide.cta ?? "Chat now"}
+              {slide.cta ?? (slide.layout === "story" ? "Play Story" : "Chat now")}
             </button>
             <button className="hidden h-11 items-center gap-2 rounded-full bg-white/10 px-6 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/20 md:inline-flex">
-              <User className="h-4 w-4" />
-              View profile
+              {slide.layout === "story" ? <Film className="h-4 w-4" /> : <User className="h-4 w-4" />}
+              {slide.layout === "story" ? "View Episodes" : "View profile"}
             </button>
           </div>
         </div>

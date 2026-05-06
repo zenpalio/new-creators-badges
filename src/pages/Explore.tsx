@@ -281,7 +281,7 @@ const heroSlides: HeroSlide[] = [
     ],
     tags: ["Interactive", "Branching", "12 Chapters"],
     badge: "New story",
-    cta: "Start reading",
+    cta: "Play Story",
     layout: "story",
     accent: "hsl(320 70% 55%)",
     storyMeta: { chapters: 12, episodes: 4, rating: 4.8 },
