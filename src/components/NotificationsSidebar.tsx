@@ -57,7 +57,7 @@ const NotificationsSidebar = ({ open, onClose, onReopen, notifications, announce
         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
 
         <aside
-          className={`absolute right-0 top-0 flex h-full w-full max-w-[380px] flex-col bg-card shadow-2xl transition-transform duration-300 ${
+          className={`absolute right-0 top-0 flex h-full max-h-[100dvh] w-full flex-col bg-card shadow-2xl transition-transform duration-300 sm:max-w-[380px] [padding-top:env(safe-area-inset-top)] [padding-bottom:env(safe-area-inset-bottom)] ${
             open ? "translate-x-0" : "translate-x-full"
           }`}
         >
