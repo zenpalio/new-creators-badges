@@ -732,10 +732,9 @@ const Explore = () => {
             <PromoBanner
               variant="gift"
               emoji="🎁"
-              badge={1}
-              title="You found a welcome gift!"
-              eyebrow="Sign up today to unlock"
-              pills={[{ label: "Create Character" }, { label: "Chat & Roleplay" }, { label: "Generate Images" }]}
+              eyebrow="Welcome gift"
+              title="A surprise is waiting for you — claim it now"
+              description="Sign up today to unlock characters, chat, roleplay and image generation."
               cta="Claim"
             />
             <PromoBanner
