@@ -35,7 +35,7 @@ export type Notification = {
   target?: string;
   thumbnail?: string;
   avatar?: string;
-  read?: boolean;
+  unread?: boolean;
 };
 
 interface NotificationsSidebarProps {
@@ -48,6 +48,9 @@ interface NotificationsSidebarProps {
 const NotificationsSidebar = ({ open, onClose, notifications, announcements }: NotificationsSidebarProps) => {
   const [tab, setTab] = useState<"notifications" | "whats-new">("notifications");
   const [openAnnouncement, setOpenAnnouncement] = useState<Announcement | null>(null);
+  const [readIds, setReadIds] = useState<Set<string>>(new Set());
+  const unreadCount = notifications.filter((n) => n.unread && !readIds.has(n.id)).length;
+  const markAllRead = () => setReadIds(new Set(notifications.map((n) => n.id)));
 
   return (
     <>
@@ -86,11 +89,14 @@ const NotificationsSidebar = ({ open, onClose, notifications, announcements }: N
             <span>All systems operational</span>
           </div>
 
-          {/* Top action row (only for notifications) */}
-          {tab === "notifications" && (
-            <button className="flex items-center justify-center gap-2 border-b border-border/40 py-2.5 text-xs font-medium text-foreground/90 transition-colors hover:bg-muted/40">
+          {/* Top action row — only when there are unread notifications */}
+          {tab === "notifications" && unreadCount > 0 && (
+            <button
+              onClick={markAllRead}
+              className="flex items-center justify-center gap-2 border-b border-border/40 py-2.5 text-xs font-medium text-foreground/90 transition-colors hover:bg-muted/40"
+            >
               <CheckCheck className="h-3.5 w-3.5" />
-              Mark all as read
+              Mark all as read ({unreadCount})
             </button>
           )}
 
@@ -98,32 +104,40 @@ const NotificationsSidebar = ({ open, onClose, notifications, announcements }: N
           <div className="scrollbar-themed flex-1 overflow-y-auto">
             {tab === "notifications" ? (
               <ul className="flex flex-col">
-                {notifications.map((n) => (
-                  <li
-                    key={n.id}
-                    className="flex items-center gap-3 border-b border-border/30 px-5 py-3 transition-colors hover:bg-muted/30"
-                  >
-                    <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full bg-muted">
-                      {n.avatar ? (
-                        <img src={n.avatar} alt="" className="h-full w-full object-cover" />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center text-[10px] font-semibold uppercase text-muted-foreground">
-                          {n.initials}
+                {notifications.map((n) => {
+                  const isUnread = n.unread && !readIds.has(n.id);
+                  return (
+                    <li
+                      key={n.id}
+                      className={`relative flex items-center gap-3 border-b border-border/30 px-5 py-3 transition-colors hover:bg-muted/30 ${
+                        isUnread ? "bg-primary/5" : ""
+                      }`}
+                    >
+                      {isUnread && (
+                        <span className="absolute left-1.5 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-primary" />
+                      )}
+                      <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full bg-muted">
+                        {n.avatar ? (
+                          <img src={n.avatar} alt="" className="h-full w-full object-cover" />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-[10px] font-semibold uppercase text-muted-foreground">
+                            {n.initials}
+                          </div>
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1 text-xs leading-snug text-foreground/90">
+                        <span className="font-semibold text-foreground">{n.actor}</span>{" "}
+                        <span className="text-muted-foreground">{n.action}</span>
+                        {n.target && <span className="font-semibold text-foreground"> {n.target}</span>}
+                      </div>
+                      {n.thumbnail && (
+                        <div className="h-9 w-9 shrink-0 overflow-hidden rounded-md bg-muted">
+                          <img src={n.thumbnail} alt="" className="h-full w-full object-cover" />
                         </div>
                       )}
-                    </div>
-                    <div className="min-w-0 flex-1 text-xs leading-snug text-foreground/90">
-                      <span className="font-semibold text-foreground">{n.actor}</span>{" "}
-                      <span className="text-muted-foreground">{n.action}</span>
-                      {n.target && <span className="font-semibold text-foreground"> {n.target}</span>}
-                    </div>
-                    {n.thumbnail && (
-                      <div className="h-9 w-9 shrink-0 overflow-hidden rounded-md bg-muted">
-                        <img src={n.thumbnail} alt="" className="h-full w-full object-cover" />
-                      </div>
-                    )}
-                  </li>
-                ))}
+                    </li>
+                  );
+                })}
               </ul>
             ) : (
               <ul className="flex flex-col">
