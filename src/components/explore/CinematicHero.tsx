@@ -98,6 +98,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
   const [dragX, setDragX] = useState(0);
   const [isDragging, setIsDragging] = useState(0); // 0 idle, 1 dragging
   const widthRef = useRef<number>(0);
+  const [width, setWidth] = useState(0);
   const activeRef = useRef(active);
   useEffect(() => { activeRef.current = active; }, [active]);
 
