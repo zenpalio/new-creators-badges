@@ -757,9 +757,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
           <button
             key={i}
             onClick={() => go(i)}
-            className={`group relative flex items-center justify-center transition-all ${
-              i === active ? "w-10" : "w-2"
-            } h-6 md:h-4 md:w-10`}
+            className="group relative flex h-6 w-10 items-center justify-center transition-all md:h-4"
             aria-label={`Go to slide ${i + 1}`}
           >
             <span className={`block h-1 overflow-hidden rounded-full bg-white/25 transition-all w-full`}>
