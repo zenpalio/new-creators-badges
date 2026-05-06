@@ -81,6 +81,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
   useEffect(() => {
     if (paused || slides.length <= 1) return;
     const id = window.setTimeout(() => {
+      setDir(1);
       setActive((a) => (a + 1) % slides.length);
     }, intervalMs);
     return () => window.clearTimeout(id);
