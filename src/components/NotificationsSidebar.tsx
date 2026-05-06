@@ -52,7 +52,7 @@ const NotificationsSidebar = ({ open, onClose, notifications, announcements }: N
   return (
     <>
       <div
-        className={`fixed inset-0 z-[110] transition-opacity ${
+        className={`fixed inset-0 z-40 transition-opacity ${
           open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
