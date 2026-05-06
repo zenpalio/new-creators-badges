@@ -58,7 +58,7 @@ const HScroll = ({ children }: HScrollProps) => {
       )}
       <div
         ref={ref}
-        className="scrollbar-hide flex gap-2 overflow-x-auto overflow-y-hidden scroll-smooth pb-1 [-webkit-overflow-scrolling:touch] [touch-action:pan-x]"
+        className="scrollbar-hide flex gap-2 overflow-x-auto overflow-y-hidden scroll-smooth pb-1 [-webkit-overflow-scrolling:touch] [touch-action:pan-x_pan-y]"
       >
         {children}
       </div>
