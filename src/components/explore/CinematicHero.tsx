@@ -403,6 +403,130 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
               );
             }
 
+            if (isPremium) {
+              const plan = s.premiumPlan;
+              return (
+                <div className="absolute inset-0 overflow-hidden">
+                  {/* Animated gradient backdrop */}
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "radial-gradient(ellipse at 30% 20%, hsl(45 90% 55% / 0.35) 0%, transparent 55%), radial-gradient(ellipse at 80% 80%, hsl(280 80% 45% / 0.45) 0%, transparent 60%), linear-gradient(135deg, hsl(260 40% 8%) 0%, hsl(220 35% 6%) 100%)",
+                    }}
+                  />
+                  <div
+                    className="pointer-events-none absolute inset-0 opacity-40"
+                    style={{
+                      backgroundImage:
+                        "radial-gradient(circle at 1px 1px, hsl(45 90% 70% / 0.18) 1px, transparent 0)",
+                      backgroundSize: "32px 32px",
+                    }}
+                  />
+
+                  {/* Pricing card on the right */}
+                  <div className="absolute inset-y-0 right-0 hidden items-center justify-center pr-12 lg:pr-20 md:flex">
+                    <div
+                      className="relative w-[360px] rounded-3xl border border-white/15 bg-gradient-to-br from-white/10 to-white/5 p-7 backdrop-blur-xl"
+                      style={{ boxShadow: "0 30px 80px -20px rgba(0,0,0,0.7), 0 0 60px -20px hsl(45 90% 55% / 0.4)" }}
+                    >
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-black">
+                        Most popular
+                      </div>
+                      <div className="flex items-center gap-2 text-yellow-400">
+                        <Crown className="h-5 w-5 fill-yellow-400" />
+                        <span className="text-sm font-bold uppercase tracking-wider">Premium</span>
+                      </div>
+                      <div className="mt-4 flex items-baseline gap-1">
+                        <span className="text-5xl font-extrabold text-white">{plan?.price ?? "$9.99"}</span>
+                        <span className="text-sm text-white/60">/{plan?.period ?? "mo"}</span>
+                      </div>
+                      <ul className="mt-5 space-y-2.5">
+                        {(plan?.perks ?? []).map((p) => (
+                          <li key={p} className="flex items-start gap-2 text-sm text-white/85">
+                            <Check className="mt-0.5 h-4 w-4 shrink-0 text-yellow-400" />
+                            <span>{p}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Mobile compact card */}
+                  <div className="absolute inset-x-0 bottom-24 px-6 md:hidden">
+                    <div className="rounded-2xl border border-white/15 bg-white/5 p-4 backdrop-blur-xl">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-yellow-400">
+                          <Crown className="h-4 w-4 fill-yellow-400" />
+                          <span className="text-xs font-bold uppercase tracking-wider">Premium</span>
+                        </div>
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-2xl font-extrabold text-white">{plan?.price ?? "$9.99"}</span>
+                          <span className="text-[11px] text-white/60">/{plan?.period ?? "mo"}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+
+            if (isFeature) {
+              const bullets = s.featureMeta?.bullets ?? [];
+              return (
+                <div className="absolute inset-0 overflow-hidden">
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "radial-gradient(ellipse at 75% 35%, hsl(213 90% 45% / 0.55) 0%, transparent 55%), radial-gradient(ellipse at 20% 90%, hsl(180 70% 35% / 0.35) 0%, transparent 60%), linear-gradient(135deg, hsl(220 40% 8%) 0%, hsl(213 45% 6%) 100%)",
+                    }}
+                  />
+                  {/* glowing orb */}
+                  <div
+                    className="absolute right-[18%] top-1/2 hidden h-72 w-72 -translate-y-1/2 rounded-full md:block"
+                    style={{
+                      background:
+                        "radial-gradient(circle, hsl(213 100% 70% / 0.45) 0%, transparent 65%)",
+                      filter: "blur(20px)",
+                    }}
+                  />
+
+                  {/* Feature mock card on the right */}
+                  <div className="absolute inset-y-0 right-0 hidden items-center justify-center pr-12 lg:pr-20 md:flex">
+                    <div
+                      className="relative w-[420px] rounded-3xl border border-white/15 bg-gradient-to-br from-white/10 to-white/[0.03] p-6 backdrop-blur-xl"
+                      style={{ boxShadow: "0 30px 80px -20px rgba(0,0,0,0.8), 0 0 80px -20px hsl(213 100% 50% / 0.5)" }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/20 ring-1 ring-primary/40">
+                          <Sparkles className="h-4 w-4 text-primary" />
+                        </div>
+                        <div>
+                          <div className="text-[10px] font-bold uppercase tracking-wider text-primary">New feature</div>
+                          <div className="text-sm font-bold text-white">{s.name}</div>
+                        </div>
+                      </div>
+                      <div className="mt-4 space-y-2">
+                        {bullets.map((b, idx) => (
+                          <div
+                            key={b}
+                            className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3 text-sm text-white/90"
+                            style={{ animation: `fade-in 0.5s ease-out ${idx * 0.08}s both` }}
+                          >
+                            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-extrabold text-primary-foreground">
+                              {idx + 1}
+                            </div>
+                            <span>{b}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+
             if (isBanner) {
               return (
                 <div className="absolute inset-0">
