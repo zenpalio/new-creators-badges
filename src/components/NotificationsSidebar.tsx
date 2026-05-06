@@ -208,7 +208,12 @@ const NotificationsSidebar = ({ open, onClose, onReopen, notifications, announce
       <AnnouncementDialog
         announcement={openAnnouncement}
         open={!!openAnnouncement}
-        onOpenChange={(o) => !o && setOpenAnnouncement(null)}
+        onOpenChange={(o) => {
+          if (!o) {
+            setOpenAnnouncement(null);
+            onReopen?.();
+          }
+        }}
       />
     </>
   );
