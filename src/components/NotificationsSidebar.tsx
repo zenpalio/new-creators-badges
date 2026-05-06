@@ -139,7 +139,10 @@ const NotificationsSidebar = ({ open, onClose, onReopen, notifications, announce
                 {announcements.map((a) => (
                   <li key={a.id}>
                     <button
-                      onClick={() => setOpenAnnouncement(a)}
+                      onClick={() => {
+                        setOpenAnnouncement(a);
+                        onClose();
+                      }}
                       className="flex w-full flex-col gap-1 border-b border-border/30 px-5 py-3.5 text-left transition-colors hover:bg-muted/30"
                     >
                       <div className="flex items-center gap-2 text-[10px] font-medium">
