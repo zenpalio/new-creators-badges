@@ -10,14 +10,7 @@ import SystemStatusIndicator from "@/components/explore/SystemStatusIndicator";
 import PromoBanner from "@/components/explore/PromoBanner";
 import SideNav from "@/components/SideNav";
 import NotificationsSidebar from "@/components/NotificationsSidebar";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import AnnouncementDialog from "@/components/AnnouncementDialog";
 import { type BadgeTier } from "@/components/BadgeCard";
 import bannerPremium from "@/assets/hero/banner-premium.jpg";
 import bannerFeature from "@/assets/hero/banner-feature.jpg";
@@ -633,6 +626,7 @@ const sidebarLinks = [
 const Explore = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [inlineAnnouncement, setInlineAnnouncement] = useState<typeof announcements[number] | null>(null);
   const mainRef = useRef<HTMLElement>(null);
   const [headerHidden, setHeaderHidden] = useState(false);
 
@@ -662,6 +656,11 @@ const Explore = () => {
   return (
     <div className="relative flex h-svh w-full overflow-hidden bg-background font-onest text-foreground">
       <SideNav open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <AnnouncementDialog
+        announcement={inlineAnnouncement}
+        open={!!inlineAnnouncement}
+        onOpenChange={(o) => !o && setInlineAnnouncement(null)}
+      />
       <NotificationsSidebar
         open={notificationsOpen}
         onClose={() => setNotificationsOpen(false)}
@@ -877,68 +876,27 @@ const Explore = () => {
 
                 const a = n.announcement;
                 return (
-                  <Dialog key={i}>
-                    <DialogTrigger asChild>
-                      <button type="button" className="block shrink-0">
-                        {newsCard}
-                      </button>
-                    </DialogTrigger>
-                    <DialogContent className="w-[calc(100%-32px)] max-w-[560px] gap-0 rounded-2xl border-white/[0.08] bg-grey-dark-1 p-0 text-white">
-                      <div className="max-h-[80vh] overflow-y-auto px-5 pb-6 pt-5 sm:px-7">
-                        <DialogHeader className="space-y-3 text-left">
-                          <div className="flex items-center gap-2 text-[11px] font-medium">
-                            <span className="rounded-full bg-primary/15 px-2 py-0.5 text-primary">{n.tag}</span>
-                            <span className="text-grey-light-4">{n.date}</span>
-                          </div>
-                          <DialogTitle className="text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-[28px]">
-                            {a.headline}
-                          </DialogTitle>
-                          <DialogDescription className="text-[15px] leading-relaxed text-grey-light-2">
-                            {a.intro}
-                          </DialogDescription>
-                        </DialogHeader>
-
-                        <div className="mt-6 space-y-7">
-                          {a.sections.map((section, idx) => (
-                            <section key={section.title}>
-                              <h3 className="flex items-baseline gap-2 text-base font-bold uppercase tracking-wide text-white">
-                                <span aria-hidden className="text-lg leading-none">{section.emoji}</span>
-                                <span className="text-grey-light-4">{idx + 1}.</span>
-                                <span>{section.title}</span>
-                              </h3>
-                              <ul className="mt-3 space-y-2.5">
-                                {section.items.map((item) => (
-                                  <li
-                                    key={item.name}
-                                    className="rounded-xl border border-white/[0.04] bg-background/40 p-3 text-sm leading-snug text-grey-light-2"
-                                  >
-                                    <span className="font-semibold text-white">{item.name}:</span>{" "}
-                                    {item.description}
-                                  </li>
-                                ))}
-                              </ul>
-                            </section>
-                          ))}
-                        </div>
-
-                        {a.cta && (
-                          <a
-                            href={a.cta.url}
-                            className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
-                          >
-                            {a.cta.label}
-                            <ArrowUpRight className="h-4 w-4" />
-                          </a>
-                        )}
-
-                        {a.outro && (
-                          <p className="mt-6 border-t border-white/[0.06] pt-5 text-sm leading-relaxed text-grey-light-3">
-                            {a.outro}
-                          </p>
-                        )}
-                      </div>
-                    </DialogContent>
-                  </Dialog>
+                  <button
+                    key={i}
+                    type="button"
+                    className="block shrink-0"
+                    onClick={() =>
+                      setInlineAnnouncement({
+                        id: `inline-${i}`,
+                        tag: n.tag,
+                        date: n.date,
+                        title: n.title,
+                        description: n.description,
+                        headline: a.headline,
+                        intro: a.intro,
+                        sections: a.sections,
+                        cta: a.cta,
+                        outro: a.outro,
+                      })
+                    }
+                  >
+                    {newsCard}
+                  </button>
                 );
               })}
             </HScroll>
