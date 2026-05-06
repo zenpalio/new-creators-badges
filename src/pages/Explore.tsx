@@ -285,6 +285,7 @@ const heroSlides: HeroSlide[] = [
     layout: "story",
     accent: "hsl(320 70% 55%)",
     storyMeta: { chapters: 12, episodes: 4, rating: 4.8 },
+  },
   {
     name: "Top creators this week",
     tagline: "Meet the faces shaping the platform",
