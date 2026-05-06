@@ -95,7 +95,7 @@ const NotificationsSidebar = ({ open, onClose, notifications, announcements }: N
           )}
 
           {/* Body */}
-          <div className="flex-1 overflow-y-auto">
+          <div className="scrollbar-themed flex-1 overflow-y-auto">
             {tab === "notifications" ? (
               <ul className="flex flex-col">
                 {notifications.map((n) => (
@@ -189,7 +189,7 @@ const NotificationsSidebar = ({ open, onClose, notifications, announcements }: N
       <Dialog open={!!openAnnouncement} onOpenChange={(o) => !o && setOpenAnnouncement(null)}>
         <DialogContent className="z-[120] w-[calc(100%-32px)] max-w-[560px] gap-0 rounded-2xl border-border/60 bg-card p-0 text-foreground">
           {openAnnouncement && (
-            <div className="max-h-[80vh] overflow-y-auto px-5 pb-6 pt-5 sm:px-7">
+            <div className="scrollbar-themed max-h-[80vh] overflow-y-auto px-5 pb-6 pt-5 sm:px-7">
               <DialogHeader className="space-y-3 text-left">
                 <div className="flex items-center gap-2 text-[11px] font-medium">
                   <span className="rounded-full bg-primary/15 px-2 py-0.5 text-primary">
