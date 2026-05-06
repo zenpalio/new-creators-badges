@@ -197,7 +197,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
       onMouseLeave={() => setPaused(false)}
       aria-roledescription="carousel"
     >
-      {/* Layered backdrops — crossfade */}
+      {/* Layered backdrops — slide horizontally, no crossfade */}
       {slides.map((s, i) => {
         const w = widthRef.current || 1;
         const prevIdx = (active - 1 + slides.length) % slides.length;
@@ -205,25 +205,22 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
         const isActive = i === active;
         const isPrev = i === prevIdx;
         const isNext = i === nextIdx;
-        let style: React.CSSProperties | undefined;
-        let opacity = isActive ? 1 : 0;
-        if (isDragging) {
-          if (isActive) {
-            style = { transform: `translate3d(${dragX}px,0,0)` };
-            opacity = 1;
-          } else if (isPrev && dragX > 0) {
-            style = { transform: `translate3d(${dragX - w}px,0,0)` };
-            opacity = Math.min(1, dragX / w);
-          } else if (isNext && dragX < 0) {
-            style = { transform: `translate3d(${dragX + w}px,0,0)` };
-            opacity = Math.min(1, -dragX / w);
-          }
-        }
+        let offsetPx = 0;
+        let visible = false;
+        if (isActive) { offsetPx = 0; visible = true; }
+        else if (isPrev) { offsetPx = -w; visible = true; }
+        else if (isNext) { offsetPx = w; visible = true; }
+        const tx = offsetPx + (isDragging && (isActive || (isPrev && dragX > 0) || (isNext && dragX < 0)) ? dragX : 0);
         return (
         <div
           key={s.name + i}
-          className={`absolute inset-0 ${isDragging ? "" : "transition-all duration-1000 ease-out"}`}
-          style={{ ...style, opacity }}
+          className={`absolute inset-0 ${isDragging ? "" : "transition-transform duration-500 ease-out"}`}
+          style={{
+            transform: `translate3d(${tx}px,0,0)`,
+            opacity: visible ? 1 : 0,
+            visibility: visible ? "visible" : "hidden",
+            willChange: "transform",
+          }}
           aria-hidden={!isActive}
         >
           {(() => {
