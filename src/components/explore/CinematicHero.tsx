@@ -312,9 +312,9 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                     </div>
                   </div>
 
-                  {/* Mobile: same card, smaller */}
-                  <div className="absolute inset-0 flex items-center justify-center px-6 md:hidden">
-                    <div className="relative h-[72%] max-h-[420px] aspect-[13/19]">
+                  {/* Mobile: full-width card with safe padding */}
+                  <div className="absolute inset-0 flex items-center justify-center px-4 pb-6 pt-4 md:hidden">
+                    <div className="relative h-full max-h-[78vh] w-full max-w-[300px] aspect-[13/19]" style={{ aspectRatio: "13 / 19" }}>
                       <div
                         className="absolute inset-0 rounded-xl overflow-hidden ring-1 ring-white/15 bg-card border border-border/50"
                         style={{ boxShadow: "0 25px 50px -10px rgba(0,0,0,0.8)" }}
