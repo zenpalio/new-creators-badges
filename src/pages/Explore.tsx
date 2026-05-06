@@ -5,6 +5,7 @@ import HScroll from "@/components/explore/HScroll";
 import CinematicHero, { type HeroSlide } from "@/components/explore/CinematicHero";
 import CreatorRankCard from "@/components/explore/CreatorRankCard";
 import StoryContentCard from "@/components/explore/StoryContentCard";
+import LikeButton from "@/components/explore/LikeButton";
 import FloatingToolsFAB from "@/components/explore/FloatingToolsFAB";
 import SystemStatusIndicator from "@/components/explore/SystemStatusIndicator";
 import PromoBanner from "@/components/explore/PromoBanner";
@@ -835,8 +836,8 @@ const Explore = () => {
                         <Play className="h-5 w-5 fill-black text-black" />
                       </div>
                     </div>
-                    <div className="absolute bottom-2 right-2 flex items-center gap-1 rounded-md bg-black/70 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur">
-                      <Heart className="h-3 w-3" /> {v.likes}
+                    <div className="absolute bottom-2 right-2 rounded-md bg-black/70 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur">
+                      <LikeButton iconClassName="h-3 w-3"><span>{v.likes}</span></LikeButton>
                     </div>
                   </div>
                 </div>

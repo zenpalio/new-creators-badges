@@ -1,4 +1,5 @@
-import { MessageSquare, Heart } from "lucide-react";
+import { MessageSquare } from "lucide-react";
+import LikeButton from "./LikeButton";
 
 interface BabeCardProps {
   name: string;
@@ -52,10 +53,7 @@ const BabeCard = ({
                 <MessageSquare className="h-3.5 w-3.5" />
                 {messageCount}
               </span>
-              <span className="flex items-center gap-1">
-                <Heart className="h-3.5 w-3.5" />
-                {likeCount ?? 0}
-              </span>
+              <LikeButton className="text-[12px] font-medium text-white/90"><span>{likeCount ?? 0}</span></LikeButton>
             </div>
           )}
         </div>
