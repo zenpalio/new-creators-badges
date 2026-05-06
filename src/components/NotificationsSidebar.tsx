@@ -76,13 +76,29 @@ const NotificationsSidebar = ({ open, onClose, onReopen, notifications, announce
           </div>
 
           {/* System status indicator */}
-          <div className="flex items-center gap-2 border-y border-border/40 px-5 py-2.5 text-xs text-muted-foreground">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[hsl(var(--success))] opacity-60" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-[hsl(var(--success))]" />
-            </span>
-            <span>All systems operational</span>
-          </div>
+          {(() => {
+            const systemStatus = "operational" as "operational" | "maintenance";
+            const isMaintenance = systemStatus === "maintenance";
+            const colorVar = isMaintenance ? "--warning" : "--success";
+            const message = isMaintenance
+              ? "We are performing database maintenance. Site will be down for ~10 mins. Thanks for your patience — we'll be back up shortly!"
+              : "All systems operational";
+            return (
+              <div className="flex items-start gap-2 border-y border-border/40 px-5 py-2.5 text-xs text-muted-foreground">
+                <span className="relative mt-1 flex h-2 w-2 shrink-0">
+                  <span
+                    className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
+                    style={{ backgroundColor: `hsl(var(${colorVar}))` }}
+                  />
+                  <span
+                    className="relative inline-flex h-2 w-2 rounded-full"
+                    style={{ backgroundColor: `hsl(var(${colorVar}))` }}
+                  />
+                </span>
+                <span className={isMaintenance ? "leading-snug" : ""}>{message}</span>
+              </div>
+            );
+          })()}
 
           {/* Top action row — only when there are unread notifications */}
           {tab === "notifications" && unreadCount > 0 && (
