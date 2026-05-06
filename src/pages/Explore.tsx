@@ -837,7 +837,7 @@ const Explore = () => {
                       </div>
                     </div>
                     <div className="absolute bottom-2 right-2 rounded-md bg-black/70 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur">
-                      <LikeButton count={v.likes} iconClassName="h-3 w-3" />
+                      <LikeButton iconClassName="h-3 w-3"><span>{v.likes}</span></LikeButton>
                     </div>
                   </div>
                 </div>
