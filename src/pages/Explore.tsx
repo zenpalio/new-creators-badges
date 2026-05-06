@@ -836,8 +836,8 @@ const Explore = () => {
                         <Play className="h-5 w-5 fill-black text-black" />
                       </div>
                     </div>
-                    <div className="absolute bottom-2 right-2 rounded-md bg-black/70 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur">
-                      <LikeButton iconClassName="h-3 w-3"><span>{v.likes}</span></LikeButton>
+                    <div className="absolute bottom-2 right-2 text-[11px] font-medium text-white drop-shadow-md">
+                      <LikeButton iconClassName="h-3.5 w-3.5"><span>{v.likes}</span></LikeButton>
                     </div>
                   </div>
                 </div>
