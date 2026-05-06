@@ -1,4 +1,4 @@
-import { Bell, Sparkles, Video, Image as ImageIcon, ArrowUpRight, Play, ChevronRight, Menu, X, Compass, Users, Heart, Settings, LogOut, BookOpen, Crown, Newspaper } from "lucide-react";
+import { Bell, Sparkles, Video, Image as ImageIcon, ArrowUpRight, Play, ChevronRight, Menu, X, Compass, Users, Heart, Settings, LogOut, BookOpen, Crown, Newspaper, Coins } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import BabeCard from "@/components/explore/BabeCard";
 import HScroll from "@/components/explore/HScroll";
@@ -727,14 +727,39 @@ const Explore = () => {
             </HScroll>
           </section>
 
-          {/* Promo banner — Premium */}
-          <PromoBanner
-            icon={Crown}
-            title="Go Premium"
-            description="Unlimited chats, longer videos, and exclusive babes — without the queue."
-            cta="Upgrade"
-            accent="hsl(213 100% 50%)"
-          />
+          {/* Promo banners */}
+          <div className="mt-2 space-y-3">
+            <PromoBanner
+              variant="gift"
+              emoji="🎁"
+              badge={1}
+              title="You found a welcome gift!"
+              eyebrow="Sign up today to unlock"
+              pills={[{ label: "Create Character" }, { label: "Chat & Roleplay" }, { label: "Generate Images" }]}
+              cta="Claim"
+            />
+            <PromoBanner
+              variant="premium"
+              icon={Crown}
+              title="Go Premium"
+              description="Unlimited chats, longer videos, and exclusive babes — without the queue."
+              cta="Upgrade"
+            />
+            <PromoBanner
+              variant="tokens"
+              icon={Coins}
+              title="Token sale — 20% off"
+              description="Stock up on tokens this week and save on every pack. Limited time only."
+              cta="Buy tokens"
+            />
+            <PromoBanner
+              variant="feature"
+              icon={Sparkles}
+              title="New: Scene Builder is live"
+              description="Break free from character-only prompts. Build full cinematic scenes in seconds."
+              cta="Try this"
+            />
+          </div>
 
 
           <section className="mt-4">
