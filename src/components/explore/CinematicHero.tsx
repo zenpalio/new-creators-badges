@@ -158,28 +158,14 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
       onMouseLeave={() => setPaused(false)}
       aria-roledescription="carousel"
     >
-      {/* Layered backdrops — slide horizontally, no crossfade */}
+      {/* Only render the active slide — no parked neighbors causing ghost overlays */}
       {slides.map((s, i) => {
-        const prevIdx = (active - 1 + slides.length) % slides.length;
-        const nextIdx = (active + 1) % slides.length;
         const isActive = i === active;
-        const isPrev = i === prevIdx;
-        const isNext = i === nextIdx;
-        let offsetPercent = 0;
-        let visible = false;
-        if (isActive) { offsetPercent = 0; visible = true; }
-        else if (isPrev) { offsetPercent = -100; visible = true; }
-        else if (isNext) { offsetPercent = 100; visible = true; }
+        if (!isActive) return null;
         return (
         <div
           key={s.name + i}
-          className="absolute inset-0 transition-transform duration-500 ease-out"
-          style={{
-            transform: `translate3d(${offsetPercent}%,0,0)`,
-            opacity: visible ? 1 : 0,
-            visibility: visible ? "visible" : "hidden",
-            willChange: "transform",
-          }}
+          className="absolute inset-0"
           aria-hidden={!isActive}
         >
           {(() => {
