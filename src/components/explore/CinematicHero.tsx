@@ -101,67 +101,136 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
   const go = (i: number) => setActive((i + slides.length) % slides.length);
   const slide = slides[active];
 
-  // Touch swipe (mobile) — live drag with snap on release
-  const touchStartX = useRef<number | null>(null);
-  const touchStartY = useRef<number | null>(null);
+  // Pointer-based swipe (mobile) — live drag with snap on release.
+  // Uses native non-passive touchmove so we can preventDefault once the
+  // gesture is clearly horizontal (prevents fighting page scroll).
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const startX = useRef<number | null>(null);
+  const startY = useRef<number | null>(null);
   const lockedAxis = useRef<"x" | "y" | null>(null);
+  const activePointerId = useRef<number | null>(null);
   const [dragX, setDragX] = useState(0);
   const [isDragging, setIsDragging] = useState(0); // 0 idle, 1 dragging
   const widthRef = useRef<number>(0);
+  const activeRef = useRef(active);
+  useEffect(() => { activeRef.current = active; }, [active]);
 
-  const onTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchStartY.current = e.touches[0].clientY;
-    lockedAxis.current = null;
-    widthRef.current = (e.currentTarget as HTMLElement).clientWidth || 1;
-    setPaused(true);
-  };
-  const onTouchMove = (e: React.TouchEvent) => {
-    if (touchStartX.current == null || touchStartY.current == null) return;
-    const dx = e.touches[0].clientX - touchStartX.current;
-    const dy = e.touches[0].clientY - touchStartY.current;
-    if (lockedAxis.current == null) {
-      if (Math.abs(dx) > 6 || Math.abs(dy) > 6) {
-        lockedAxis.current = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+  const endGesture = (commitDx: number | null) => {
+    const w = widthRef.current || 1;
+    if (commitDx != null && lockedAxis.current === "x") {
+      const ratio = Math.abs(commitDx) / w;
+      if (ratio > 0.12 || Math.abs(commitDx) > 50) {
+        go(activeRef.current + (commitDx < 0 ? 1 : -1));
       }
     }
-    if (lockedAxis.current === "x") {
-      setIsDragging(1);
-      // Add resistance — slide follows finger 1:1, but feels snappier on release
-      setDragX(dx);
-    }
-  };
-  const onTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current == null || touchStartY.current == null) {
-      setPaused(false);
-      return;
-    }
-    const dx = e.changedTouches[0].clientX - touchStartX.current;
-    const w = widthRef.current || 1;
-    const ratio = Math.abs(dx) / w;
-    touchStartX.current = null;
-    touchStartY.current = null;
+    startX.current = null;
+    startY.current = null;
+    lockedAxis.current = null;
+    activePointerId.current = null;
     setIsDragging(0);
     setDragX(0);
-    // Lower threshold: 12% width or 50px is enough to advance
-    if (lockedAxis.current === "x" && (ratio > 0.12 || Math.abs(dx) > 50)) {
-      go(active + (dx < 0 ? 1 : -1));
-    }
-    lockedAxis.current = null;
     setPaused(false);
   };
 
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const onStart = (clientX: number, clientY: number, pointerId: number | null) => {
+      startX.current = clientX;
+      startY.current = clientY;
+      lockedAxis.current = null;
+      activePointerId.current = pointerId;
+      widthRef.current = el.clientWidth || 1;
+      setPaused(true);
+    };
+
+    const onMove = (clientX: number, clientY: number, e: Event) => {
+      if (startX.current == null || startY.current == null) return;
+      const dx = clientX - startX.current;
+      const dy = clientY - startY.current;
+      if (lockedAxis.current == null) {
+        const ax = Math.abs(dx);
+        const ay = Math.abs(dy);
+        // Require a clear horizontal intent before locking — bias toward
+        // letting the page scroll vertically.
+        if (ax > 10 && ax > ay * 1.3) {
+          lockedAxis.current = "x";
+        } else if (ay > 10 && ay > ax) {
+          lockedAxis.current = "y";
+        }
+      }
+      if (lockedAxis.current === "x") {
+        // Block vertical scroll only once we own the gesture.
+        if (e.cancelable) e.preventDefault();
+        setIsDragging(1);
+        setDragX(dx);
+      }
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      const t = e.touches[0];
+      onStart(t.clientX, t.clientY, null);
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      const t = e.touches[0];
+      onMove(t.clientX, t.clientY, e);
+    };
+    const onTouchEnd = (e: TouchEvent) => {
+      if (startX.current == null) return endGesture(null);
+      const t = e.changedTouches[0];
+      const dx = t.clientX - startX.current;
+      endGesture(dx);
+    };
+    const onTouchCancel = () => endGesture(null);
+
+    // Pointer events for mouse / pen — touch is handled above.
+    const onPointerDown = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return;
+      if (e.button !== 0) return;
+      onStart(e.clientX, e.clientY, e.pointerId);
+    };
+    const onPointerMove = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return;
+      if (activePointerId.current !== e.pointerId) return;
+      onMove(e.clientX, e.clientY, e);
+    };
+    const onPointerUp = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return;
+      if (activePointerId.current !== e.pointerId) return;
+      const dx = startX.current == null ? 0 : e.clientX - startX.current;
+      endGesture(startX.current == null ? null : dx);
+    };
+
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchmove", onTouchMove, { passive: false });
+    el.addEventListener("touchend", onTouchEnd, { passive: true });
+    el.addEventListener("touchcancel", onTouchCancel, { passive: true });
+    el.addEventListener("pointerdown", onPointerDown);
+    window.addEventListener("pointermove", onPointerMove);
+    window.addEventListener("pointerup", onPointerUp);
+    window.addEventListener("pointercancel", onPointerUp);
+
+    return () => {
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchend", onTouchEnd);
+      el.removeEventListener("touchcancel", onTouchCancel);
+      el.removeEventListener("pointerdown", onPointerDown);
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("pointercancel", onPointerUp);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slides.length]);
+
   return (
     <section
-      ref={(el) => { if (el) widthRef.current = el.clientWidth; }}
-      className="relative w-full shrink-0 overflow-hidden touch-pan-y"
+      ref={(el) => { sectionRef.current = el; if (el) widthRef.current = el.clientWidth; }}
+      className="relative w-full shrink-0 overflow-hidden touch-pan-y select-none"
       style={{ height: "clamp(520px, 78vh, 760px)" }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
-      onTouchCancel={onTouchEnd}
       aria-roledescription="carousel"
     >
       {/* Layered backdrops — crossfade */}
