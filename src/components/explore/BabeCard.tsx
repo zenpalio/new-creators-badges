@@ -1,4 +1,5 @@
-import { MessageSquare, Heart } from "lucide-react";
+import { MessageSquare } from "lucide-react";
+import LikeButton from "./LikeButton";
 
 interface BabeCardProps {
   name: string;
