@@ -35,7 +35,7 @@ export type Notification = {
   target?: string;
   thumbnail?: string;
   avatar?: string;
-  read?: boolean;
+  unread?: boolean;
 };
 
 interface NotificationsSidebarProps {
