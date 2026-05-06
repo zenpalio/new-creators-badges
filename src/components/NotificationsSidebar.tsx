@@ -48,6 +48,9 @@ interface NotificationsSidebarProps {
 const NotificationsSidebar = ({ open, onClose, notifications, announcements }: NotificationsSidebarProps) => {
   const [tab, setTab] = useState<"notifications" | "whats-new">("notifications");
   const [openAnnouncement, setOpenAnnouncement] = useState<Announcement | null>(null);
+  const [readIds, setReadIds] = useState<Set<string>>(new Set());
+  const unreadCount = notifications.filter((n) => n.unread && !readIds.has(n.id)).length;
+  const markAllRead = () => setReadIds(new Set(notifications.map((n) => n.id)));
 
   return (
     <>
