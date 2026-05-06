@@ -101,24 +101,24 @@ const NotificationsSidebar = ({ open, onClose, notifications, announcements }: N
                 {notifications.map((n) => (
                   <li
                     key={n.id}
-                    className="flex items-center gap-3 border-b border-border/30 px-5 py-3.5 transition-colors hover:bg-muted/30"
+                    className="flex items-center gap-3 border-b border-border/30 px-5 py-3 transition-colors hover:bg-muted/30"
                   >
-                    <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-muted">
+                    <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full bg-muted">
                       {n.avatar ? (
                         <img src={n.avatar} alt="" className="h-full w-full object-cover" />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center text-[11px] font-semibold uppercase text-muted-foreground">
+                        <div className="flex h-full w-full items-center justify-center text-[10px] font-semibold uppercase text-muted-foreground">
                           {n.initials}
                         </div>
                       )}
                     </div>
-                    <div className="min-w-0 flex-1 text-sm leading-snug text-foreground/90">
+                    <div className="min-w-0 flex-1 text-xs leading-snug text-foreground/90">
                       <span className="font-semibold text-foreground">{n.actor}</span>{" "}
                       <span className="text-muted-foreground">{n.action}</span>
                       {n.target && <span className="font-semibold text-foreground"> {n.target}</span>}
                     </div>
                     {n.thumbnail && (
-                      <div className="h-10 w-10 shrink-0 overflow-hidden rounded-md bg-muted">
+                      <div className="h-9 w-9 shrink-0 overflow-hidden rounded-md bg-muted">
                         <img src={n.thumbnail} alt="" className="h-full w-full object-cover" />
                       </div>
                     )}
@@ -131,14 +131,14 @@ const NotificationsSidebar = ({ open, onClose, notifications, announcements }: N
                   <li key={a.id}>
                     <button
                       onClick={() => setOpenAnnouncement(a)}
-                      className="flex w-full flex-col gap-1.5 border-b border-border/30 px-5 py-4 text-left transition-colors hover:bg-muted/30"
+                      className="flex w-full flex-col gap-1 border-b border-border/30 px-5 py-3.5 text-left transition-colors hover:bg-muted/30"
                     >
-                      <div className="flex items-center gap-2 text-[11px] font-medium">
+                      <div className="flex items-center gap-2 text-[10px] font-medium">
                         <span className="rounded-full bg-primary/15 px-2 py-0.5 text-primary">{a.tag}</span>
                         <span className="text-muted-foreground">{a.date}</span>
                       </div>
-                      <h3 className="text-sm font-semibold leading-snug text-foreground">{a.title}</h3>
-                      <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">{a.description}</p>
+                      <h3 className="text-xs font-semibold leading-snug text-foreground">{a.title}</h3>
+                      <p className="line-clamp-2 text-[11px] leading-snug text-muted-foreground">{a.description}</p>
                     </button>
                   </li>
                 ))}
@@ -147,10 +147,10 @@ const NotificationsSidebar = ({ open, onClose, notifications, announcements }: N
           </div>
 
           {/* Bottom tab switcher */}
-          <div className="grid grid-cols-2 gap-2 border-t border-border/40 p-3">
+          <div className="grid grid-cols-2 gap-2 border-t border-border/40 p-2.5">
             <button
               onClick={() => setTab("notifications")}
-              className={`rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+              className={`rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
                 tab === "notifications"
                   ? "bg-muted text-foreground"
                   : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
@@ -160,7 +160,7 @@ const NotificationsSidebar = ({ open, onClose, notifications, announcements }: N
             </button>
             <button
               onClick={() => setTab("whats-new")}
-              className={`rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+              className={`rounded-lg px-3 py-2 text-xs font-medium transition-colors ${
                 tab === "whats-new"
                   ? "bg-muted text-foreground"
                   : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
