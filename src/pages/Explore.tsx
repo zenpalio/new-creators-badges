@@ -1141,21 +1141,6 @@ const Explore = () => {
             </HScroll>
           </section>
 
-          {/* New releases */}
-          <section className="mt-4">
-            <SectionTitle title="New releases" action="See all" />
-            <TagRow tags={newReleaseTags} />
-            <HScroll>
-              {newBabes.map((b, i) => (
-                <BabeCard
-                  key={i}
-                  {...b}
-                  variant="stats"
-                  imageUrl={img(`new-${b.name}-${i}`)}
-                />
-              ))}
-            </HScroll>
-          </section>
 
           {/* Start creating */}
 
