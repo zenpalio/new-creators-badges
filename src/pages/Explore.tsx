@@ -880,7 +880,7 @@ const Explore = () => {
 
           {/* What's new — news row */}
           <section className="mt-4">
-            <SectionTitle icon={Newspaper} title="What&#39;s new" action="See all" />
+            <SectionTitle icon={Newspaper} title="What's new" action="See all" />
             <HScroll>
               {whatsNewItems.map((n, i) => {
                 const newsCard = (
