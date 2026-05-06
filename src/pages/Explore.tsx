@@ -415,10 +415,151 @@ const whatsNewItems: WhatsNewItem[] = [
         "🗺️ This is just the foundation. We're currently building Stories, Interactive Games, and a Video Editing suite to transform the platform from a gallery into a fully interactive multiverse.",
     },
   },
-  { tag: "Update", date: "May 3", title: "Faster video generation", description: "Render times cut in half on all Premium plans this week." },
-  { tag: "Babe drop", date: "May 2", title: "10 new fantasy babes", description: "Elven scouts, vampire countesses, and shrine maidens just landed." },
-  { tag: "Community", date: "Apr 30", title: "Creator payouts opened", description: "Top 100 creators can now cash out earnings directly from their dashboard." },
-  { tag: "Event", date: "Apr 28", title: "Spring writing contest", description: "Submit a story by May 20 for a chance at 3 months Premium." },
+  {
+    tag: "Update",
+    date: "Mar 31",
+    title: "New image models & 'Heat' chat engine are LIVE",
+    description: "Three brand-new realistic image models plus a next-gen English chat model in Beta.",
+    announcement: {
+      headline: "🚀 Big update: new models are live",
+      intro:
+        "Hey everyone — we've been busy in the lab and we're thrilled to finally drop some massive upgrades to your experience. We just launched three brand-new image models and a next-gen chat engine.",
+      sections: [
+        {
+          emoji: "🎨",
+          title: "New realistic image models",
+          items: [
+            { name: "Aphrodite — Fully Real", description: "Our most advanced realistic engine yet. High-end photography, perfect lighting, and lifelike textures." },
+            { name: "Dark Fantasy", description: "Epic landscapes, mystical characters, and magical effects with a grounded, cinematic feel." },
+            { name: "Anthro — Furry Oriented", description: "Tuned for the community with incredible anatomy, fur textures, and expressive characters." },
+          ],
+        },
+        {
+          emoji: "✨",
+          title: "What's improved",
+          items: [
+            { name: "Superior realism", description: "Better skin, fur, and material rendering across the board." },
+            { name: "Dynamic posing", description: "More natural positions and better understanding of complex body language." },
+            { name: "Stable & smooth", description: "Major reduction in artifacts and much more consistent results — including in chat." },
+          ],
+        },
+        {
+          emoji: "🔥",
+          title: "New chat model: 'Heat' (Beta)",
+          items: [
+            { name: "Deeper immersion", description: "Smarter, more responsive, and better at staying in character for a fluid chatting experience." },
+            { name: "English-only for now", description: "Since this is in Beta, it's currently English-only as we fine-tune the performance." },
+          ],
+        },
+      ],
+      outro:
+        "👀 Something huge is cooking — we're developing a massive suite of creative tools and advanced video settings. More variety, more control, more ways to bring your imagination to life.",
+    },
+  },
+  {
+    tag: "Update",
+    date: "Mar 13",
+    title: "V2.5 Video Generator is LIVE",
+    description: "Faster, sharper, smoother video generation with a fresh batch of new mods.",
+    announcement: {
+      headline: "🎬 Big news: V2.5 Video Generator is LIVE",
+      intro:
+        "Get ready to level up your creations! V2.5 has officially hit the platform, and it is a total game-changer.",
+      sections: [
+        {
+          emoji: "🚀",
+          title: "What's waiting for you",
+          items: [
+            { name: "Blazing speed", description: "Spend less time waiting and more time creating." },
+            { name: "Stunning quality", description: "Crisper details and high-definition results." },
+            { name: "Liquid smoothness", description: "Movement is now more natural and fluid than ever before." },
+            { name: "New mods", description: "A ton of fresh styles and mods are ready for you to experiment with." },
+          ],
+        },
+      ],
+      outro:
+        "🎨 We're not stopping there — brand-new templates are dropping very soon to spark even more inspiration. Happy creating!",
+    },
+  },
+  {
+    tag: "Update",
+    date: "Feb 20",
+    title: "Public Profiles, Following & Token Donations",
+    description: "A major update with new community features plus key bug fixes and gallery improvements.",
+    announcement: {
+      headline: "🚀 New update incoming",
+      intro:
+        "Hey everyone! We're briefly taking the site offline to roll out a major update packed with new features and some much-needed polish. Here's what's landing.",
+      sections: [
+        {
+          emoji: "🌟",
+          title: "New features",
+          items: [
+            { name: "Public Profiles", description: "You now have a home base — showcase your creations, stats, and style to the entire community." },
+            { name: "Following system", description: "Follow your favorite creators to keep up with their latest uploads and activity." },
+            { name: "Token donations", description: "Donate tokens directly to creators to support their work and keep the creativity flowing." },
+          ],
+        },
+        {
+          emoji: "🛠️",
+          title: "Bug fixes & improvements",
+          items: [
+            { name: "Remixing", description: "Fixed the issue where remixing videos from the Explore page would occasionally fail. Remix away!" },
+            { name: "Gallery view", description: "You can now open full-screen previews of images within the Babes Gallery for a high-res look." },
+          ],
+        },
+      ],
+      outro: "Estimated downtime: ~10–15 minutes. Thanks for your patience while we build a better experience for you.",
+    },
+  },
+  {
+    tag: "Announcement",
+    date: "Feb 3",
+    title: "The Community Update is LIVE",
+    description: "Remix culture, profile personalization, mass delete, and a new Explore UI.",
+    announcement: {
+      headline: "🎉 The Community Update is officially live",
+      intro:
+        "We've been working hard to give you more control and better ways to connect. The way you interact with the platform just leveled up.",
+      sections: [
+        {
+          emoji: "🤝",
+          title: "Community features are out",
+          items: [
+            { name: "Remix culture", description: "Love a babe? Remix existing characters — yours or other users' — to make them your own." },
+            { name: "Share your creations", description: "Easily share your custom babes with the rest of the community." },
+            { name: "New Explore UI", description: "A fresh way to discover the best community babes and videos with improved sorting." },
+            { name: "Better prompting", description: "More context for babe creation, babe bio, and overall prompting your babes." },
+          ],
+        },
+        {
+          emoji: "🎨",
+          title: "Customize your presence",
+          items: [
+            { name: "Profile personalization", description: "You can finally change your babe profile image, video, and bio." },
+          ],
+        },
+        {
+          emoji: "🧹",
+          title: "Total control over your gallery",
+          items: [
+            { name: "Mass delete", description: "Clean up your space instantly with the new mass delete option for both babes and gallery items." },
+          ],
+        },
+        {
+          emoji: "🔮",
+          title: "What's coming next",
+          items: [
+            { name: "Creator ecosystem", description: "Full user profiles with the option to follow your favorite creators." },
+            { name: "Support & tips", description: "Send tokens to other users to thank them for their amazing work." },
+            { name: "New mods & realistic model", description: "We're implementing a brand-new realistic image model for mind-blowing quality." },
+            { name: "Manual memory", description: "You'll have the power to manually manage what your babes remember for even deeper roleplay." },
+          ],
+        },
+      ],
+      outro: "Go check out the new features now and let us know what you think in the feedback channel. Stay creative — the team.",
+    },
+  },
 ];
 
 const announcements = whatsNewItems
