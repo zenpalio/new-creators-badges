@@ -164,18 +164,33 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
       aria-roledescription="carousel"
     >
       {/* Layered backdrops — crossfade */}
-      {slides.map((s, i) => (
+      {slides.map((s, i) => {
+        const w = widthRef.current || 1;
+        const prevIdx = (active - 1 + slides.length) % slides.length;
+        const nextIdx = (active + 1) % slides.length;
+        const isActive = i === active;
+        const isPrev = i === prevIdx;
+        const isNext = i === nextIdx;
+        let style: React.CSSProperties | undefined;
+        let opacity = isActive ? 1 : 0;
+        if (isDragging) {
+          if (isActive) {
+            style = { transform: `translate3d(${dragX}px,0,0)` };
+            opacity = 1;
+          } else if (isPrev && dragX > 0) {
+            style = { transform: `translate3d(${dragX - w}px,0,0)` };
+            opacity = Math.min(1, dragX / w);
+          } else if (isNext && dragX < 0) {
+            style = { transform: `translate3d(${dragX + w}px,0,0)` };
+            opacity = Math.min(1, -dragX / w);
+          }
+        }
+        return (
         <div
           key={s.name + i}
-          className={`absolute inset-0 ${isDragging ? "" : "transition-all duration-1000 ease-out"} ${
-            i === active ? "opacity-100" : "opacity-0"
-          }`}
-          style={
-            i === active && isDragging
-              ? { transform: `translate3d(${dragX}px,0,0)` }
-              : undefined
-          }
-          aria-hidden={i !== active}
+          className={`absolute inset-0 ${isDragging ? "" : "transition-all duration-1000 ease-out"}`}
+          style={{ ...style, opacity }}
+          aria-hidden={!isActive}
         >
           {(() => {
             const list = slideMedia[i];
