@@ -146,7 +146,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
 
     if (lockedHorizontal.current) {
       // Slight follow with rubber-band damping
-      const damped = Math.sign(dx) * Math.min(Math.abs(dx) * 0.5, 80);
+      const damped = Math.sign(dx) * Math.min(Math.abs(dx) * 0.28, 50);
       setDragX(damped);
     }
   };
