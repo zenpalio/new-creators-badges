@@ -312,9 +312,9 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                     </div>
                   </div>
 
-                  {/* Mobile: same card, smaller */}
-                  <div className="absolute inset-0 flex items-center justify-center px-6 md:hidden">
-                    <div className="relative h-[72%] max-h-[420px] aspect-[13/19]">
+                  {/* Mobile: full-width card with safe padding */}
+                  <div className="absolute inset-0 flex items-center justify-center px-4 pb-6 pt-4 md:hidden">
+                    <div className="relative h-full max-h-[78vh] w-full max-w-[300px] aspect-[13/19]" style={{ aspectRatio: "13 / 19" }}>
                       <div
                         className="absolute inset-0 rounded-xl overflow-hidden ring-1 ring-white/15 bg-card border border-border/50"
                         style={{ boxShadow: "0 25px 50px -10px rgba(0,0,0,0.8)" }}
@@ -668,7 +668,14 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
       <div
         className="relative z-10 mx-auto flex h-full max-w-[1600px] items-end px-6 pb-20 md:items-center md:pb-0"
       >
-        <div key={slide.name} className="max-w-xl animate-fade-in space-y-4">
+        <div
+          key={slide.name}
+          className={`max-w-xl animate-fade-in space-y-4 ${
+            slide.layout === "story" || slide.layout === "creators" || slide.layout === "premium"
+              ? "hidden md:block"
+              : ""
+          }`}
+        >
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-white/80 backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
             {slide.badge ?? "Featured today"}
