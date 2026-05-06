@@ -101,7 +101,7 @@
 
   .scrollbar-themed {
     scrollbar-width: thin;
-    scrollbar-color: hsl(var(--primary) / 0.5) transparent;
+    scrollbar-color: hsl(0 0% 35%) transparent;
   }
   .scrollbar-themed::-webkit-scrollbar {
     width: 6px;
@@ -111,11 +111,11 @@
     background: transparent;
   }
   .scrollbar-themed::-webkit-scrollbar-thumb {
-    background: hsl(var(--primary) / 0.4);
+    background: hsl(0 0% 30%);
     border-radius: 9999px;
   }
   .scrollbar-themed::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--primary) / 0.7);
+    background: hsl(0 0% 45%);
   }
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
