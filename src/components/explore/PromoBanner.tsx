@@ -29,7 +29,7 @@ const variantStyles: Record<
   }
 > = {
   premium: {
-    bg: "bg-gradient-to-br from-[#14171d] via-[#0c0e13] to-[#08090c]",
+    bg: "bg-gradient-to-br from-[#0a0c11] via-[#06080b] to-[#030405]",
     border: "border-white/[0.06] hover:border-white/[0.12]",
     eyebrow: "text-[hsl(213_90%_70%)]/80",
     title: "text-white",
@@ -40,7 +40,7 @@ const variantStyles: Record<
     monoColor: "text-black/60",
   },
   tokens: {
-    bg: "bg-gradient-to-br from-[#1a160e] via-[#100d08] to-[#080604]",
+    bg: "bg-gradient-to-br from-[#0d0a06] via-[#070503] to-[#030201]",
     border: "border-[hsl(45_70%_50%)]/15 hover:border-[hsl(45_70%_50%)]/30",
     eyebrow: "text-[hsl(45_85%_65%)]/80",
     title: "text-white",
@@ -51,7 +51,7 @@ const variantStyles: Record<
     monoColor: "text-black/60",
   },
   gift: {
-    bg: "bg-gradient-to-br from-[#160e13] via-[#10080c] to-[#080406]",
+    bg: "bg-gradient-to-br from-[#0d070a] via-[#070306] to-[#030102]",
     border: "border-[hsl(340_70%_55%)]/15 hover:border-[hsl(340_70%_55%)]/30",
     eyebrow: "text-[hsl(340_90%_70%)]/80",
     title: "text-white",
@@ -62,7 +62,7 @@ const variantStyles: Record<
     monoColor: "text-black/60",
   },
   feature: {
-    bg: "bg-gradient-to-br from-[#13141d] via-[#0c0d14] to-[#08090d]",
+    bg: "bg-gradient-to-br from-[#09090f] via-[#06060a] to-[#030305]",
     border: "border-[hsl(265_70%_60%)]/15 hover:border-[hsl(265_70%_60%)]/30",
     eyebrow: "text-[hsl(265_85%_75%)]/80",
     title: "text-white",
