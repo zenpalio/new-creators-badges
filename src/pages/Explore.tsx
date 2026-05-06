@@ -130,6 +130,7 @@ const featuredStories = [
     totalScenes: 24,
     avgRating: 4.8,
     ratingCount: 312,
+    likes: 2412,
   },
   {
     id: "s2",
@@ -140,6 +141,7 @@ const featuredStories = [
     totalScenes: 18,
     avgRating: 4.6,
     ratingCount: 218,
+    likes: 1830,
   },
   {
     id: "s3",
@@ -150,6 +152,7 @@ const featuredStories = [
     totalScenes: 32,
     avgRating: 4.9,
     ratingCount: 504,
+    likes: 3104,
   },
   {
     id: "s4",
@@ -160,6 +163,7 @@ const featuredStories = [
     totalScenes: 12,
     avgRating: 4.4,
     ratingCount: 96,
+    likes: 742,
   },
   {
     id: "s5",
@@ -170,6 +174,7 @@ const featuredStories = [
     totalScenes: 20,
     avgRating: 4.7,
     ratingCount: 174,
+    likes: 1567,
   },
 ];
 
@@ -183,6 +188,7 @@ const newEpisodes = [
     totalScenes: 8,
     avgRating: 4.3,
     ratingCount: 47,
+    likes: 612,
   },
   {
     id: "ne2",
@@ -193,6 +199,7 @@ const newEpisodes = [
     totalScenes: 14,
     avgRating: 4.5,
     ratingCount: 89,
+    likes: 1098,
   },
   {
     id: "ne3",
@@ -203,6 +210,7 @@ const newEpisodes = [
     totalScenes: 16,
     avgRating: 4.6,
     ratingCount: 132,
+    likes: 2230,
   },
   {
     id: "ne4",
@@ -213,6 +221,7 @@ const newEpisodes = [
     totalScenes: 22,
     avgRating: 4.8,
     ratingCount: 261,
+    likes: 1745,
   },
   {
     id: "ne5",
@@ -223,6 +232,7 @@ const newEpisodes = [
     totalScenes: 9,
     avgRating: 4.2,
     ratingCount: 58,
+    likes: 2980,
   },
 ];
 

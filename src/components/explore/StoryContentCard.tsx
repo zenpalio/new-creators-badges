@@ -1,4 +1,4 @@
-import { BookOpen, Star, Layers, Film } from "lucide-react";
+import { BookOpen, Star, Layers, Film, Heart } from "lucide-react";
 
 interface StoryContentCardProps {
   src: string;
@@ -8,6 +8,7 @@ interface StoryContentCardProps {
   totalScenes?: number;
   avgRating?: number;
   ratingCount?: number;
+  likes?: number;
   onClick?: () => void;
 }
 
@@ -23,6 +24,7 @@ const StoryContentCard = ({
   totalScenes = 0,
   avgRating = 0,
   ratingCount = 0,
+  likes,
   onClick,
 }: StoryContentCardProps) => {
   return (
@@ -83,6 +85,12 @@ const StoryContentCard = ({
             <Layers className="h-3.5 w-3.5" />
             {totalScenes} {totalScenes === 1 ? "scene" : "scenes"}
           </span>
+          {likes != null && (
+            <span className="flex items-center gap-1 text-[11px] text-white/80">
+              <Heart className="h-3.5 w-3.5" />
+              {likes}
+            </span>
+          )}
         </div>
       </div>
 
