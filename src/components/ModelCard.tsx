@@ -1,4 +1,5 @@
-import { MessageSquare, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
+import ChatIcon from "@/components/icons/ChatIcon";
 
 interface ModelCardProps {
   name: string;

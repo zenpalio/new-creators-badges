@@ -5,7 +5,6 @@ import {
   Image as ImageIcon,
   Sparkles,
   Film,
-  MessageSquare,
   Plus,
   ChevronLeft,
   Coins,
