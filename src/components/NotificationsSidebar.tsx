@@ -52,7 +52,7 @@ const NotificationsSidebar = ({ open, onClose, notifications, announcements }: N
   return (
     <>
       <div
-        className={`fixed inset-0 z-[110] transition-opacity ${
+        className={`fixed inset-0 z-40 transition-opacity ${
           open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
@@ -169,12 +169,25 @@ const NotificationsSidebar = ({ open, onClose, notifications, announcements }: N
               What's new?
             </button>
           </div>
+
+          {/* Discord link */}
+          <a
+            href="https://discord.gg/lovable-dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 border-t border-border/40 px-5 py-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted/40 hover:text-foreground"
+          >
+            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden>
+              <path d="M20.317 4.369A19.79 19.79 0 0 0 16.558 3a14.61 14.61 0 0 0-.617 1.265 18.27 18.27 0 0 0-5.487 0A14.61 14.61 0 0 0 9.837 3 19.79 19.79 0 0 0 6.077 4.369C2.61 9.534 1.67 14.568 2.14 19.527A19.94 19.94 0 0 0 8.18 22.5a14.66 14.66 0 0 0 1.262-2.05 12.85 12.85 0 0 1-1.987-.95c.166-.122.33-.25.487-.38a14.18 14.18 0 0 0 12.116 0c.158.13.32.258.487.38-.633.376-1.302.696-1.99.951.376.726.797 1.41 1.262 2.05a19.93 19.93 0 0 0 6.041-2.973c.55-5.748-.94-10.737-3.541-15.158ZM8.52 16.402c-1.182 0-2.157-1.085-2.157-2.418 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.333-.955 2.418-2.157 2.418Zm6.96 0c-1.183 0-2.158-1.085-2.158-2.418 0-1.333.955-2.418 2.158-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.333-.946 2.418-2.157 2.418Z" />
+            </svg>
+            Join our Discord
+          </a>
         </aside>
       </div>
 
       {/* Announcement detail dialog */}
       <Dialog open={!!openAnnouncement} onOpenChange={(o) => !o && setOpenAnnouncement(null)}>
-        <DialogContent className="w-[calc(100%-32px)] max-w-[560px] gap-0 rounded-2xl border-border/60 bg-card p-0 text-foreground">
+        <DialogContent className="z-[120] w-[calc(100%-32px)] max-w-[560px] gap-0 rounded-2xl border-border/60 bg-card p-0 text-foreground">
           {openAnnouncement && (
             <div className="max-h-[80vh] overflow-y-auto px-5 pb-6 pt-5 sm:px-7">
               <DialogHeader className="space-y-3 text-left">
