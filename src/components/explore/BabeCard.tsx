@@ -1,5 +1,5 @@
-import { MessageSquare } from "lucide-react";
 import LikeButton from "./LikeButton";
+import ChatIcon from "@/components/icons/ChatIcon";
 
 interface BabeCardProps {
   name: string;
@@ -36,7 +36,7 @@ const BabeCard = ({
         {/* Compact variant: message badge top-right */}
         {!showStats && messageCount !== 0 && messageCount !== "0" && (
           <div className="absolute right-2 top-2 flex items-center gap-1 rounded-full bg-black/60 px-2 py-0.5 text-[11px] font-medium text-white backdrop-blur-sm">
-            <MessageSquare className="h-3 w-3" />
+            <ChatIcon className="h-3 w-3" />
             {messageCount}
           </div>
         )}
@@ -50,7 +50,7 @@ const BabeCard = ({
           {showStats && (
             <div className="mt-2 flex items-center justify-between text-[12px] font-medium text-white/90">
               <span className="flex items-center gap-1">
-                <MessageSquare className="h-3.5 w-3.5" />
+                <ChatIcon className="h-3.5 w-3.5" />
                 {messageCount}
               </span>
               <LikeButton className="text-[12px] font-medium text-white/90"><span>{likeCount ?? 0}</span></LikeButton>

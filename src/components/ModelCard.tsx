@@ -1,4 +1,5 @@
-import { MessageSquare, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
+import ChatIcon from "@/components/icons/ChatIcon";
 
 interface ModelCardProps {
   name: string;
@@ -18,7 +19,7 @@ const ModelCard = ({ name, description, messageCount, likeCount, imageUrl }: Mod
         <p className="text-muted-foreground text-xs mt-0.5 line-clamp-2">{description}</p>
         <div className="flex items-center gap-3 mt-1.5 text-muted-foreground">
           <div className="flex items-center gap-1">
-            <MessageSquare className="w-3.5 h-3.5" />
+            <ChatIcon className="w-3.5 h-3.5" />
             <span className="text-xs">{messageCount}</span>
           </div>
           <div className="flex items-center gap-1">
