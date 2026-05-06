@@ -37,7 +37,7 @@ const variantStyles: Record<
     cta: "bg-white/[0.06] text-white border border-white/15 hover:bg-white/[0.1] hover:border-white/25",
     glow: "bg-[radial-gradient(circle_at_70%_50%,hsl(213_100%_60%/0.18),transparent_60%)]",
     monogram: "P",
-    monoColor: "text-white/[0.04]",
+    monoColor: "text-black/60",
   },
   tokens: {
     bg: "bg-gradient-to-br from-[#1a160e] via-[#100d08] to-[#080604]",
@@ -48,7 +48,7 @@ const variantStyles: Record<
     cta: "bg-[hsl(45_70%_15%)] text-[hsl(45_90%_70%)] border border-[hsl(45_70%_45%)]/30 hover:bg-[hsl(45_70%_18%)] hover:border-[hsl(45_70%_45%)]/50",
     glow: "bg-[radial-gradient(circle_at_75%_50%,hsl(45_90%_55%/0.18),transparent_60%)]",
     monogram: "20",
-    monoColor: "text-[hsl(45_90%_55%)]/[0.06]",
+    monoColor: "text-black/60",
   },
   gift: {
     bg: "bg-gradient-to-br from-[#160e13] via-[#10080c] to-[#080406]",
@@ -59,7 +59,7 @@ const variantStyles: Record<
     cta: "bg-[hsl(340_50%_18%)] text-[hsl(340_90%_75%)] border border-[hsl(340_70%_55%)]/30 hover:bg-[hsl(340_50%_22%)] hover:border-[hsl(340_70%_55%)]/50",
     glow: "bg-[radial-gradient(circle_at_75%_50%,hsl(340_90%_55%/0.22),transparent_60%)]",
     monogram: "★",
-    monoColor: "text-[hsl(340_90%_60%)]/[0.07]",
+    monoColor: "text-black/60",
   },
   feature: {
     bg: "bg-gradient-to-br from-[#13141d] via-[#0c0d14] to-[#08090d]",
@@ -70,7 +70,7 @@ const variantStyles: Record<
     cta: "bg-[hsl(265_50%_18%)] text-[hsl(265_90%_80%)] border border-[hsl(265_70%_60%)]/30 hover:bg-[hsl(265_50%_22%)] hover:border-[hsl(265_70%_60%)]/50",
     glow: "bg-[radial-gradient(circle_at_75%_50%,hsl(265_90%_60%/0.22),transparent_60%)]",
     monogram: "✦",
-    monoColor: "text-[hsl(265_90%_70%)]/[0.07]",
+    monoColor: "text-black/60",
   },
 };
 
