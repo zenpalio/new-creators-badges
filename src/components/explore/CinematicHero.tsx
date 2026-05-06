@@ -784,32 +784,29 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
         <ChevronRight className="h-5 w-5" />
       </button>
 
-      {/* Progress indicators — desktop shows all, mobile shows a window of max 4 */}
+      {/* Progress indicators — desktop bars, mobile small dots with edge-fade hint */}
       {(() => {
-        const MAX_MOBILE = 4;
         const total = slides.length;
+        const MAX_MOBILE = 7; // odd number, active sits in middle when possible
+        const half = Math.floor(MAX_MOBILE / 2);
         let mobileStart = 0;
         if (total > MAX_MOBILE) {
-          mobileStart = Math.min(
-            Math.max(0, active - Math.floor(MAX_MOBILE / 2)),
-            total - MAX_MOBILE,
-          );
+          mobileStart = Math.min(Math.max(0, active - half), total - MAX_MOBILE);
         }
         const mobileEnd = mobileStart + Math.min(MAX_MOBILE, total);
+        const visibleCount = mobileEnd - mobileStart;
         return (
-          <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1.5 md:gap-2">
-            {slides.map((_, i) => {
-              const inMobileWindow = i >= mobileStart && i < mobileEnd;
-              return (
+          <>
+            {/* Desktop: full progress bars */}
+            <div className="absolute bottom-6 left-1/2 z-20 hidden -translate-x-1/2 items-center gap-2 md:flex">
+              {slides.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => go(i)}
-                  className={`group relative h-6 w-10 items-center justify-center transition-all md:h-4 md:flex ${
-                    inMobileWindow ? "flex" : "hidden"
-                  }`}
+                  className="group relative flex h-4 w-10 items-center justify-center transition-all"
                   aria-label={`Go to slide ${i + 1}`}
                 >
-                  <span className={`block h-1 overflow-hidden rounded-full bg-white/25 transition-all w-full`}>
+                  <span className="block h-1 w-full overflow-hidden rounded-full bg-white/25">
                     <span
                       className={`block h-full origin-left bg-white ${i === active ? "hero-progress-fill" : ""}`}
                       style={{
@@ -820,9 +817,45 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                     />
                   </span>
                 </button>
-              );
-            })}
-          </div>
+              ))}
+            </div>
+
+            {/* Mobile: small dots, edge dots scaled down to hint at more slides */}
+            <div className="absolute bottom-5 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1.5 md:hidden">
+              {slides.map((_, i) => {
+                if (i < mobileStart || i >= mobileEnd) return null;
+                const localIdx = i - mobileStart;
+                const isActive = i === active;
+                const hasMoreLeft = mobileStart > 0;
+                const hasMoreRight = mobileEnd < total;
+                // Edge-fade scaling: outermost = smallest, next = medium
+                let scale = 1;
+                if (hasMoreLeft && localIdx === 0) scale = 0.45;
+                else if (hasMoreLeft && localIdx === 1) scale = 0.7;
+                if (hasMoreRight && localIdx === visibleCount - 1) scale = 0.45;
+                else if (hasMoreRight && localIdx === visibleCount - 2) scale = 0.7;
+
+                return (
+                  <button
+                    key={i}
+                    onClick={() => go(i)}
+                    aria-label={`Go to slide ${i + 1}`}
+                    className="flex h-4 w-4 items-center justify-center"
+                  >
+                    <span
+                      className={`block rounded-full transition-all ${
+                        isActive ? "bg-white" : "bg-white/40"
+                      }`}
+                      style={{
+                        width: `${(isActive ? 7 : 6) * scale}px`,
+                        height: `${(isActive ? 7 : 6) * scale}px`,
+                      }}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+          </>
         );
       })()}
     </section>
