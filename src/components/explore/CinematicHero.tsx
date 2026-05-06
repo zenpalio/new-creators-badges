@@ -647,8 +647,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
 
       {/* Content */}
       <div
-        className={`relative z-10 mx-auto flex h-full max-w-[1600px] items-end px-6 pb-20 md:items-center md:pb-0 ${isDragging ? "" : "transition-transform duration-500 ease-out"}`}
-        style={isDragging ? { transform: `translate3d(${dragX}px,0,0)` } : undefined}
+        className="relative z-10 mx-auto flex h-full max-w-[1600px] items-end px-6 pb-20 md:items-center md:pb-0"
       >
         <div key={slide.name} className="max-w-xl animate-fade-in space-y-4">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-white/80 backdrop-blur">
