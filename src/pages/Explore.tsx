@@ -731,7 +731,7 @@ const Explore = () => {
           <div className="mt-2 space-y-3">
             <PromoBanner
               variant="gift"
-              emoji="🎁"
+              icon={Sparkles}
               eyebrow="Welcome gift"
               title="A surprise is waiting for you — claim it now"
               description="Sign up today to unlock characters, chat, roleplay and image generation."
