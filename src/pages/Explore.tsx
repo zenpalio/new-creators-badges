@@ -835,8 +835,8 @@ const Explore = () => {
                         <Play className="h-5 w-5 fill-black text-black" />
                       </div>
                     </div>
-                    <div className="absolute bottom-2 right-2 flex items-center gap-1 rounded-md bg-black/70 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur">
-                      <Heart className="h-3 w-3" /> {v.likes}
+                    <div className="absolute bottom-2 right-2 rounded-md bg-black/70 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur">
+                      <LikeButton count={v.likes} iconClassName="h-3 w-3" />
                     </div>
                   </div>
                 </div>
