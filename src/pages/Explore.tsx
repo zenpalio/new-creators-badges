@@ -343,17 +343,76 @@ const createTools = [
   },
 ];
 
-const whatsNewItems = [
+type AnnouncementSection = {
+  emoji: string;
+  title: string;
+  items: { name: string; description: string }[];
+};
+
+type WhatsNewItem = {
+  tag: string;
+  date: string;
+  title: string;
+  description: string;
+  announcement?: {
+    headline: string;
+    intro: string;
+    sections: AnnouncementSection[];
+    cta?: { label: string; url: string };
+    outro?: string;
+  };
+};
+
+const whatsNewItems: WhatsNewItem[] = [
   {
-    tag: "Feature",
+    tag: "Announcement",
     date: "May 5",
-    title: "Story Creator is live",
-    description: "Write your own branching episodes and publish them to the community.",
-    featureDetails: [
-      "Build multi-scene stories with branching choices.",
-      "Attach characters, cover art, and episode metadata.",
-      "Publish drafts when they are ready for the community.",
-    ],
+    title: "Introducing Studio — your new creative hub",
+    description: "Build, edit, and monetize like never before. Here's everything that's new and live right now.",
+    announcement: {
+      headline: "✨ The future of creativity is here: introducing Studio",
+      intro:
+        "Hi everyone — we're so happy to finally introduce Studio, your new creative hub designed to be the heartbeat of the ecosystem, giving you the power to build, edit, and monetize like never before. Here's what's new and live right now.",
+      sections: [
+        {
+          emoji: "🌌",
+          title: "Expanded image generation",
+          items: [
+            { name: "Scene Builder", description: "Break free from character-only prompts. Create immersive worlds, cinematic landscapes, and complex environments." },
+            { name: "Inpainting", description: "Your images are no longer \"final.\" Edit specific details, add elements, or refine your vision with surgical precision." },
+            { name: "New Artea mods", description: "Exclusive new stylistic mods to push the boundaries of your favorite anime model." },
+          ],
+        },
+        {
+          emoji: "📽️",
+          title: "The next chapter in video",
+          items: [
+            { name: "Video Extension", description: "Create deeper narratives with our new video extension tool." },
+            { name: "Strategic partnerships", description: "We've joined forces with industry leaders to integrate audio, voiceovers, and high-fidelity video models. (coming soon)" },
+          ],
+        },
+        {
+          emoji: "🎭",
+          title: "Intuitive character crafting",
+          items: [
+            { name: "Real-time preview", description: "Watch your character take shape instantly within the builder." },
+            { name: "Archetypes & AI synthesis", description: "Personality archetypes and AI-assisted rewriting bridge the gap between an idea and a living, breathing character." },
+          ],
+        },
+        {
+          emoji: "💎",
+          title: "The creator economy is here",
+          items: [
+            { name: "Creator Hub", description: "Launch your profile, lock premium content, and set your own pricing." },
+            { name: "Redeem codes", description: "Convert your audience across the web with a one-click redeem system." },
+            { name: "Affiliate program", description: "Earn recurring revenue for every new user you bring into the ecosystem." },
+          ],
+        },
+      ],
+      cta: { label: "Become a creator", url: "#" },
+      outro:
+        "🗺️ This is just the foundation. We're currently building Stories, Interactive Games, and a Video Editing suite to transform the platform from a gallery into a fully interactive multiverse.",
+    },
   },
   { tag: "Update", date: "May 3", title: "Faster video generation", description: "Render times cut in half on all Premium plans this week." },
   { tag: "Babe drop", date: "May 2", title: "10 new fantasy babes", description: "Elven scouts, vampire countesses, and shrine maidens just landed." },
