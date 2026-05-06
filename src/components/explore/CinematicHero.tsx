@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { BookOpen, ChevronLeft, ChevronRight, Heart, MessageSquare, Play, Star, User } from "lucide-react";
+import { BookOpen, ChevronLeft, ChevronRight, MessageSquare, Play, Star, User } from "lucide-react";
+import LikeButton from "./LikeButton";
 
 export type HeroMedia =
   | { type: "image"; url: string }
