@@ -132,7 +132,6 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
       lockedAxis.current = null;
       activePointerId.current = pointerId;
       widthRef.current = el.clientWidth || 1;
-      setPaused(true);
     };
 
     const onMove = (clientX: number, clientY: number, e: Event) => {
@@ -144,10 +143,13 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
         const ay = Math.abs(dy);
         // Require a clear horizontal intent before locking — bias toward
         // letting the page scroll vertically.
-        if (ax > 10 && ax > ay * 1.3) {
+        if (ax > 18 && ax > ay * 1.7) {
           lockedAxis.current = "x";
-        } else if (ay > 10 && ay > ax) {
+          setPaused(true);
+        } else if (ay > 8 && ay > ax * 0.7) {
           lockedAxis.current = "y";
+          resetGesture();
+          return;
         }
       }
       if (lockedAxis.current === "x") {
@@ -158,54 +160,26 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
       }
     };
 
-    const onTouchStart = (e: TouchEvent) => {
-      const t = e.touches[0];
-      onStart(t.clientX, t.clientY, null);
-    };
-    const onTouchMove = (e: TouchEvent) => {
-      const t = e.touches[0];
-      onMove(t.clientX, t.clientY, e);
-    };
-    const onTouchEnd = (e: TouchEvent) => {
-      if (startX.current == null) return endGesture(null);
-      const t = e.changedTouches[0];
-      const dx = t.clientX - startX.current;
-      endGesture(dx);
-    };
-    const onTouchCancel = () => endGesture(null);
-
-    // Pointer events for mouse / pen — touch is handled above.
     const onPointerDown = (e: PointerEvent) => {
-      if (e.pointerType === "touch") return;
-      if (e.button !== 0) return;
+      if (e.pointerType === "mouse" && e.button !== 0) return;
       onStart(e.clientX, e.clientY, e.pointerId);
     };
     const onPointerMove = (e: PointerEvent) => {
-      if (e.pointerType === "touch") return;
       if (activePointerId.current !== e.pointerId) return;
       onMove(e.clientX, e.clientY, e);
     };
     const onPointerUp = (e: PointerEvent) => {
-      if (e.pointerType === "touch") return;
       if (activePointerId.current !== e.pointerId) return;
       const dx = startX.current == null ? 0 : e.clientX - startX.current;
       endGesture(startX.current == null ? null : dx);
     };
 
-    el.addEventListener("touchstart", onTouchStart, { passive: true });
-    el.addEventListener("touchmove", onTouchMove, { passive: false });
-    el.addEventListener("touchend", onTouchEnd, { passive: true });
-    el.addEventListener("touchcancel", onTouchCancel, { passive: true });
     el.addEventListener("pointerdown", onPointerDown);
     window.addEventListener("pointermove", onPointerMove);
     window.addEventListener("pointerup", onPointerUp);
     window.addEventListener("pointercancel", onPointerUp);
 
     return () => {
-      el.removeEventListener("touchstart", onTouchStart);
-      el.removeEventListener("touchmove", onTouchMove);
-      el.removeEventListener("touchend", onTouchEnd);
-      el.removeEventListener("touchcancel", onTouchCancel);
       el.removeEventListener("pointerdown", onPointerDown);
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
