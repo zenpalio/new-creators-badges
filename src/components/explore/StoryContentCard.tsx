@@ -1,4 +1,5 @@
-import { BookOpen, Star, Layers, Film, Heart } from "lucide-react";
+import { BookOpen, Star, Layers, Film } from "lucide-react";
+import LikeButton from "./LikeButton";
 
 interface StoryContentCardProps {
   src: string;
