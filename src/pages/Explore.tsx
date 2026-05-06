@@ -664,6 +664,7 @@ const Explore = () => {
       <NotificationsSidebar
         open={notificationsOpen}
         onClose={() => setNotificationsOpen(false)}
+        onReopen={() => setNotificationsOpen(true)}
         notifications={mockNotifications}
         announcements={announcements}
       />
