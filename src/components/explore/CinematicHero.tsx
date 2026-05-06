@@ -22,12 +22,15 @@ export interface HeroSlide {
   cta?: string;
   /** Visual treatment. "portrait" (default) shows a tall portrait panel on the right.
    *  "banner" shows a full-bleed wide image — better for promo / sale / feature cards.
-   *  "story" shows a book-cover style card with chapter/episode metadata. */
-  layout?: "portrait" | "banner" | "story";
+   *  "story" shows a book-cover style card with chapter/episode metadata.
+   *  "creators" shows a top-3 creators podium. */
+  layout?: "portrait" | "banner" | "story" | "creators";
   /** Optional accent color (hsl) for banner overlays */
   accent?: string;
   /** Story metadata, shown when layout === "story" */
   storyMeta?: { chapters?: number; episodes?: number; rating?: number };
+  /** Top creators, shown when layout === "creators" */
+  creators?: { rank: number; name: string; avatarUrl: string; subtitle?: string }[];
 }
 
 interface Props {
