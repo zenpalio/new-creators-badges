@@ -146,7 +146,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
 
     if (lockedHorizontal.current) {
       // Slight follow with rubber-band damping
-      const damped = Math.sign(dx) * Math.min(Math.abs(dx) * 0.28, 50);
+      const damped = Math.sign(dx) * Math.min(Math.abs(dx) * 0.15, 32);
       setDragX(damped);
     }
   };
@@ -195,7 +195,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
           className="absolute inset-0 hero-slide-enter"
           style={{
             transform: dragX ? `translate3d(${dragX}px,0,0)` : undefined,
-            transition: dragging ? "none" : "transform 300ms ease-out",
+            transition: dragging ? "none" : "transform 500ms ease-out",
             willChange: dragging ? "transform" : undefined,
             ["--hero-dir" as any]: dir === 1 ? "1" : "-1",
           }}
