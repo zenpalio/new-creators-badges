@@ -47,8 +47,6 @@ interface Props {
 const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Props) => {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
-  const startRef = useRef<number>(performance.now());
-  const [progress, setProgress] = useState(0);
 
   // Build a normalized media list per slide (always at least the imageUrl)
   const slideMedia = useMemo<HeroMedia[][]>(
@@ -79,31 +77,19 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
     return () => window.clearInterval(id);
   }, [active, paused, slideMedia, mediaIntervalMs]);
 
-  // Auto-rotate slides with progress
+  // Auto-rotate slides. Progress is CSS-driven so the hero doesn't re-render every frame.
   useEffect(() => {
-    if (paused) return;
-    startRef.current = performance.now();
-    setProgress(0);
-    let raf = 0;
-    const tick = (t: number) => {
-      const p = Math.min(1, (t - startRef.current) / intervalMs);
-      setProgress(p);
-      if (p >= 1) {
-        setActive((a) => (a + 1) % slides.length);
-      } else {
-        raf = requestAnimationFrame(tick);
-      }
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    if (paused || slides.length <= 1) return;
+    const id = window.setTimeout(() => {
+      setActive((a) => (a + 1) % slides.length);
+    }, intervalMs);
+    return () => window.clearTimeout(id);
   }, [active, paused, intervalMs, slides.length]);
 
   const go = (i: number) => setActive((i + slides.length) % slides.length);
   const slide = slides[active];
 
-  // Pointer-based swipe (mobile) — live drag with snap on release.
-  // Uses native non-passive touchmove so we can preventDefault once the
-  // gesture is clearly horizontal (prevents fighting page scroll).
+  // Pointer-based swipe — only takes over after a very clear horizontal gesture.
   const sectionRef = useRef<HTMLElement | null>(null);
   const startX = useRef<number | null>(null);
   const startY = useRef<number | null>(null);
@@ -115,14 +101,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
   const activeRef = useRef(active);
   useEffect(() => { activeRef.current = active; }, [active]);
 
-  const endGesture = (commitDx: number | null) => {
-    const w = widthRef.current || 1;
-    if (commitDx != null && lockedAxis.current === "x") {
-      const ratio = Math.abs(commitDx) / w;
-      if (ratio > 0.12 || Math.abs(commitDx) > 50) {
-        go(activeRef.current + (commitDx < 0 ? 1 : -1));
-      }
-    }
+  const resetGesture = () => {
     startX.current = null;
     startY.current = null;
     lockedAxis.current = null;
@@ -130,6 +109,17 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
     setIsDragging(0);
     setDragX(0);
     setPaused(false);
+  };
+
+  const endGesture = (commitDx: number | null) => {
+    const w = widthRef.current || 1;
+    if (commitDx != null && lockedAxis.current === "x") {
+      const ratio = Math.abs(commitDx) / w;
+      if (ratio > 0.18 || Math.abs(commitDx) > 72) {
+        go(activeRef.current + (commitDx < 0 ? 1 : -1));
+      }
+    }
+    resetGesture();
   };
 
   useEffect(() => {
