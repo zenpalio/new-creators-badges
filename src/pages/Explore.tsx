@@ -403,7 +403,7 @@ const whatsNewItems: WhatsNewItem[] = [
           ],
         },
       ],
-      cta: { label: "Become a creator", url: "#" },
+      
       outro:
         "🗺️ This is just the foundation. We're currently building Stories, Interactive Games, and a Video Editing suite to transform the platform from a gallery into a fully interactive multiverse.",
     },
