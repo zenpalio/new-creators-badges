@@ -89,11 +89,14 @@ const NotificationsSidebar = ({ open, onClose, notifications, announcements }: N
             <span>All systems operational</span>
           </div>
 
-          {/* Top action row (only for notifications) */}
-          {tab === "notifications" && (
-            <button className="flex items-center justify-center gap-2 border-b border-border/40 py-2.5 text-xs font-medium text-foreground/90 transition-colors hover:bg-muted/40">
+          {/* Top action row — only when there are unread notifications */}
+          {tab === "notifications" && unreadCount > 0 && (
+            <button
+              onClick={markAllRead}
+              className="flex items-center justify-center gap-2 border-b border-border/40 py-2.5 text-xs font-medium text-foreground/90 transition-colors hover:bg-muted/40"
+            >
               <CheckCheck className="h-3.5 w-3.5" />
-              Mark all as read
+              Mark all as read ({unreadCount})
             </button>
           )}
 
