@@ -9,6 +9,14 @@ import FloatingToolsFAB from "@/components/explore/FloatingToolsFAB";
 import SystemStatusIndicator from "@/components/explore/SystemStatusIndicator";
 import PromoBanner from "@/components/explore/PromoBanner";
 import SideNav from "@/components/SideNav";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { type BadgeTier } from "@/components/BadgeCard";
 import bannerPremium from "@/assets/hero/banner-premium.jpg";
 import bannerFeature from "@/assets/hero/banner-feature.jpg";
@@ -335,6 +343,24 @@ const createTools = [
   },
 ];
 
+const whatsNewItems = [
+  {
+    tag: "Feature",
+    date: "May 5",
+    title: "Story Creator is live",
+    description: "Write your own branching episodes and publish them to the community.",
+    featureDetails: [
+      "Build multi-scene stories with branching choices.",
+      "Attach characters, cover art, and episode metadata.",
+      "Publish drafts when they are ready for the community.",
+    ],
+  },
+  { tag: "Update", date: "May 3", title: "Faster video generation", description: "Render times cut in half on all Premium plans this week." },
+  { tag: "Babe drop", date: "May 2", title: "10 new fantasy babes", description: "Elven scouts, vampire countesses, and shrine maidens just landed." },
+  { tag: "Community", date: "Apr 30", title: "Creator payouts opened", description: "Top 100 creators can now cash out earnings directly from their dashboard." },
+  { tag: "Event", date: "Apr 28", title: "Spring writing contest", description: "Submit a story by May 20 for a chance at 3 months Premium." },
+];
+
 
 
 // ---- Section header ----
@@ -584,34 +610,64 @@ const Explore = () => {
           <section className="mt-4">
             <SectionTitle title="What's new" action="See all" />
             <HScroll>
-              {[
-                { tag: "Feature", date: "May 5", title: "Story Creator is live", description: "Write your own branching episodes and publish them to the community." },
-                { tag: "Update", date: "May 3", title: "Faster video generation", description: "Render times cut in half on all Premium plans this week." },
-                { tag: "Babe drop", date: "May 2", title: "10 new fantasy babes", description: "Elven scouts, vampire countesses, and shrine maidens just landed." },
-                { tag: "Community", date: "Apr 30", title: "Creator payouts opened", description: "Top 100 creators can now cash out earnings directly from their dashboard." },
-                { tag: "Event", date: "Apr 28", title: "Spring writing contest", description: "Submit a story by May 20 for a chance at 3 months Premium." },
-              ].map((n, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  className="group flex w-[300px] shrink-0 flex-col gap-2 rounded-2xl border border-white/[0.06] bg-grey-dark-1/60 p-4 transition-colors hover:border-white/10 hover:bg-grey-dark-1"
-                >
-                  <div className="flex items-center gap-2 text-[11px] font-medium">
-                    <span className="rounded-full bg-primary/15 px-2 py-0.5 text-primary">{n.tag}</span>
-                    <span className="text-grey-light-4">{n.date}</span>
+              {whatsNewItems.map((n, i) => {
+                const newsCard = (
+                  <div className="group flex h-full w-[300px] shrink-0 flex-col gap-2 rounded-2xl border border-white/[0.06] bg-grey-dark-1/60 p-4 text-left transition-colors hover:border-white/10 hover:bg-grey-dark-1">
+                    <div className="flex items-center gap-2 text-[11px] font-medium">
+                      <span className="rounded-full bg-primary/15 px-2 py-0.5 text-primary">{n.tag}</span>
+                      <span className="text-grey-light-4">{n.date}</span>
+                    </div>
+                    <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-white">
+                      {n.title}
+                    </h3>
+                    <p className="line-clamp-2 text-xs leading-snug text-grey-light-3">
+                      {n.description}
+                    </p>
+                    <div className="mt-auto flex items-center gap-1 pt-1 text-xs font-medium text-grey-light-3 transition-colors group-hover:text-white">
+                      <span>Read more</span>
+                      <ArrowUpRight className="h-3.5 w-3.5" />
+                    </div>
                   </div>
-                  <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-white">
-                    {n.title}
-                  </h3>
-                  <p className="line-clamp-2 text-xs leading-snug text-grey-light-3">
-                    {n.description}
-                  </p>
-                  <div className="mt-auto flex items-center gap-1 pt-1 text-xs font-medium text-grey-light-3 transition-colors group-hover:text-white">
-                    <span>Read more</span>
-                    <ArrowUpRight className="h-3.5 w-3.5" />
-                  </div>
-                </a>
-              ))}
+                );
+
+                if (!n.featureDetails) {
+                  return (
+                    <button key={i} type="button" className="block shrink-0">
+                      {newsCard}
+                    </button>
+                  );
+                }
+
+                return (
+                  <Dialog key={i}>
+                    <DialogTrigger asChild>
+                      <button type="button" className="block shrink-0">
+                        {newsCard}
+                      </button>
+                    </DialogTrigger>
+                    <DialogContent className="w-[calc(100%-32px)] max-w-[420px] rounded-2xl border-white/[0.08] bg-grey-dark-1 p-5 text-white">
+                      <DialogHeader>
+                        <div className="mb-2 flex items-center gap-2 text-[11px] font-medium">
+                          <span className="rounded-full bg-primary/15 px-2 py-0.5 text-primary">{n.tag}</span>
+                          <span className="text-grey-light-4">{n.date}</span>
+                        </div>
+                        <DialogTitle className="text-xl font-bold leading-tight text-white">{n.title}</DialogTitle>
+                        <DialogDescription className="text-sm leading-relaxed text-grey-light-3">
+                          {n.description}
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-2 pt-1">
+                        {n.featureDetails.map((detail) => (
+                          <div key={detail} className="flex gap-3 rounded-xl bg-background/50 p-3 text-sm leading-snug text-grey-light-2">
+                            <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                            <span>{detail}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                );
+              })}
             </HScroll>
           </section>
 
