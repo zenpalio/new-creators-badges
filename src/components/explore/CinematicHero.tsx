@@ -134,12 +134,11 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
     touchLast.current = { x: touch.clientX, y: touch.clientY };
 
     if (!lockedHorizontal.current) {
-      // Bias strongly toward vertical so page scrolling wins easily.
-      if (Math.abs(dy) > 6 && Math.abs(dy) >= Math.abs(dx) * 0.7) {
+      if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx) * 1.15) {
         clearTouch();
         return;
       }
-      if (Math.abs(dx) > 16 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
         lockedHorizontal.current = true;
         setDragging(true);
       }
