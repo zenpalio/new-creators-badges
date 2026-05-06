@@ -64,23 +64,32 @@ const NotificationsSidebar = ({ open, onClose, notifications, announcements }: N
           }`}
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-5 py-4">
-            <h2 className="text-xl font-bold text-foreground">
+          <div className="flex items-center justify-between px-5 py-3.5">
+            <h2 className="text-base font-bold text-foreground">
               {tab === "notifications" ? "Notifications" : "What's new"}
             </h2>
             <button
               onClick={onClose}
-              className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
+              className="flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
               aria-label="Close"
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4" />
             </button>
+          </div>
+
+          {/* System status indicator */}
+          <div className="flex items-center gap-2 border-y border-border/40 px-5 py-2.5 text-xs text-muted-foreground">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[hsl(var(--success))] opacity-60" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[hsl(var(--success))]" />
+            </span>
+            <span>All systems operational</span>
           </div>
 
           {/* Top action row (only for notifications) */}
           {tab === "notifications" && (
-            <button className="flex items-center justify-center gap-2 border-y border-border/40 py-3 text-sm font-medium text-foreground/90 transition-colors hover:bg-muted/40">
-              <CheckCheck className="h-4 w-4" />
+            <button className="flex items-center justify-center gap-2 border-b border-border/40 py-2.5 text-xs font-medium text-foreground/90 transition-colors hover:bg-muted/40">
+              <CheckCheck className="h-3.5 w-3.5" />
               Mark all as read
             </button>
           )}
