@@ -181,6 +181,8 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
             const m = list[0];
             const isBanner = s.layout === "banner";
             const isStory = s.layout === "story";
+            const isPremium = s.layout === "premium";
+            const isFeature = s.layout === "feature";
 
             if (isStory) {
               const list = slideMedia[i];
