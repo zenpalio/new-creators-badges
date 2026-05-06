@@ -153,6 +153,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
 
   return (
     <section
+      ref={(el) => { if (el) widthRef.current = el.clientWidth; }}
       className="relative w-full shrink-0 overflow-hidden touch-pan-y"
       style={{ height: "clamp(520px, 78vh, 760px)" }}
       onMouseEnter={() => setPaused(true)}
