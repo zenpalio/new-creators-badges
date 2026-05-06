@@ -81,12 +81,20 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
   useEffect(() => {
     if (paused || slides.length <= 1) return;
     const id = window.setTimeout(() => {
+      setDir(1);
       setActive((a) => (a + 1) % slides.length);
     }, intervalMs);
     return () => window.clearTimeout(id);
   }, [active, paused, intervalMs, slides.length]);
 
-  const go = (i: number) => setActive((i + slides.length) % slides.length);
+  const [dir, setDir] = useState<1 | -1>(1);
+  const go = (i: number) => {
+    setActive((prev) => {
+      const next = (i + slides.length) % slides.length;
+      if (next !== prev) setDir(next > prev || (prev === slides.length - 1 && next === 0) ? 1 : -1);
+      return next;
+    });
+  };
   const slide = slides[active];
 
   // Mobile swipe: touch-only with a slight follow effect.
@@ -183,12 +191,13 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
         if (!isActive) return null;
         return (
         <div
-          key={s.name + i}
-          className="absolute inset-0"
+          key={s.name + i + "-" + active}
+          className="absolute inset-0 hero-slide-enter"
           style={{
             transform: dragX ? `translate3d(${dragX}px,0,0)` : undefined,
             transition: dragging ? "none" : "transform 300ms ease-out",
             willChange: dragging ? "transform" : undefined,
+            ["--hero-dir" as any]: dir === 1 ? "1" : "-1",
           }}
           aria-hidden={!isActive}
         >
