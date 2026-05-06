@@ -670,11 +670,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
       >
         <div
           key={slide.name}
-          className={`max-w-xl animate-fade-in space-y-4 ${
-            slide.layout === "story" || slide.layout === "creators" || slide.layout === "premium"
-              ? "hidden md:block"
-              : ""
-          }`}
+          className="max-w-xl animate-fade-in space-y-4"
         >
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-white/80 backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
