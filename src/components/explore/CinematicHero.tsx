@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { BookOpen, ChevronLeft, ChevronRight, Play, Star, User } from "lucide-react";
+import { BookOpen, ChevronLeft, ChevronRight, Film, Layers, Play, Star, User } from "lucide-react";
 import ChatIcon from "@/components/icons/ChatIcon";
 import LikeButton from "./LikeButton";
 
