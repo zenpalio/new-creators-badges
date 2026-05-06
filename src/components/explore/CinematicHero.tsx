@@ -86,7 +86,14 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
     return () => window.clearTimeout(id);
   }, [active, paused, intervalMs, slides.length]);
 
-  const go = (i: number) => setActive((i + slides.length) % slides.length);
+  const [dir, setDir] = useState<1 | -1>(1);
+  const go = (i: number) => {
+    setActive((prev) => {
+      const next = (i + slides.length) % slides.length;
+      if (next !== prev) setDir(next > prev || (prev === slides.length - 1 && next === 0) ? 1 : -1);
+      return next;
+    });
+  };
   const slide = slides[active];
 
   // Mobile swipe: touch-only with a slight follow effect.
