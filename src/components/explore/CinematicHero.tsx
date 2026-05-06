@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { type TouchEvent, useEffect, useMemo, useRef, useState } from "react";
 import { BookOpen, Check, ChevronLeft, ChevronRight, Crown, Film, Layers, Play, Sparkles, Star, User } from "lucide-react";
 import ChatIcon from "@/components/icons/ChatIcon";
 import LikeButton from "./LikeButton";
@@ -89,113 +89,61 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
   const go = (i: number) => setActive((i + slides.length) % slides.length);
   const slide = slides[active];
 
-  // Pointer-based swipe — only takes over after a very clear horizontal gesture.
+  // Mobile swipe: touch-only, no drag-follow state, and no scroll blocking.
   const sectionRef = useRef<HTMLElement | null>(null);
-  const startX = useRef<number | null>(null);
-  const startY = useRef<number | null>(null);
-  const lockedAxis = useRef<"x" | "y" | null>(null);
-  const activePointerId = useRef<number | null>(null);
-  const [dragX, setDragX] = useState(0);
-  const [isDragging, setIsDragging] = useState(0); // 0 idle, 1 dragging
-  const widthRef = useRef<number>(0);
-  const [width, setWidth] = useState(0);
+  const touchStart = useRef<{ x: number; y: number; at: number } | null>(null);
+  const touchLast = useRef<{ x: number; y: number } | null>(null);
   const activeRef = useRef(active);
   useEffect(() => { activeRef.current = active; }, [active]);
-  useEffect(() => {
-    const onResize = () => {
-      const el = sectionRef.current;
-      if (el) { widthRef.current = el.clientWidth; setWidth(el.clientWidth); }
-    };
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
 
-  const resetGesture = () => {
-    startX.current = null;
-    startY.current = null;
-    lockedAxis.current = null;
-    activePointerId.current = null;
-    setIsDragging(0);
-    setDragX(0);
+  const clearTouch = () => {
+    touchStart.current = null;
+    touchLast.current = null;
     setPaused(false);
   };
 
-  const endGesture = (commitDx: number | null) => {
-    const w = widthRef.current || 1;
-    if (commitDx != null && lockedAxis.current === "x") {
-      const ratio = Math.abs(commitDx) / w;
-      if (ratio > 0.18 || Math.abs(commitDx) > 72) {
-        go(activeRef.current + (commitDx < 0 ? 1 : -1));
-      }
-    }
-    resetGesture();
+  const handleTouchStart = (event: TouchEvent<HTMLElement>) => {
+    if (event.touches.length !== 1 || slides.length <= 1) return;
+    const touch = event.touches[0];
+    touchStart.current = { x: touch.clientX, y: touch.clientY, at: Date.now() };
+    touchLast.current = { x: touch.clientX, y: touch.clientY };
+    setPaused(true);
   };
 
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
+  const handleTouchMove = (event: TouchEvent<HTMLElement>) => {
+    const start = touchStart.current;
+    if (!start || event.touches.length !== 1) return;
+    const touch = event.touches[0];
+    const dx = touch.clientX - start.x;
+    const dy = touch.clientY - start.y;
+    touchLast.current = { x: touch.clientX, y: touch.clientY };
 
-    const onStart = (clientX: number, clientY: number, pointerId: number | null) => {
-      startX.current = clientX;
-      startY.current = clientY;
-      lockedAxis.current = null;
-      activePointerId.current = pointerId;
-      widthRef.current = el.clientWidth || 1;
-    };
+    // If the gesture is vertical, release it immediately so normal page scroll wins.
+    if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx) * 1.15) {
+      clearTouch();
+    }
+  };
 
-    const onMove = (clientX: number, clientY: number, e: Event) => {
-      if (startX.current == null || startY.current == null) return;
-      const dx = clientX - startX.current;
-      const dy = clientY - startY.current;
-      if (lockedAxis.current == null) {
-        const ax = Math.abs(dx);
-        const ay = Math.abs(dy);
-        // Require a clear horizontal intent before locking — bias toward
-        // letting the page scroll vertically.
-        if (ax > 18 && ax > ay * 1.7) {
-          lockedAxis.current = "x";
-          setPaused(true);
-        } else if (ay > 8 && ay > ax * 0.7) {
-          lockedAxis.current = "y";
-          resetGesture();
-          return;
-        }
-      }
-      if (lockedAxis.current === "x") {
-        // Block vertical scroll only once we own the gesture.
-        if (e.cancelable) e.preventDefault();
-        setIsDragging(1);
-        setDragX(dx);
-      }
-    };
+  const handleTouchEnd = () => {
+    const start = touchStart.current;
+    const last = touchLast.current;
+    if (!start || !last) {
+      clearTouch();
+      return;
+    }
 
-    const onPointerDown = (e: PointerEvent) => {
-      if (e.pointerType === "mouse" && e.button !== 0) return;
-      onStart(e.clientX, e.clientY, e.pointerId);
-    };
-    const onPointerMove = (e: PointerEvent) => {
-      if (activePointerId.current !== e.pointerId) return;
-      onMove(e.clientX, e.clientY, e);
-    };
-    const onPointerUp = (e: PointerEvent) => {
-      if (activePointerId.current !== e.pointerId) return;
-      const dx = startX.current == null ? 0 : e.clientX - startX.current;
-      endGesture(startX.current == null ? null : dx);
-    };
+    const dx = last.x - start.x;
+    const dy = last.y - start.y;
+    const elapsed = Date.now() - start.at;
+    const horizontal = Math.abs(dx) > Math.abs(dy) * 1.25;
+    const deliberateSwipe = horizontal && Math.abs(dx) > 64;
+    const quickSwipe = horizontal && elapsed < 450 && Math.abs(dx) > 42;
 
-    el.addEventListener("pointerdown", onPointerDown);
-    window.addEventListener("pointermove", onPointerMove);
-    window.addEventListener("pointerup", onPointerUp);
-    window.addEventListener("pointercancel", onPointerUp);
-
-    return () => {
-      el.removeEventListener("pointerdown", onPointerDown);
-      window.removeEventListener("pointermove", onPointerMove);
-      window.removeEventListener("pointerup", onPointerUp);
-      window.removeEventListener("pointercancel", onPointerUp);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slides.length]);
+    if (deliberateSwipe || quickSwipe) {
+      go(activeRef.current + (dx < 0 ? 1 : -1));
+    }
+    clearTouch();
+  };
 
   return (
     <section
