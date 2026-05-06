@@ -5,6 +5,7 @@ import HScroll from "@/components/explore/HScroll";
 import CinematicHero, { type HeroSlide } from "@/components/explore/CinematicHero";
 import CreatorRankCard from "@/components/explore/CreatorRankCard";
 import StoryContentCard from "@/components/explore/StoryContentCard";
+import LikeButton from "@/components/explore/LikeButton";
 import FloatingToolsFAB from "@/components/explore/FloatingToolsFAB";
 import SystemStatusIndicator from "@/components/explore/SystemStatusIndicator";
 import PromoBanner from "@/components/explore/PromoBanner";
