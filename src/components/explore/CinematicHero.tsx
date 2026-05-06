@@ -24,13 +24,17 @@ export interface HeroSlide {
    *  "banner" shows a full-bleed wide image — better for promo / sale / feature cards.
    *  "story" shows a book-cover style card with chapter/episode metadata.
    *  "creators" shows a top-3 creators podium. */
-  layout?: "portrait" | "banner" | "story" | "creators";
+  layout?: "portrait" | "banner" | "story" | "creators" | "premium" | "feature";
   /** Optional accent color (hsl) for banner overlays */
   accent?: string;
   /** Story metadata, shown when layout === "story" */
   storyMeta?: { chapters?: number; episodes?: number; rating?: number };
   /** Top creators, shown when layout === "creators" */
   creators?: { rank: number; name: string; avatarUrl: string; subtitle?: string }[];
+  /** Premium plan, shown when layout === "premium" */
+  premiumPlan?: { price: string; period: string; perks: string[] };
+  /** Feature highlight, shown when layout === "feature" */
+  featureMeta?: { eyebrow?: string; bullets?: string[] };
 }
 
 interface Props {
