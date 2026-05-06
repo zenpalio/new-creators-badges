@@ -95,7 +95,7 @@ const NotificationsSidebar = ({ open, onClose, notifications, announcements }: N
           )}
 
           {/* Body */}
-          <div className="flex-1 overflow-y-auto">
+          <div className="scrollbar-themed flex-1 overflow-y-auto">
             {tab === "notifications" ? (
               <ul className="flex flex-col">
                 {notifications.map((n) => (
