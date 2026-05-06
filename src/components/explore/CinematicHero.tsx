@@ -823,14 +823,11 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
           >
             <span className={`block h-1 overflow-hidden rounded-full bg-white/25 transition-all w-full`}>
               <span
-                className="block h-full bg-white transition-[width] duration-150 ease-linear"
+                className={`block h-full origin-left bg-white ${i === active ? "hero-progress-fill" : ""}`}
                 style={{
-                  width:
-                    i < active
-                      ? "100%"
-                      : i === active
-                      ? `${progress * 100}%`
-                      : "0%",
+                  width: i <= active ? "100%" : "0%",
+                  animationDuration: i === active ? `${intervalMs}ms` : undefined,
+                  animationPlayState: paused ? "paused" : "running",
                 }}
               />
             </span>
