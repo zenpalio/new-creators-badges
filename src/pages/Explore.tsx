@@ -420,6 +420,34 @@ const whatsNewItems: WhatsNewItem[] = [
   { tag: "Event", date: "Apr 28", title: "Spring writing contest", description: "Submit a story by May 20 for a chance at 3 months Premium." },
 ];
 
+const announcements = whatsNewItems
+  .filter((n): n is WhatsNewItem & { announcement: NonNullable<WhatsNewItem["announcement"]> } => !!n.announcement)
+  .map((n, i) => ({
+    id: `ann-${i}`,
+    tag: n.tag,
+    date: n.date,
+    title: n.title,
+    description: n.description,
+    headline: n.announcement.headline,
+    intro: n.announcement.intro,
+    sections: n.announcement.sections,
+    cta: n.announcement.cta,
+    outro: n.announcement.outro,
+  }));
+
+const mockNotifications = [
+  { id: "n1", actor: "energetic_lion_0991", initials: "EN", action: "liked video of", target: "Mia" },
+  { id: "n2", actor: "calm_beaver_6740", initials: "CA", action: "liked video of", target: "Ellie – The Reclusive Stepsister" },
+  { id: "n3", actor: "amiable_leopard_8696", initials: "AM", action: "liked", target: "Nyx", thumbnail: "https://picsum.photos/seed/nyx/80" },
+  { id: "n4", actor: "cheerful_ibis_4482", initials: "CH", action: "liked video of", target: "Ella" },
+  { id: "n5", actor: "charming_capybara_7956", initials: "CH", action: "liked", target: "Hikari" },
+  { id: "n6", actor: "Sandwiches", initials: "SA", action: "liked video of", target: "Elipses..." },
+  { id: "n7", actor: "blessed_gecko_6782", initials: "BL", action: "liked video of", target: "Lucy" },
+  { id: "n8", actor: "Sandwiches", initials: "SA", action: "liked images of", thumbnail: "https://picsum.photos/seed/img1/80" },
+  { id: "n9", actor: "Sandwiches", initials: "SA", action: "liked images of", thumbnail: "https://picsum.photos/seed/img2/80" },
+  { id: "n10", actor: "appealing_camel_9047", initials: "AP", action: "started following you" },
+];
+
 
 
 // ---- Section header ----
