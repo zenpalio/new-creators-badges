@@ -98,8 +98,17 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
   const [dragX, setDragX] = useState(0);
   const [isDragging, setIsDragging] = useState(0); // 0 idle, 1 dragging
   const widthRef = useRef<number>(0);
+  const [width, setWidth] = useState(0);
   const activeRef = useRef(active);
   useEffect(() => { activeRef.current = active; }, [active]);
+  useEffect(() => {
+    const onResize = () => {
+      const el = sectionRef.current;
+      if (el) { widthRef.current = el.clientWidth; setWidth(el.clientWidth); }
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   const resetGesture = () => {
     startX.current = null;
@@ -190,7 +199,14 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
 
   return (
     <section
-      ref={(el) => { sectionRef.current = el; if (el) widthRef.current = el.clientWidth; }}
+      ref={(el) => {
+        sectionRef.current = el;
+        if (el) {
+          const cw = el.clientWidth;
+          widthRef.current = cw;
+          if (cw && cw !== width) setWidth(cw);
+        }
+      }}
       className="relative w-full shrink-0 overflow-hidden touch-pan-y select-none"
       style={{ height: "clamp(520px, 78vh, 760px)" }}
       onMouseEnter={() => setPaused(true)}
@@ -199,7 +215,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
     >
       {/* Layered backdrops — slide horizontally, no crossfade */}
       {slides.map((s, i) => {
-        const w = widthRef.current || 1;
+        const w = width || widthRef.current || 1;
         const prevIdx = (active - 1 + slides.length) % slides.length;
         const nextIdx = (active + 1) % slides.length;
         const isActive = i === active;
