@@ -17,7 +17,7 @@ interface AnnouncementDialogProps {
 const AnnouncementDialog = ({ announcement, open, onOpenChange }: AnnouncementDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="z-[120] flex h-[100dvh] w-screen max-w-none flex-col gap-0 rounded-none border-0 bg-card p-0 text-foreground sm:h-auto sm:max-h-[85vh] sm:w-[calc(100%-32px)] sm:max-w-[560px] sm:rounded-2xl sm:border sm:border-border/60">
+      <DialogContent className="z-[120] flex h-[100dvh] w-screen max-w-none flex-col gap-0 rounded-none border-0 bg-card p-0 text-foreground left-0 top-0 translate-x-0 translate-y-0 data-[state=closed]:zoom-out-100 data-[state=open]:zoom-in-100 data-[state=closed]:slide-out-to-left-0 data-[state=closed]:slide-out-to-top-0 data-[state=open]:slide-in-from-left-0 data-[state=open]:slide-in-from-top-0 sm:left-[50%] sm:top-[50%] sm:h-auto sm:max-h-[85vh] sm:w-[calc(100%-32px)] sm:max-w-[560px] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-2xl sm:border sm:border-border/60">
         {announcement && (
           <div className="scrollbar-themed flex-1 overflow-y-auto px-5 pb-6 pt-5 sm:px-7">
             <DialogHeader className="space-y-3 text-left">
