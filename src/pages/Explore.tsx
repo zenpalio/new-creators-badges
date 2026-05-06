@@ -10,14 +10,7 @@ import SystemStatusIndicator from "@/components/explore/SystemStatusIndicator";
 import PromoBanner from "@/components/explore/PromoBanner";
 import SideNav from "@/components/SideNav";
 import NotificationsSidebar from "@/components/NotificationsSidebar";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import AnnouncementDialog from "@/components/AnnouncementDialog";
 import { type BadgeTier } from "@/components/BadgeCard";
 import bannerPremium from "@/assets/hero/banner-premium.jpg";
 import bannerFeature from "@/assets/hero/banner-feature.jpg";
