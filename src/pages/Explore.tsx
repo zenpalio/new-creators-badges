@@ -656,6 +656,11 @@ const Explore = () => {
   return (
     <div className="relative flex h-svh w-full overflow-hidden bg-background font-onest text-foreground">
       <SideNav open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <AnnouncementDialog
+        announcement={inlineAnnouncement}
+        open={!!inlineAnnouncement}
+        onOpenChange={(o) => !o && setInlineAnnouncement(null)}
+      />
       <NotificationsSidebar
         open={notificationsOpen}
         onClose={() => setNotificationsOpen(false)}
