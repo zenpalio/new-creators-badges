@@ -778,25 +778,29 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
       </button>
 
       {/* Progress indicators */}
-      <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">
+      <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1.5 md:gap-2">
         {slides.map((_, i) => (
           <button
             key={i}
             onClick={() => go(i)}
-            className="group h-1 w-10 overflow-hidden rounded-full bg-white/20"
+            className={`group relative flex items-center justify-center transition-all ${
+              i === active ? "w-10" : "w-2"
+            } h-6 md:h-4 md:w-10`}
             aria-label={`Go to slide ${i + 1}`}
           >
-            <span
-              className="block h-full bg-white transition-[width] duration-150 ease-linear"
-              style={{
-                width:
-                  i < active
-                    ? "100%"
-                    : i === active
-                    ? `${progress * 100}%`
-                    : "0%",
-              }}
-            />
+            <span className={`block h-1 overflow-hidden rounded-full bg-white/25 transition-all w-full`}>
+              <span
+                className="block h-full bg-white transition-[width] duration-150 ease-linear"
+                style={{
+                  width:
+                    i < active
+                      ? "100%"
+                      : i === active
+                      ? `${progress * 100}%`
+                      : "0%",
+                }}
+              />
+            </span>
           </button>
         ))}
       </div>
