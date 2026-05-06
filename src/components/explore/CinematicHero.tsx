@@ -784,28 +784,47 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
         <ChevronRight className="h-5 w-5" />
       </button>
 
-      {/* Progress indicators */}
-      <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1.5 md:gap-2">
-        {slides.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => go(i)}
-            className="group relative flex h-6 w-10 items-center justify-center transition-all md:h-4"
-            aria-label={`Go to slide ${i + 1}`}
-          >
-            <span className={`block h-1 overflow-hidden rounded-full bg-white/25 transition-all w-full`}>
-              <span
-                className={`block h-full origin-left bg-white ${i === active ? "hero-progress-fill" : ""}`}
-                style={{
-                  width: i <= active ? "100%" : "0%",
-                  animationDuration: i === active ? `${intervalMs}ms` : undefined,
-                  animationPlayState: paused ? "paused" : "running",
-                }}
-              />
-            </span>
-          </button>
-        ))}
-      </div>
+      {/* Progress indicators — desktop shows all, mobile shows a window of max 4 */}
+      {(() => {
+        const MAX_MOBILE = 4;
+        const total = slides.length;
+        let mobileStart = 0;
+        if (total > MAX_MOBILE) {
+          mobileStart = Math.min(
+            Math.max(0, active - Math.floor(MAX_MOBILE / 2)),
+            total - MAX_MOBILE,
+          );
+        }
+        const mobileEnd = mobileStart + Math.min(MAX_MOBILE, total);
+        return (
+          <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1.5 md:gap-2">
+            {slides.map((_, i) => {
+              const inMobileWindow = i >= mobileStart && i < mobileEnd;
+              return (
+                <button
+                  key={i}
+                  onClick={() => go(i)}
+                  className={`group relative h-6 w-10 items-center justify-center transition-all md:h-4 md:flex ${
+                    inMobileWindow ? "flex" : "hidden"
+                  }`}
+                  aria-label={`Go to slide ${i + 1}`}
+                >
+                  <span className={`block h-1 overflow-hidden rounded-full bg-white/25 transition-all w-full`}>
+                    <span
+                      className={`block h-full origin-left bg-white ${i === active ? "hero-progress-fill" : ""}`}
+                      style={{
+                        width: i <= active ? "100%" : "0%",
+                        animationDuration: i === active ? `${intervalMs}ms` : undefined,
+                        animationPlayState: paused ? "paused" : "running",
+                      }}
+                    />
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        );
+      })()}
     </section>
   );
 };
