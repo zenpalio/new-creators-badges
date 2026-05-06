@@ -638,7 +638,8 @@ const SectionTitle = ({
       </button>
     )}
   </div>
-);
+  );
+};
 
 // ---- Tag pill row ----
 const TagRow = ({ tags }: { tags: string[] }) => (
