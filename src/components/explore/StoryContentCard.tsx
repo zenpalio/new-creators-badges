@@ -1,4 +1,4 @@
-import { BookOpen, Star, Layers, Film } from "lucide-react";
+import { BookOpen, Star, Layers, Film, Heart } from "lucide-react";
 
 interface StoryContentCardProps {
   src: string;
@@ -8,6 +8,7 @@ interface StoryContentCardProps {
   totalScenes?: number;
   avgRating?: number;
   ratingCount?: number;
+  likes?: number;
   onClick?: () => void;
 }
 
