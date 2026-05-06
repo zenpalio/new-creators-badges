@@ -1,4 +1,4 @@
-import { ChatIcon } from "lucide-react";
+import ChatIcon from "@/components/icons/ChatIcon";
 
 interface CharacterCardProps {
   name: string;
