@@ -85,6 +85,12 @@ const StoryContentCard = ({
             <Layers className="h-3.5 w-3.5" />
             {totalScenes} {totalScenes === 1 ? "scene" : "scenes"}
           </span>
+          {likes != null && (
+            <span className="flex items-center gap-1 text-[11px] text-white/80">
+              <Heart className="h-3.5 w-3.5" />
+              {likes}
+            </span>
+          )}
         </div>
       </div>
 
