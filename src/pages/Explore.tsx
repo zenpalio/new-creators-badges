@@ -285,6 +285,21 @@ const heroSlides: HeroSlide[] = [
     layout: "story",
     accent: "hsl(320 70% 55%)",
     storyMeta: { chapters: 12, episodes: 4, rating: 4.8 },
+  {
+    name: "Top creators this week",
+    tagline: "Meet the faces shaping the platform",
+    description: "The 3 creators everyone's talking about. Tap in to see their latest babes, scenes and stories.",
+    imageUrl: "https://picsum.photos/seed/creator-bigdaddy/600/600",
+    tags: ["Trending", "Verified", "Top 3"],
+    badge: "Top creators",
+    cta: "See leaderboard",
+    layout: "creators",
+    accent: "hsl(213 100% 55%)",
+    creators: [
+      { rank: 1, name: "Big Daddy", avatarUrl: "https://picsum.photos/seed/creator-bigdaddy/400/600", subtitle: "Immortal · 1.2M fans" },
+      { rank: 2, name: "VelvetHeat", avatarUrl: "https://picsum.photos/seed/creator-velvet/400/600", subtitle: "Mythic · 980K fans" },
+      { rank: 3, name: "DarkFantasy", avatarUrl: "https://picsum.photos/seed/creator-darkfantasy/400/600", subtitle: "Grandmaster · 740K fans" },
+    ],
   },
 ];
 
