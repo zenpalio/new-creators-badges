@@ -184,6 +184,10 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
               const src0 = c0.type === "image" ? c0.url : (c0.poster ?? s.imageUrl);
               const src1 = c1.type === "image" ? c1.url : (c1.poster ?? s.imageUrl);
               const src2 = c2.type === "image" ? c2.url : (c2.poster ?? s.imageUrl);
+              const rating = s.storyMeta?.rating;
+              const chapters = s.storyMeta?.chapters;
+              const episodes = s.storyMeta?.episodes;
+              const likes = s.meta?.likes;
               return (
                 <div className="absolute inset-0">
                   {/* Moody backdrop */}
@@ -201,70 +205,116 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                     }}
                   />
 
-                  {/* Desktop: fanned scene-card stack */}
-                  <div className="absolute inset-y-0 right-0 hidden items-center justify-center pr-16 md:flex">
-                    <div className="relative h-[68%] aspect-[3/4]">
+                  {/* Desktop: wide 5:3 story card matching StoryContentCard */}
+                  <div className="absolute inset-y-0 right-0 hidden items-center justify-center pr-12 lg:pr-20 md:flex">
+                    <div className="relative w-[min(560px,42vw)] aspect-[5/3]">
+                      {/* Back layer (subtle peek) */}
                       <div
-                        className="absolute inset-0 -translate-x-16 -rotate-[10deg] rounded-xl overflow-hidden ring-1 ring-white/10"
-                        style={{ boxShadow: "0 25px 50px -15px rgba(0,0,0,0.7)" }}
-                      >
-                        <img src={src2} alt="" className="h-full w-full object-cover opacity-90" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                      </div>
-                      <div
-                        className="absolute inset-0 translate-x-12 -translate-y-4 rotate-[6deg] rounded-xl overflow-hidden ring-1 ring-white/10"
+                        className="absolute inset-0 translate-x-6 translate-y-4 rounded-xl overflow-hidden ring-1 ring-white/10 opacity-70"
                         style={{ boxShadow: "0 25px 50px -15px rgba(0,0,0,0.7)" }}
                       >
                         <img src={src1} alt="" className="h-full w-full object-cover" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                        <div className="absolute inset-0 bg-black/40" />
                       </div>
+
+                      {/* Main story card */}
                       <div
-                        className="absolute inset-0 rounded-xl overflow-hidden ring-1 ring-white/15"
+                        className="absolute inset-0 rounded-xl overflow-hidden ring-1 ring-white/15 bg-card border border-border/50"
                         style={{ boxShadow: "0 35px 60px -15px rgba(0,0,0,0.8)" }}
                       >
-                        <img src={src0} alt={s.name} className="h-full w-full object-cover" loading={i === 0 ? "eager" : "lazy"} />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-                        <div className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-black/70 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white backdrop-blur ring-1 ring-white/15">
-                          <BookOpen className="h-3 w-3 text-primary" />
-                          Interactive Story
+                        <img
+                          src={src0}
+                          alt={s.name}
+                          className="h-full w-full object-cover object-top"
+                          loading={i === 0 ? "eager" : "lazy"}
+                        />
+
+                        {/* Top-left Story badge */}
+                        <div className="absolute left-2.5 top-2.5 z-10">
+                          <span className="flex items-center gap-1 rounded-lg border border-border/30 bg-background/70 px-2.5 py-1 text-[11px] font-medium text-foreground backdrop-blur-sm">
+                            <BookOpen className="h-3.5 w-3.5" /> Story
+                          </span>
                         </div>
-                        <div className="absolute inset-x-0 bottom-0 p-4">
-                          <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/70">
-                            Chapter 1 · 12 chapters
+
+                        {/* Top-right rating */}
+                        {rating != null && (
+                          <div className="absolute right-2.5 top-2.5 z-10">
+                            <span className="flex items-center gap-1 rounded-lg border border-border/30 bg-background/70 px-2 py-1 text-[11px] font-semibold text-yellow-400 backdrop-blur-sm">
+                              <Star className="h-3.5 w-3.5 fill-yellow-400" />
+                              {rating.toFixed(1)}
+                            </span>
                           </div>
-                          <div className="mt-1 text-base font-bold leading-tight text-white line-clamp-2">
+                        )}
+
+                        {/* Bottom gradient + meta */}
+                        <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/85 via-black/50 to-transparent px-3 pb-3 pt-12">
+                          <p className="mb-0.5 truncate text-lg font-bold tracking-tight text-white drop-shadow-md md:text-xl">
                             {s.name}
-                          </div>
-                          <div className="mt-2.5 flex flex-wrap gap-1.5">
-                            <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-medium text-white/85 backdrop-blur ring-1 ring-white/10">
-                              → Pick up the phone
-                            </span>
-                            <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-medium text-white/85 backdrop-blur ring-1 ring-white/10">
-                              → Let it ring
-                            </span>
+                          </p>
+                          <p className="mb-2 line-clamp-2 text-[11px] leading-relaxed text-white/60">
+                            {s.description}
+                          </p>
+                          <div className="flex flex-wrap items-center gap-3">
+                            {episodes != null && (
+                              <span className="flex items-center gap-1 text-[11px] text-white/80">
+                                <Film className="h-3.5 w-3.5" />
+                                {episodes} {episodes === 1 ? "episode" : "episodes"}
+                              </span>
+                            )}
+                            {chapters != null && (
+                              <span className="flex items-center gap-1 text-[11px] text-white/80">
+                                <Layers className="h-3.5 w-3.5" />
+                                {chapters} {chapters === 1 ? "chapter" : "chapters"}
+                              </span>
+                            )}
+                            {likes && (
+                              <LikeButton iconClassName="h-3.5 w-3.5" className="text-[11px] text-white/80 hover:text-white">
+                                <span>{likes}</span>
+                              </LikeButton>
+                            )}
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Mobile */}
-                  <div className="absolute inset-0 flex items-center justify-center px-10 md:hidden">
-                    <div className="relative h-[48%] max-h-[260px] aspect-[3/4]">
+                  {/* Mobile: same card, smaller */}
+                  <div className="absolute inset-0 flex items-center justify-center px-6 md:hidden">
+                    <div className="relative w-full max-w-[360px] aspect-[5/3]">
                       <div
-                        className="absolute inset-0 -translate-x-4 -rotate-[8deg] rounded-xl overflow-hidden ring-1 ring-white/10"
-                        style={{ boxShadow: "0 20px 40px -10px rgba(0,0,0,0.7)" }}
-                      >
-                        <img src={src1} alt="" className="h-full w-full object-cover opacity-90" />
-                      </div>
-                      <div
-                        className="absolute inset-0 rounded-xl overflow-hidden ring-1 ring-white/15"
+                        className="absolute inset-0 rounded-xl overflow-hidden ring-1 ring-white/15 bg-card border border-border/50"
                         style={{ boxShadow: "0 25px 50px -10px rgba(0,0,0,0.8)" }}
                       >
-                        <img src={src0} alt={s.name} className="h-full w-full object-cover" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                        <div className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-black/70 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white ring-1 ring-white/15">
-                          <BookOpen className="h-2.5 w-2.5 text-primary" /> Interactive Story
+                        <img src={src0} alt={s.name} className="h-full w-full object-cover object-top" />
+                        <div className="absolute left-2 top-2 z-10">
+                          <span className="flex items-center gap-1 rounded-lg border border-border/30 bg-background/70 px-2 py-1 text-[10px] font-medium text-foreground backdrop-blur-sm">
+                            <BookOpen className="h-3 w-3" /> Story
+                          </span>
+                        </div>
+                        {rating != null && (
+                          <div className="absolute right-2 top-2 z-10">
+                            <span className="flex items-center gap-1 rounded-lg border border-border/30 bg-background/70 px-1.5 py-1 text-[10px] font-semibold text-yellow-400 backdrop-blur-sm">
+                              <Star className="h-3 w-3 fill-yellow-400" />
+                              {rating.toFixed(1)}
+                            </span>
+                          </div>
+                        )}
+                        <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/85 via-black/50 to-transparent px-3 pb-2 pt-8">
+                          <p className="truncate text-sm font-bold text-white">{s.name}</p>
+                          <div className="mt-1 flex flex-wrap items-center gap-2">
+                            {episodes != null && (
+                              <span className="flex items-center gap-1 text-[10px] text-white/80">
+                                <Film className="h-3 w-3" />
+                                {episodes}
+                              </span>
+                            )}
+                            {chapters != null && (
+                              <span className="flex items-center gap-1 text-[10px] text-white/80">
+                                <Layers className="h-3 w-3" />
+                                {chapters}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
