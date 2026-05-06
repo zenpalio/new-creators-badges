@@ -87,10 +87,7 @@ const StoryContentCard = ({
             {totalScenes} {totalScenes === 1 ? "scene" : "scenes"}
           </span>
           {likes != null && (
-            <span className="flex items-center gap-1 text-[11px] text-white/80">
-              <Heart className="h-3.5 w-3.5" />
-              {likes}
-            </span>
+            <LikeButton count={likes} className="text-[11px] text-white/80 hover:text-white" />
           )}
         </div>
       </div>
