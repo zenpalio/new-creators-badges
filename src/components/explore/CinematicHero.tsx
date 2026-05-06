@@ -397,7 +397,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
               );
             }
 
-
+            if (isBanner) {
               return (
                 <div className="absolute inset-0">
                   {/* Blurred backdrop, same image */}
