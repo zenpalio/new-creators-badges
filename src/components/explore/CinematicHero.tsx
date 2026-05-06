@@ -442,10 +442,9 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                 </span>
               )}
               {slide.meta.likes && (
-                <span className="flex items-center gap-1.5">
-                  <Heart className="h-3.5 w-3.5" />
-                  {slide.meta.likes}
-                </span>
+                <LikeButton iconClassName="h-3.5 w-3.5" className="gap-1.5">
+                  <span>{slide.meta.likes}</span>
+                </LikeButton>
               )}
             </div>
           )}
