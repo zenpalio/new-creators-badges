@@ -481,6 +481,11 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                   {slide.storyMeta.rating.toFixed(1)}
                 </span>
               )}
+              {slide.meta?.likes && (
+                <LikeButton iconClassName="h-3.5 w-3.5" className="gap-1.5 text-white/80 hover:text-white">
+                  <span>{slide.meta.likes}</span>
+                </LikeButton>
+              )}
             </div>
           )}
 
