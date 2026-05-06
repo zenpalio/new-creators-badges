@@ -147,40 +147,35 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
 
   return (
     <section
-      ref={(el) => {
-        sectionRef.current = el;
-        if (el) {
-          const cw = el.clientWidth;
-          widthRef.current = cw;
-          if (cw && cw !== width) setWidth(cw);
-        }
-      }}
+      ref={sectionRef}
       className="relative w-full shrink-0 overflow-hidden touch-pan-y select-none"
       style={{ height: "clamp(520px, 78vh, 760px)" }}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={clearTouch}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       aria-roledescription="carousel"
     >
       {/* Layered backdrops — slide horizontally, no crossfade */}
       {slides.map((s, i) => {
-        const w = width || widthRef.current || 1;
         const prevIdx = (active - 1 + slides.length) % slides.length;
         const nextIdx = (active + 1) % slides.length;
         const isActive = i === active;
         const isPrev = i === prevIdx;
         const isNext = i === nextIdx;
-        let offsetPx = 0;
+        let offsetPercent = 0;
         let visible = false;
-        if (isActive) { offsetPx = 0; visible = true; }
-        else if (isPrev) { offsetPx = -w; visible = true; }
-        else if (isNext) { offsetPx = w; visible = true; }
-        const tx = offsetPx + (isDragging && (isActive || (isPrev && dragX > 0) || (isNext && dragX < 0)) ? dragX : 0);
+        if (isActive) { offsetPercent = 0; visible = true; }
+        else if (isPrev) { offsetPercent = -100; visible = true; }
+        else if (isNext) { offsetPercent = 100; visible = true; }
         return (
         <div
           key={s.name + i}
-          className={`absolute inset-0 ${isDragging ? "" : "transition-transform duration-500 ease-out"}`}
+          className="absolute inset-0 transition-transform duration-500 ease-out"
           style={{
-            transform: `translate3d(${tx}px,0,0)`,
+            transform: `translate3d(${offsetPercent}%,0,0)`,
             opacity: visible ? 1 : 0,
             visibility: visible ? "visible" : "hidden",
             willChange: "transform",
