@@ -816,7 +816,7 @@ const Explore = () => {
 
           {/* Your babes */}
           <section>
-            <SectionTitle title="Your babes are waiting" action="See all" />
+            <SectionTitle title="Your babes are waiting" action="See all" icon={Heart} />
             <TagRow tags={babeCategories} />
             <HScroll>
               {yourBabes.map((b, i) => (
@@ -825,9 +825,19 @@ const Explore = () => {
             </HScroll>
           </section>
 
+          {/* Banner — Welcome gift */}
+          <PromoBanner
+            variant="gift"
+            icon={Sparkles}
+            eyebrow="Welcome gift"
+            title="A surprise is waiting for you — claim it now"
+            description="Sign up today to unlock characters, chat, roleplay and image generation."
+            cta="Claim"
+          />
+
           {/* Featured stories */}
-          <section className="mt-4">
-            <SectionTitle title="Featured stories" action="See all" />
+          <section className="mt-2">
+            <SectionTitle title="Featured stories" action="See all" icon={BookOpen} />
             <HScroll>
               {featuredStories.map((s) => (
                 <StoryContentCard key={s.id} {...s} />
@@ -835,42 +845,9 @@ const Explore = () => {
             </HScroll>
           </section>
 
-          {/* Promo banners */}
-          <div className="mt-2 space-y-3">
-            <PromoBanner
-              variant="gift"
-              icon={Sparkles}
-              eyebrow="Welcome gift"
-              title="A surprise is waiting for you — claim it now"
-              description="Sign up today to unlock characters, chat, roleplay and image generation."
-              cta="Claim"
-            />
-            <PromoBanner
-              variant="premium"
-              icon={Crown}
-              title="Go Premium"
-              description="Unlimited chats, longer videos, and exclusive babes — without the queue."
-              cta="Upgrade"
-            />
-            <PromoBanner
-              variant="tokens"
-              icon={Coins}
-              title="Token sale — 20% off"
-              description="Stock up on tokens this week and save on every pack. Limited time only."
-              cta="Buy tokens"
-            />
-            <PromoBanner
-              variant="feature"
-              icon={Sparkles}
-              title="New: Scene Builder is live"
-              description="Break free from character-only prompts. Build full cinematic scenes in seconds."
-              cta="Try this"
-            />
-          </div>
-
-
-          <section className="mt-4">
-            <SectionTitle title="Top trending videos" action="See all" />
+          {/* Top trending videos */}
+          <section className="mt-2">
+            <SectionTitle title="Top trending videos" action="See all" icon={Flame} />
             <TagRow tags={videoCategories} />
             <HScroll>
               {trendingVideos.map((v) => (
@@ -900,9 +877,18 @@ const Explore = () => {
             </HScroll>
           </section>
 
+          {/* Banner — Premium */}
+          <PromoBanner
+            variant="premium"
+            icon={Crown}
+            title="Go Premium"
+            description="Unlimited chats, longer videos, and exclusive babes — without the queue."
+            cta="Upgrade"
+          />
+
           {/* Top creators */}
-          <section className="mt-4">
-            <SectionTitle title="Top creators" action="See all" />
+          <section className="mt-2">
+            <SectionTitle title="Top creators" action="See all" icon={Crown} />
             <HScroll>
               {topCreators.map((c) => (
                 <CreatorRankCard
@@ -917,68 +903,9 @@ const Explore = () => {
             </HScroll>
           </section>
 
-          {/* Your following */}
-          <section className="mt-4">
-            <SectionTitle title="Your following" action="See all" />
-            <TagRow tags={followingUsernames} />
-            <HScroll>
-              {yourFollowing.map((b, i) => (
-                <BabeCard
-                  key={i}
-                  {...b}
-                  variant="stats"
-                  imageUrl={img(`follow-${b.name}-${i}`)}
-                />
-              ))}
-            </HScroll>
-          </section>
-
-          {/* Trending this week */}
-          <section className="mt-4">
-            <SectionTitle title="Check out this week trending babes" action="See all" />
-            <TagRow tags={trendingTags} />
-            <HScroll>
-              {trendingBabes.map((b, i) => (
-                <BabeCard
-                  key={i}
-                  {...b}
-                  variant="stats"
-                  imageUrl={img(`trend-${b.name}-${i}`)}
-                />
-              ))}
-            </HScroll>
-          </section>
-
-          {/* New story episodes */}
-          <section className="mt-4">
-            <SectionTitle title="New story episodes" action="See all" />
-            <HScroll>
-              {newEpisodes.map((s) => (
-                <StoryContentCard key={s.id} {...s} />
-              ))}
-            </HScroll>
-          </section>
-
-          {/* Rising creators */}
-          <section className="mt-4">
-            <SectionTitle title="Rising creators this week" action="See all" />
-            <HScroll>
-              {risingCreators.map((c) => (
-                <CreatorRankCard
-                  key={c.rank}
-                  rank={c.rank}
-                  name={c.name}
-                  tier={c.tier}
-                  verified={c.verified}
-                  avatarUrl={`https://picsum.photos/seed/${encodeURIComponent(c.avatarSeed)}/160/160`}
-                />
-              ))}
-            </HScroll>
-          </section>
-
-          {/* What's new — news row */}
-          <section className="mt-4">
-            <SectionTitle title="What's new" action="See all" />
+          {/* What's new — news row (between sections) */}
+          <section className="mt-2">
+            <SectionTitle title="What's new" action="See all" icon={Newspaper} />
             <HScroll>
               {whatsNewItems.map((n, i) => {
                 const newsCard = (
@@ -1036,6 +963,183 @@ const Explore = () => {
             </HScroll>
           </section>
 
+          {/* Your following */}
+          <section className="mt-2">
+            <SectionTitle title="Your following" action="See all" icon={UserCircle2} />
+            <TagRow tags={followingUsernames} />
+            <HScroll>
+              {yourFollowing.map((b, i) => (
+                <BabeCard
+                  key={i}
+                  {...b}
+                  variant="stats"
+                  imageUrl={img(`follow-${b.name}-${i}`)}
+                />
+              ))}
+            </HScroll>
+          </section>
+
+          {/* Banner — Token sale */}
+          <PromoBanner
+            variant="tokens"
+            icon={Coins}
+            title="Token sale — 20% off"
+            description="Stock up on tokens this week and save on every pack. Limited time only."
+            cta="Buy tokens"
+          />
+
+          {/* Trending this week */}
+          <section className="mt-2">
+            <SectionTitle title="Check out this week trending babes" action="See all" icon={TrendingUp} />
+            <TagRow tags={trendingTags} />
+            <HScroll>
+              {trendingBabes.map((b, i) => (
+                <BabeCard
+                  key={i}
+                  {...b}
+                  variant="stats"
+                  imageUrl={img(`trend-${b.name}-${i}`)}
+                />
+              ))}
+            </HScroll>
+          </section>
+
+          {/* New story episodes */}
+          <section className="mt-2">
+            <SectionTitle title="New story episodes" action="See all" icon={BookOpen} />
+            <HScroll>
+              {newEpisodes.map((s) => (
+                <StoryContentCard key={s.id} {...s} />
+              ))}
+            </HScroll>
+          </section>
+
+          {/* Banner — Scene Builder feature */}
+          <PromoBanner
+            variant="feature"
+            icon={Sparkles}
+            title="New: Scene Builder is live"
+            description="Break free from character-only prompts. Build full cinematic scenes in seconds."
+            cta="Try this"
+          />
+
+          {/* Rising creators */}
+          <section className="mt-2">
+            <SectionTitle title="Rising creators this week" action="See all" icon={Sparkles} />
+            <HScroll>
+              {risingCreators.map((c) => (
+                <CreatorRankCard
+                  key={c.rank}
+                  rank={c.rank}
+                  name={c.name}
+                  tier={c.tier}
+                  verified={c.verified}
+                  avatarUrl={`https://picsum.photos/seed/${encodeURIComponent(c.avatarSeed)}/160/160`}
+                />
+              ))}
+            </HScroll>
+          </section>
+
+          {/* Recommended for you */}
+          <section className="mt-2">
+            <SectionTitle title="Recommended for you" action="See all" icon={Star} />
+            <HScroll>
+              {[...yourBabes].reverse().map((b, i) => (
+                <BabeCard key={`rec-${i}`} {...b} imageUrl={img(`rec-${b.name}-${i}`)} />
+              ))}
+            </HScroll>
+          </section>
+
+          {/* Banner — Welcome gift (second placement) */}
+          <PromoBanner
+            variant="gift"
+            icon={Sparkles}
+            eyebrow="Still here?"
+            title="Claim your welcome bonus before it expires"
+            description="3 free image generations and a starter token pack — on the house."
+            cta="Claim now"
+          />
+
+          {/* Continue your stories */}
+          <section className="mt-2">
+            <SectionTitle title="Continue your stories" action="See all" icon={BookOpen} />
+            <HScroll>
+              {[...featuredStories, ...newEpisodes].map((s, i) => (
+                <StoryContentCard key={`cont-${s.id}-${i}`} {...s} />
+              ))}
+            </HScroll>
+          </section>
+
+          {/* Hot right now videos */}
+          <section className="mt-2">
+            <SectionTitle title="Hot right now" action="See all" icon={Flame} />
+            <HScroll>
+              {[...trendingVideos, ...trendingVideos].map((v, i) => (
+                <div
+                  key={`hot-${v.id}-${i}`}
+                  className="group relative w-[220px] shrink-0 overflow-hidden rounded-2xl bg-grey-dark-1"
+                >
+                  <div className="relative aspect-[13/19] w-full overflow-hidden">
+                    <img
+                      src={img(`hot-${v.id}-${i}`, 260, 380)}
+                      alt=""
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/70 to-transparent" />
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 transition-opacity group-hover:opacity-100">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 backdrop-blur">
+                        <Play className="h-5 w-5 fill-black text-black" />
+                      </div>
+                    </div>
+                    <div className="absolute bottom-2 right-2 text-[11px] font-medium text-white drop-shadow-md">
+                      <LikeButton iconClassName="h-3.5 w-3.5"><span>{v.likes}</span></LikeButton>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </HScroll>
+          </section>
+
+          {/* Banner — Premium (second placement) */}
+          <PromoBanner
+            variant="premium"
+            icon={Crown}
+            title="Unlock everything with Premium"
+            description="Skip the queue, unlimited messages, HD video — cancel anytime."
+            cta="Go Premium"
+          />
+
+          {/* New releases */}
+          <section className="mt-2">
+            <SectionTitle title="New releases" action="See all" icon={Sparkles} />
+            <TagRow tags={newReleaseTags} />
+            <HScroll>
+              {newBabes.map((b, i) => (
+                <BabeCard
+                  key={i}
+                  {...b}
+                  variant="stats"
+                  imageUrl={img(`new-${b.name}-${i}`)}
+                />
+              ))}
+            </HScroll>
+          </section>
+
+          {/* Fan favorites */}
+          <section className="mt-2">
+            <SectionTitle title="Fan favorites" action="See all" icon={Heart} />
+            <HScroll>
+              {[...trendingBabes, ...newBabes].map((b, i) => (
+                <BabeCard
+                  key={`fav-${i}`}
+                  {...b}
+                  variant="stats"
+                  imageUrl={img(`fav-${b.name}-${i}`)}
+                />
+              ))}
+            </HScroll>
+          </section>
 
           {/* New releases */}
           <section className="mt-4">
