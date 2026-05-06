@@ -652,7 +652,8 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
             }}
           />
         </div>
-      ))}
+        );
+      })}
 
       {/* Content */}
       <div
