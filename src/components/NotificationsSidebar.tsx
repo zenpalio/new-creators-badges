@@ -77,7 +77,7 @@ const NotificationsSidebar = ({ open, onClose, onReopen, notifications, announce
 
           {/* System status indicator */}
           {(() => {
-            const systemStatus: "operational" | "maintenance" = "operational";
+            const systemStatus = "operational" as "operational" | "maintenance";
             const isMaintenance = systemStatus === "maintenance";
             const colorVar = isMaintenance ? "--warning" : "--success";
             const message = isMaintenance
