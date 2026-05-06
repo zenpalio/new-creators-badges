@@ -9,6 +9,7 @@ import FloatingToolsFAB from "@/components/explore/FloatingToolsFAB";
 import SystemStatusIndicator from "@/components/explore/SystemStatusIndicator";
 import PromoBanner from "@/components/explore/PromoBanner";
 import SideNav from "@/components/SideNav";
+import NotificationsSidebar from "@/components/NotificationsSidebar";
 import {
   Dialog,
   DialogContent,
@@ -520,6 +521,12 @@ const Explore = () => {
   return (
     <div className="relative flex h-svh w-full overflow-hidden bg-background font-onest text-foreground">
       <SideNav open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <NotificationsSidebar
+        open={notificationsOpen}
+        onClose={() => setNotificationsOpen(false)}
+        notifications={mockNotifications}
+        announcements={announcements}
+      />
 
       <main ref={mainRef} className="relative flex w-full flex-1 flex-col overflow-y-auto overflow-x-hidden">
         {/* Sticky top bar — slides away on scroll down, returns on scroll up */}
@@ -540,6 +547,7 @@ const Explore = () => {
           <div className="pointer-events-auto flex items-center gap-1">
             <SystemStatusIndicator />
             <button
+              onClick={() => setNotificationsOpen(true)}
               className="relative flex h-9 w-9 items-center justify-center text-foreground/90 transition-opacity hover:opacity-70"
               aria-label="Notifications"
             >
