@@ -22,12 +22,15 @@ export interface HeroSlide {
   cta?: string;
   /** Visual treatment. "portrait" (default) shows a tall portrait panel on the right.
    *  "banner" shows a full-bleed wide image — better for promo / sale / feature cards.
-   *  "story" shows a book-cover style card with chapter/episode metadata. */
-  layout?: "portrait" | "banner" | "story";
+   *  "story" shows a book-cover style card with chapter/episode metadata.
+   *  "creators" shows a top-3 creators podium. */
+  layout?: "portrait" | "banner" | "story" | "creators";
   /** Optional accent color (hsl) for banner overlays */
   accent?: string;
   /** Story metadata, shown when layout === "story" */
   storyMeta?: { chapters?: number; episodes?: number; rating?: number };
+  /** Top creators, shown when layout === "creators" */
+  creators?: { rank: number; name: string; avatarUrl: string; subtitle?: string }[];
 }
 
 interface Props {
@@ -318,6 +321,77 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                         </div>
                       </div>
                     </div>
+                  </div>
+                </div>
+              );
+            }
+
+            const isCreators = s.layout === "creators";
+
+            if (isCreators) {
+              const creators = (s.creators ?? []).slice(0, 3);
+              const podiumOrder = [creators[1], creators[0], creators[2]].filter(Boolean);
+              const heights = ["h-[58%]", "h-[72%]", "h-[50%]"];
+              const ranks = [2, 1, 3];
+              return (
+                <div className="absolute inset-0">
+                  <img
+                    src={s.imageUrl}
+                    alt=""
+                    aria-hidden
+                    className="absolute inset-0 h-full w-full scale-125 object-cover blur-3xl saturate-150 opacity-70"
+                  />
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "radial-gradient(ellipse at 70% 50%, hsl(213 70% 30% / 0.45) 0%, hsl(220 35% 8% / 0.85) 55%, hsl(0 0% 0% / 0.95) 100%)",
+                    }}
+                  />
+
+                  {/* Desktop podium */}
+                  <div className="absolute inset-y-0 right-0 hidden items-end justify-center gap-4 pr-12 pb-16 lg:pr-20 md:flex">
+                    {podiumOrder.map((c, idx) => {
+                      const r = ranks[idx];
+                      const medal = r === 1 ? "text-yellow-400" : r === 2 ? "text-gray-300" : "text-amber-700";
+                      return (
+                        <div key={c.rank} className={`relative flex w-[140px] flex-col items-center ${heights[idx]}`}>
+                          <div className="relative w-full flex-1 overflow-hidden rounded-2xl ring-1 ring-white/15"
+                            style={{ boxShadow: "0 30px 60px -15px rgba(0,0,0,0.8)" }}>
+                            <img src={c.avatarUrl} alt={c.name} className="h-full w-full object-cover" loading={i === 0 ? "eager" : "lazy"} />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+                            <div className={`absolute left-2 top-2 rounded-full bg-black/70 px-2 py-0.5 text-xs font-extrabold backdrop-blur ring-1 ring-white/20 ${medal}`}>
+                              #{r}
+                            </div>
+                            <div className="absolute inset-x-0 bottom-0 px-2 pb-2">
+                              <p className="truncate text-sm font-bold text-white drop-shadow-md">{c.name}</p>
+                              {c.subtitle && (
+                                <p className="truncate text-[10px] text-white/70">{c.subtitle}</p>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Mobile: row of 3 */}
+                  <div className="absolute inset-x-0 bottom-24 flex items-end justify-center gap-3 px-6 md:hidden">
+                    {podiumOrder.map((c, idx) => {
+                      const r = ranks[idx];
+                      const medal = r === 1 ? "text-yellow-400" : r === 2 ? "text-gray-300" : "text-amber-700";
+                      const h = idx === 1 ? "h-32" : "h-24";
+                      return (
+                        <div key={c.rank} className={`relative w-20 ${h} overflow-hidden rounded-xl ring-1 ring-white/15`}>
+                          <img src={c.avatarUrl} alt={c.name} className="h-full w-full object-cover" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                          <div className={`absolute left-1 top-1 rounded-full bg-black/70 px-1.5 text-[10px] font-extrabold ${medal}`}>#{r}</div>
+                          <p className="absolute inset-x-0 bottom-1 truncate px-1 text-center text-[10px] font-semibold text-white">
+                            {c.name}
+                          </p>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               );
