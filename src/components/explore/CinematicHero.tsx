@@ -399,20 +399,24 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                     })}
                   </div>
 
-                  {/* Mobile: row of 3 */}
-                  <div className="absolute inset-x-0 bottom-24 flex items-end justify-center gap-3 px-6 md:hidden">
+                  {/* Mobile: top podium row of 3 */}
+                  <div className="absolute inset-x-0 top-16 flex items-end justify-center gap-3 px-6 md:hidden">
                     {podiumOrder.map((c, idx) => {
                       const r = ranks[idx];
                       const medal = r === 1 ? "text-yellow-400" : r === 2 ? "text-gray-300" : "text-amber-700";
-                      const h = idx === 1 ? "h-32" : "h-24";
+                      const h = idx === 1 ? "h-44" : "h-36";
+                      const w = idx === 1 ? "w-28" : "w-24";
                       return (
-                        <div key={c.rank} className={`relative w-20 ${h} overflow-hidden rounded-xl ring-1 ring-white/15`}>
+                        <div key={c.rank} className={`relative ${w} ${h} overflow-hidden rounded-2xl ring-1 ring-white/15`} style={{ boxShadow: "0 20px 40px -12px rgba(0,0,0,0.7)" }}>
                           <img src={c.avatarUrl} alt={c.name} className="h-full w-full object-cover" />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                          <div className={`absolute left-1 top-1 rounded-full bg-black/70 px-1.5 text-[10px] font-extrabold ${medal}`}>#{r}</div>
-                          <p className="absolute inset-x-0 bottom-1 truncate px-1 text-center text-[10px] font-semibold text-white">
-                            {c.name}
-                          </p>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+                          <div className={`absolute left-1.5 top-1.5 rounded-full bg-black/70 px-1.5 py-0.5 text-[10px] font-extrabold ring-1 ring-white/20 backdrop-blur ${medal}`}>#{r}</div>
+                          <div className="absolute inset-x-0 bottom-1 px-1.5">
+                            <p className="truncate text-center text-[11px] font-bold text-white drop-shadow">{c.name}</p>
+                            {c.subtitle && (
+                              <p className="truncate text-center text-[9px] text-white/70">{c.subtitle.split(" · ")[0]}</p>
+                            )}
+                          </div>
                         </div>
                       );
                     })}
