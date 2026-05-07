@@ -345,7 +345,7 @@ const heroSlides: HeroSlide[] = [
     description: "Build multi-episode stories starring your favorite characters. Mix images, video, voice and music into cinematic scenes — you direct every moment.",
     imageUrl: storyCreatorHero,
     badge: "Just shipped",
-    cta: "Start your story",
+    cta: "Create your story",
     layout: "feature",
     accent: "hsl(213 100% 55%)",
     featureMeta: {
