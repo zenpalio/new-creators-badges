@@ -306,7 +306,7 @@ const heroSlides: HeroSlide[] = [
   {
     name: "Unlock Premium",
     tagline: "Faster, hotter, unlimited",
-    description: "Skip the queue, get unlimited messages, exclusive babes, and pro-grade scene tools. Cancel anytime.",
+    description: "Unlimited chat with long memory, hundreds of monthly tokens, spicy AI images and videos. From €9.99/mo — cancel anytime.",
     imageUrl: "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/dae34bfb-4650-4e1a-a3fd-fd87785473d1/profile-picture-a2cfaed2-d95a-4a35-b729-3b7619033d42.avif",
     badge: "Limited offer",
     cta: "Get Premium",
