@@ -17,6 +17,7 @@ import bannerPremium from "@/assets/hero/banner-premium.jpg";
 import bannerFeature from "@/assets/hero/banner-feature.jpg";
 import bannerSale from "@/assets/hero/banner-sale.jpg";
 import bannerStory from "@/assets/hero/banner-story.jpg";
+import storyCreatorHero from "@/assets/story-creator-hero.jpg";
 
 // ---- Mock data ----
 const img = (seed: string, w = 400, h = 533) =>
