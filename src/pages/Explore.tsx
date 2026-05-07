@@ -311,16 +311,33 @@ const heroSlides: HeroSlide[] = [
     cta: "Get Premium",
     layout: "premium",
     accent: "hsl(45 90% 55%)",
-    premiumPlan: {
-      price: "$9.99",
-      period: "mo",
-      perks: [
-        "Unlimited messages with every babe",
-        "Early access to new characters & stories",
-        "HD video generation, no watermarks",
-        "Priority queue + 2× faster image gen",
-      ],
-    },
+    accent: "hsl(213 100% 55%)",
+    premiumPlans: [
+      {
+        name: "Premium",
+        price: "€9.99",
+        period: "mo",
+        perks: [
+          "Up to 500 monthly tokens",
+          "Unlimited Chat & Roleplay",
+          "Up to 500 Spicy Images",
+          "Up to 100 Videos",
+        ],
+      },
+      {
+        name: "Ultra",
+        price: "€23.33",
+        period: "mo",
+        highlight: true,
+        bonus: "+400 tokens",
+        perks: [
+          "Up to 900 monthly tokens",
+          "Unlimited Chat with long memory",
+          "Up to 900 Spicy Images",
+          "Up to 300 AI Videos",
+        ],
+      },
+    ],
   },
   {
     name: "Scene Builder",
