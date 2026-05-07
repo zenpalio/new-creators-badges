@@ -244,13 +244,17 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                   {/* Desktop: wide 5:3 story card matching StoryContentCard */}
                   <div className="absolute inset-y-0 right-0 hidden items-center justify-center pr-12 lg:pr-20 md:flex">
                     <div className="relative h-[78%] aspect-[13/19]">
-                      {/* Back layer (subtle peek) */}
+                      {/* Back layer (fanned out so both covers are visible) */}
                       <div
-                        className="absolute inset-0 translate-x-6 translate-y-4 rounded-xl overflow-hidden ring-1 ring-white/10 opacity-70"
-                        style={{ boxShadow: "0 25px 50px -15px rgba(0,0,0,0.7)" }}
+                        className="absolute inset-0 rounded-xl overflow-hidden ring-1 ring-white/10 opacity-85"
+                        style={{
+                          transform: "translate(58%, 18px) rotate(6deg)",
+                          transformOrigin: "bottom left",
+                          boxShadow: "0 25px 50px -15px rgba(0,0,0,0.7)",
+                        }}
                       >
                         <img src={src1} alt="" className="h-full w-full object-cover" />
-                        <div className="absolute inset-0 bg-black/40" />
+                        <div className="absolute inset-0 bg-black/25" />
                       </div>
 
                       {/* Main story card */}
