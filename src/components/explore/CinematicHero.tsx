@@ -531,11 +531,19 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
               ];
               return (
                 <div className="absolute inset-0 overflow-hidden">
+                  {/* Epic background image */}
+                  <img
+                    src={s.imageUrl}
+                    alt=""
+                    className="absolute inset-0 h-full w-full object-cover"
+                    style={{ animation: "hero-zoom 18s ease-out both" }}
+                  />
+                  {/* Color grade + vignette */}
                   <div
                     className="absolute inset-0"
                     style={{
                       background:
-                        "radial-gradient(ellipse at 75% 35%, hsl(213 90% 45% / 0.55) 0%, transparent 55%), radial-gradient(ellipse at 20% 90%, hsl(280 70% 35% / 0.35) 0%, transparent 60%), linear-gradient(135deg, hsl(220 40% 8%) 0%, hsl(213 45% 6%) 100%)",
+                        "radial-gradient(ellipse at 75% 35%, hsl(213 90% 45% / 0.35) 0%, transparent 60%), radial-gradient(ellipse at 20% 90%, hsl(280 70% 35% / 0.30) 0%, transparent 60%), linear-gradient(180deg, hsl(220 40% 6% / 0.4) 0%, hsl(220 40% 4% / 0.85) 100%)",
                     }}
                   />
                   {/* film grain dots */}
