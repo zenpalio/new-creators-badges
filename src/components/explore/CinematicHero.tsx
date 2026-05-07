@@ -327,7 +327,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                       loading={i === 0 ? "eager" : "lazy"}
                     />
                     {/* Top-left Story badge */}
-                    <div className="absolute left-4 top-4 z-10">
+                    <div className="absolute left-4 top-20 z-10">
                       <span className="flex items-center gap-1.5 rounded-lg border border-white/15 bg-black/45 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-md">
                         <BookOpen className="h-3.5 w-3.5" /> Story
                       </span>
