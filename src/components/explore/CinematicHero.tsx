@@ -1,5 +1,5 @@
 import { type TouchEvent, useEffect, useMemo, useRef, useState } from "react";
-import { BookOpen, Check, ChevronLeft, ChevronRight, Crown, Film, Layers, Play, Sparkles, Star, User } from "lucide-react";
+import { BookOpen, Check, ChevronLeft, ChevronRight, Crown, Film, GitBranch, Image as ImageIcon, Layers, Mic, Music, Play, Sparkles, Star, User, Wand2 } from "lucide-react";
 import ChatIcon from "@/components/icons/ChatIcon";
 import LikeButton from "./LikeButton";
 
