@@ -482,8 +482,8 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                     </div>
                   </div>
 
-                  {/* Mobile: stacked compact plans */}
-                  <div className="absolute inset-x-0 bottom-20 flex flex-col gap-2 px-4 md:hidden">
+                  {/* Mobile: stacked compact plans at top */}
+                  <div className="absolute inset-x-0 top-16 flex flex-col gap-2 px-4 md:hidden">
                     {plans.map((plan) => {
                       const highlight = plan.highlight;
                       return (
@@ -494,11 +494,11 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                           }`}
                         >
                           <div className="flex items-center gap-2">
-                            <span className={`text-[10px] font-bold uppercase tracking-wider ${highlight ? "text-primary" : "text-white/70"}`}>
+                            <span className={`text-[11px] font-bold uppercase tracking-wider ${highlight ? "text-primary" : "text-white/80"}`}>
                               {plan.name}
                             </span>
                             {plan.bonus && (
-                              <span className="rounded-full bg-primary/15 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-primary">
+                              <span className="rounded-full bg-primary/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary">
                                 {plan.bonus}
                               </span>
                             )}
