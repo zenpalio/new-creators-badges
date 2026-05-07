@@ -1,6 +1,6 @@
 import { type TouchEvent, useEffect, useMemo, useRef, useState } from "react";
 import { BookOpen, Check, ChevronLeft, ChevronRight, Crown, Film, GitBranch, Image as ImageIcon, Layers, MessageCircle, Mic, Music, Play, Sparkles, Star, Trophy, User, Wand2 } from "lucide-react";
-import ChatIcon from "@/components/icons/ChatIcon";
+import ChatIcon from "../icons/ChatIcon";
 import LikeButton from "./LikeButton";
 
 export type HeroMedia =

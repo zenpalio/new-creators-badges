@@ -1,5 +1,5 @@
 import LikeButton from "./LikeButton";
-import ChatIcon from "@/components/icons/ChatIcon";
+import ChatIcon from "../icons/ChatIcon";
 
 interface BabeCardProps {
   name: string;

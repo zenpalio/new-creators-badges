@@ -1,31 +1,45 @@
-import { Bell, Sparkles, Video, Image as ImageIcon, ArrowUpRight, Play, ChevronRight, Menu, X, Compass, Users, Heart, Settings, LogOut, BookOpen, Crown, Newspaper, Coins, UserCircle2, TrendingUp, Flame, Star, type LucideIcon } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
-import BabeCard from "@/components/explore/BabeCard";
-import HScroll from "@/components/explore/HScroll";
-import CinematicHero, { type HeroSlide } from "@/components/explore/CinematicHero";
-import CreatorRankCard from "@/components/explore/CreatorRankCard";
-import StoryContentCard from "@/components/explore/StoryContentCard";
-import LikeButton from "@/components/explore/LikeButton";
-import FloatingToolsFAB from "@/components/explore/FloatingToolsFAB";
-import SystemStatusIndicator from "@/components/explore/SystemStatusIndicator";
-import PromoBanner from "@/components/explore/PromoBanner";
-import SideNav from "@/components/SideNav";
-import NotificationsSidebar from "@/components/NotificationsSidebar";
-import AnnouncementDialog from "@/components/AnnouncementDialog";
-import { type BadgeTier } from "@/components/BadgeCard";
-import bannerPremium from "@/assets/hero/banner-premium.jpg";
-import bannerFeature from "@/assets/hero/banner-feature.jpg";
-import bannerSale from "@/assets/hero/banner-sale.jpg";
-import bannerStory from "@/assets/hero/banner-story.jpg";
-import storyCreatorHero from "@/assets/story-creator-hero.jpg";
+import { useState } from "react";
+import {
+  Sparkles,
+  Video,
+  Image as ImageIcon,
+  BookOpen,
+  Crown,
+  Coins,
+} from "lucide-react";
+import SideNav from "../components/SideNav";
+import NotificationsSidebar, { type Announcement } from "../components/NotificationsSidebar";
+import AnnouncementDialog from "../components/AnnouncementDialog";
+import { ExploreView } from "../components/ExploreView";
+import {
+  ExploreBabesSection,
+  ExploreCreatorsSection,
+  ExploreFooterSection,
+  ExplorePromoSection,
+  ExploreStartCreatingSection,
+  ExploreStoriesSection,
+  ExploreVideosSection,
+  ExploreWhatsNewSection,
+  type ExploreViewBabe,
+  type ExploreViewCreatorRank,
+  type ExploreViewCreateTool,
+  type ExploreViewFooterLinks,
+  type ExploreViewPromo,
+  type ExploreViewSectionCategory,
+  type ExploreViewStory,
+  type ExploreViewVideo,
+  type ExploreViewWhatsNew,
+} from "../components/explore/ExploreSections";
+import { type HeroSlide } from "../components/explore/CinematicHero";
+import { type BadgeTier } from "../components/BadgeCard";
+import bannerStory from "../assets/hero/banner-story.jpg";
+import storyCreatorHero from "../assets/story-creator-hero.jpg";
 
 // ---- Mock data ----
 const img = (seed: string, w = 400, h = 533) =>
   `https://picsum.photos/seed/${encodeURIComponent(seed)}/${w}/${h}`;
 
-
-
-const yourBabes = [
+const yourBabesBase: Omit<ExploreViewBabe, "imageUrl">[] = [
   { name: "Tanya", description: "Your sultry coworker who always finds a reason to bend over your desk...", messageCount: 12 },
   { name: "Celeste", description: "A stargazer who reads your future in the constellations of her freckles...", messageCount: 0 },
   { name: "Naomi", description: "Your best friend's older sister, back from college with a wicked smile...", messageCount: 4 },
@@ -42,7 +56,7 @@ const yourBabes = [
   { name: "Ella", description: "Cinderella after midnight, no longer playing nice or losing slippers...", messageCount: 0 },
 ];
 
-const yourFollowing = [
+const yourFollowingBase: Omit<ExploreViewBabe, "imageUrl">[] = [
   { name: "Hana", description: "Quiet, shy, and dangerously curious about your bookshelf...", messageCount: "1.1K", likeCount: "26" },
   { name: "Riyo Reaper", description: "Death's intern with a soft spot for tortured souls and tortured nights...", messageCount: "412", likeCount: "34" },
   { name: "Luna", description: "Apprentice witch who keeps mistaking lust spells for love spells...", messageCount: "1.8K", likeCount: "322" },
@@ -56,41 +70,41 @@ const yourFollowing = [
   { name: "Olivia", description: "Your therapist's eyebrow twitches every time you describe her in session...", messageCount: "830", likeCount: "61" },
 ];
 
-const followingUsernames = [
-  "@phenix_giraffe_BDSM",
-  "@energetic_giraffe_3754",
-  "@marvelous_ibis",
-  "@respectful_leopard_9203",
-  "@Sirlight",
-  "@Sandwiches",
-  "@gentle_horse_1142",
-  "@quiet_owl_88",
-  "@cosmic_fox",
-  "@velvet_raven",
+const followingUsers: ExploreViewSectionCategory[] = [
+  { id: "phenix_giraffe_BDSM", label: "@phenix_giraffe_BDSM" },
+  { id: "energetic_giraffe_3754", label: "@energetic_giraffe_3754" },
+  { id: "marvelous_ibis", label: "@marvelous_ibis" },
+  { id: "respectful_leopard_9203", label: "@respectful_leopard_9203" },
+  { id: "Sirlight", label: "@Sirlight" },
+  { id: "Sandwiches", label: "@Sandwiches" },
+  { id: "gentle_horse_1142", label: "@gentle_horse_1142" },
+  { id: "quiet_owl_88", label: "@quiet_owl_88" },
+  { id: "cosmic_fox", label: "@cosmic_fox" },
+  { id: "velvet_raven", label: "@velvet_raven" },
 ];
 
-const videoCategories = [
-  "Anime3d", "Aphrodite", "Furry", "Velvetheat", "Fantasy", "Artea",
-  "Truelook", "Dreammix", "Cartoon", "Darkfantasy", "Anthro", "Female",
+const videoCategories: ExploreViewSectionCategory[] = [
+  { label: "Anime3d" }, { label: "Aphrodite" }, { label: "Furry" }, { label: "Velvetheat" }, { label: "Fantasy" }, { label: "Artea" },
+  { label: "Truelook" }, { label: "Dreammix" }, { label: "Cartoon" }, { label: "Darkfantasy" }, { label: "Anthro" }, { label: "Female" },
 ];
 
-const trendingTags = [
-  "Blowjob", "Cowgirl", "Creampie", "Cumshot", "Doggy Style", "Deepthroat",
-  "Facials", "Footjob", "Handjob", "Kissing", "Masturbation", "Mating Press",
-  "Missionary", "Pissing", "Bukkake", "Boob Bounce", "Breast Play", "Fingering",
+const trendingTags: ExploreViewSectionCategory[] = [
+  { label: "Blowjob" }, { label: "Cowgirl" }, { label: "Creampie" }, { label: "Cumshot" }, { label: "Doggy Style" }, { label: "Deepthroat" },
+  { label: "Facials" }, { label: "Footjob" }, { label: "Handjob" }, { label: "Kissing" }, { label: "Masturbation" }, { label: "Mating Press" },
+  { label: "Missionary" }, { label: "Pissing" }, { label: "Bukkake" }, { label: "Boob Bounce" }, { label: "Breast Play" }, { label: "Fingering" },
 ];
 
-const babeCategories = [
-  "Realistic", "Anime", "Hentai", "Caucasian", "Asian", "Latina",
-  "Ebony", "Goth", "MILF", "Teen 18+", "Cosplay", "Fantasy",
+const babeCategories: ExploreViewSectionCategory[] = [
+  { label: "Realistic" }, { label: "Anime" }, { label: "Hentai" }, { label: "Caucasian" }, { label: "Asian" }, { label: "Latina" },
+  { label: "Ebony" }, { label: "Goth" }, { label: "MILF" }, { label: "Teen 18+" }, { label: "Cosplay" }, { label: "Fantasy" },
 ];
 
-const newReleaseTags = [
-  "New today", "This week", "Rising stars", "Editor's pick",
-  "Most chatted", "Most liked", "Trending now", "Hidden gems",
+const newReleaseTags: ExploreViewSectionCategory[] = [
+  { label: "New today" }, { label: "This week" }, { label: "Rising stars" }, { label: "Editor's pick" },
+  { label: "Most chatted" }, { label: "Most liked" }, { label: "Trending now" }, { label: "Hidden gems" },
 ];
 
-const trendingVideos = [
+const trendingVideosBase: Omit<ExploreViewVideo, "imageUrl">[] = [
   { id: "v1", likes: "2.1K" },
   { id: "v2", likes: "1.8K" },
   { id: "v3", likes: "1.4K" },
@@ -100,7 +114,7 @@ const trendingVideos = [
   { id: "v7", likes: "523" },
 ];
 
-const trendingBabes = [
+const trendingBabesBase: Omit<ExploreViewBabe, "imageUrl">[] = [
   { name: "Juliana", description: "Brazilian samba instructor whose hips never lie and never quit...", messageCount: "3.2K", likeCount: "412" },
   { name: "Natalie", description: "Your boss's daughter who keeps texting you after the office party...", messageCount: "2.8K", likeCount: "388" },
   { name: "Elyndra", description: "Elven scout who tracked your scent across three kingdoms to find you...", messageCount: "1.9K", likeCount: "266" },
@@ -111,7 +125,7 @@ const trendingBabes = [
   { name: "Princess Demetria", description: "Royal heir slumming it in your one-bedroom apartment for the weekend...", messageCount: "2.0K", likeCount: "229" },
 ];
 
-const newBabes = [
+const newBabesBase: Omit<ExploreViewBabe, "imageUrl">[] = [
   { name: "Vexa", description: "Cyberpunk netrunner jacking into your dreams uninvited...", messageCount: "412", likeCount: "38" },
   { name: "Hikari", description: "Shrine maiden bored of incense and ready for trouble...", messageCount: "289", likeCount: "44" },
   { name: "Sable", description: "Vampire countess who needs more than just your blood tonight...", messageCount: "611", likeCount: "82" },
@@ -122,7 +136,7 @@ const newBabes = [
   { name: "Yumi", description: "Idol on hiatus, hiding out in your spare room and out of costume...", messageCount: "722", likeCount: "104" },
 ];
 
-const featuredStories = [
+const featuredStories: ExploreViewStory[] = [
   {
     id: "s1",
     title: "Midnight at the Manor",
@@ -180,7 +194,7 @@ const featuredStories = [
   },
 ];
 
-const newEpisodes = [
+const newEpisodes: ExploreViewStory[] = [
   {
     id: "ne1",
     title: "Confession Booth",
@@ -237,7 +251,6 @@ const newEpisodes = [
     likes: 2980,
   },
 ];
-
 
 const heroSlides: HeroSlide[] = [
   {
@@ -360,8 +373,7 @@ const heroSlides: HeroSlide[] = [
   },
 ];
 
-
-const topCreators: { rank: number; name: string; avatarSeed: string; tier: BadgeTier; verified?: boolean }[] = [
+const topCreatorsBase: { rank: number; name: string; avatarSeed: string; tier: BadgeTier; verified?: boolean }[] = [
   { rank: 1, name: "Big Daddy", avatarSeed: "creator-bigdaddy", tier: "immortal", verified: true },
   { rank: 2, name: "VelvetHeat", avatarSeed: "creator-velvet", tier: "mythic", verified: true },
   { rank: 3, name: "DarkFantasy", avatarSeed: "creator-darkfantasy", tier: "grandmaster", verified: true },
@@ -374,7 +386,7 @@ const topCreators: { rank: number; name: string; avatarSeed: string; tier: Badge
   { rank: 10, name: "Sirlight", avatarSeed: "creator-sirlight", tier: "master" },
 ];
 
-const risingCreators: { rank: number; name: string; avatarSeed: string; tier: BadgeTier; verified?: boolean }[] = [
+const risingCreatorsBase: { rank: number; name: string; avatarSeed: string; tier: BadgeTier; verified?: boolean }[] = [
   { rank: 1, name: "@phenix_giraffe_BDSM", avatarSeed: "rising-phenix", tier: "elite" },
   { rank: 2, name: "@energetic_giraffe_3754", avatarSeed: "rising-energetic", tier: "legend" },
   { rank: 3, name: "@marvelous_ibis", avatarSeed: "rising-ibis", tier: "legend" },
@@ -387,37 +399,12 @@ const risingCreators: { rank: number; name: string; avatarSeed: string; tier: Ba
   { rank: 10, name: "@silver_lynx", avatarSeed: "rising-lynx", tier: "newbie" },
 ];
 
-const createTools = [
-  {
-    title: "Create Custom Babe",
-    subtitle: "Design your dream character",
-    href: "/explore/create-babe",
-    Icon: Sparkles,
-  },
-  {
-    title: "Video Generator",
-    subtitle: "Bring scenes to life",
-    href: "/explore/video-generator",
-    Icon: Video,
-  },
-  {
-    title: "Image Generator",
-    subtitle: "Render any moment",
-    href: "/explore/image-generator",
-    Icon: ImageIcon,
-  },
-  {
-    title: "Story Creator",
-    subtitle: "Write episodic adventures",
-    href: "/explore/story-creator",
-    Icon: BookOpen,
-  },
-  {
-    title: "Create Template Babe",
-    subtitle: "Start from a preset",
-    href: "/explore/create-template",
-    Icon: Sparkles,
-  },
+const createTools: ExploreViewCreateTool[] = [
+  { title: "Create Custom Babe", subtitle: "Design your dream character", href: "/explore/create-babe", Icon: Sparkles },
+  { title: "Video Generator", subtitle: "Bring scenes to life", href: "/explore/video-generator", Icon: Video },
+  { title: "Image Generator", subtitle: "Render any moment", href: "/explore/image-generator", Icon: ImageIcon },
+  { title: "Story Creator", subtitle: "Write episodic adventures", href: "/explore/story-creator", Icon: BookOpen },
+  { title: "Create Template Babe", subtitle: "Start from a preset", href: "/explore/create-template", Icon: Sparkles },
 ];
 
 type AnnouncementSection = {
@@ -486,7 +473,6 @@ const whatsNewItems: WhatsNewItem[] = [
           ],
         },
       ],
-      
       outro:
         "🗺️ This is just the foundation. We're currently building Stories, Interactive Games, and a Video Editing suite to transform the platform from a gallery into a fully interactive multiverse.",
     },
@@ -638,7 +624,7 @@ const whatsNewItems: WhatsNewItem[] = [
   },
 ];
 
-const announcements = whatsNewItems
+const announcements: Announcement[] = whatsNewItems
   .filter((n): n is WhatsNewItem & { announcement: NonNullable<WhatsNewItem["announcement"]> } => !!n.announcement)
   .map((n, i) => ({
     id: `ann-${i}`,
@@ -666,99 +652,181 @@ const mockNotifications = [
   { id: "n10", actor: "appealing_camel_9047", initials: "AP", action: "started following you" },
 ];
 
-
-
-// ---- Section header ----
-const iconActiveStyles: Record<string, { color: string; fill: boolean }> = {
-  Heart: { color: "text-pink-500", fill: true },
-  Crown: { color: "text-yellow-400", fill: true },
-  Flame: { color: "text-orange-500", fill: true },
-  Sparkles: { color: "text-blue-400", fill: true },
-  Star: { color: "text-yellow-400", fill: true },
-  BookOpen: { color: "text-amber-400", fill: false },
-  Video: { color: "text-blue-400", fill: false },
-  ImageIcon: { color: "text-emerald-400", fill: false },
-  TrendingUp: { color: "text-green-400", fill: false },
-  Newspaper: { color: "text-cyan-400", fill: false },
-  UserCircle2: { color: "text-violet-400", fill: true },
+const giftPromo: ExploreViewPromo = {
+  variant: "gift",
+  Icon: Sparkles,
+  eyebrow: "Welcome gift",
+  title: "A surprise is waiting for you — claim it now",
+  description: "Sign up today to unlock characters, chat, roleplay and image generation.",
+  cta: "Claim",
 };
 
-const SectionTitle = ({
-  title,
-  action,
-}: {
-  title: string;
-  action?: string;
-  icon?: LucideIcon;
-}) => (
-  <div className="mb-3 flex items-end justify-between">
-    <h2 className="text-xl font-bold leading-tight text-white">{title}</h2>
-    {action && (
-      <button className="flex items-center gap-1 text-xs font-medium text-grey-light-3 hover:text-white transition-colors">
-        {action}
-        <ArrowUpRight className="h-3.5 w-3.5" />
-      </button>
-    )}
-  </div>
-);
+const premiumPromo: ExploreViewPromo = {
+  variant: "premium",
+  Icon: Crown,
+  title: "Go Premium",
+  description: "Unlimited chats, longer videos, and exclusive babes — without the queue.",
+  cta: "Upgrade",
+};
 
-// ---- Tag pill row ----
-const TagRow = ({ tags }: { tags: string[] }) => (
-  <div className="mb-3">
-    <HScroll>
-      {tags.map((t) => (
-        <button
-          key={t}
-          className="inline-flex h-[41px] shrink-0 items-center justify-center whitespace-nowrap rounded-[5px] bg-grey-dark-1 px-[16px] text-sm font-medium text-[#F2F2F2] transition-colors hover:bg-grey-dark-3 hover:text-white"
-        >
-          <span className="normal-case">{t}</span>
-        </button>
-      ))}
-    </HScroll>
-  </div>
-);
+const tokensPromo: ExploreViewPromo = {
+  variant: "tokens",
+  Icon: Coins,
+  title: "Token sale — 20% off",
+  description: "Stock up on tokens this week and save on every pack. Limited time only.",
+  cta: "Buy tokens",
+};
 
+const featurePromo: ExploreViewPromo = {
+  variant: "feature",
+  Icon: Sparkles,
+  title: "New: Scene Builder is live",
+  description: "Break free from character-only prompts. Build full cinematic scenes in seconds.",
+  cta: "Try this",
+};
 
-const sidebarLinks = [
-  { label: "Explore", icon: Compass },
-  { label: "Creators", icon: Users },
-  { label: "Favorites", icon: Heart },
-  { label: "Create", icon: Sparkles },
-  { label: "Settings", icon: Settings },
-];
+const giftPromo2: ExploreViewPromo = {
+  variant: "gift",
+  Icon: Sparkles,
+  eyebrow: "Still here?",
+  title: "Claim your welcome bonus before it expires",
+  description: "3 free image generations and a starter token pack — on the house.",
+  cta: "Claim now",
+};
+
+const premiumPromo2: ExploreViewPromo = {
+  variant: "premium",
+  Icon: Crown,
+  title: "Unlock everything with Premium",
+  description: "Skip the queue, unlimited messages, HD video — cancel anytime.",
+  cta: "Go Premium",
+};
+
+const footerLinks: ExploreViewFooterLinks = {
+  social: {
+    title: "Social",
+    links: [
+      { label: "Discord", href: "#" },
+      { label: "X (Twitter)", href: "#" },
+      { label: "Reddit", href: "#" },
+    ],
+  },
+  features: {
+    title: "Features",
+    links: [
+      { label: "AI Chat", href: "#" },
+      { label: "Image Generator", href: "#" },
+      { label: "Video Generator", href: "#" },
+    ],
+  },
+  legal: {
+    title: "Legal",
+    links: [
+      { label: "Terms", href: "#" },
+      { label: "Privacy", href: "#" },
+      { label: "2257", href: "#" },
+    ],
+  },
+  resources: {
+    title: "Resources",
+    links: [
+      { label: "Guides", href: "#" },
+      { label: "Blog", href: "#" },
+      { label: "Contact", href: "#" },
+    ],
+  },
+};
 
 const Explore = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
-  const [inlineAnnouncement, setInlineAnnouncement] = useState<typeof announcements[number] | null>(null);
-  const mainRef = useRef<HTMLElement>(null);
-  const [headerHidden, setHeaderHidden] = useState(false);
+  const [inlineAnnouncement, setInlineAnnouncement] = useState<Announcement | null>(null);
 
-  useEffect(() => {
-    const el = mainRef.current;
-    if (!el) return;
-    let lastY = el.scrollTop;
-    let ticking = false;
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const y = el.scrollTop;
-        const dy = y - lastY;
-        // Always show near the top
-        if (y < 80) setHeaderHidden(false);
-        else if (dy > 6) setHeaderHidden(true); // scrolling down
-        else if (dy < -6) setHeaderHidden(false); // scrolling up
-        lastY = y;
-        ticking = false;
-      });
-    };
-    el.addEventListener("scroll", onScroll, { passive: true });
-    return () => el.removeEventListener("scroll", onScroll);
-  }, []);
+  const yourBabes: ExploreViewBabe[] = yourBabesBase.map((b, i) => ({
+    ...b,
+    imageUrl: img(`babe-${b.name}-${i}`),
+  }));
+
+  const yourFollowing: ExploreViewBabe[] = yourFollowingBase.map((b, i) => ({
+    ...b,
+    imageUrl: img(`follow-${b.name}-${i}`),
+  }));
+
+  const trendingBabes: ExploreViewBabe[] = trendingBabesBase.map((b, i) => ({
+    ...b,
+    imageUrl: img(`trend-${b.name}-${i}`),
+  }));
+
+  const newBabes: ExploreViewBabe[] = newBabesBase.map((b, i) => ({
+    ...b,
+    imageUrl: img(`new-${b.name}-${i}`),
+  }));
+
+  const recommendedBabes: ExploreViewBabe[] = [...yourBabesBase].reverse().map((b, i) => ({
+    ...b,
+    imageUrl: img(`rec-${b.name}-${i}`),
+  }));
+
+  const fanFavoritesBabes: ExploreViewBabe[] = [...trendingBabesBase, ...newBabesBase].map((b, i) => ({
+    ...b,
+    imageUrl: img(`fav-${b.name}-${i}`),
+  }));
+
+  const trendingVideos: ExploreViewVideo[] = trendingVideosBase.map((v) => ({
+    ...v,
+    imageUrl: img(`vid-${v.id}`, 260, 380),
+  }));
+
+  const hotVideos: ExploreViewVideo[] = [...trendingVideosBase, ...trendingVideosBase].map((v, i) => ({
+    ...v,
+    imageUrl: img(`hot-${v.id}-${i}`, 260, 380),
+  }));
+
+  const continueStories: ExploreViewStory[] = [...featuredStories, ...newEpisodes].map((s, i) => ({
+    ...s,
+    id: `cont-${s.id}-${i}`,
+  }));
+
+  const topCreators: ExploreViewCreatorRank[] = topCreatorsBase.map((c) => ({
+    rank: c.rank,
+    name: c.name,
+    tier: c.tier,
+    verified: c.verified,
+    avatarUrl: `https://picsum.photos/seed/${encodeURIComponent(c.avatarSeed)}/160/160`,
+  }));
+
+  const risingCreators: ExploreViewCreatorRank[] = risingCreatorsBase.map((c) => ({
+    rank: c.rank,
+    name: c.name,
+    tier: c.tier,
+    verified: c.verified,
+    avatarUrl: `https://picsum.photos/seed/${encodeURIComponent(c.avatarSeed)}/160/160`,
+  }));
+
+  const whatsNewPosts: ExploreViewWhatsNew[] = whatsNewItems.map((n, i) => ({
+    tag: n.tag,
+    date: n.date,
+    title: n.title,
+    description: n.description,
+    onClick: n.announcement
+      ? () =>
+          setInlineAnnouncement({
+            id: `inline-${i}`,
+            tag: n.tag,
+            date: n.date,
+            title: n.title,
+            description: n.description,
+            headline: n.announcement!.headline,
+            intro: n.announcement!.intro,
+            sections: n.announcement!.sections,
+            cta: n.announcement!.cta,
+            outro: n.announcement!.outro,
+          })
+      : undefined,
+  }));
 
   return (
-    <div className="relative flex h-svh w-full overflow-hidden bg-background font-onest text-foreground">
+    <>
       <SideNav open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <AnnouncementDialog
         announcement={inlineAnnouncement}
@@ -772,470 +840,118 @@ const Explore = () => {
         notifications={mockNotifications}
         announcements={announcements}
       />
-
-      <main ref={mainRef} className="relative flex w-full flex-1 flex-col overflow-y-auto overflow-x-hidden">
-        {/* Sticky top bar — slides away on scroll down, returns on scroll up */}
-        <header
-          className={`pointer-events-none fixed inset-x-0 top-0 z-30 flex min-h-[62px] items-center justify-between px-6 py-4 bg-gradient-to-b from-background/40 via-background/15 to-transparent transition-transform duration-300 ease-out ${
-            headerHidden ? "-translate-y-full" : "translate-y-0"
-          }`}
-        >
-          <div className="pointer-events-auto flex items-center gap-3">
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="flex h-9 w-9 items-center justify-center text-foreground/90 transition-opacity hover:opacity-70"
-              aria-label="Open menu"
-            >
-              <Menu className="h-5 w-5" strokeWidth={1.5} />
-            </button>
-          </div>
-          <div className="pointer-events-auto flex items-center gap-1">
-            <SystemStatusIndicator />
-            <button
-              onClick={() => setNotificationsOpen(true)}
-              className="relative flex h-9 w-9 items-center justify-center text-foreground/90 transition-opacity hover:opacity-70"
-              aria-label="Notifications"
-            >
-              <Bell className="h-5 w-5" strokeWidth={1.5} />
-              <span className="absolute right-1 top-1 flex h-[12px] min-w-[12px] items-center justify-center rounded-full bg-primary px-[2px] text-[9px] font-semibold leading-[12px] text-primary-foreground">
-                14
-              </span>
-            </button>
-          </div>
-        </header>
-
-        {/* Cinematic hero (full-bleed) */}
-        <CinematicHero slides={heroSlides} />
-
-        {/* Edge-to-edge content rows */}
-        <div className="relative z-10 flex w-full flex-col gap-6 px-4 pb-16 pt-6 md:px-8 lg:px-12">
-
-          {/* Your babes */}
-          <section>
-            <SectionTitle title="Your babes are waiting" action="See all" icon={Heart} />
-            <TagRow tags={babeCategories} />
-            <HScroll>
-              {yourBabes.map((b, i) => (
-                <BabeCard key={i} {...b} imageUrl={img(`babe-${b.name}-${i}`)} />
-              ))}
-            </HScroll>
-          </section>
-
-          {/* Banner — Welcome gift */}
-          <PromoBanner
-            variant="gift"
-            icon={Sparkles}
-            eyebrow="Welcome gift"
-            title="A surprise is waiting for you — claim it now"
-            description="Sign up today to unlock characters, chat, roleplay and image generation."
-            cta="Claim"
-          />
-
-          {/* Featured stories */}
-          <section className="mt-2">
-            <SectionTitle title="Featured stories" action="See all" icon={BookOpen} />
-            <HScroll>
-              {featuredStories.map((s) => (
-                <StoryContentCard key={s.id} {...s} />
-              ))}
-            </HScroll>
-          </section>
-
-          {/* Top trending videos */}
-          <section className="mt-2">
-            <SectionTitle title="Top trending videos" action="See all" icon={Flame} />
-            <TagRow tags={videoCategories} />
-            <HScroll>
-              {trendingVideos.map((v) => (
-                <div
-                  key={v.id}
-                  className="group relative w-[220px] shrink-0 overflow-hidden rounded-2xl bg-grey-dark-1"
-                >
-                  <div className="relative aspect-[13/19] w-full overflow-hidden">
-                    <img
-                      src={img(`vid-${v.id}`, 260, 380)}
-                      alt=""
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/70 to-transparent" />
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 transition-opacity group-hover:opacity-100">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 backdrop-blur">
-                        <Play className="h-5 w-5 fill-black text-black" />
-                      </div>
-                    </div>
-                    <div className="absolute bottom-2 right-2 text-[11px] font-medium text-white drop-shadow-md">
-                      <LikeButton iconClassName="h-3.5 w-3.5"><span>{v.likes}</span></LikeButton>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </HScroll>
-          </section>
-
-          {/* Banner — Premium */}
-          <PromoBanner
-            variant="premium"
-            icon={Crown}
-            title="Go Premium"
-            description="Unlimited chats, longer videos, and exclusive babes — without the queue."
-            cta="Upgrade"
-          />
-
-          {/* Top creators */}
-          <section className="mt-2">
-            <SectionTitle title="Top creators" action="See all" icon={Crown} />
-            <HScroll>
-              {topCreators.map((c) => (
-                <CreatorRankCard
-                  key={c.rank}
-                  rank={c.rank}
-                  name={c.name}
-                  tier={c.tier}
-                  verified={c.verified}
-                  avatarUrl={`https://picsum.photos/seed/${encodeURIComponent(c.avatarSeed)}/160/160`}
-                />
-              ))}
-            </HScroll>
-          </section>
-
-          {/* What's new — news row (between sections) */}
-          <section className="mt-2">
-            <SectionTitle title="What's new" action="See all" icon={Newspaper} />
-            <HScroll>
-              {whatsNewItems.map((n, i) => {
-                const newsCard = (
-                  <div className="group flex h-full w-[300px] shrink-0 flex-col gap-2 rounded-2xl border border-white/[0.06] bg-grey-dark-1/60 p-4 text-left transition-colors hover:border-white/10 hover:bg-grey-dark-1">
-                    <div className="flex items-center gap-2 text-[11px] font-medium">
-                      <span className="rounded-full bg-primary/15 px-2 py-0.5 text-primary">{n.tag}</span>
-                      <span className="text-grey-light-4">{n.date}</span>
-                    </div>
-                    <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-white">
-                      {n.title}
-                    </h3>
-                    <p className="line-clamp-2 text-xs leading-snug text-grey-light-3">
-                      {n.description}
-                    </p>
-                    <div className="mt-auto flex items-center gap-1 pt-1 text-xs font-medium text-grey-light-3 transition-colors group-hover:text-white">
-                      <span>Read more</span>
-                      <ArrowUpRight className="h-3.5 w-3.5" />
-                    </div>
-                  </div>
-                );
-
-                if (!n.announcement) {
-                  return (
-                    <button key={i} type="button" className="block shrink-0">
-                      {newsCard}
-                    </button>
-                  );
-                }
-
-                const a = n.announcement;
-                return (
-                  <button
-                    key={i}
-                    type="button"
-                    className="block shrink-0"
-                    onClick={() =>
-                      setInlineAnnouncement({
-                        id: `inline-${i}`,
-                        tag: n.tag,
-                        date: n.date,
-                        title: n.title,
-                        description: n.description,
-                        headline: a.headline,
-                        intro: a.intro,
-                        sections: a.sections,
-                        cta: a.cta,
-                        outro: a.outro,
-                      })
-                    }
-                  >
-                    {newsCard}
-                  </button>
-                );
-              })}
-            </HScroll>
-          </section>
-
-          {/* Your following */}
-          <section className="mt-2">
-            <SectionTitle title="Your following" action="See all" icon={UserCircle2} />
-            <TagRow tags={followingUsernames} />
-            <HScroll>
-              {yourFollowing.map((b, i) => (
-                <BabeCard
-                  key={i}
-                  {...b}
-                  variant="stats"
-                  imageUrl={img(`follow-${b.name}-${i}`)}
-                />
-              ))}
-            </HScroll>
-          </section>
-
-          {/* Banner — Token sale */}
-          <PromoBanner
-            variant="tokens"
-            icon={Coins}
-            title="Token sale — 20% off"
-            description="Stock up on tokens this week and save on every pack. Limited time only."
-            cta="Buy tokens"
-          />
-
-          {/* Trending this week */}
-          <section className="mt-2">
-            <SectionTitle title="Check out this week trending babes" action="See all" icon={TrendingUp} />
-            <TagRow tags={trendingTags} />
-            <HScroll>
-              {trendingBabes.map((b, i) => (
-                <BabeCard
-                  key={i}
-                  {...b}
-                  variant="stats"
-                  imageUrl={img(`trend-${b.name}-${i}`)}
-                />
-              ))}
-            </HScroll>
-          </section>
-
-          {/* New story episodes */}
-          <section className="mt-2">
-            <SectionTitle title="New story episodes" action="See all" icon={BookOpen} />
-            <HScroll>
-              {newEpisodes.map((s) => (
-                <StoryContentCard key={s.id} {...s} />
-              ))}
-            </HScroll>
-          </section>
-
-          {/* Banner — Scene Builder feature */}
-          <PromoBanner
-            variant="feature"
-            icon={Sparkles}
-            title="New: Scene Builder is live"
-            description="Break free from character-only prompts. Build full cinematic scenes in seconds."
-            cta="Try this"
-          />
-
-          {/* Rising creators */}
-          <section className="mt-2">
-            <SectionTitle title="Rising creators this week" action="See all" icon={Sparkles} />
-            <HScroll>
-              {risingCreators.map((c) => (
-                <CreatorRankCard
-                  key={c.rank}
-                  rank={c.rank}
-                  name={c.name}
-                  tier={c.tier}
-                  verified={c.verified}
-                  avatarUrl={`https://picsum.photos/seed/${encodeURIComponent(c.avatarSeed)}/160/160`}
-                />
-              ))}
-            </HScroll>
-          </section>
-
-          {/* Recommended for you */}
-          <section className="mt-2">
-            <SectionTitle title="Recommended for you" action="See all" icon={Star} />
-            <HScroll>
-              {[...yourBabes].reverse().map((b, i) => (
-                <BabeCard key={`rec-${i}`} {...b} imageUrl={img(`rec-${b.name}-${i}`)} />
-              ))}
-            </HScroll>
-          </section>
-
-          {/* Banner — Welcome gift (second placement) */}
-          <PromoBanner
-            variant="gift"
-            icon={Sparkles}
-            eyebrow="Still here?"
-            title="Claim your welcome bonus before it expires"
-            description="3 free image generations and a starter token pack — on the house."
-            cta="Claim now"
-          />
-
-          {/* Continue your stories */}
-          <section className="mt-2">
-            <SectionTitle title="Continue your stories" action="See all" icon={BookOpen} />
-            <HScroll>
-              {[...featuredStories, ...newEpisodes].map((s, i) => (
-                <StoryContentCard key={`cont-${s.id}-${i}`} {...s} />
-              ))}
-            </HScroll>
-          </section>
-
-          {/* Hot right now videos */}
-          <section className="mt-2">
-            <SectionTitle title="Hot right now" action="See all" icon={Flame} />
-            <HScroll>
-              {[...trendingVideos, ...trendingVideos].map((v, i) => (
-                <div
-                  key={`hot-${v.id}-${i}`}
-                  className="group relative w-[220px] shrink-0 overflow-hidden rounded-2xl bg-grey-dark-1"
-                >
-                  <div className="relative aspect-[13/19] w-full overflow-hidden">
-                    <img
-                      src={img(`hot-${v.id}-${i}`, 260, 380)}
-                      alt=""
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/70 to-transparent" />
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 transition-opacity group-hover:opacity-100">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 backdrop-blur">
-                        <Play className="h-5 w-5 fill-black text-black" />
-                      </div>
-                    </div>
-                    <div className="absolute bottom-2 right-2 text-[11px] font-medium text-white drop-shadow-md">
-                      <LikeButton iconClassName="h-3.5 w-3.5"><span>{v.likes}</span></LikeButton>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </HScroll>
-          </section>
-
-          {/* Banner — Premium (second placement) */}
-          <PromoBanner
-            variant="premium"
-            icon={Crown}
-            title="Unlock everything with Premium"
-            description="Skip the queue, unlimited messages, HD video — cancel anytime."
-            cta="Go Premium"
-          />
-
-          {/* New releases */}
-          <section className="mt-2">
-            <SectionTitle title="New releases" action="See all" icon={Sparkles} />
-            <TagRow tags={newReleaseTags} />
-            <HScroll>
-              {newBabes.map((b, i) => (
-                <BabeCard
-                  key={i}
-                  {...b}
-                  variant="stats"
-                  imageUrl={img(`new-${b.name}-${i}`)}
-                />
-              ))}
-            </HScroll>
-          </section>
-
-          {/* Fan favorites */}
-          <section className="mt-2">
-            <SectionTitle title="Fan favorites" action="See all" icon={Heart} />
-            <HScroll>
-              {[...trendingBabes, ...newBabes].map((b, i) => (
-                <BabeCard
-                  key={`fav-${i}`}
-                  {...b}
-                  variant="stats"
-                  imageUrl={img(`fav-${b.name}-${i}`)}
-                />
-              ))}
-            </HScroll>
-          </section>
-
-
-          {/* Start creating */}
-
-          <section className="mt-4">
-            <SectionTitle title="Start creating" />
-            {(() => {
-              const cardClass =
-                "group relative flex w-full shrink-0 flex-col gap-2.5 overflow-hidden rounded-2xl border border-white/5 bg-grey-dark-1 p-4 text-left transition-all hover:-translate-y-0.5 hover:border-white/10";
-              const renderCard = (t: (typeof createTools)[number]) => {
-                const Icon = t.Icon;
-                return (
-                  <button key={t.title} className={cardClass}>
-                    {/* Subtle primary accent */}
-                    <div className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-primary/15 blur-2xl transition-opacity duration-300 group-hover:bg-primary/25" />
-
-                    {/* Top row: icon + arrow */}
-                    <div className="relative flex items-center justify-between">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04]">
-                        <Icon className="h-[18px] w-[18px] text-white" />
-                      </div>
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 backdrop-blur transition-all group-hover:bg-white group-hover:text-black">
-                        <ChevronRight className="h-4 w-4 text-current" />
-                      </div>
-                    </div>
-
-                    {/* Title + subtitle */}
-                    <div className="relative min-w-0">
-                      <h3 className="line-clamp-2 text-[15px] font-bold leading-tight text-white">
-                        {t.title}
-                      </h3>
-                      <p className="mt-1 line-clamp-2 text-xs leading-snug text-grey-light-3">
-                        {t.subtitle}
-                      </p>
-                    </div>
-                  </button>
-                );
-              };
-
-              return (
-                <>
-                  {/* Tablet & mobile: horizontal scroll */}
-                  <div className="xl:hidden">
-                    <HScroll>
-                      {createTools.map((t) => (
-                        <div key={t.title} className="w-[240px] shrink-0">
-                          {renderCard(t)}
-                        </div>
-                      ))}
-                    </HScroll>
-                  </div>
-                  {/* Desktop: full-width grid */}
-                  <div className="hidden gap-3 xl:grid xl:grid-cols-5">
-                    {createTools.map(renderCard)}
-                  </div>
-                </>
-              );
-            })()}
-          </section>
-
-          {/* Footer links */}
-          <footer className="mt-8 grid grid-cols-2 gap-6 border-t border-[#242529] pt-6 text-[13px] text-grey-light-4 md:grid-cols-4">
-            <div>
-              <h4 className="mb-2 text-xs font-bold uppercase tracking-wider text-grey-light-2">Social</h4>
-              <ul className="space-y-1.5">
-                <li><a href="#" className="hover:text-white">Discord</a></li>
-                <li><a href="#" className="hover:text-white">X (Twitter)</a></li>
-                <li><a href="#" className="hover:text-white">Reddit</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="mb-2 text-xs font-bold uppercase tracking-wider text-grey-light-2">Features</h4>
-              <ul className="space-y-1.5">
-                <li><a href="#" className="hover:text-white">AI Chat</a></li>
-                <li><a href="#" className="hover:text-white">Image Generator</a></li>
-                <li><a href="#" className="hover:text-white">Video Generator</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="mb-2 text-xs font-bold uppercase tracking-wider text-grey-light-2">Legal</h4>
-              <ul className="space-y-1.5">
-                <li><a href="#" className="hover:text-white">Terms</a></li>
-                <li><a href="#" className="hover:text-white">Privacy</a></li>
-                <li><a href="#" className="hover:text-white">2257</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="mb-2 text-xs font-bold uppercase tracking-wider text-grey-light-2">Resources</h4>
-              <ul className="space-y-1.5">
-                <li><a href="#" className="hover:text-white">Guides</a></li>
-                <li><a href="#" className="hover:text-white">Blog</a></li>
-                <li><a href="#" className="hover:text-white">Contact</a></li>
-              </ul>
-            </div>
-          </footer>
-        </div>
-      </main>
-
-      <FloatingToolsFAB />
-    </div>
+      <ExploreView
+        heroSlides={heroSlides}
+        onMenu={() => setSidebarOpen(true)}
+        onNotifications={() => setNotificationsOpen(true)}
+        notificationCount={14}
+      >
+        <ExploreBabesSection
+          title="Your babes are waiting"
+          actionLabel="See all"
+          categories={babeCategories}
+          posts={yourBabes}
+        />
+        <ExplorePromoSection promo={giftPromo} />
+        <ExploreStoriesSection
+          title="Featured stories"
+          actionLabel="See all"
+          posts={featuredStories}
+          className="mt-2"
+        />
+        <ExploreVideosSection
+          title="Top trending videos"
+          actionLabel="See all"
+          categories={videoCategories}
+          posts={trendingVideos}
+          className="mt-2"
+        />
+        <ExplorePromoSection promo={premiumPromo} />
+        <ExploreCreatorsSection
+          title="Top creators"
+          actionLabel="See all"
+          posts={topCreators}
+          className="mt-2"
+        />
+        <ExploreWhatsNewSection
+          title="What's new"
+          actionLabel="See all"
+          posts={whatsNewPosts}
+          className="mt-2"
+        />
+        <ExploreBabesSection
+          title="Your following"
+          actionLabel="See all"
+          categories={followingUsers}
+          posts={yourFollowing}
+          variant="stats"
+          className="mt-2"
+        />
+        <ExplorePromoSection promo={tokensPromo} />
+        <ExploreBabesSection
+          title="Check out this week trending babes"
+          actionLabel="See all"
+          categories={trendingTags}
+          posts={trendingBabes}
+          variant="stats"
+          className="mt-2"
+        />
+        <ExploreStoriesSection
+          title="New story episodes"
+          actionLabel="See all"
+          posts={newEpisodes}
+          className="mt-2"
+        />
+        <ExplorePromoSection promo={featurePromo} />
+        <ExploreCreatorsSection
+          title="Rising creators this week"
+          actionLabel="See all"
+          posts={risingCreators}
+          className="mt-2"
+        />
+        <ExploreBabesSection
+          title="Recommended for you"
+          actionLabel="See all"
+          posts={recommendedBabes}
+          className="mt-2"
+        />
+        <ExplorePromoSection promo={giftPromo2} />
+        <ExploreStoriesSection
+          title="Continue your stories"
+          actionLabel="See all"
+          posts={continueStories}
+          className="mt-2"
+        />
+        <ExploreVideosSection
+          title="Hot right now"
+          actionLabel="See all"
+          posts={hotVideos}
+          className="mt-2"
+        />
+        <ExplorePromoSection promo={premiumPromo2} />
+        <ExploreBabesSection
+          title="New releases"
+          actionLabel="See all"
+          categories={newReleaseTags}
+          posts={newBabes}
+          variant="stats"
+          className="mt-2"
+        />
+        <ExploreBabesSection
+          title="Fan favorites"
+          actionLabel="See all"
+          posts={fanFavoritesBabes}
+          variant="stats"
+          className="mt-2"
+        />
+        <ExploreStartCreatingSection
+          title="Start creating"
+          tools={createTools}
+          className="mt-4"
+        />
+        <ExploreFooterSection footer={footerLinks} />
+      </ExploreView>
+    </>
   );
 };
 

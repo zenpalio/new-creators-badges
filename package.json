@@ -5,7 +5,8 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./creators-view": "./src/components/CreatorsView.tsx"
+    "./creators-view": "./src/components/CreatorsView.tsx",
+    "./explore-view": "./src/components/ExploreView.tsx"
   },
   "scripts": {
     "dev": "vite",

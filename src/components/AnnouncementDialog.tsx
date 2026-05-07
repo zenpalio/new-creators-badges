@@ -5,8 +5,8 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import type { Announcement } from "@/components/NotificationsSidebar";
+} from "./ui/dialog";
+import type { Announcement } from "./NotificationsSidebar";
 
 interface AnnouncementDialogProps {
   announcement: Announcement | null;

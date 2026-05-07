@@ -1,5 +1,5 @@
 import { ChevronRight } from "lucide-react";
-import { imageSets, type BadgeTier } from "@/components/BadgeCard";
+import { imageSets, type BadgeTier } from "../BadgeCard";
 
 const tierBorderColors: Record<BadgeTier, string> = {
   newbie: "hsl(25 45% 52%)",
