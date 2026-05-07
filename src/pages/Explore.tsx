@@ -342,7 +342,7 @@ const heroSlides: HeroSlide[] = [
   {
     name: "Story Creator",
     tagline: "Lights. Camera. Your story.",
-    description: "Mix images, video, voice and music into cinematic, branching stories. Direct every scene — your babes star in it.",
+    description: "Build multi-episode stories starring your favorite characters. Mix images, video, voice and music into cinematic scenes — you direct every moment.",
     imageUrl: storyCreatorHero,
     badge: "Just shipped",
     cta: "Start your story",
@@ -352,9 +352,9 @@ const heroSlides: HeroSlide[] = [
       eyebrow: "New · Story Creator",
       bullets: [
         "Drop in images, clips, voice notes & music",
-        "Branching scenes with character consistency",
+        "Star your favorite characters across episodes",
         "Cinematic transitions, captions & SFX",
-        "Publish as a reel or interactive story",
+        "Publish as reels or full episode series",
       ],
     },
   },

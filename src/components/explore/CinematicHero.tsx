@@ -522,7 +522,6 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                 { icon: Film, label: "Video", color: "hsl(280 80% 65%)" },
                 { icon: Mic, label: "Voice", color: "hsl(160 70% 55%)" },
                 { icon: Music, label: "Music", color: "hsl(45 90% 60%)" },
-                { icon: GitBranch, label: "Branch", color: "hsl(0 80% 65%)" },
               ];
               return (
                 <div className="absolute inset-0 overflow-hidden">
@@ -577,10 +576,6 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                             <div className="text-sm font-bold text-white">{s.name}</div>
                           </div>
                         </div>
-                        <div className="flex items-center gap-1 rounded-full bg-red-500/15 px-2 py-1 ring-1 ring-red-500/40">
-                          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-500" />
-                          <span className="text-[9px] font-bold uppercase tracking-wider text-red-400">REC</span>
-                        </div>
                       </div>
 
                       {/* Cinematic preview strip with letterbox bars */}
@@ -604,10 +599,6 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow-lg">
                             <Play className="h-4 w-4 fill-black text-black" />
                           </div>
-                        </div>
-                        {/* caption */}
-                        <div className="absolute inset-x-0 bottom-3 text-center text-[11px] font-medium text-white/95 drop-shadow">
-                          "Wait... did you just hear that?"
                         </div>
                       </div>
 
