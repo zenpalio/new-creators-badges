@@ -33,6 +33,8 @@ export interface HeroSlide {
   creators?: { rank: number; name: string; avatarUrl: string; subtitle?: string }[];
   /** Premium plan, shown when layout === "premium" */
   premiumPlan?: { price: string; period: string; perks: string[] };
+  /** Optional second plan for premium layout (e.g. Ultra) */
+  premiumPlans?: { name: string; price: string; period: string; perks: string[]; highlight?: boolean; bonus?: string }[];
   /** Feature highlight, shown when layout === "feature" */
   featureMeta?: { eyebrow?: string; bullets?: string[] };
 }
@@ -429,68 +431,90 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
             }
 
             if (isPremium) {
-              const plan = s.premiumPlan;
+              const plans = s.premiumPlans ?? (s.premiumPlan
+                ? [{ name: "Premium", price: s.premiumPlan.price, period: s.premiumPlan.period, perks: s.premiumPlan.perks }]
+                : []);
               return (
                 <div className="absolute inset-0 overflow-hidden">
-                  {/* Animated gradient backdrop */}
+                  {/* Minimal dark backdrop with primary blue glow */}
                   <div
                     className="absolute inset-0"
                     style={{
                       background:
-                        "radial-gradient(ellipse at 30% 20%, hsl(45 90% 55% / 0.35) 0%, transparent 55%), radial-gradient(ellipse at 80% 80%, hsl(280 80% 45% / 0.45) 0%, transparent 60%), linear-gradient(135deg, hsl(260 40% 8%) 0%, hsl(220 35% 6%) 100%)",
-                    }}
-                  />
-                  <div
-                    className="pointer-events-none absolute inset-0 opacity-40"
-                    style={{
-                      backgroundImage:
-                        "radial-gradient(circle at 1px 1px, hsl(45 90% 70% / 0.18) 1px, transparent 0)",
-                      backgroundSize: "32px 32px",
+                        "radial-gradient(ellipse at 50% 0%, hsl(213 100% 50% / 0.18) 0%, transparent 60%), linear-gradient(180deg, hsl(220 30% 6%) 0%, hsl(220 35% 4%) 100%)",
                     }}
                   />
 
-                  {/* Pricing card on the right */}
-                  <div className="absolute inset-y-0 right-0 hidden items-center justify-center pr-12 lg:pr-20 md:flex">
-                    <div
-                      className="relative w-[360px] rounded-3xl border border-white/15 bg-gradient-to-br from-white/10 to-white/5 p-7 backdrop-blur-xl"
-                      style={{ boxShadow: "0 30px 80px -20px rgba(0,0,0,0.7), 0 0 60px -20px hsl(45 90% 55% / 0.4)" }}
-                    >
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-black">
-                        Most popular
-                      </div>
-                      <div className="flex items-center gap-2 text-yellow-400">
-                        <Crown className="h-5 w-5 fill-yellow-400" />
-                        <span className="text-sm font-bold uppercase tracking-wider">Premium</span>
-                      </div>
-                      <div className="mt-4 flex items-baseline gap-1">
-                        <span className="text-5xl font-extrabold text-white">{plan?.price ?? "$9.99"}</span>
-                        <span className="text-sm text-white/60">/{plan?.period ?? "mo"}</span>
-                      </div>
-                      <ul className="mt-5 space-y-2.5">
-                        {(plan?.perks ?? []).map((p) => (
-                          <li key={p} className="flex items-start gap-2 text-sm text-white/85">
-                            <Check className="mt-0.5 h-4 w-4 shrink-0 text-yellow-400" />
-                            <span>{p}</span>
-                          </li>
-                        ))}
-                      </ul>
+                  {/* Plan cards */}
+                  <div className="absolute inset-0 hidden items-center justify-end pr-8 lg:pr-16 md:flex">
+                    <div className="flex gap-3">
+                      {plans.map((plan) => {
+                        const highlight = plan.highlight;
+                        return (
+                          <div
+                            key={plan.name}
+                            className={`relative w-[240px] rounded-2xl border p-5 backdrop-blur-xl transition-colors ${
+                              highlight
+                                ? "border-primary/50 bg-primary/[0.06]"
+                                : "border-white/10 bg-white/[0.03]"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className={`text-[11px] font-bold uppercase tracking-[0.15em] ${highlight ? "text-primary" : "text-white/70"}`}>
+                                {plan.name}
+                              </span>
+                              {plan.bonus && (
+                                <span className="rounded-full bg-primary/15 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary">
+                                  {plan.bonus}
+                                </span>
+                              )}
+                            </div>
+                            <div className="mt-3 flex items-baseline gap-1">
+                              <span className="text-3xl font-extrabold text-white">{plan.price}</span>
+                              <span className="text-xs text-white/50">/{plan.period}</span>
+                            </div>
+                            <ul className="mt-4 space-y-1.5">
+                              {plan.perks.slice(0, 4).map((p) => (
+                                <li key={p} className="flex items-start gap-2 text-[12px] text-white/75">
+                                  <Check className={`mt-0.5 h-3.5 w-3.5 shrink-0 ${highlight ? "text-primary" : "text-white/40"}`} />
+                                  <span>{p}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
 
-                  {/* Mobile compact card */}
-                  <div className="absolute inset-x-0 bottom-24 px-6 md:hidden">
-                    <div className="rounded-2xl border border-white/15 bg-white/5 p-4 backdrop-blur-xl">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-yellow-400">
-                          <Crown className="h-4 w-4 fill-yellow-400" />
-                          <span className="text-xs font-bold uppercase tracking-wider">Premium</span>
+                  {/* Mobile: stacked compact plans */}
+                  <div className="absolute inset-x-0 bottom-20 flex flex-col gap-2 px-4 md:hidden">
+                    {plans.map((plan) => {
+                      const highlight = plan.highlight;
+                      return (
+                        <div
+                          key={plan.name}
+                          className={`flex items-center justify-between rounded-xl border px-3 py-2.5 backdrop-blur-xl ${
+                            highlight ? "border-primary/50 bg-primary/[0.08]" : "border-white/10 bg-white/[0.04]"
+                          }`}
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className={`text-[10px] font-bold uppercase tracking-wider ${highlight ? "text-primary" : "text-white/70"}`}>
+                              {plan.name}
+                            </span>
+                            {plan.bonus && (
+                              <span className="rounded-full bg-primary/15 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-primary">
+                                {plan.bonus}
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex items-baseline gap-0.5">
+                            <span className="text-lg font-extrabold text-white">{plan.price}</span>
+                            <span className="text-[10px] text-white/50">/{plan.period}</span>
+                          </div>
                         </div>
-                        <div className="flex items-baseline gap-1">
-                          <span className="text-2xl font-extrabold text-white">{plan?.price ?? "$9.99"}</span>
-                          <span className="text-[11px] text-white/60">/{plan?.period ?? "mo"}</span>
-                        </div>
-                      </div>
-                    </div>
+                      );
+                    })}
                   </div>
                 </div>
               );
