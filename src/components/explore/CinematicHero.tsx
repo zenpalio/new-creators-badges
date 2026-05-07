@@ -242,7 +242,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                   />
 
                   {/* Desktop: wide 5:3 story card matching StoryContentCard */}
-                  <div className="absolute inset-y-0 right-0 hidden items-center justify-center pr-12 lg:pr-20 md:flex">
+                  <div className="absolute inset-y-0 right-0 hidden items-center justify-center pr-24 lg:pr-40 xl:pr-56 md:flex">
                     <div className="relative h-[78%] aspect-[13/19]">
                       {/* Back layer (fanned out so both covers are visible) */}
                       <div
