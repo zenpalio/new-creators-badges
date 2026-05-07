@@ -522,7 +522,6 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                 { icon: Film, label: "Video", color: "hsl(280 80% 65%)" },
                 { icon: Mic, label: "Voice", color: "hsl(160 70% 55%)" },
                 { icon: Music, label: "Music", color: "hsl(45 90% 60%)" },
-                { icon: GitBranch, label: "Branch", color: "hsl(0 80% 65%)" },
               ];
               return (
                 <div className="absolute inset-0 overflow-hidden">
