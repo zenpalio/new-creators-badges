@@ -1,5 +1,5 @@
 import { type TouchEvent, useEffect, useMemo, useRef, useState } from "react";
-import { BookOpen, Check, ChevronLeft, ChevronRight, Crown, Film, Layers, Play, Sparkles, Star, User } from "lucide-react";
+import { BookOpen, Check, ChevronLeft, ChevronRight, Crown, Film, GitBranch, Image as ImageIcon, Layers, Mic, Music, Play, Sparkles, Star, User, Wand2 } from "lucide-react";
 import ChatIcon from "@/components/icons/ChatIcon";
 import LikeButton from "./LikeButton";
 
@@ -522,13 +522,29 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
 
             if (isFeature) {
               const bullets = s.featureMeta?.bullets ?? [];
+              const mediaChips = [
+                { icon: ImageIcon, label: "Image", color: "hsl(213 100% 60%)" },
+                { icon: Film, label: "Video", color: "hsl(280 80% 65%)" },
+                { icon: Mic, label: "Voice", color: "hsl(160 70% 55%)" },
+                { icon: Music, label: "Music", color: "hsl(45 90% 60%)" },
+                { icon: GitBranch, label: "Branch", color: "hsl(0 80% 65%)" },
+              ];
               return (
                 <div className="absolute inset-0 overflow-hidden">
                   <div
                     className="absolute inset-0"
                     style={{
                       background:
-                        "radial-gradient(ellipse at 75% 35%, hsl(213 90% 45% / 0.55) 0%, transparent 55%), radial-gradient(ellipse at 20% 90%, hsl(180 70% 35% / 0.35) 0%, transparent 60%), linear-gradient(135deg, hsl(220 40% 8%) 0%, hsl(213 45% 6%) 100%)",
+                        "radial-gradient(ellipse at 75% 35%, hsl(213 90% 45% / 0.55) 0%, transparent 55%), radial-gradient(ellipse at 20% 90%, hsl(280 70% 35% / 0.35) 0%, transparent 60%), linear-gradient(135deg, hsl(220 40% 8%) 0%, hsl(213 45% 6%) 100%)",
+                    }}
+                  />
+                  {/* film grain dots */}
+                  <div
+                    className="pointer-events-none absolute inset-0 opacity-30"
+                    style={{
+                      backgroundImage:
+                        "radial-gradient(circle at 1px 1px, hsl(213 100% 70% / 0.18) 1px, transparent 0)",
+                      backgroundSize: "26px 26px",
                     }}
                   />
                   {/* glowing orb */}
@@ -541,31 +557,102 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                     }}
                   />
 
-                  {/* Feature mock card on the right */}
+                  {/* Story Creator mock card on the right */}
                   <div className="absolute inset-y-0 right-0 hidden items-center justify-center pr-12 lg:pr-20 md:flex">
                     <div
-                      className="relative w-[420px] rounded-3xl border border-white/15 bg-gradient-to-br from-white/10 to-white/[0.03] p-6 backdrop-blur-xl"
+                      className="relative w-[440px] rounded-3xl border border-white/15 bg-gradient-to-br from-white/10 to-white/[0.03] p-5 backdrop-blur-xl"
                       style={{ boxShadow: "0 30px 80px -20px rgba(0,0,0,0.8), 0 0 80px -20px hsl(213 100% 50% / 0.5)" }}
                     >
-                      <div className="flex items-center gap-2">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/20 ring-1 ring-primary/40">
-                          <Sparkles className="h-4 w-4 text-primary" />
+                      {/* Header */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/20 ring-1 ring-primary/40">
+                            <Wand2 className="h-4 w-4 text-primary" />
+                          </div>
+                          <div>
+                            <div className="text-[10px] font-bold uppercase tracking-wider text-primary">{s.featureMeta?.eyebrow ?? "New feature"}</div>
+                            <div className="text-sm font-bold text-white">{s.name}</div>
+                          </div>
                         </div>
-                        <div>
-                          <div className="text-[10px] font-bold uppercase tracking-wider text-primary">New feature</div>
-                          <div className="text-sm font-bold text-white">{s.name}</div>
+                        <div className="flex items-center gap-1 rounded-full bg-red-500/15 px-2 py-1 ring-1 ring-red-500/40">
+                          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-500" />
+                          <span className="text-[9px] font-bold uppercase tracking-wider text-red-400">REC</span>
                         </div>
                       </div>
-                      <div className="mt-4 space-y-2">
-                        {bullets.map((b, idx) => (
+
+                      {/* Cinematic preview strip with letterbox bars */}
+                      <div className="relative mt-4 aspect-[16/7] overflow-hidden rounded-xl ring-1 ring-white/10">
+                        <img
+                          src={s.imageUrl}
+                          alt=""
+                          className="h-full w-full object-cover"
+                          style={{ filter: "saturate(1.1) contrast(1.05)" }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30" />
+                        {/* letterbox bars */}
+                        <div className="absolute inset-x-0 top-0 h-2 bg-black/80" />
+                        <div className="absolute inset-x-0 bottom-0 h-2 bg-black/80" />
+                        {/* timecode */}
+                        <div className="absolute left-2 top-3 rounded bg-black/60 px-1.5 py-0.5 font-mono text-[9px] text-white/90">
+                          00:01:24
+                        </div>
+                        {/* play button */}
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow-lg">
+                            <Play className="h-4 w-4 fill-black text-black" />
+                          </div>
+                        </div>
+                        {/* caption */}
+                        <div className="absolute inset-x-0 bottom-3 text-center text-[11px] font-medium text-white/95 drop-shadow">
+                          "Wait... did you just hear that?"
+                        </div>
+                      </div>
+
+                      {/* Media chips */}
+                      <div className="mt-3 flex flex-wrap gap-1.5">
+                        {mediaChips.map((c, idx) => (
+                          <div
+                            key={c.label}
+                            className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] font-semibold text-white/80"
+                            style={{ animation: `fade-in 0.4s ease-out ${idx * 0.06}s both` }}
+                          >
+                            <c.icon className="h-3 w-3" style={{ color: c.color }} />
+                            {c.label}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Timeline */}
+                      <div className="mt-3 space-y-1.5">
+                        {[
+                          { c: "hsl(213 100% 55%)", w: "w-[35%]" },
+                          { c: "hsl(280 80% 60%)", w: "w-[55%]" },
+                          { c: "hsl(45 90% 55%)", w: "w-[25%]" },
+                        ].map((t, i) => (
+                          <div key={i} className="flex items-center gap-2">
+                            <div className="h-1.5 w-3 rounded-full bg-white/20" />
+                            <div className="flex-1 overflow-hidden rounded-full bg-white/5">
+                              <div
+                                className={`h-1.5 ${t.w} rounded-full`}
+                                style={{
+                                  background: `linear-gradient(90deg, ${t.c}, ${t.c}88)`,
+                                  animation: `fade-in 0.6s ease-out ${0.2 + i * 0.1}s both`,
+                                }}
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Bullets */}
+                      <div className="mt-3 grid grid-cols-2 gap-1.5">
+                        {bullets.slice(0, 4).map((b, idx) => (
                           <div
                             key={b}
-                            className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3 text-sm text-white/90"
-                            style={{ animation: `fade-in 0.5s ease-out ${idx * 0.08}s both` }}
+                            className="flex items-start gap-1.5 text-[10.5px] leading-snug text-white/75"
+                            style={{ animation: `fade-in 0.5s ease-out ${0.3 + idx * 0.06}s both` }}
                           >
-                            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-extrabold text-primary-foreground">
-                              {idx + 1}
-                            </div>
+                            <Check className="mt-0.5 h-3 w-3 shrink-0 text-primary" />
                             <span>{b}</span>
                           </div>
                         ))}
