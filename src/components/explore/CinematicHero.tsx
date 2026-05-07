@@ -33,6 +33,8 @@ export interface HeroSlide {
   creators?: { rank: number; name: string; avatarUrl: string; subtitle?: string }[];
   /** Premium plan, shown when layout === "premium" */
   premiumPlan?: { price: string; period: string; perks: string[] };
+  /** Optional second plan for premium layout (e.g. Ultra) */
+  premiumPlans?: { name: string; price: string; period: string; perks: string[]; highlight?: boolean; bonus?: string }[];
   /** Feature highlight, shown when layout === "feature" */
   featureMeta?: { eyebrow?: string; bullets?: string[] };
 }
