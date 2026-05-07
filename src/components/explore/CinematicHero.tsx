@@ -774,7 +774,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
           <h1 className="text-4xl font-extrabold leading-[1.05] text-white drop-shadow-lg md:text-6xl">
             {slide.name}
           </h1>
-          <p className="max-w-lg text-sm text-white/90 [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] md:text-base md:text-grey-light-3 md:[text-shadow:none] md:line-clamp-3">
+          <p className="max-w-lg text-sm text-white/90 line-clamp-3 [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] md:text-base md:text-grey-light-3 md:[text-shadow:none] md:line-clamp-3">
             {slide.description}
           </p>
 
