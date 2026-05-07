@@ -1,5 +1,5 @@
 import { type TouchEvent, useEffect, useMemo, useRef, useState } from "react";
-import { BookOpen, Check, ChevronLeft, ChevronRight, Crown, Film, GitBranch, Image as ImageIcon, Layers, Mic, Music, Play, Sparkles, Star, User, Wand2 } from "lucide-react";
+import { BookOpen, Check, ChevronLeft, ChevronRight, Crown, Film, GitBranch, Image as ImageIcon, Layers, MessageCircle, Mic, Music, Play, Sparkles, Star, Trophy, User, Wand2 } from "lucide-react";
 import ChatIcon from "@/components/icons/ChatIcon";
 import LikeButton from "./LikeButton";
 
@@ -868,9 +868,13 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                 {slide.layout === "story" ? (
                   <BookOpen className="h-4 w-4" />
                 ) : slide.layout === "feature" ? (
-                  <Sparkles className="h-4 w-4" />
+                  <Wand2 className="h-4 w-4" />
+                ) : slide.layout === "creators" ? (
+                  <Trophy className="h-4 w-4 fill-black" />
+                ) : slide.layout === "banner" ? (
+                  <Sparkles className="h-4 w-4 fill-black" />
                 ) : (
-                  <Play className="h-4 w-4 fill-black" />
+                  <MessageCircle className="h-4 w-4 fill-black" />
                 )}
                 {slide.cta ?? (
                   slide.layout === "story" ? "Play Story"
