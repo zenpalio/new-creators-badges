@@ -431,12 +431,28 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                 : []);
               return (
                 <div className="absolute inset-0 overflow-hidden">
-                  {/* Minimal dark backdrop with primary blue glow */}
+                  {/* Hero image — anchored right on desktop, full on mobile */}
+                  <img
+                    src={s.imageUrl}
+                    alt=""
+                    aria-hidden
+                    className="absolute inset-0 h-full w-full object-cover md:object-right"
+                    loading={i === 0 ? "eager" : "lazy"}
+                  />
+                  {/* Color grade — primary blue wash + cinematic vignette */}
                   <div
                     className="absolute inset-0"
                     style={{
                       background:
-                        "radial-gradient(ellipse at 50% 0%, hsl(213 100% 50% / 0.18) 0%, transparent 60%), linear-gradient(180deg, hsl(220 30% 6%) 0%, hsl(220 35% 4%) 100%)",
+                        "radial-gradient(ellipse at 80% 40%, hsl(213 100% 50% / 0.25) 0%, transparent 55%), linear-gradient(90deg, hsl(220 35% 4% / 0.95) 0%, hsl(220 35% 4% / 0.55) 45%, hsl(220 35% 4% / 0.25) 70%, transparent 100%)",
+                    }}
+                  />
+                  {/* Mobile readability darken */}
+                  <div
+                    className="absolute inset-0 md:hidden"
+                    style={{
+                      background:
+                        "linear-gradient(180deg, hsl(220 35% 4% / 0.55) 0%, hsl(220 35% 4% / 0.2) 30%, hsl(220 35% 4% / 0.55) 60%, hsl(220 35% 4% / 0.95) 100%)",
                     }}
                   />
 
