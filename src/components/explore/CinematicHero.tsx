@@ -879,14 +879,16 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                 )}
               </button>
             )}
-            <button className={`h-11 items-center gap-2 rounded-full px-6 text-sm font-semibold text-white backdrop-blur transition-colors ${
-              slide.layout === "premium"
-                ? "inline-flex bg-primary/15 hover:bg-primary/25 ring-1 ring-primary/40"
-                : "hidden bg-white/10 hover:bg-white/20 md:inline-flex"
-            }`}>
-              {slide.layout === "story" ? <Film className="h-4 w-4" /> : slide.layout === "premium" ? <Star className="h-4 w-4" /> : slide.layout === "feature" ? <BookOpen className="h-4 w-4" /> : <User className="h-4 w-4" />}
-              {slide.layout === "story" ? "View Episodes" : slide.layout === "premium" ? "Compare plans" : slide.layout === "feature" ? "Learn more" : "View profile"}
-            </button>
+            {slide.layout !== "creators" && (
+              <button className={`h-11 items-center gap-2 rounded-full px-6 text-sm font-semibold text-white backdrop-blur transition-colors ${
+                slide.layout === "premium"
+                  ? "inline-flex bg-primary/15 hover:bg-primary/25 ring-1 ring-primary/40"
+                  : "hidden bg-white/10 hover:bg-white/20 md:inline-flex"
+              }`}>
+                {slide.layout === "story" ? <Film className="h-4 w-4" /> : slide.layout === "premium" ? <Star className="h-4 w-4" /> : slide.layout === "feature" ? <BookOpen className="h-4 w-4" /> : <User className="h-4 w-4" />}
+                {slide.layout === "story" ? "View Episodes" : slide.layout === "premium" ? "Compare plans" : slide.layout === "feature" ? "Learn more" : "View profile"}
+              </button>
+            )}
           </div>
         </div>
       </div>
