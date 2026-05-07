@@ -868,9 +868,13 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                 {slide.layout === "story" ? (
                   <BookOpen className="h-4 w-4" />
                 ) : slide.layout === "feature" ? (
-                  <Sparkles className="h-4 w-4" />
+                  <Wand2 className="h-4 w-4" />
+                ) : slide.layout === "creators" ? (
+                  <Trophy className="h-4 w-4 fill-black" />
+                ) : slide.layout === "banner" ? (
+                  <Sparkles className="h-4 w-4 fill-black" />
                 ) : (
-                  <Play className="h-4 w-4 fill-black" />
+                  <MessageCircle className="h-4 w-4 fill-black" />
                 )}
                 {slide.cta ?? (
                   slide.layout === "story" ? "Play Story"
