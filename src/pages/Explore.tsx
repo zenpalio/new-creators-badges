@@ -343,7 +343,7 @@ const heroSlides: HeroSlide[] = [
     name: "Story Creator",
     tagline: "Lights. Camera. Your story.",
     description: "Mix images, video, voice and music into cinematic, branching stories. Direct every scene — your babes star in it.",
-    imageUrl: "https://picsum.photos/seed/story-creator-bg/1200/800",
+    imageUrl: storyCreatorHero,
     badge: "Just shipped",
     cta: "Start your story",
     layout: "feature",
