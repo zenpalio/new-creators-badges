@@ -310,7 +310,6 @@ const heroSlides: HeroSlide[] = [
     badge: "Limited offer",
     cta: "Get Premium",
     layout: "premium",
-    accent: "hsl(45 90% 55%)",
     accent: "hsl(213 100% 55%)",
     premiumPlans: [
       {
