@@ -600,10 +600,6 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                             <Play className="h-4 w-4 fill-black text-black" />
                           </div>
                         </div>
-                        {/* caption */}
-                        <div className="absolute inset-x-0 bottom-3 text-center text-[11px] font-medium text-white/95 drop-shadow">
-                          "Wait... did you just hear that?"
-                        </div>
                       </div>
 
                       {/* Media chips */}
