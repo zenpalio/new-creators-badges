@@ -762,32 +762,33 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
           )}
 
           <div className="flex flex-wrap items-center gap-3 pt-2">
-            <button className={`inline-flex h-11 items-center gap-2 rounded-full px-6 text-sm font-bold transition-transform hover:scale-[1.03] ${
+            {slide.layout !== "premium" && (
+              <button className={`inline-flex h-11 items-center gap-2 rounded-full px-6 text-sm font-bold transition-transform hover:scale-[1.03] ${
+                slide.layout === "feature"
+                  ? "bg-primary text-primary-foreground"
+                  : slide.layout === "story"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-white text-black"
+              }`}>
+                {slide.layout === "story" ? (
+                  <BookOpen className="h-4 w-4" />
+                ) : slide.layout === "feature" ? (
+                  <Sparkles className="h-4 w-4" />
+                ) : (
+                  <Play className="h-4 w-4 fill-black" />
+                )}
+                {slide.cta ?? (
+                  slide.layout === "story" ? "Play Story"
+                  : slide.layout === "feature" ? "Try it now"
+                  : "Chat now"
+                )}
+              </button>
+            )}
+            <button className={`h-11 items-center gap-2 rounded-full px-6 text-sm font-semibold text-white backdrop-blur transition-colors ${
               slide.layout === "premium"
-                ? "bg-gradient-to-r from-yellow-400 to-amber-500 text-black"
-                : slide.layout === "feature"
-                ? "bg-primary text-primary-foreground"
-                : slide.layout === "story"
-                ? "bg-primary text-primary-foreground"
-                : "bg-white text-black"
+                ? "inline-flex bg-primary/15 hover:bg-primary/25 ring-1 ring-primary/40"
+                : "hidden bg-white/10 hover:bg-white/20 md:inline-flex"
             }`}>
-              {slide.layout === "story" ? (
-                <BookOpen className="h-4 w-4" />
-              ) : slide.layout === "premium" ? (
-                <Crown className="h-4 w-4 fill-black" />
-              ) : slide.layout === "feature" ? (
-                <Sparkles className="h-4 w-4" />
-              ) : (
-                <Play className="h-4 w-4 fill-black" />
-              )}
-              {slide.cta ?? (
-                slide.layout === "story" ? "Play Story"
-                : slide.layout === "premium" ? "Get Premium"
-                : slide.layout === "feature" ? "Try it now"
-                : "Chat now"
-              )}
-            </button>
-            <button className="hidden h-11 items-center gap-2 rounded-full bg-white/10 px-6 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/20 md:inline-flex">
               {slide.layout === "story" ? <Film className="h-4 w-4" /> : slide.layout === "premium" ? <Star className="h-4 w-4" /> : slide.layout === "feature" ? <BookOpen className="h-4 w-4" /> : <User className="h-4 w-4" />}
               {slide.layout === "story" ? "View Episodes" : slide.layout === "premium" ? "Compare plans" : slide.layout === "feature" ? "Learn more" : "View profile"}
             </button>
