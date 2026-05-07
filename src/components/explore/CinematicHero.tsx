@@ -314,46 +314,37 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                     </div>
                   </div>
 
-                  {/* Mobile: full-width card with safe padding */}
-                  <div className="absolute inset-0 flex items-center justify-center px-4 pb-6 pt-4 md:hidden">
-                    <div className="relative h-full max-h-[78vh] w-full max-w-[300px] aspect-[13/19]" style={{ aspectRatio: "13 / 19" }}>
-                      <div
-                        className="absolute inset-0 rounded-xl overflow-hidden ring-1 ring-white/15 bg-card border border-border/50"
-                        style={{ boxShadow: "0 25px 50px -10px rgba(0,0,0,0.8)" }}
-                      >
-                        <img src={src0} alt={s.name} className="h-full w-full object-cover object-top" />
-                        <div className="absolute left-2 top-2 z-10">
-                          <span className="flex items-center gap-1 rounded-lg border border-border/30 bg-background/70 px-2 py-1 text-[10px] font-medium text-foreground backdrop-blur-sm">
-                            <BookOpen className="h-3 w-3" /> Story
-                          </span>
-                        </div>
-                        {rating != null && (
-                          <div className="absolute right-2 top-2 z-10">
-                            <span className="flex items-center gap-1 rounded-lg border border-border/30 bg-background/70 px-1.5 py-1 text-[10px] font-semibold text-yellow-400 backdrop-blur-sm">
-                              <Star className="h-3 w-3 fill-yellow-400" />
-                              {rating.toFixed(1)}
-                            </span>
-                          </div>
-                        )}
-                        <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/85 via-black/50 to-transparent px-3 pb-2 pt-8">
-                          <p className="truncate text-sm font-bold text-white">{s.name}</p>
-                          <div className="mt-1 flex flex-wrap items-center gap-2">
-                            {episodes != null && (
-                              <span className="flex items-center gap-1 text-[10px] text-white/80">
-                                <Film className="h-3 w-3" />
-                                {episodes}
-                              </span>
-                            )}
-                            {chapters != null && (
-                              <span className="flex items-center gap-1 text-[10px] text-white/80">
-                                <Layers className="h-3 w-3" />
-                                {chapters}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
+                  {/* Mobile: cinematic full-bleed cover. Title/meta/CTA come from the global content block below. */}
+                  <div className="absolute inset-0 md:hidden">
+                    <img
+                      src={src0}
+                      alt={s.name}
+                      className="h-full w-full object-cover object-top"
+                      loading={i === 0 ? "eager" : "lazy"}
+                    />
+                    {/* Top-left Story badge */}
+                    <div className="absolute left-4 top-4 z-10">
+                      <span className="flex items-center gap-1.5 rounded-lg border border-white/15 bg-black/45 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-md">
+                        <BookOpen className="h-3.5 w-3.5" /> Story
+                      </span>
                     </div>
+                    {/* Top-right rating */}
+                    {rating != null && (
+                      <div className="absolute right-4 top-4 z-10">
+                        <span className="flex items-center gap-1 rounded-lg border border-white/15 bg-black/45 px-2 py-1 text-[11px] font-semibold text-yellow-400 backdrop-blur-md">
+                          <Star className="h-3.5 w-3.5 fill-yellow-400" />
+                          {rating.toFixed(1)}
+                        </span>
+                      </div>
+                    )}
+                    {/* Cinematic letterbox-ish dark gradient for text legibility */}
+                    <div
+                      className="pointer-events-none absolute inset-0"
+                      style={{
+                        background:
+                          "linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 25%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.85) 100%)",
+                      }}
+                    />
                   </div>
                 </div>
               );
