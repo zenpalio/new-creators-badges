@@ -576,10 +576,6 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                             <div className="text-sm font-bold text-white">{s.name}</div>
                           </div>
                         </div>
-                        <div className="flex items-center gap-1 rounded-full bg-red-500/15 px-2 py-1 ring-1 ring-red-500/40">
-                          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-500" />
-                          <span className="text-[9px] font-bold uppercase tracking-wider text-red-400">REC</span>
-                        </div>
                       </div>
 
                       {/* Cinematic preview strip with letterbox bars */}
