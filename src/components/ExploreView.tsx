@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, type MutableRefObject, type ReactNode } from "react";
 import { Bell, Menu } from "lucide-react";
 import CinematicHero, { type HeroSlide } from "./explore/CinematicHero";
-import FloatingToolsFAB from "./explore/FloatingToolsFAB";
 import SystemStatusIndicator from "./explore/SystemStatusIndicator";
 
 export interface ExploreViewProps {
@@ -161,8 +160,6 @@ export function ExploreView({
           {children}
         </div>
       </main>
-
-      <FloatingToolsFAB />
     </div>
   );
 }

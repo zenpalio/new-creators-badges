@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
-import { Plus, Image as ImageIcon, Film, BookOpen, Users, X } from "lucide-react";
+import { useEffect, useState, type ComponentType, type ReactNode } from "react";
+import {
+  Plus,
+  X,
+} from "lucide-react";
 
-const tools = [
-  { icon: Users, label: "Create Babe" },
-  { icon: ImageIcon, label: "Create Image" },
-  { icon: Film, label: "Create Video" },
-  { icon: BookOpen, label: "Create Story" },
-];
+export interface FloatingToolsFabItem {
+  icon: ComponentType<{ className?: string }>;
+  label: ReactNode;
+  ariaLabel: string;
+  onClick: () => void;
+}
 
 export interface FloatingToolsFabMainButtonProps {
   isOpen: boolean;
@@ -49,7 +52,11 @@ export const FloatingToolsFabMainButton = ({
  * Floating action button anchored bottom-right of the viewport that fans out
  * a stack of creation tools on click. Ported from Creative Studio (motion-free).
  */
-const FloatingToolsFAB = () => {
+export interface FloatingToolsFABProps {
+  items: FloatingToolsFabItem[];
+}
+
+const FloatingToolsFAB = ({ items }: FloatingToolsFABProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   // Close on Escape
@@ -74,15 +81,18 @@ const FloatingToolsFAB = () => {
 
       <div className="fixed bottom-6 right-6 z-[90] flex flex-col items-center gap-3">
         {/* Tool buttons stack */}
-        {tools.map((tool, i) => {
+        {items.map((tool, i) => {
           const Icon = tool.icon;
           // Reverse index so the first tool sits closest to the FAB
-          const reverseIdx = tools.length - 1 - i;
+          const reverseIdx = items.length - 1 - i;
           return (
             <button
-              key={tool.label}
-              onClick={() => setIsOpen(false)}
-              aria-label={tool.label}
+              key={i}
+              onClick={() => {
+                tool.onClick();
+                setIsOpen(false);
+              }}
+              aria-label={tool.ariaLabel}
               className={`group relative flex items-center transition-all duration-200 ease-out ${
                 isOpen
                   ? "pointer-events-auto translate-y-0 scale-100 opacity-100"

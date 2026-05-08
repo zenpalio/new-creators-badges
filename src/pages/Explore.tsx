@@ -6,11 +6,14 @@ import {
   BookOpen,
   Crown,
   Coins,
+  Film,
+  Users,
 } from "lucide-react";
 import SideNav from "../components/SideNav";
 import NotificationsSidebar, { type Announcement } from "../components/NotificationsSidebar";
 import AnnouncementDialog from "../components/AnnouncementDialog";
 import { ExploreView } from "../components/ExploreView";
+import FloatingToolsFAB, { type FloatingToolsFabItem } from "../components/explore/FloatingToolsFAB";
 import {
   ExploreBabesSection,
   ExploreCreatorsSection,
@@ -825,6 +828,13 @@ const Explore = () => {
       : undefined,
   }));
 
+  const floatingToolsItems: FloatingToolsFabItem[] = [
+    { icon: Users, label: "Create Babe", ariaLabel: "Create Babe", onClick: () => {} },
+    { icon: ImageIcon, label: "Create Image", ariaLabel: "Create Image", onClick: () => {} },
+    { icon: Film, label: "Create Video", ariaLabel: "Create Video", onClick: () => {} },
+    { icon: BookOpen, label: "Create Story", ariaLabel: "Create Story", onClick: () => {} },
+  ];
+
   return (
     <>
       <SideNav open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -951,6 +961,7 @@ const Explore = () => {
         />
         <ExploreFooterSection footer={footerLinks} />
       </ExploreView>
+      <FloatingToolsFAB items={floatingToolsItems} />
     </>
   );
 };

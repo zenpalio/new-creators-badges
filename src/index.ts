@@ -53,8 +53,12 @@ export type {
   ExploreFooterSectionProps,
 } from "./components/explore/ExploreSections";
 export type { HeroSlide, HeroMedia } from "./components/explore/CinematicHero";
-export { FloatingToolsFabMainButton } from "./components/explore/FloatingToolsFAB";
-export type { FloatingToolsFabMainButtonProps } from "./components/explore/FloatingToolsFAB";
+export { default as FloatingToolsFAB, FloatingToolsFabMainButton } from "./components/explore/FloatingToolsFAB";
+export type {
+  FloatingToolsFabMainButtonProps,
+  FloatingToolsFABProps,
+  FloatingToolsFabItem,
+} from "./components/explore/FloatingToolsFAB";
 export { default as NotificationsSidebar } from "./components/NotificationsSidebar";
 export type { Notification, Announcement } from "./components/NotificationsSidebar";
 export { default as AnnouncementDialog } from "./components/AnnouncementDialog";
