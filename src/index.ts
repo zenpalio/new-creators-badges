@@ -10,7 +10,18 @@ export type {
 export type { BadgeTier } from "./components/BadgeCard";
 
 export { ExploreView } from "./components/ExploreView";
-export type { ExploreViewProps } from "./components/ExploreView";
+export {
+  ExploreMenuButton,
+  ExploreNotificationsButton,
+  ExploreHeaderActions,
+  useHeaderScrollTracking,
+} from "./components/ExploreView";
+export type {
+  ExploreViewProps,
+  ExploreMenuButtonProps,
+  ExploreNotificationsButtonProps,
+  ExploreHeaderActionsProps,
+} from "./components/ExploreView";
 export {
   ExploreBabesSection,
   ExploreStoriesSection,
@@ -42,6 +53,8 @@ export type {
   ExploreFooterSectionProps,
 } from "./components/explore/ExploreSections";
 export type { HeroSlide, HeroMedia } from "./components/explore/CinematicHero";
+export { FloatingToolsFabMainButton } from "./components/explore/FloatingToolsFAB";
+export type { FloatingToolsFabMainButtonProps } from "./components/explore/FloatingToolsFAB";
 export { default as NotificationsSidebar } from "./components/NotificationsSidebar";
 export type { Notification, Announcement } from "./components/NotificationsSidebar";
 export { default as AnnouncementDialog } from "./components/AnnouncementDialog";

@@ -8,6 +8,43 @@ const tools = [
   { icon: BookOpen, label: "Create Story" },
 ];
 
+export interface FloatingToolsFabMainButtonProps {
+  isOpen: boolean;
+  onToggle: () => void;
+}
+
+export const FloatingToolsFabMainButton = ({
+  isOpen,
+  onToggle,
+}: FloatingToolsFabMainButtonProps) => (
+  <button
+    onClick={onToggle}
+    aria-label={isOpen ? "Close menu" : "Open create menu"}
+    aria-expanded={isOpen}
+    className="relative flex h-[52px] w-[52px] items-center justify-center rounded-full bg-primary shadow-lg shadow-primary/30 transition-all hover:shadow-xl hover:brightness-110 active:scale-90"
+  >
+    <span
+      className={`flex items-center justify-center transition-transform duration-300 ${
+        isOpen ? "rotate-[135deg]" : "rotate-0"
+      }`}
+    >
+      {isOpen ? (
+        <X className="h-6 w-6 text-primary-foreground" />
+      ) : (
+        <Plus className="h-6 w-6 text-primary-foreground" />
+      )}
+    </span>
+
+    {/* Pulse ring when closed */}
+    {!isOpen && (
+      <span
+        className="pointer-events-none absolute inset-0 animate-ping rounded-full bg-primary/40"
+        style={{ animationDuration: "3s" }}
+      />
+    )}
+  </button>
+);
+
 /**
  * Floating action button anchored bottom-right of the viewport that fans out
  * a stack of creation tools on click. Ported from Creative Studio (motion-free).
@@ -64,33 +101,7 @@ const FloatingToolsFAB = () => {
           );
         })}
 
-        {/* Main FAB */}
-        <button
-          onClick={() => setIsOpen((o) => !o)}
-          aria-label={isOpen ? "Close menu" : "Open create menu"}
-          aria-expanded={isOpen}
-          className="relative flex h-[52px] w-[52px] items-center justify-center rounded-full bg-primary shadow-lg shadow-primary/30 transition-all hover:shadow-xl hover:brightness-110 active:scale-90"
-        >
-          <span
-            className={`flex items-center justify-center transition-transform duration-300 ${
-              isOpen ? "rotate-[135deg]" : "rotate-0"
-            }`}
-          >
-            {isOpen ? (
-              <X className="h-6 w-6 text-primary-foreground" />
-            ) : (
-              <Plus className="h-6 w-6 text-primary-foreground" />
-            )}
-          </span>
-
-          {/* Pulse ring when closed */}
-          {!isOpen && (
-            <span
-              className="pointer-events-none absolute inset-0 animate-ping rounded-full bg-primary/40"
-              style={{ animationDuration: "3s" }}
-            />
-          )}
-        </button>
+        <FloatingToolsFabMainButton isOpen={isOpen} onToggle={() => setIsOpen((o) => !o)} />
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type MutableRefObject, type ReactNode } from "react";
 import { Bell, Menu } from "lucide-react";
 import CinematicHero, { type HeroSlide } from "./explore/CinematicHero";
 import FloatingToolsFAB from "./explore/FloatingToolsFAB";
@@ -15,6 +15,108 @@ export interface ExploreViewProps {
   className?: string;
 }
 
+export function useHeaderScrollTracking(
+  scrollRef: MutableRefObject<HTMLElement | null>,
+  topOffset = 80,
+  deltaThreshold = 6,
+) {
+  const [headerHidden, setHeaderHidden] = useState(false);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    let lastY = el.scrollTop;
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = el.scrollTop;
+        const dy = y - lastY;
+        if (y < topOffset) setHeaderHidden(false);
+        else if (dy > deltaThreshold) setHeaderHidden(true);
+        else if (dy < -deltaThreshold) setHeaderHidden(false);
+        lastY = y;
+        ticking = false;
+      });
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, [deltaThreshold, scrollRef, topOffset]);
+
+  return { headerHidden };
+}
+
+export interface ExploreNotificationsButtonProps {
+  onClick?: () => void;
+  notificationCount?: number;
+  ariaLabel?: string;
+}
+
+export interface ExploreMenuButtonProps {
+  onClick?: () => void;
+  ariaLabel?: string;
+}
+
+export interface ExploreHeaderActionsProps {
+  onNotifications?: () => void;
+  notificationCount?: number;
+  notificationsAriaLabel?: string;
+}
+
+export function ExploreMenuButton({
+  onClick,
+  ariaLabel = "Open menu",
+}: ExploreMenuButtonProps) {
+  return (
+    <button
+      onClick={onClick}
+      className="flex h-9 w-9 items-center justify-center text-foreground/90 transition-opacity hover:opacity-70"
+      aria-label={ariaLabel}
+    >
+      <Menu className="h-5 w-5" strokeWidth={1.5} />
+    </button>
+  );
+}
+
+export function ExploreNotificationsButton({
+  onClick,
+  notificationCount,
+  ariaLabel = "Notifications",
+}: ExploreNotificationsButtonProps) {
+  return (
+    <button
+      onClick={onClick}
+      className="relative flex h-9 w-9 items-center justify-center text-foreground/90 transition-opacity hover:opacity-70"
+      aria-label={ariaLabel}
+    >
+      <Bell className="h-5 w-5" strokeWidth={1.5} />
+      {notificationCount != null && notificationCount > 0 && (
+        <span className="absolute right-1 top-1 flex h-[12px] min-w-[12px] items-center justify-center rounded-full bg-primary px-[2px] text-[9px] font-semibold leading-[12px] text-primary-foreground">
+          {notificationCount}
+        </span>
+      )}
+    </button>
+  );
+}
+
+export function ExploreHeaderActions({
+  onNotifications,
+  notificationCount,
+  notificationsAriaLabel,
+}: ExploreHeaderActionsProps) {
+  return (
+    <div className="pointer-events-auto flex items-center gap-1">
+      <SystemStatusIndicator />
+      <ExploreNotificationsButton
+        onClick={onNotifications}
+        notificationCount={notificationCount}
+        ariaLabel={notificationsAriaLabel}
+      />
+    </div>
+  );
+}
+
 export function ExploreView({
   heroSlides,
   onMenu,
@@ -26,29 +128,7 @@ export function ExploreView({
   className,
 }: ExploreViewProps) {
   const mainRef = useRef<HTMLElement>(null);
-  const [headerHidden, setHeaderHidden] = useState(false);
-
-  useEffect(() => {
-    const el = mainRef.current;
-    if (!el) return;
-    let lastY = el.scrollTop;
-    let ticking = false;
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const y = el.scrollTop;
-        const dy = y - lastY;
-        if (y < 80) setHeaderHidden(false);
-        else if (dy > 6) setHeaderHidden(true);
-        else if (dy < -6) setHeaderHidden(false);
-        lastY = y;
-        ticking = false;
-      });
-    };
-    el.addEventListener("scroll", onScroll, { passive: true });
-    return () => el.removeEventListener("scroll", onScroll);
-  }, []);
+  const { headerHidden } = useHeaderScrollTracking(mainRef);
 
   return (
     <div
@@ -64,29 +144,13 @@ export function ExploreView({
           }`}
         >
           <div className="pointer-events-auto flex items-center gap-3">
-            <button
-              onClick={onMenu}
-              className="flex h-9 w-9 items-center justify-center text-foreground/90 transition-opacity hover:opacity-70"
-              aria-label={menuAriaLabel}
-            >
-              <Menu className="h-5 w-5" strokeWidth={1.5} />
-            </button>
+            <ExploreMenuButton onClick={onMenu} ariaLabel={menuAriaLabel} />
           </div>
-          <div className="pointer-events-auto flex items-center gap-1">
-            <SystemStatusIndicator />
-            <button
-              onClick={onNotifications}
-              className="relative flex h-9 w-9 items-center justify-center text-foreground/90 transition-opacity hover:opacity-70"
-              aria-label={notificationsAriaLabel}
-            >
-              <Bell className="h-5 w-5" strokeWidth={1.5} />
-              {notificationCount != null && notificationCount > 0 && (
-                <span className="absolute right-1 top-1 flex h-[12px] min-w-[12px] items-center justify-center rounded-full bg-primary px-[2px] text-[9px] font-semibold leading-[12px] text-primary-foreground">
-                  {notificationCount}
-                </span>
-              )}
-            </button>
-          </div>
+          <ExploreHeaderActions
+            onNotifications={onNotifications}
+            notificationCount={notificationCount}
+            notificationsAriaLabel={notificationsAriaLabel}
+          />
         </header>
 
         {/* Cinematic hero (full-bleed) */}
