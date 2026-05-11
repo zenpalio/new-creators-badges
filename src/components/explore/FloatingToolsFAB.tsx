@@ -3,6 +3,7 @@ import {
   Plus,
   X,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export interface FloatingToolsFabItem {
   icon: ComponentType<{ className?: string }>;
@@ -54,9 +55,12 @@ export const FloatingToolsFabMainButton = ({
  */
 export interface FloatingToolsFABProps {
   items: FloatingToolsFabItem[];
+  backdropClassName?: string;
+  contentClassName?: string;
+
 }
 
-const FloatingToolsFAB = ({ items }: FloatingToolsFABProps) => {
+const FloatingToolsFAB = ({ items, backdropClassName, contentClassName }: FloatingToolsFABProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   // Close on Escape
@@ -74,12 +78,12 @@ const FloatingToolsFAB = ({ items }: FloatingToolsFABProps) => {
       {/* Backdrop */}
       <div
         onClick={() => setIsOpen(false)}
-        className={`fixed inset-0 z-[80] bg-black/40 backdrop-blur-sm transition-opacity duration-200 ${
+        className={cn(`fixed inset-0 z-[80] bg-black/40 backdrop-blur-sm transition-opacity duration-200 ${
           isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
-        }`}
+        }`, backdropClassName)}
       />
 
-      <div className="fixed bottom-6 right-6 z-[90] flex flex-col items-center gap-3">
+      <div className={cn("fixed bottom-6 right-6 z-[90] flex flex-col items-center gap-3", contentClassName)}>
         {/* Tool buttons stack */}
         {items.map((tool, i) => {
           const Icon = tool.icon;
