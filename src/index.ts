@@ -53,6 +53,7 @@ export type {
   ExploreFooterSectionProps,
 } from "./components/explore/ExploreSections";
 export type { HeroSlide, HeroMedia } from "./components/explore/CinematicHero";
+export { default as CinematicHero } from "./components/explore/CinematicHero";
 export { default as FloatingToolsFAB, FloatingToolsFabMainButton } from "./components/explore/FloatingToolsFAB";
 export type {
   FloatingToolsFabMainButtonProps,
