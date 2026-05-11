@@ -1,7 +1,7 @@
 import LikeButton from "./LikeButton";
 import ChatIcon from "../icons/ChatIcon";
 
-interface BabeCardProps {
+export interface PostCardProps {
   name: string;
   description: string;
   imageUrl: string;
@@ -12,7 +12,7 @@ interface BabeCardProps {
   variant?: "compact" | "stats";
 }
 
-const BabeCard = ({
+const PostCard = ({
   name,
   description,
   imageUrl,
@@ -21,7 +21,7 @@ const BabeCard = ({
   messageCount = 0,
   likeCount,
   variant = "compact",
-}: BabeCardProps) => {
+}: PostCardProps) => {
   const showStats = variant === "stats";
 
   return (
@@ -70,4 +70,4 @@ const BabeCard = ({
   );
 };
 
-export default BabeCard;
+export default PostCard;

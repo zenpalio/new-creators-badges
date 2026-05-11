@@ -15,7 +15,7 @@ import AnnouncementDialog from "../components/AnnouncementDialog";
 import { ExploreView } from "../components/ExploreView";
 import FloatingToolsFAB, { type FloatingToolsFabItem } from "../components/explore/FloatingToolsFAB";
 import {
-  ExploreBabesSection,
+  PostsSection,
   ExploreCreatorsSection,
   ExploreFooterSection,
   ExplorePromoSection,
@@ -842,7 +842,7 @@ const Explore = () => {
         onNotifications={() => setNotificationsOpen(true)}
         notificationCount={14}
       >
-        <ExploreBabesSection
+        <PostsSection
           title="Your babes are waiting"
           actionLabel="See all"
           categories={babeCategories}
@@ -893,7 +893,7 @@ const Explore = () => {
             });
           }}
         />
-        <ExploreBabesSection
+        <PostsSection
           title="Your following"
           actionLabel="See all"
           categories={followingUsers}
@@ -902,7 +902,7 @@ const Explore = () => {
           className="mt-2"
         />
         <ExplorePromoSection promo={tokensPromo} />
-        <ExploreBabesSection
+        <PostsSection
           title="Check out this week trending babes"
           actionLabel="See all"
           categories={trendingTags}
@@ -923,7 +923,7 @@ const Explore = () => {
           posts={risingCreators}
           className="mt-2"
         />
-        <ExploreBabesSection
+        <PostsSection
           title="Recommended for you"
           actionLabel="See all"
           posts={recommendedBabes}
@@ -943,7 +943,7 @@ const Explore = () => {
           className="mt-2"
         />
         <ExplorePromoSection promo={premiumPromo2} />
-        <ExploreBabesSection
+        <PostsSection
           title="New releases"
           actionLabel="See all"
           categories={newReleaseTags}
@@ -951,7 +951,7 @@ const Explore = () => {
           variant="stats"
           className="mt-2"
         />
-        <ExploreBabesSection
+        <PostsSection
           title="Fan favorites"
           actionLabel="See all"
           posts={fanFavoritesBabes}

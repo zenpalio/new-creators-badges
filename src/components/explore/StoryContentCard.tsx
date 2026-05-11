@@ -1,7 +1,7 @@
 import { BookOpen, Star, Layers, Film } from "lucide-react";
 import LikeButton from "./LikeButton";
 
-interface StoryContentCardProps {
+export interface StoryContentCardProps {
   src: string;
   title?: string;
   description?: string;

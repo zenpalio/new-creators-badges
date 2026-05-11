@@ -23,7 +23,7 @@ export type {
   ExploreHeaderActionsProps,
 } from "./components/ExploreView";
 export {
-  ExploreBabesSection,
+  PostsSection,
   ExploreStoriesSection,
   ExploreVideosSection,
   ExploreCreatorsSection,
@@ -32,6 +32,18 @@ export {
   ExploreStartCreatingSection,
   ExploreFooterSection,
 } from "./components/explore/ExploreSections";
+export { default as PostCard } from "./components/explore/PostCard";
+export type { PostCardProps } from "./components/explore/PostCard";
+export { default as StoryContentCard } from "./components/explore/StoryContentCard";
+export type { StoryContentCardProps } from "./components/explore/StoryContentCard";
+export { default as CreatorRankCard } from "./components/explore/CreatorRankCard";
+export type { CreatorRankCardProps } from "./components/explore/CreatorRankCard";
+export { default as ExploreVideoCard } from "./components/explore/ExploreVideoCard";
+export type { ExploreVideoCardProps } from "./components/explore/ExploreVideoCard";
+export { default as ExploreWhatsNewCard } from "./components/explore/ExploreWhatsNewCard";
+export type { ExploreWhatsNewCardProps } from "./components/explore/ExploreWhatsNewCard";
+export { default as ExploreCreateToolCard } from "./components/explore/ExploreCreateToolCard";
+export type { ExploreCreateToolCardProps } from "./components/explore/ExploreCreateToolCard";
 export type {
   ExploreViewBabe,
   ExploreViewStory,
@@ -43,7 +55,7 @@ export type {
   ExploreViewFooterLinks,
   ExploreViewFooterLinkGroup,
   ExploreViewSectionCategory,
-  ExploreBabesSectionProps,
+  PostsSectionProps,
   ExploreStoriesSectionProps,
   ExploreVideosSectionProps,
   ExploreCreatorsSectionProps,
