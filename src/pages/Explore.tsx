@@ -807,25 +807,11 @@ const Explore = () => {
   }));
 
   const whatsNewPosts: ExploreViewWhatsNew[] = whatsNewItems.map((n, i) => ({
+    id: `wn-${i}`,
     tag: n.tag,
     date: n.date,
     title: n.title,
     description: n.description,
-    onClick: n.announcement
-      ? () =>
-          setInlineAnnouncement({
-            id: `inline-${i}`,
-            tag: n.tag,
-            date: n.date,
-            title: n.title,
-            description: n.description,
-            headline: n.announcement!.headline,
-            intro: n.announcement!.intro,
-            sections: n.announcement!.sections,
-            cta: n.announcement!.cta,
-            outro: n.announcement!.outro,
-          })
-      : undefined,
   }));
 
   const floatingToolsItems: FloatingToolsFabItem[] = [
@@ -888,6 +874,24 @@ const Explore = () => {
           actionLabel="See all"
           posts={whatsNewPosts}
           className="mt-2"
+          onPostClick={(post) => {
+            const idx = whatsNewPosts.findIndex((p) => p.id === post.id);
+            if (idx < 0) return;
+            const n = whatsNewItems[idx];
+            if (!n.announcement) return;
+            setInlineAnnouncement({
+              id: `inline-${idx}`,
+              tag: n.tag,
+              date: n.date,
+              title: n.title,
+              description: n.description,
+              headline: n.announcement.headline,
+              intro: n.announcement.intro,
+              sections: n.announcement.sections,
+              cta: n.announcement.cta,
+              outro: n.announcement.outro,
+            });
+          }}
         />
         <ExploreBabesSection
           title="Your following"
