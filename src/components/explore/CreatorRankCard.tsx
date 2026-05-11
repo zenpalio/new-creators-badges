@@ -36,6 +36,8 @@ export interface CreatorRankCardProps {
   avatarUrl: string;
   tier: BadgeTier;
   verified?: boolean;
+  href?: string;
+  onClick?: () => void;
 }
 
 const CreatorRankCard = ({
@@ -43,13 +45,19 @@ const CreatorRankCard = ({
   name,
   avatarUrl,
   tier,
+  href = "#",
+  onClick,
 }: CreatorRankCardProps) => {
   const borderColor = tierBorderColors[tier];
   const high = isHighTier(tier);
   const badgeSrc = resolveSrc(imageSets.aura[tier]);
 
   return (
-    <button className="group relative flex w-[300px] shrink-0 items-center gap-4 overflow-hidden rounded-2xl bg-grey-dark-1 pl-5 pr-4 py-3 text-left transition-colors hover:bg-grey-dark-2">
+    <a
+      href={href}
+      onClick={onClick}
+      className="group relative flex w-[300px] shrink-0 items-center gap-4 overflow-hidden rounded-2xl bg-grey-dark-1 pl-5 pr-4 py-3 text-left transition-colors hover:bg-grey-dark-2"
+    >
       <RankBackdrop rank={rank} />
 
       {/* Avatar with badge in bottom-right */}
@@ -88,7 +96,7 @@ const CreatorRankCard = ({
       </div>
 
       <ChevronRight className="relative z-10 h-5 w-5 text-grey-light-3 transition-colors group-hover:text-white" />
-    </button>
+    </a>
   );
 };
 

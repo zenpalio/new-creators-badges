@@ -5,6 +5,7 @@ interface StoryContentCardProps {
   src: string;
   title?: string;
   description?: string;
+  href?: string;
   episodeCount?: number;
   totalScenes?: number;
   avgRating?: number;
@@ -21,6 +22,7 @@ const StoryContentCard = ({
   src,
   title,
   description,
+  href = "#",
   episodeCount = 0,
   totalScenes = 0,
   avgRating = 0,
@@ -29,9 +31,10 @@ const StoryContentCard = ({
   onClick,
 }: StoryContentCardProps) => {
   return (
-    <div
+    <a
+      href={href}
       onClick={onClick}
-      className="group relative w-[calc(100vw-2rem)] max-w-[460px] shrink-0 aspect-[5/3] rounded-xl overflow-hidden bg-card border border-border/50 cursor-pointer md:w-[460px]"
+      className="group relative block w-[calc(100vw-2rem)] max-w-[460px] shrink-0 aspect-[5/3] rounded-xl overflow-hidden bg-card border border-border/50 cursor-pointer md:w-[460px]"
     >
       {/* Cover image */}
       {src ? (
@@ -98,7 +101,7 @@ const StoryContentCard = ({
           View Story
         </span>
       </div>
-    </div>
+    </a>
   );
 };
 

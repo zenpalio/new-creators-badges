@@ -5,6 +5,8 @@ interface BabeCardProps {
   name: string;
   description: string;
   imageUrl: string;
+  href?: string;
+  onClick?: () => void;
   messageCount?: number | string;
   likeCount?: number | string;
   variant?: "compact" | "stats";
@@ -14,6 +16,8 @@ const BabeCard = ({
   name,
   description,
   imageUrl,
+  href = "#",
+  onClick,
   messageCount = 0,
   likeCount,
   variant = "compact",
@@ -21,7 +25,11 @@ const BabeCard = ({
   const showStats = variant === "stats";
 
   return (
-    <div className="group relative w-[220px] shrink-0 cursor-pointer overflow-hidden rounded-2xl bg-grey-dark-1">
+    <a
+      href={href}
+      onClick={onClick}
+      className="group relative block w-[220px] shrink-0 cursor-pointer overflow-hidden rounded-2xl bg-grey-dark-1"
+    >
       <div className="relative aspect-[13/19] w-full overflow-hidden">
         <img
           src={imageUrl}
@@ -58,7 +66,7 @@ const BabeCard = ({
           )}
         </div>
       </div>
-    </div>
+    </a>
   );
 };
 

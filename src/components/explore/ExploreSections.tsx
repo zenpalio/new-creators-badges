@@ -12,12 +12,16 @@ import { type BadgeTier } from "../BadgeCard";
 export interface ExploreViewSectionCategory {
   id?: string;
   label: string;
+  href?: string;
+  onClick?: () => void;
 }
 
 export interface ExploreViewBabe {
   name: string;
   description: string;
   imageUrl: string;
+  href?: string;
+  onClick?: () => void;
   messageCount?: number | string;
   likeCount?: number | string;
 }
@@ -25,6 +29,7 @@ export interface ExploreViewBabe {
 export interface ExploreViewStory {
   id: string;
   src: string;
+  href?: string;
   title?: string;
   description?: string;
   episodeCount?: number;
@@ -38,6 +43,8 @@ export interface ExploreViewStory {
 export interface ExploreViewVideo {
   id: string;
   imageUrl: string;
+  href?: string;
+  onClick?: () => void;
   likes?: number | string;
 }
 
@@ -47,6 +54,8 @@ export interface ExploreViewCreatorRank {
   avatarUrl: string;
   tier: BadgeTier;
   verified?: boolean;
+  href?: string;
+  onClick?: () => void;
 }
 
 export interface ExploreViewWhatsNew {
@@ -54,6 +63,7 @@ export interface ExploreViewWhatsNew {
   date: string;
   title: string;
   description: string;
+  href?: string;
   onClick?: () => void;
 }
 
@@ -72,7 +82,7 @@ export interface ExploreViewCreateTool {
   title: string;
   subtitle: string;
   Icon: LucideIcon;
-  href?: string;
+  href: string;
   onClick?: () => void;
 }
 
@@ -93,20 +103,22 @@ export interface ExploreViewFooterLinks {
 interface SectionTitleProps {
   title: string;
   actionLabel?: string;
+  actionHref?: string;
   onAction?: () => void;
 }
 
-const SectionTitle = ({ title, actionLabel, onAction }: SectionTitleProps) => (
+const SectionTitle = ({ title, actionLabel, actionHref = "#", onAction }: SectionTitleProps) => (
   <div className="mb-3 flex items-end justify-between">
     <h2 className="text-xl font-bold leading-tight text-white">{title}</h2>
     {actionLabel && (
-      <button
+      <a
+        href={actionHref}
         onClick={onAction}
         className="flex items-center gap-1 text-xs font-medium text-grey-light-3 hover:text-white transition-colors"
       >
         {actionLabel}
         <ArrowUpRight className="h-3.5 w-3.5" />
-      </button>
+      </a>
     )}
   </div>
 );
@@ -119,12 +131,14 @@ const TagRow = ({ tags }: TagRowProps) => (
   <div className="mb-3">
     <HScroll>
       {tags.map((t, i) => (
-        <button
+        <a
+          href={t.href ?? "#"}
+          onClick={t.onClick}
           key={t.id ?? `${t.label}-${i}`}
           className="inline-flex h-[41px] shrink-0 items-center justify-center whitespace-nowrap rounded-[5px] bg-grey-dark-1 px-[16px] text-sm font-medium text-[#F2F2F2] transition-colors hover:bg-grey-dark-3 hover:text-white"
         >
           <span className="normal-case">{t.label}</span>
-        </button>
+        </a>
       ))}
     </HScroll>
   </div>
@@ -135,6 +149,7 @@ const TagRow = ({ tags }: TagRowProps) => (
 export interface ExploreBabesSectionProps {
   title: string;
   actionLabel?: string;
+  actionHref?: string;
   onAction?: () => void;
   categories?: ExploreViewSectionCategory[];
   posts: ExploreViewBabe[];
@@ -145,6 +160,7 @@ export interface ExploreBabesSectionProps {
 export const ExploreBabesSection = ({
   title,
   actionLabel,
+  actionHref,
   onAction,
   categories,
   posts,
@@ -152,7 +168,7 @@ export const ExploreBabesSection = ({
   className,
 }: ExploreBabesSectionProps) => (
   <section className={className}>
-    <SectionTitle title={title} actionLabel={actionLabel} onAction={onAction} />
+    <SectionTitle title={title} actionLabel={actionLabel} actionHref={actionHref} onAction={onAction} />
     {categories && categories.length > 0 && <TagRow tags={categories} />}
     <HScroll>
       {posts.map((b, i) => (
@@ -161,6 +177,8 @@ export const ExploreBabesSection = ({
           name={b.name}
           description={b.description}
           imageUrl={b.imageUrl}
+          href={b.href}
+          onClick={b.onClick}
           messageCount={b.messageCount}
           likeCount={b.likeCount}
           variant={variant}
@@ -173,6 +191,7 @@ export const ExploreBabesSection = ({
 export interface ExploreStoriesSectionProps {
   title: string;
   actionLabel?: string;
+  actionHref?: string;
   onAction?: () => void;
   posts: ExploreViewStory[];
   className?: string;
@@ -181,17 +200,19 @@ export interface ExploreStoriesSectionProps {
 export const ExploreStoriesSection = ({
   title,
   actionLabel,
+  actionHref,
   onAction,
   posts,
   className,
 }: ExploreStoriesSectionProps) => (
   <section className={className}>
-    <SectionTitle title={title} actionLabel={actionLabel} onAction={onAction} />
+    <SectionTitle title={title} actionLabel={actionLabel} actionHref={actionHref} onAction={onAction} />
     <HScroll>
       {posts.map((s, i) => (
         <StoryContentCard
           key={`${s.id}-${i}`}
           src={s.src}
+          href={s.href}
           title={s.title}
           description={s.description}
           episodeCount={s.episodeCount}
@@ -209,6 +230,7 @@ export const ExploreStoriesSection = ({
 export interface ExploreVideosSectionProps {
   title: string;
   actionLabel?: string;
+  actionHref?: string;
   onAction?: () => void;
   categories?: ExploreViewSectionCategory[];
   posts: ExploreViewVideo[];
@@ -218,19 +240,22 @@ export interface ExploreVideosSectionProps {
 export const ExploreVideosSection = ({
   title,
   actionLabel,
+  actionHref,
   onAction,
   categories,
   posts,
   className,
 }: ExploreVideosSectionProps) => (
   <section className={className}>
-    <SectionTitle title={title} actionLabel={actionLabel} onAction={onAction} />
+    <SectionTitle title={title} actionLabel={actionLabel} actionHref={actionHref} onAction={onAction} />
     {categories && categories.length > 0 && <TagRow tags={categories} />}
     <HScroll>
       {posts.map((v, i) => (
-        <div
+        <a
+          href={v.href ?? "#"}
+          onClick={v.onClick}
           key={`${v.id}-${i}`}
-          className="group relative w-[220px] shrink-0 overflow-hidden rounded-2xl bg-grey-dark-1"
+          className="group relative block w-[220px] shrink-0 overflow-hidden rounded-2xl bg-grey-dark-1"
         >
           <div className="relative aspect-[13/19] w-full overflow-hidden">
             <img
@@ -253,7 +278,7 @@ export const ExploreVideosSection = ({
               </div>
             )}
           </div>
-        </div>
+        </a>
       ))}
     </HScroll>
   </section>
@@ -262,6 +287,7 @@ export const ExploreVideosSection = ({
 export interface ExploreCreatorsSectionProps {
   title: string;
   actionLabel?: string;
+  actionHref?: string;
   onAction?: () => void;
   posts: ExploreViewCreatorRank[];
   className?: string;
@@ -270,12 +296,13 @@ export interface ExploreCreatorsSectionProps {
 export const ExploreCreatorsSection = ({
   title,
   actionLabel,
+  actionHref,
   onAction,
   posts,
   className,
 }: ExploreCreatorsSectionProps) => (
   <section className={className}>
-    <SectionTitle title={title} actionLabel={actionLabel} onAction={onAction} />
+    <SectionTitle title={title} actionLabel={actionLabel} actionHref={actionHref} onAction={onAction} />
     <HScroll>
       {posts.map((c) => (
         <CreatorRankCard
@@ -285,6 +312,8 @@ export const ExploreCreatorsSection = ({
           tier={c.tier}
           verified={c.verified}
           avatarUrl={c.avatarUrl}
+          href={c.href}
+          onClick={c.onClick}
         />
       ))}
     </HScroll>
@@ -294,6 +323,7 @@ export const ExploreCreatorsSection = ({
 export interface ExploreWhatsNewSectionProps {
   title: string;
   actionLabel?: string;
+  actionHref?: string;
   onAction?: () => void;
   readMoreLabel?: string;
   posts: ExploreViewWhatsNew[];
@@ -303,18 +333,19 @@ export interface ExploreWhatsNewSectionProps {
 export const ExploreWhatsNewSection = ({
   title,
   actionLabel,
+  actionHref,
   onAction,
   readMoreLabel = "Read more",
   posts,
   className,
 }: ExploreWhatsNewSectionProps) => (
   <section className={className}>
-    <SectionTitle title={title} actionLabel={actionLabel} onAction={onAction} />
+    <SectionTitle title={title} actionLabel={actionLabel} actionHref={actionHref} onAction={onAction} />
     <HScroll>
       {posts.map((n, i) => (
-        <button
+        <a
+          href={n.href ?? "#"}
           key={i}
-          type="button"
           className="block shrink-0"
           onClick={n.onClick}
         >
@@ -334,7 +365,7 @@ export const ExploreWhatsNewSection = ({
               <ArrowUpRight className="h-3.5 w-3.5" />
             </div>
           </div>
-        </button>
+        </a>
       ))}
     </HScroll>
   </section>
@@ -377,7 +408,7 @@ export const ExploreStartCreatingSection = ({
   const renderCard = (t: ExploreViewCreateTool) => {
     const Icon = t.Icon;
     return (
-      <button key={t.title} onClick={t.onClick} className={cardClass}>
+      <a key={t.title} href={t.href} onClick={t.onClick} className={cardClass}>
         <div className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-primary/15 blur-2xl transition-opacity duration-300 group-hover:bg-primary/25" />
 
         <div className="relative flex items-center justify-between">
@@ -397,7 +428,7 @@ export const ExploreStartCreatingSection = ({
             {t.subtitle}
           </p>
         </div>
-      </button>
+      </a>
     );
   };
 
