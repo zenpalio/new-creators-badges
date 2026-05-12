@@ -41,7 +41,7 @@ export interface ExploreViewStory {
 
 export interface ExploreViewVideo {
   id: string
-  poster: string
+  poster?: string
   video: string
   href?: string
   likes?: number | string

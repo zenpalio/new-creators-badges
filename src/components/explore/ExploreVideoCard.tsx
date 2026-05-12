@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import LikeButton from "./LikeButton";
 
 export interface ExploreVideoCardProps {
-  poster: string;
+  poster?: string;
   video: string;
   href?: string;
   likes?: number | string;
@@ -76,13 +76,15 @@ const ExploreVideoCard = ({
           preload="auto"
           className="absolute inset-0 z-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        <img
-          src={poster}
-          alt=""
-          loading="lazy"
-          decoding="async"
-          className="pointer-events-none absolute inset-0 z-[1] h-full w-full object-cover transition-opacity duration-200 group-hover:opacity-0"
-        />
+        {poster != null && poster !== "" && (
+          <img
+            src={poster}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            className="pointer-events-none absolute inset-0 z-[1] h-full w-full object-cover transition-opacity duration-200 group-hover:opacity-0"
+          />
+        )}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-20 bg-gradient-to-t from-black/70 to-transparent" />
         {likes != null && (
           <div className="absolute bottom-2 right-2 z-[3] text-[11px] font-medium text-white drop-shadow-md">
