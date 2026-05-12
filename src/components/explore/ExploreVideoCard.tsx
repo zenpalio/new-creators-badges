@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import LikeButton from "./LikeButton";
+import ResponsiveImage from "../ui/ResponsiveImage";
 
 export interface ExploreVideoCardProps {
   poster?: string;
@@ -77,13 +78,16 @@ const ExploreVideoCard = ({
           className="absolute inset-0 z-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         {poster != null && poster !== "" && (
-          <img
-            src={poster}
-            alt=""
-            loading="lazy"
-            decoding="async"
-            className="pointer-events-none absolute inset-0 z-[1] h-full w-full object-cover transition-opacity duration-200 group-hover:opacity-0"
-          />
+          <span className="pointer-events-none absolute inset-0 z-[1] block">
+            <ResponsiveImage
+              src={poster}
+              alt=""
+              fill
+              absolute
+              sizes="(max-width: 479px) min(220px, 72vw), 220px"
+              className="transition-opacity duration-200 group-hover:opacity-0"
+            />
+          </span>
         )}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-20 bg-gradient-to-t from-black/70 to-transparent" />
         {likes != null && (

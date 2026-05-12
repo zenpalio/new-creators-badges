@@ -1,5 +1,6 @@
-import { ChevronRight } from "lucide-react";
-import { imageSets, type BadgeTier } from "../BadgeCard";
+import { ChevronRight } from "lucide-react"
+import { imageSets, type BadgeTier } from "../BadgeCard"
+import ResponsiveImage from "../ui/ResponsiveImage"
 
 const tierBorderColors: Record<BadgeTier, string> = {
   newbie: "hsl(25 45% 52%)",
@@ -9,13 +10,13 @@ const tierBorderColors: Record<BadgeTier, string> = {
   grandmaster: "hsl(0 82% 58%)",
   mythic: "hsl(281 85% 62%)",
   immortal: "hsl(48 96% 70%)",
-};
+}
 
 const isHighTier = (tier: BadgeTier) =>
-  ["elite", "grandmaster", "mythic", "immortal"].includes(tier);
+  ["elite", "grandmaster", "mythic", "immortal"].includes(tier)
 
 const resolveSrc = (image: string | { src: string }) =>
-  typeof image === "string" ? image : image.src;
+  typeof image === "string" ? image : image.src
 
 const RankBackdrop = ({ rank }: { rank: number }) => (
   <span
@@ -28,18 +29,18 @@ const RankBackdrop = ({ rank }: { rank: number }) => (
   >
     {rank}
   </span>
-);
+)
 
 export interface CreatorRankCardProps {
-  rank: number;
-  name: string;
-  avatarUrl: string;
-  tier: BadgeTier;
+  rank: number
+  name: string
+  avatarUrl: string
+  tier: BadgeTier
   /** Visible tier line; when omitted, raw `tier` is shown */
-  tierLabel?: string;
-  verified?: boolean;
-  href?: string;
-  onClick?: () => void;
+  tierLabel?: string
+  verified?: boolean
+  href?: string
+  onClick?: () => void
 }
 
 const CreatorRankCard = ({
@@ -51,9 +52,9 @@ const CreatorRankCard = ({
   href = "#",
   onClick,
 }: CreatorRankCardProps) => {
-  const borderColor = tierBorderColors[tier];
-  const high = isHighTier(tier);
-  const badgeSrc = resolveSrc(imageSets.aura[tier]);
+  const borderColor = tierBorderColors[tier]
+  const high = isHighTier(tier)
+  const badgeSrc = resolveSrc(imageSets.aura[tier])
 
   return (
     <a
@@ -71,14 +72,16 @@ const CreatorRankCard = ({
         }}
       >
         <div
-          className="h-16 w-16 overflow-hidden rounded-full"
+          className="relative h-16 w-16 overflow-hidden rounded-full"
           style={{ border: `2px solid ${borderColor}` }}
         >
-          <img
+          <ResponsiveImage
             src={avatarUrl}
             alt={name}
-            loading="lazy"
-            className="h-full w-full object-cover"
+            fill
+            absolute
+            sizes="64px"
+            className="object-cover"
           />
         </div>
         {/* Real tier badge in bottom-right of avatar */}
@@ -100,7 +103,7 @@ const CreatorRankCard = ({
 
       <ChevronRight className="relative z-10 h-5 w-5 text-grey-light-3-v2 transition-colors group-hover:text-white" />
     </a>
-  );
-};
+  )
+}
 
-export default CreatorRankCard;
+export default CreatorRankCard

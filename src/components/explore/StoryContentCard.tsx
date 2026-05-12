@@ -1,5 +1,6 @@
 import { BookOpen, Star, Layers, Film } from "lucide-react";
 import LikeButton from "./LikeButton";
+import ResponsiveImage from "../ui/ResponsiveImage";
 
 export type StoryContentCardLabels = {
   storyBadge: string;
@@ -53,11 +54,13 @@ const StoryContentCard = ({
     >
       {/* Cover image */}
       {src ? (
-        <img
+        <ResponsiveImage
           src={src}
           alt={title || labels.imageAltFallback}
-          loading="lazy"
-          className="h-full w-full object-cover object-top transition-transform duration-300 md:group-hover:scale-[1.03]"
+          fill
+          absolute
+          sizes="(max-width: 767px) calc(100vw - 2rem), 460px"
+          className="object-top transition-transform duration-300 md:group-hover:scale-[1.03]"
         />
       ) : (
         <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary-v2/20 to-primary-v2/5">

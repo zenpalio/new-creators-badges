@@ -47,8 +47,54 @@ import bannerStory from "../assets/hero/banner-story.jpg";
 import storyCreatorHero from "../assets/story-creator-hero.jpg";
 
 // ---- Mock data ----
-const img = (seed: string, w = 400, h = 533) =>
-  `https://picsum.photos/seed/${encodeURIComponent(seed)}/${w}/${h}`;
+
+/** Profile pictures from attached "babes / character" dataset */
+const exploreBabeProfileUrls = [
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/e8fe5e83-dc55-424d-930c-d0b16eaa6e75/profile-picture-77b22208-141b-4809-93d8-7186e4b6a3ec.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/c8f9ba5a-70f0-4860-a384-1e6cd9de23eb/profile-picture-0fdb08c2-bf28-444f-8c80-7fe5dd73e13c.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/a1acba14-1fcc-4967-a66e-cb618f7e33eb/profile-picture-73c0787f-a4dd-439d-9c6b-6bde6aecbd65.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/0406537a-2cea-4888-8772-f53bcc78906c/profile-picture-01da4af8-7a89-4474-80fe-a893ef46c452.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/d8afc282-2de5-4b83-9307-a5d4d5e80676/profile-picture-5d582acc-efd4-4776-be3e-8252381f94fd.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/39d90c07-730d-4b40-933b-71f88ccf4e67/profile-picture-5b3beef3-2efc-4755-b1d7-531b51c3a72c.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/5e243b89-d3a8-4a2d-bbaa-2ab44006a2a4/profile-picture-b8f9b7f9-2d72-4d73-858d-a4c19c9b007f.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/f9122435-9628-4dcb-9f33-b33a1997d513/profile-picture-4da2e41e-916d-463c-a1e7-862763bd8e88.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/a58540de-b337-4abe-9529-0852f045b3c6/profile-picture-6b926a01-f597-4af3-933f-eeaab19b1cb5.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/32952531-81cf-427f-8fb9-f4736ad20848/950e731b-3ceb-4524-bea9-f35f6f4315ec-0.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/2d61c2d0-ec91-4ac1-8d2b-cd2c6caab5f5/profile-picture-14a36d37-7a43-4cae-b42e-e91fc8a04db4.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/71b44aa6-d249-4cba-a3b4-2697e3736a14/profile-picture-814c2415-e50e-478f-9cdc-8c8d5c578dcf.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/10fd6466-78a7-4fc8-a75a-8b50d152205c/profile-picture-bf2c0c9a-0286-456d-a4e3-42b0efae771c.jpg",
+  "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/7629344d-7127-46b3-90fd-54b7a5cdc211/20250204-153435-0.jpg",
+  "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/0c74fea0-7834-477c-8a5a-87148ce00b68/20250204-153421-0.jpg",
+  "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/f5a6f56d-2ab7-4920-a280-d9afbcd7a578/20250204-153450-0.jpg",
+  "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/36f2d174-5449-4db2-80e9-ec7e24208d93/20250204-153424-0.jpg",
+  "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/08973fb4-d528-4d23-a1e9-eb7370c79414/20250204-153412-0.jpg",
+  "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/3b86b97c-cd22-48d8-afae-ce724b6d75a4/20250204-153427-0.jpg",
+  "https://storage.googleapis.com/aibabe-prod-public/77283949-292a-4ce4-8057-29af9f7ae17a/image-files/profile-picture-2025-04-22T19%3A01%3A29.816728.jpg",
+];
+
+/** `picture.url` from attached image posts dataset */
+const explorePictureUrls = [
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/e6adefce-215b-426e-afb3-a5c712f33124/c31d0759-aaa0-41d5-a80b-5a39049f053e.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/f1d4591e-29d8-4dd2-bb06-37efa60cdcf3/78ef1037-feec-490a-9958-7c11fe594185-1.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/e0f46e4c-95b4-4cfe-a3cf-63bdcd640f1e/fdf5e7cf-f9f1-4728-b200-58867383a3f6-0.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/2b7a0e69-7c22-4b44-aafb-7b7b6a629edd/3a16fa1f-e993-46e6-93ff-dc111af9e1cd-0.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/a82fbd78-1de5-4fb0-8a01-01bbd995b7fd/95d56351-43bd-4866-9216-905605011840-0.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/5b21e105-7806-459f-af51-2cd52ef90151/caa086d9-b791-4f9d-96d6-e2cdb343481b.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/1509fdc0-3845-448f-8fa9-40063e2c149f/165e1879-8f10-4d0b-b61d-5bbfa4c46fef-0.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/6042fa0d-523d-4e15-94a2-b7df7b1ab15c/012c68c1-fd18-4933-bcbd-0be3487d098c-0.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/27b0dc4a-50c2-48b5-880d-daa0c451fa87/733d19c9-2e5d-4c28-9c19-9b9350141ca7.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/a35d2201-48a1-4673-9f49-c55f20b39f93/17e5a235-694b-476d-8f0e-5cb62de64da1.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/dee259c3-a3d4-4fa7-baf8-d7af055dd66d/dc57a1a1-5d83-4ee6-9bc2-9e89273f35b9-0.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/c65177ce-c44c-4bc6-b0e0-22de44fe545f/3840703d-7ba2-4f42-8807-7b216bdc9866-0.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/f4fad887-120b-4acf-9c83-0438a0f66e85/c461f79f-3bb1-4b9d-866a-92d959d4a784.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/e5afdf4c-7eaa-44b9-8e5c-bc5dfbbdb965/bf33eb09-ad5e-4c14-9b10-13607159820b-2.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/f735b7d8-1639-41e7-933a-fc7a1d877f06/f352a7ef-9876-40d8-9034-c46bf9f3546d-0.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/e1c6c4e5-7538-4987-b61a-8f0e71351bcd/f6294380-4615-4f9c-aab5-af561ff5123d-0.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/d5aecaf5-5a65-4f94-973a-b6cfc792e0c0/49cf119d-3cf8-48f2-8a1a-e1d18b7e4731-0.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/92ebc821-6271-4bee-ae9d-41033277abad/cc43846a-7600-455b-becb-f48c003a17d1.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/27a128da-db1d-488f-9757-006cb38266e2/46a6d177-8be0-4214-a6ea-4003b40089aa-0.jpg",
+  "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/09962f0f-e9f4-4339-aeab-a5826382cb2a/8ebce6e6-3e38-4dd9-85a0-636f9e29bf09-1.jpg",
+];
 
 const yourBabesBase: Omit<ExploreViewBabe, "imageUrl">[] = [
   { name: "Tanya", description: "Your sultry coworker who always finds a reason to bend over your desk...", messageCount: 12 },
@@ -175,7 +221,7 @@ const featuredStories: ExploreViewStory[] = [
     id: "s4",
     title: "After Hours at the Library",
     description: "Rina locks the doors at closing — and the rules of the quiet section change after dark.",
-    src: img("story-library", 600, 360),
+    src: explorePictureUrls[0],
     episodeCount: 3,
     totalScenes: 12,
     avgRating: 4.4,
@@ -186,7 +232,7 @@ const featuredStories: ExploreViewStory[] = [
     id: "s5",
     title: "Moonlit Tides",
     description: "A washed-up mermaid, a private beach, and a secret she'll only tell you at high tide.",
-    src: img("story-mermaid", 600, 360),
+    src: explorePictureUrls[1],
     episodeCount: 5,
     totalScenes: 20,
     avgRating: 4.7,
@@ -200,7 +246,7 @@ const newEpisodes: ExploreViewStory[] = [
     id: "ne1",
     title: "Confession Booth",
     description: "Maria has something to admit — but she'll only say it through the screen.",
-    src: img("story-confession", 600, 360),
+    src: explorePictureUrls[2],
     episodeCount: 2,
     totalScenes: 8,
     avgRating: 4.3,
@@ -211,7 +257,7 @@ const newEpisodes: ExploreViewStory[] = [
     id: "ne2",
     title: "Royal Hideaway",
     description: "Princess Demetria is in your apartment for the weekend and won't be sleeping on the couch.",
-    src: img("story-royal", 600, 360),
+    src: explorePictureUrls[3],
     episodeCount: 3,
     totalScenes: 14,
     avgRating: 4.5,
@@ -222,7 +268,7 @@ const newEpisodes: ExploreViewStory[] = [
     id: "ne3",
     title: "Down the Rabbit Hole",
     description: "Alice fell into your lap. Now she's rewriting Wonderland's rules — starting with yours.",
-    src: img("story-alice", 600, 360),
+    src: explorePictureUrls[4],
     episodeCount: 4,
     totalScenes: 16,
     avgRating: 4.6,
@@ -233,7 +279,7 @@ const newEpisodes: ExploreViewStory[] = [
     id: "ne4",
     title: "Smoke & Silk",
     description: "Sable's invitation arrived in your dreams. Tonight she's collecting an answer in person.",
-    src: img("story-vampire", 600, 360),
+    src: explorePictureUrls[5],
     episodeCount: 6,
     totalScenes: 22,
     avgRating: 4.8,
@@ -244,7 +290,7 @@ const newEpisodes: ExploreViewStory[] = [
     id: "ne5",
     title: "Spotting You",
     description: "Momo finally noticed you at the gym — and she's got a workout in mind that's not on the program.",
-    src: img("story-gym", 600, 360),
+    src: explorePictureUrls[6],
     episodeCount: 2,
     totalScenes: 9,
     avgRating: 4.2,
@@ -320,15 +366,15 @@ const heroSlides: HeroSlide[] = [
     name: "Top creators this week",
     tagline: "Meet the faces shaping the platform",
     description: "The 3 creators everyone's talking about. Tap in to see their latest babes, scenes and stories.",
-    imageUrl: "https://picsum.photos/seed/creator-bigdaddy/600/600",
+    imageUrl: exploreBabeProfileUrls[0],
     tags: ["Trending", "Verified", "Top 3"],
     badge: "Top creators",
     layout: "creators",
     accent: "hsl(213 100% 55%)",
     creators: [
-      { rank: 1, name: "Big Daddy", avatarUrl: "https://picsum.photos/seed/creator-bigdaddy/400/600", subtitle: "Immortal · 1.2M fans" },
-      { rank: 2, name: "VelvetHeat", avatarUrl: "https://picsum.photos/seed/creator-velvet/400/600", subtitle: "Mythic · 980K fans" },
-      { rank: 3, name: "DarkFantasy", avatarUrl: "https://picsum.photos/seed/creator-darkfantasy/400/600", subtitle: "Grandmaster · 740K fans" },
+      { rank: 1, name: "Big Daddy", avatarUrl: exploreBabeProfileUrls[0], subtitle: "Immortal · 1.2M fans" },
+      { rank: 2, name: "VelvetHeat", avatarUrl: exploreBabeProfileUrls[1], subtitle: "Mythic · 980K fans" },
+      { rank: 3, name: "DarkFantasy", avatarUrl: exploreBabeProfileUrls[2], subtitle: "Grandmaster · 740K fans" },
     ],
     buttons: [{ label: "See leaderboard", variant: "onHero", Icon: Trophy }],
   },
@@ -661,13 +707,13 @@ const announcements: Announcement[] = whatsNewItems
 const mockNotifications = [
   { id: "n1", actor: "energetic_lion_0991", initials: "EN", action: "liked video of", target: "Mia", unread: true },
   { id: "n2", actor: "calm_beaver_6740", initials: "CA", action: "liked video of", target: "Ellie – The Reclusive Stepsister", unread: true },
-  { id: "n3", actor: "amiable_leopard_8696", initials: "AM", action: "liked", target: "Nyx", thumbnail: "https://picsum.photos/seed/nyx/80", unread: true },
+  { id: "n3", actor: "amiable_leopard_8696", initials: "AM", action: "liked", target: "Nyx", thumbnail: exploreBabeProfileUrls[5], unread: true },
   { id: "n4", actor: "cheerful_ibis_4482", initials: "CH", action: "liked video of", target: "Ella" },
   { id: "n5", actor: "charming_capybara_7956", initials: "CH", action: "liked", target: "Hikari" },
   { id: "n6", actor: "Sandwiches", initials: "SA", action: "liked video of", target: "Elipses..." },
   { id: "n7", actor: "blessed_gecko_6782", initials: "BL", action: "liked video of", target: "Lucy" },
-  { id: "n8", actor: "Sandwiches", initials: "SA", action: "liked images of", thumbnail: "https://picsum.photos/seed/img1/80" },
-  { id: "n9", actor: "Sandwiches", initials: "SA", action: "liked images of", thumbnail: "https://picsum.photos/seed/img2/80" },
+  { id: "n8", actor: "Sandwiches", initials: "SA", action: "liked images of", thumbnail: explorePictureUrls[0] },
+  { id: "n9", actor: "Sandwiches", initials: "SA", action: "liked images of", thumbnail: explorePictureUrls[1] },
   { id: "n10", actor: "appealing_camel_9047", initials: "AP", action: "started following you" },
 ];
 
@@ -823,32 +869,32 @@ const Explore = () => {
 
   const yourBabes: ExploreViewBabe[] = yourBabesBase.map((b, i) => ({
     ...b,
-    imageUrl: img(`babe-${b.name}-${i}`),
+    imageUrl: exploreBabeProfileUrls[i % exploreBabeProfileUrls.length],
   }));
 
   const yourFollowing: ExploreViewBabe[] = yourFollowingBase.map((b, i) => ({
     ...b,
-    imageUrl: img(`follow-${b.name}-${i}`),
+    imageUrl: exploreBabeProfileUrls[(i + 3) % exploreBabeProfileUrls.length],
   }));
 
   const trendingBabes: ExploreViewBabe[] = trendingBabesBase.map((b, i) => ({
     ...b,
-    imageUrl: img(`trend-${b.name}-${i}`),
+    imageUrl: explorePictureUrls[(i + 2) % explorePictureUrls.length],
   }));
 
   const newBabes: ExploreViewBabe[] = newBabesBase.map((b, i) => ({
     ...b,
-    imageUrl: img(`new-${b.name}-${i}`),
+    imageUrl: exploreBabeProfileUrls[(i + 7) % exploreBabeProfileUrls.length],
   }));
 
   const recommendedBabes: ExploreViewBabe[] = [...yourBabesBase].reverse().map((b, i) => ({
     ...b,
-    imageUrl: img(`rec-${b.name}-${i}`),
+    imageUrl: exploreBabeProfileUrls[(i + 1) % exploreBabeProfileUrls.length],
   }));
 
   const fanFavoritesBabes: ExploreViewBabe[] = [...trendingBabesBase, ...newBabesBase].map((b, i) => ({
     ...b,
-    imageUrl: img(`fav-${b.name}-${i}`),
+    imageUrl: explorePictureUrls[(i + 5) % explorePictureUrls.length],
   }));
 
   const trendingVideos: ExploreViewVideo[] = exploreVideoFeed;
@@ -865,7 +911,7 @@ const Explore = () => {
     name: c.name,
     tier: c.tier,
     verified: c.verified,
-    avatarUrl: `https://picsum.photos/seed/${encodeURIComponent(c.avatarSeed)}/160/160`,
+    avatarUrl: exploreBabeProfileUrls[(c.rank - 1) % exploreBabeProfileUrls.length],
   }));
 
   const risingCreators: ExploreViewCreatorRank[] = risingCreatorsBase.map((c) => ({
@@ -873,7 +919,7 @@ const Explore = () => {
     name: c.name,
     tier: c.tier,
     verified: c.verified,
-    avatarUrl: `https://picsum.photos/seed/${encodeURIComponent(c.avatarSeed)}/160/160`,
+    avatarUrl: exploreBabeProfileUrls[(c.rank + 6) % exploreBabeProfileUrls.length],
   }));
 
   const whatsNewPosts: ExploreViewWhatsNew[] = whatsNewItems.map((n, i) => ({

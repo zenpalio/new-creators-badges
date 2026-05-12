@@ -1,5 +1,6 @@
 import LikeButton from "./LikeButton";
 import ChatIcon from "../icons/ChatIcon";
+import ResponsiveImage from "../ui/ResponsiveImage";
 
 export interface PostCardProps {
   name: string;
@@ -31,11 +32,13 @@ const PostCard = ({
       className="group relative block w-[220px] shrink-0 cursor-pointer overflow-hidden rounded-2xl bg-grey-dark-1-v2"
     >
       <div className="relative aspect-[13/19] w-full overflow-hidden">
-        <img
+        <ResponsiveImage
           src={imageUrl}
           alt={name}
-          loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          fill
+          absolute
+          sizes="(max-width: 479px) min(220px, 72vw), 220px"
+          className="transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
 
