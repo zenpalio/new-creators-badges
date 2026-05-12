@@ -31,6 +31,10 @@ export type Notification = {
   thumbnail?: string;
   avatar?: string;
   unread?: boolean;
+  /** When set, the row is a link (and still calls `onNotificationClick` if provided). */
+  href?: string;
+  /** Defaults to `_self`. Use `_blank` for external URLs (adds `rel="noopener noreferrer"`). */
+  hrefTarget?: "_blank" | "_self";
 };
 
 /** Status strip row in NotificationsSidebar — message copy comes from the parent. */
@@ -163,9 +167,11 @@ const NotificationsSidebar = ({
               <ul className="flex flex-col">
                 {notifications.map((n) => {
                   const isUnread = !!n.unread;
+                  const isInteractive = !!(n.href || onNotificationClick);
                   const rowClassName = `relative flex w-full items-center gap-3 px-5 py-3 text-left transition-colors ${
-                    onNotificationClick ? "cursor-pointer hover:bg-muted-v2/30" : ""
+                    isInteractive ? "cursor-pointer hover:bg-muted-v2/30" : ""
                   } ${isUnread ? "bg-primary-v2/5" : ""}`;
+                  const rowAriaLabel = `${n.actor} ${n.action}${n.target ? ` ${n.target}` : ""}`;
                   const rowInner = (
                     <>
                       {isUnread && (
@@ -192,20 +198,34 @@ const NotificationsSidebar = ({
                       )}
                     </>
                   );
+                  const rowContent =
+                    n.href != null && n.href !== "" ? (
+                      <a
+                        href={n.href}
+                        className={`${rowClassName} text-inherit no-underline`}
+                        aria-label={rowAriaLabel}
+                        {...(n.hrefTarget === "_blank"
+                          ? { target: "_blank" as const, rel: "noopener noreferrer" as const }
+                          : {})}
+                        onClick={() => onNotificationClick?.(n)}
+                      >
+                        {rowInner}
+                      </a>
+                    ) : onNotificationClick ? (
+                      <button
+                        type="button"
+                        className={rowClassName}
+                        aria-label={rowAriaLabel}
+                        onClick={() => onNotificationClick(n)}
+                      >
+                        {rowInner}
+                      </button>
+                    ) : (
+                      <div className={rowClassName}>{rowInner}</div>
+                    );
                   return (
                     <li key={n.id} className="border-b border-border-v2/30">
-                      {onNotificationClick ? (
-                        <button
-                          type="button"
-                          className={rowClassName}
-                          aria-label={`${n.actor} ${n.action}${n.target ? ` ${n.target}` : ""}`}
-                          onClick={() => onNotificationClick(n)}
-                        >
-                          {rowInner}
-                        </button>
-                      ) : (
-                        <div className={rowClassName}>{rowInner}</div>
-                      )}
+                      {rowContent}
                     </li>
                   );
                 })}

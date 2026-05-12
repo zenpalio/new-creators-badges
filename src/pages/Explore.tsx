@@ -714,7 +714,15 @@ const announcements: Announcement[] = whatsNewItems
   }));
 
 const mockNotifications = [
-  { id: "n1", actor: "energetic_lion_0991", initials: "EN", action: "liked video of", target: "Mia", unread: true },
+  {
+    id: "n1",
+    actor: "energetic_lion_0991",
+    initials: "EN",
+    action: "liked video of",
+    target: "Mia",
+    unread: true,
+    href: "#",
+  },
   { id: "n2", actor: "calm_beaver_6740", initials: "CA", action: "liked video of", target: "Ellie – The Reclusive Stepsister", unread: true },
   { id: "n3", actor: "amiable_leopard_8696", initials: "AM", action: "liked", target: "Nyx", thumbnail: exploreBabeProfileUrls[5], unread: true },
   { id: "n4", actor: "cheerful_ibis_4482", initials: "CH", action: "liked video of", target: "Ella" },
@@ -723,7 +731,14 @@ const mockNotifications = [
   { id: "n7", actor: "blessed_gecko_6782", initials: "BL", action: "liked video of", target: "Lucy" },
   { id: "n8", actor: "Sandwiches", initials: "SA", action: "liked images of", thumbnail: explorePictureUrls[0] },
   { id: "n9", actor: "Sandwiches", initials: "SA", action: "liked images of", thumbnail: explorePictureUrls[1] },
-  { id: "n10", actor: "appealing_camel_9047", initials: "AP", action: "started following you" },
+  {
+    id: "n10",
+    actor: "appealing_camel_9047",
+    initials: "AP",
+    action: "started following you",
+    href: "https://discord.gg/lovable-dev",
+    hrefTarget: "_blank",
+  },
 ];
 
 const giftPromo: ExploreViewPromo = {
