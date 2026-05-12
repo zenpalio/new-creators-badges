@@ -8,6 +8,11 @@ import {
   Coins,
   Film,
   Users,
+  MessageCircle,
+  User,
+  Trophy,
+  Star,
+  Wand2,
 } from "lucide-react";
 import SideNav from "../components/SideNav";
 import NotificationsSidebar, { type Announcement } from "../components/NotificationsSidebar";
@@ -263,6 +268,10 @@ const heroSlides: HeroSlide[] = [
     imageUrl: "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/c4bc02f2-4213-4bdd-b782-1dc4a44d4687/profile-picture-707144ba-b868-4cb5-9e78-3df93aa818d3.avif",
     tags: ["Goth", "Roleplay", "Dark Romance", "Editor's pick"],
     meta: { messages: "12.4K", likes: "8.9K" },
+    buttons: [
+      { label: "Chat now", variant: "onHero", Icon: MessageCircle },
+      { label: "View profile", variant: "ghost", Icon: User, visibility: "mdUp" },
+    ],
   },
   {
     name: "Luna",
@@ -276,6 +285,10 @@ const heroSlides: HeroSlide[] = [
     ],
     tags: ["Fantasy", "Witch", "Trending"],
     meta: { messages: "1.8K", likes: "2.2K" },
+    buttons: [
+      { label: "Chat now", variant: "onHero", Icon: MessageCircle },
+      { label: "View profile", variant: "ghost", Icon: User, visibility: "mdUp" },
+    ],
   },
   {
     name: "Sakura",
@@ -284,6 +297,10 @@ const heroSlides: HeroSlide[] = [
     imageUrl: "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/e8fe5e83-dc55-424d-930c-d0b16eaa6e75/profile-picture-77b22208-141b-4809-93d8-7186e4b6a3ec.avif",
     tags: ["Anime", "Roommate", "New"],
     meta: { messages: "9.1K", likes: "4.4K" },
+    buttons: [
+      { label: "Chat now", variant: "onHero", Icon: MessageCircle },
+      { label: "View profile", variant: "ghost", Icon: User, visibility: "mdUp" },
+    ],
   },
   {
     name: "The Midnight Confession",
@@ -298,10 +315,13 @@ const heroSlides: HeroSlide[] = [
     ],
     tags: ["Interactive", "Branching", "12 Chapters"],
     badge: "New story",
-    cta: "Play Story",
     layout: "story",
     accent: "hsl(320 70% 55%)",
     storyMeta: { chapters: 12, episodes: 4, rating: 4.8 },
+    buttons: [
+      { label: "Play Story", variant: "primary", Icon: BookOpen },
+      { label: "View Episodes", variant: "ghost", Icon: Film, visibility: "mdUp" },
+    ],
   },
   {
     name: "Top creators this week",
@@ -310,7 +330,6 @@ const heroSlides: HeroSlide[] = [
     imageUrl: "https://picsum.photos/seed/creator-bigdaddy/600/600",
     tags: ["Trending", "Verified", "Top 3"],
     badge: "Top creators",
-    cta: "See leaderboard",
     layout: "creators",
     accent: "hsl(213 100% 55%)",
     creators: [
@@ -318,6 +337,7 @@ const heroSlides: HeroSlide[] = [
       { rank: 2, name: "VelvetHeat", avatarUrl: "https://picsum.photos/seed/creator-velvet/400/600", subtitle: "Mythic · 980K fans" },
       { rank: 3, name: "DarkFantasy", avatarUrl: "https://picsum.photos/seed/creator-darkfantasy/400/600", subtitle: "Grandmaster · 740K fans" },
     ],
+    buttons: [{ label: "See leaderboard", variant: "onHero", Icon: Trophy }],
   },
   {
     name: "Unlock Premium",
@@ -325,9 +345,9 @@ const heroSlides: HeroSlide[] = [
     description: "Unlimited chat with long memory, hundreds of monthly tokens, spicy AI images and videos. From €9.99/mo — cancel anytime.",
     imageUrl: "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/dae34bfb-4650-4e1a-a3fd-fd87785473d1/profile-picture-a2cfaed2-d95a-4a35-b729-3b7619033d42.avif",
     badge: "Limited offer",
-    cta: "Get Premium",
     layout: "premium",
     accent: "hsl(213 100% 55%)",
+    buttons: [{ label: "Compare plans", variant: "premiumMuted", Icon: Star }],
     premiumPlans: [
       {
         name: "Premium",
@@ -361,7 +381,6 @@ const heroSlides: HeroSlide[] = [
     description: "Build multi-episode stories starring your favorite characters. Mix images, video, voice and music into cinematic scenes — you direct every moment.",
     imageUrl: storyCreatorHero,
     badge: "Just shipped",
-    cta: "Create your story",
     layout: "feature",
     accent: "hsl(213 100% 55%)",
     featureMeta: {
@@ -373,6 +392,10 @@ const heroSlides: HeroSlide[] = [
         "Publish as reels or full episode series",
       ],
     },
+    buttons: [
+      { label: "Create your story", variant: "primary", Icon: Wand2 },
+      { label: "View all stories", variant: "ghost", Icon: BookOpen, visibility: "mdUp" },
+    ],
   },
 ];
 

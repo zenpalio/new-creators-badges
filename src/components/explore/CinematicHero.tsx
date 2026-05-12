@@ -1,11 +1,31 @@
-import { type TouchEvent, useEffect, useMemo, useRef, useState } from "react";
-import { BookOpen, Check, ChevronLeft, ChevronRight, Crown, Film, GitBranch, Image as ImageIcon, Layers, MessageCircle, Mic, Music, Play, Sparkles, Star, Trophy, User, Wand2 } from "lucide-react";
+import { type ComponentType, type TouchEvent, useEffect, useMemo, useRef, useState } from "react";
+import { BookOpen, Check, ChevronLeft, ChevronRight, Crown, Film, GitBranch, Image as ImageIcon, Layers, Mic, Music, Play, Star, Wand2 } from "lucide-react";
 import ChatIcon from "../icons/ChatIcon";
 import LikeButton from "./LikeButton";
 
 export type HeroMedia =
   | { type: "image"; url: string }
   | { type: "video"; url: string; poster?: string };
+
+/** Leading icon for a hero CTA (e.g. lucide-react icon). */
+export type HeroSlideButtonIcon = ComponentType<{ className?: string }>;
+
+export type HeroSlideButtonVariant = "primary" | "onHero" | "ghost" | "premiumMuted";
+
+export interface HeroSlideButton {
+  label: string;
+  variant: HeroSlideButtonVariant;
+  /** Optional leading icon component */
+  Icon?: HeroSlideButtonIcon;
+  href?: string;
+  target?: string;
+  rel?: string;
+  onClick?: () => void;
+  /** Extra classes merged after variant styles */
+  className?: string;
+  /** `"mdUp"` = hidden on small screens, inline-flex from md (matches previous secondary CTA) */
+  visibility?: "always" | "mdUp";
+}
 
 export interface HeroSlide {
   name: string;
@@ -18,8 +38,8 @@ export interface HeroSlide {
   meta?: { messages?: string; likes?: string };
   /** Optional override for the small pill above the headline (default: "Featured today") */
   badge?: string;
-  /** Optional override for the primary CTA label (default: "Chat now") */
-  cta?: string;
+  /** Row of CTAs under the copy — each slide defines its own actions */
+  buttons?: HeroSlideButton[];
   /** Visual treatment. "portrait" (default) shows a tall portrait panel on the right.
    *  "banner" shows a full-bleed wide image — better for promo / sale / feature cards.
    *  "story" shows a book-cover style card with chapter/episode metadata.
@@ -37,6 +57,30 @@ export interface HeroSlide {
   premiumPlans?: { name: string; price: string; period: string; perks: string[]; highlight?: boolean; bonus?: string }[];
   /** Feature highlight, shown when layout === "feature" */
   featureMeta?: { eyebrow?: string; bullets?: string[] };
+}
+
+function heroSlideButtonClasses(btn: HeroSlideButton): string {
+  const vis = btn.visibility === "mdUp" ? "hidden md:inline-flex" : "inline-flex";
+  const core = `${vis} h-11 items-center gap-2 rounded-full px-6 text-sm`;
+  let variant = "";
+  switch (btn.variant) {
+    case "primary":
+      variant =
+        "font-bold bg-primary text-primary-foreground transition-transform hover:scale-[1.03]";
+      break;
+    case "onHero":
+      variant = "font-bold bg-white text-black transition-transform hover:scale-[1.03]";
+      break;
+    case "ghost":
+      variant =
+        "font-semibold text-white backdrop-blur transition-colors bg-white/10 hover:bg-white/20";
+      break;
+    case "premiumMuted":
+      variant =
+        "font-semibold text-white backdrop-blur transition-colors bg-primary/15 hover:bg-primary/25 ring-1 ring-primary/40";
+      break;
+  }
+  return `${core} ${variant} ${btn.className ?? ""}`.trim();
 }
 
 interface Props {
@@ -832,44 +876,39 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
             </div>
           )}
 
-          <div className="flex flex-wrap items-center gap-3 pt-2">
-            {slide.layout !== "premium" && (
-              <button className={`inline-flex h-11 items-center gap-2 rounded-full px-6 text-sm font-bold transition-transform hover:scale-[1.03] ${
-                slide.layout === "feature"
-                  ? "bg-primary text-primary-foreground"
-                  : slide.layout === "story"
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-white text-black"
-              }`}>
-                {slide.layout === "story" ? (
-                  <BookOpen className="h-4 w-4" />
-                ) : slide.layout === "feature" ? (
-                  <Wand2 className="h-4 w-4" />
-                ) : slide.layout === "creators" ? (
-                  <Trophy className="h-4 w-4" />
-                ) : slide.layout === "banner" ? (
-                  <Sparkles className="h-4 w-4" />
-                ) : (
-                  <MessageCircle className="h-4 w-4" />
-                )}
-                {slide.cta ?? (
-                  slide.layout === "story" ? "Play Story"
-                  : slide.layout === "feature" ? "Try it now"
-                  : "Chat now"
-                )}
-              </button>
-            )}
-            {slide.layout !== "creators" && (
-              <button className={`h-11 items-center gap-2 rounded-full px-6 text-sm font-semibold text-white backdrop-blur transition-colors ${
-                slide.layout === "premium"
-                  ? "inline-flex bg-primary/15 hover:bg-primary/25 ring-1 ring-primary/40"
-                  : "hidden bg-white/10 hover:bg-white/20 md:inline-flex"
-              }`}>
-                {slide.layout === "story" ? <Film className="h-4 w-4" /> : slide.layout === "premium" ? <Star className="h-4 w-4" /> : slide.layout === "feature" ? <BookOpen className="h-4 w-4" /> : <User className="h-4 w-4" />}
-                {slide.layout === "story" ? "View Episodes" : slide.layout === "premium" ? "Compare plans" : slide.layout === "feature" ? "View all stories" : "View profile"}
-              </button>
-            )}
-          </div>
+          {slide.buttons && slide.buttons.length > 0 && (
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              {slide.buttons.map((b, idx) => {
+                const Icon = b.Icon;
+                const cn = heroSlideButtonClasses(b);
+                const content = (
+                  <>
+                    {Icon ? <Icon className="h-4 w-4 shrink-0" /> : null}
+                    {b.label}
+                  </>
+                );
+                if (b.href) {
+                  return (
+                    <a
+                      key={`${b.label}-${idx}`}
+                      href={b.href}
+                      className={cn}
+                      onClick={b.onClick}
+                      target={b.target}
+                      rel={b.rel ?? (b.target === "_blank" ? "noopener noreferrer" : undefined)}
+                    >
+                      {content}
+                    </a>
+                  );
+                }
+                return (
+                  <button key={`${b.label}-${idx}`} type="button" className={cn} onClick={b.onClick}>
+                    {content}
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 
