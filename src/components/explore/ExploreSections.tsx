@@ -41,7 +41,8 @@ export interface ExploreViewStory {
 
 export interface ExploreViewVideo {
   id: string
-  imageUrl: string
+  poster: string
+  video: string
   href?: string
   likes?: number | string
 }
@@ -289,7 +290,8 @@ export const ExploreVideosSection = ({
       {posts.map((v, i) => (
         <ExploreVideoCard
           key={`${v.id}-${i}`}
-          imageUrl={v.imageUrl}
+          poster={v.poster}
+          video={v.video}
           href={v.href}
           likes={v.likes}
           onClick={onPostClick ? () => onPostClick(v) : undefined}

@@ -38,6 +38,7 @@ import {
   type ExploreViewVideo,
   type ExploreViewWhatsNew,
 } from "../components/explore/ExploreSections";
+import { exploreVideoFeed } from "../data/exploreVideoFeed";
 import { type CinematicHeroLabels, type HeroSlide } from "../components/explore/CinematicHero";
 import type { Service } from "../components/explore/SystemStatusIndicator";
 import type { StoryContentCardLabels } from "../components/explore/StoryContentCard";
@@ -112,16 +113,6 @@ const babeCategories: ExploreViewSectionCategory[] = [
 const newReleaseTags: ExploreViewSectionCategory[] = [
   { label: "New today" }, { label: "This week" }, { label: "Rising stars" }, { label: "Editor's pick" },
   { label: "Most chatted" }, { label: "Most liked" }, { label: "Trending now" }, { label: "Hidden gems" },
-];
-
-const trendingVideosBase: Omit<ExploreViewVideo, "imageUrl">[] = [
-  { id: "v1", likes: "2.1K" },
-  { id: "v2", likes: "1.8K" },
-  { id: "v3", likes: "1.4K" },
-  { id: "v4", likes: "987" },
-  { id: "v5", likes: "812" },
-  { id: "v6", likes: "640" },
-  { id: "v7", likes: "523" },
 ];
 
 const trendingBabesBase: Omit<ExploreViewBabe, "imageUrl">[] = [
@@ -860,15 +851,9 @@ const Explore = () => {
     imageUrl: img(`fav-${b.name}-${i}`),
   }));
 
-  const trendingVideos: ExploreViewVideo[] = trendingVideosBase.map((v) => ({
-    ...v,
-    imageUrl: img(`vid-${v.id}`, 260, 380),
-  }));
+  const trendingVideos: ExploreViewVideo[] = exploreVideoFeed;
 
-  const hotVideos: ExploreViewVideo[] = [...trendingVideosBase, ...trendingVideosBase].map((v, i) => ({
-    ...v,
-    imageUrl: img(`hot-${v.id}-${i}`, 260, 380),
-  }));
+  const hotVideos: ExploreViewVideo[] = [...exploreVideoFeed, ...exploreVideoFeed];
 
   const continueStories: ExploreViewStory[] = [...featuredStories, ...newEpisodes].map((s, i) => ({
     ...s,
