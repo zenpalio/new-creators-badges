@@ -133,7 +133,7 @@ const BadgeCard = ({ name, aura, tier, unlocked, claimed = true, isNew = false, 
         className={`relative w-[140px] h-[140px] sm:w-[164px] sm:h-[164px] rounded-[1.25rem] sm:rounded-[1.75rem] border border-border/30 flex items-center justify-center transition-transform duration-300 ${
           unlocked ? "hover:scale-[1.03]" : "opacity-45 grayscale"
         }`}
-        style={{ backgroundColor: "hsl(var(--popover))", backgroundImage: "none" }}
+        style={{ backgroundColor: "hsl(var(--popover-v2))", backgroundImage: "none" }}
       >
         <img
           src={resolveImageSrc(images[tier])}

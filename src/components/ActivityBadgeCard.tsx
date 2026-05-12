@@ -17,7 +17,7 @@ const ActivityBadgeCard = ({ name, description, imageUrl, completed, claimed, eq
     <div className="flex flex-col items-center gap-2 cursor-pointer" onClick={onClick}>
       <div
         className="relative w-full aspect-square max-w-[164px] rounded-[1.25rem] sm:rounded-[1.75rem] border border-border/30 flex items-center justify-center transition-transform duration-300 hover:scale-[1.03]"
-        style={{ backgroundColor: "hsl(var(--popover))", backgroundImage: "none" }}
+        style={{ backgroundColor: "hsl(var(--popover-v2))", backgroundImage: "none" }}
       >
         <img
           src={imageUrl}

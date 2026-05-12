@@ -32,7 +32,7 @@ const ActivityBadgePopup = ({ name, description, imageUrl, completed, claimed, e
         className="relative w-[320px] sm:w-[380px] rounded-2xl border border-border/20 p-6 flex flex-col items-center text-center overflow-hidden animate-in zoom-in-90 fade-in duration-500"
         onClick={(e) => e.stopPropagation()}
         style={{
-          backgroundColor: "hsl(var(--popover))",
+          backgroundColor: "hsl(var(--popover-v2))",
           backgroundImage: "none",
           boxShadow: equipped
             ? `0 0 60px ${effect.glowColor.replace(")", " / 0.3)")}, 0 0 120px ${effect.glowColor.replace(")", " / 0.1)")}`

@@ -210,7 +210,7 @@ const ProfileBadgeShowcase = ({ equippedBadges, onRemove }: ProfileBadgeShowcase
               {/* Badge container */}
               <div
                 className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border border-border/30 flex items-center justify-center cursor-pointer overflow-visible"
-                style={{ backgroundColor: "hsl(var(--popover))" }}
+                style={{ backgroundColor: "hsl(var(--popover-v2))" }}
               >
                 {/* Animated image */}
                 <div style={animationStyles[effect.animation] || animationStyles.float}>

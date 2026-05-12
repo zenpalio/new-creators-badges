@@ -55,7 +55,7 @@ const BadgePopup = ({ name, aura, tokens, tier, unlocked, claimed = true, imageS
         className="relative w-[320px] sm:w-[380px] rounded-2xl border border-border/20 p-6 flex flex-col items-center text-center overflow-hidden animate-in zoom-in-90 fade-in duration-500"
         onClick={(e) => e.stopPropagation()}
         style={{
-          backgroundColor: "hsl(var(--popover))",
+          backgroundColor: "hsl(var(--popover-v2))",
           backgroundImage: "none",
           boxShadow: unlocked
             ? `0 0 60px hsl(${glowHsl} / 0.25), 0 0 120px hsl(${glowHsl} / 0.1)`

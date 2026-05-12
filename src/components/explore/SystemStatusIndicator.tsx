@@ -62,7 +62,7 @@ export default function SystemStatusIndicator({
       <PopoverContent
         align="end"
         sideOffset={8}
-        className="w-64 rounded-lg border border-border/60 bg-popover/95 p-3 text-popover-foreground backdrop-blur-xl"
+        className="w-64 rounded-lg border border-border/60 bg-popover-v2/95 p-3 text-popover-v2-foreground backdrop-blur-xl"
       >
         <p className="text-sm leading-snug text-foreground/90">{message}</p>
         {affected.length > 0 && (
