@@ -66,6 +66,12 @@ export type {
 } from "./components/explore/ExploreSections";
 export type { HeroSlide, HeroMedia, HeroSlideButton, HeroSlideButtonVariant, HeroSlideButtonIcon } from "./components/explore/CinematicHero";
 export { default as CinematicHero } from "./components/explore/CinematicHero";
+export { default as SystemStatusIndicator } from "./components/explore/SystemStatusIndicator";
+export type {
+  ServiceStatus,
+  Service,
+  SystemStatusIndicatorProps,
+} from "./components/explore/SystemStatusIndicator";
 export { default as FloatingToolsFAB, FloatingToolsFabMainButton } from "./components/explore/FloatingToolsFAB";
 export type {
   FloatingToolsFabMainButtonProps,

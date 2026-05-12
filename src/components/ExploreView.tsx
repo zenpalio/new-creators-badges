@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type MutableRefObject, type ReactNode } fr
 import { Bell, Menu } from "lucide-react";
 import CinematicHero, { type HeroSlide } from "./explore/CinematicHero";
 import SystemStatusIndicator from "./explore/SystemStatusIndicator";
+import type { Service } from "./explore/SystemStatusIndicator";
 
 export interface ExploreViewProps {
   heroSlides: HeroSlide[];
@@ -10,6 +11,11 @@ export interface ExploreViewProps {
   notificationCount?: number;
   menuAriaLabel?: string;
   notificationsAriaLabel?: string;
+  /** When set, shows a header status control if any service is not operational */
+  systemStatus?: {
+    services: Service[];
+    message: string;
+  };
   children: ReactNode;
   className?: string;
 }
@@ -61,6 +67,7 @@ export interface ExploreHeaderActionsProps {
   onNotifications?: () => void;
   notificationCount?: number;
   notificationsAriaLabel?: string;
+  systemStatus?: ExploreViewProps["systemStatus"];
 }
 
 export function ExploreMenuButton({
@@ -103,10 +110,13 @@ export function ExploreHeaderActions({
   onNotifications,
   notificationCount,
   notificationsAriaLabel,
+  systemStatus,
 }: ExploreHeaderActionsProps) {
   return (
     <div className="pointer-events-auto flex items-center gap-1">
-      <SystemStatusIndicator />
+      {systemStatus ? (
+        <SystemStatusIndicator services={systemStatus.services} message={systemStatus.message} />
+      ) : null}
       <ExploreNotificationsButton
         onClick={onNotifications}
         notificationCount={notificationCount}
@@ -123,6 +133,7 @@ export function ExploreView({
   notificationCount,
   menuAriaLabel = "Open menu",
   notificationsAriaLabel = "Notifications",
+  systemStatus,
   children,
   className,
 }: ExploreViewProps) {
@@ -149,6 +160,7 @@ export function ExploreView({
             onNotifications={onNotifications}
             notificationCount={notificationCount}
             notificationsAriaLabel={notificationsAriaLabel}
+            systemStatus={systemStatus}
           />
         </header>
 

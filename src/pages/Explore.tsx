@@ -39,6 +39,7 @@ import {
   type ExploreViewWhatsNew,
 } from "../components/explore/ExploreSections";
 import { type HeroSlide } from "../components/explore/CinematicHero";
+import type { Service } from "../components/explore/SystemStatusIndicator";
 import { type BadgeTier } from "../components/BadgeCard";
 import bannerStory from "../assets/hero/banner-story.jpg";
 import storyCreatorHero from "../assets/story-creator-hero.jpg";
@@ -763,6 +764,17 @@ const footerLinks: ExploreViewFooterLinks = {
   },
 };
 
+const exploreSystemStatus: { services: Service[]; message: string } = {
+  services: [
+    { name: "Chat", status: "operational" },
+    { name: "Image generation", status: "operational" },
+    { name: "Video generation", status: "degraded", note: "Slower than usual" },
+    { name: "Voice", status: "operational" },
+    { name: "Payments", status: "operational" },
+  ],
+  message: "Some features are temporarily unavailable.",
+};
+
 const Explore = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -864,6 +876,7 @@ const Explore = () => {
         onMenu={() => setSidebarOpen(true)}
         onNotifications={() => setNotificationsOpen(true)}
         notificationCount={14}
+        systemStatus={exploreSystemStatus}
       >
         <PostsSection
           title="Your babes are waiting"
