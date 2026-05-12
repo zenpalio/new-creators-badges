@@ -98,5 +98,6 @@ export type {
   NotificationsSidebarLabels,
   NotificationsSidebarStatusItem,
   NotificationsSidebarStatusType,
+  NotificationRowLinkProps,
 } from "./components/NotificationsSidebar";
 export { default as AnnouncementDialog } from "./components/AnnouncementDialog";

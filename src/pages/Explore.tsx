@@ -14,10 +14,12 @@ import {
   Star,
   Wand2,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import SideNav from "../components/SideNav";
 import NotificationsSidebar, {
   type Announcement,
   type Notification,
+  type NotificationRowLinkProps,
   type NotificationsSidebarLabels,
   type NotificationsSidebarStatusItem,
 } from "../components/NotificationsSidebar";
@@ -713,6 +715,12 @@ const announcements: Announcement[] = whatsNewItems
     outro: n.announcement.outro,
   }));
 
+const ExploreNotificationLink = ({ href, children, ...rest }: NotificationRowLinkProps) => (
+  <Link to={href} {...rest}>
+    {children}
+  </Link>
+);
+
 const mockNotifications = [
   {
     id: "n1",
@@ -1081,6 +1089,7 @@ const Explore = () => {
         announcements={announcements}
         labels={exploreNotificationsSidebarLabels}
         systemStatusItems={exploreNotificationsSidebarStatusItems}
+        notificationLinkComponent={ExploreNotificationLink}
         onMarkAllRead={markAllNotificationsRead}
         onNotificationClick={(n) =>
           setNotifications((prev) =>

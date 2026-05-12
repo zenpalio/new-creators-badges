@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ComponentType, type AnchorHTMLAttributes, type ElementType } from "react";
 import { createPortal } from "react-dom";
 import { CheckCheck, X } from "lucide-react";
 import AnnouncementDialog from "./AnnouncementDialog";
@@ -35,6 +35,11 @@ export type Notification = {
   href?: string;
   /** Defaults to `_self`. Use `_blank` for external URLs (adds `rel="noopener noreferrer"`). */
   hrefTarget?: "_blank" | "_self";
+};
+
+/** Props passed to `notificationLinkComponent` (or native `<a>` when omitted). Map `href` → `to` for React Router inside your component. */
+export type NotificationRowLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
+  href: string;
 };
 
 /** Status strip row in NotificationsSidebar — message copy comes from the parent. */
@@ -85,6 +90,8 @@ interface NotificationsSidebarProps {
   labels: NotificationsSidebarLabels;
   /** System status rows; omit or pass [] to hide the strip. */
   systemStatusItems?: NotificationsSidebarStatusItem[];
+  /** When set, notification rows with `href` render with this instead of `<a>` (e.g. React Router `Link`). */
+  notificationLinkComponent?: ComponentType<NotificationRowLinkProps>;
   onMarkAllRead: () => void;
   onNotificationClick?: (notification: Notification) => void;
 }
@@ -97,6 +104,7 @@ const NotificationsSidebar = ({
   announcements,
   labels,
   systemStatusItems = [],
+  notificationLinkComponent: NotificationLink,
   onMarkAllRead,
   onNotificationClick,
 }: NotificationsSidebarProps) => {
@@ -168,6 +176,7 @@ const NotificationsSidebar = ({
                 {notifications.map((n) => {
                   const isUnread = !!n.unread;
                   const isInteractive = !!(n.href || onNotificationClick);
+                  const LinkRoot = (NotificationLink ?? "a") as ElementType<NotificationRowLinkProps>;
                   const rowClassName = `relative flex w-full items-center gap-3 px-5 py-3 text-left transition-colors ${
                     isInteractive ? "cursor-pointer hover:bg-muted-v2/30" : ""
                   } ${isUnread ? "bg-primary-v2/5" : ""}`;
@@ -200,17 +209,17 @@ const NotificationsSidebar = ({
                   );
                   const rowContent =
                     n.href != null && n.href !== "" ? (
-                      <a
+                      <LinkRoot
                         href={n.href}
                         className={`${rowClassName} text-inherit no-underline`}
                         aria-label={rowAriaLabel}
+                        onClick={() => onNotificationClick?.(n)}
                         {...(n.hrefTarget === "_blank"
                           ? { target: "_blank" as const, rel: "noopener noreferrer" as const }
                           : {})}
-                        onClick={() => onNotificationClick?.(n)}
                       >
                         {rowInner}
-                      </a>
+                      </LinkRoot>
                     ) : onNotificationClick ? (
                       <button
                         type="button"
