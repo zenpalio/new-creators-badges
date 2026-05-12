@@ -35,6 +35,8 @@ export interface CreatorRankCardProps {
   name: string;
   avatarUrl: string;
   tier: BadgeTier;
+  /** Visible tier line; when omitted, raw `tier` is shown */
+  tierLabel?: string;
   verified?: boolean;
   href?: string;
   onClick?: () => void;
@@ -45,6 +47,7 @@ const CreatorRankCard = ({
   name,
   avatarUrl,
   tier,
+  tierLabel,
   href = "#",
   onClick,
 }: CreatorRankCardProps) => {
@@ -81,7 +84,7 @@ const CreatorRankCard = ({
         {/* Real tier badge in bottom-right of avatar */}
         <img
           src={badgeSrc}
-          alt={`${tier} badge`}
+          alt=""
           loading="lazy"
           className="absolute -bottom-1.5 -right-2 h-7 w-7 object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]"
         />
@@ -91,7 +94,7 @@ const CreatorRankCard = ({
       <div className="relative z-10 flex min-w-0 flex-1 flex-col">
         <span className="truncate text-sm font-bold text-white">{name}</span>
         <span className="mt-0.5 text-[10px] font-medium uppercase tracking-wider text-grey-light-3-v2">
-          {tier}
+          {tierLabel ?? tier}
         </span>
       </div>
 

@@ -61,7 +61,9 @@ const PostCard = ({
                 <ChatIcon className="h-3.5 w-3.5" />
                 {messageCount}
               </span>
-              <LikeButton className="text-[12px] font-medium text-white/90"><span>{likeCount ?? 0}</span></LikeButton>
+              <LikeButton className="text-[12px] font-medium text-white/90">
+                <span>{likeCount ?? 0}</span>
+              </LikeButton>
             </div>
           )}
         </div>

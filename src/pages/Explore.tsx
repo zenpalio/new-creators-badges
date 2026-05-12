@@ -38,8 +38,9 @@ import {
   type ExploreViewVideo,
   type ExploreViewWhatsNew,
 } from "../components/explore/ExploreSections";
-import { type HeroSlide } from "../components/explore/CinematicHero";
+import { type CinematicHeroLabels, type HeroSlide } from "../components/explore/CinematicHero";
 import type { Service } from "../components/explore/SystemStatusIndicator";
+import type { StoryContentCardLabels } from "../components/explore/StoryContentCard";
 import { type BadgeTier } from "../components/BadgeCard";
 import bannerStory from "../assets/hero/banner-story.jpg";
 import storyCreatorHero from "../assets/story-creator-hero.jpg";
@@ -764,7 +765,51 @@ const footerLinks: ExploreViewFooterLinks = {
   },
 };
 
-const exploreSystemStatus: { services: Service[]; message: string } = {
+const exploreHeroLabels: CinematicHeroLabels = {
+  defaultFeaturedBadge: "Featured today",
+  storyBadgeLabel: "Story",
+  episodeSingular: "episode",
+  episodePlural: "episodes",
+  chapterSingular: "chapter",
+  chapterPlural: "chapters",
+  chatsSuffix: "chats",
+  featureEyebrowFallback: "New feature",
+  featureChipImage: "Image",
+  featureChipVideo: "Video",
+  featureChipVoice: "Voice",
+  featureChipMusic: "Music",
+  defaultPremiumPlanName: "Premium",
+};
+
+const exploreStoryCardLabels: StoryContentCardLabels = {
+  storyBadge: "Story",
+  viewStory: "View Story",
+  episodeSingular: "episode",
+  episodePlural: "episodes",
+  sceneSingular: "scene",
+  scenePlural: "scenes",
+  imageAltFallback: "Story",
+};
+
+const exploreVideoCardImageAlt = "Video preview";
+
+const exploreReadMoreLabel = "Read more";
+
+const exploreTierLabels: Partial<Record<BadgeTier, string>> = {
+  newbie: "Newbie",
+  master: "Master",
+  legend: "Legend",
+  elite: "Elite",
+  grandmaster: "Grandmaster",
+  mythic: "Mythic",
+  immortal: "Immortal",
+};
+
+const exploreSystemStatus: {
+  services: Service[];
+  message: string;
+  statusLabels: { operational: string; degraded: string; down: string };
+} = {
   services: [
     { name: "Chat", status: "operational" },
     { name: "Image generation", status: "operational" },
@@ -773,6 +818,11 @@ const exploreSystemStatus: { services: Service[]; message: string } = {
     { name: "Payments", status: "operational" },
   ],
   message: "Some features are temporarily unavailable.",
+  statusLabels: {
+    operational: "Operational",
+    degraded: "Degraded",
+    down: "Down",
+  },
 };
 
 const Explore = () => {
@@ -850,10 +900,10 @@ const Explore = () => {
   }));
 
   const floatingToolsItems: FloatingToolsFabItem[] = [
-    { icon: Users, label: "Create Babe", ariaLabel: "Create Babe", onClick: () => {} },
-    { icon: ImageIcon, label: "Create Image", ariaLabel: "Create Image", onClick: () => {} },
-    { icon: Film, label: "Create Video", ariaLabel: "Create Video", onClick: () => {} },
-    { icon: BookOpen, label: "Create Story", ariaLabel: "Create Story", onClick: () => {} },
+    { icon: Users, label: "Create Babe", onClick: () => {} },
+    { icon: ImageIcon, label: "Create Image", onClick: () => {} },
+    { icon: Film, label: "Create Video", onClick: () => {} },
+    { icon: BookOpen, label: "Create Story", onClick: () => {} },
   ];
 
   return (
@@ -873,6 +923,7 @@ const Explore = () => {
       />
       <ExploreView
         heroSlides={heroSlides}
+        heroLabels={exploreHeroLabels}
         onMenu={() => setSidebarOpen(true)}
         onNotifications={() => setNotificationsOpen(true)}
         notificationCount={14}
@@ -890,6 +941,7 @@ const Explore = () => {
           actionLabel="See all"
           posts={featuredStories}
           className="mt-2"
+          storyCardLabels={exploreStoryCardLabels}
         />
         <ExploreVideosSection
           title="Top trending videos"
@@ -897,6 +949,7 @@ const Explore = () => {
           categories={videoCategories}
           posts={trendingVideos}
           className="mt-2"
+          videoCardImageAlt={exploreVideoCardImageAlt}
         />
         <ExplorePromoSection promo={premiumPromo} />
         <ExploreCreatorsSection
@@ -904,10 +957,12 @@ const Explore = () => {
           actionLabel="See all"
           posts={topCreators}
           className="mt-2"
+          tierLabels={exploreTierLabels}
         />
         <ExploreWhatsNewSection
           title="What's new"
           actionLabel="See all"
+          readMoreLabel={exploreReadMoreLabel}
           posts={whatsNewPosts}
           className="mt-2"
           onPostClick={(post) => {
@@ -951,6 +1006,7 @@ const Explore = () => {
           actionLabel="See all"
           posts={newEpisodes}
           className="mt-2"
+          storyCardLabels={exploreStoryCardLabels}
         />
         <ExplorePromoSection promo={featurePromo} />
         <ExploreCreatorsSection
@@ -958,6 +1014,7 @@ const Explore = () => {
           actionLabel="See all"
           posts={risingCreators}
           className="mt-2"
+          tierLabels={exploreTierLabels}
         />
         <PostsSection
           title="Recommended for you"
@@ -971,12 +1028,14 @@ const Explore = () => {
           actionLabel="See all"
           posts={continueStories}
           className="mt-2"
+          storyCardLabels={exploreStoryCardLabels}
         />
         <ExploreVideosSection
           title="Hot right now"
           actionLabel="See all"
           posts={hotVideos}
           className="mt-2"
+          videoCardImageAlt={exploreVideoCardImageAlt}
         />
         <ExplorePromoSection promo={premiumPromo2} />
         <PostsSection

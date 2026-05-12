@@ -1,6 +1,16 @@
 import { BookOpen, Star, Layers, Film } from "lucide-react";
 import LikeButton from "./LikeButton";
 
+export type StoryContentCardLabels = {
+  storyBadge: string;
+  viewStory: string;
+  episodeSingular: string;
+  episodePlural: string;
+  sceneSingular: string;
+  scenePlural: string;
+  imageAltFallback: string;
+};
+
 export interface StoryContentCardProps {
   src: string;
   title?: string;
@@ -12,6 +22,7 @@ export interface StoryContentCardProps {
   ratingCount?: number;
   likes?: number;
   onClick?: () => void;
+  labels: StoryContentCardLabels;
 }
 
 /**
@@ -29,7 +40,11 @@ const StoryContentCard = ({
   ratingCount = 0,
   likes,
   onClick,
+  labels,
 }: StoryContentCardProps) => {
+  const episodeWord = episodeCount === 1 ? labels.episodeSingular : labels.episodePlural;
+  const sceneWord = totalScenes === 1 ? labels.sceneSingular : labels.scenePlural;
+
   return (
     <a
       href={href}
@@ -40,7 +55,7 @@ const StoryContentCard = ({
       {src ? (
         <img
           src={src}
-          alt={title || "Story"}
+          alt={title || labels.imageAltFallback}
           loading="lazy"
           className="h-full w-full object-cover object-top transition-transform duration-300 md:group-hover:scale-[1.03]"
         />
@@ -53,7 +68,7 @@ const StoryContentCard = ({
       {/* Top badge */}
       <div className="absolute left-2.5 top-2.5 z-10">
         <span className="flex items-center gap-1 rounded-lg border border-border-v2/30 bg-background-v2/70 px-2.5 py-1 text-[11px] font-medium text-foreground-v2 backdrop-blur-sm">
-          <BookOpen className="h-3.5 w-3.5" /> Story
+          <BookOpen className="h-3.5 w-3.5" /> {labels.storyBadge}
         </span>
       </div>
 
@@ -83,11 +98,11 @@ const StoryContentCard = ({
         <div className="flex flex-wrap items-center gap-3">
           <span className="flex items-center gap-1 text-[11px] text-white/80">
             <Film className="h-3.5 w-3.5" />
-            {episodeCount} {episodeCount === 1 ? "episode" : "episodes"}
+            {episodeCount} {episodeWord}
           </span>
           <span className="flex items-center gap-1 text-[11px] text-white/80">
             <Layers className="h-3.5 w-3.5" />
-            {totalScenes} {totalScenes === 1 ? "scene" : "scenes"}
+            {totalScenes} {sceneWord}
           </span>
           {likes != null && (
             <LikeButton count={likes} className="text-[11px] text-white/80 hover:text-white" />
@@ -98,7 +113,7 @@ const StoryContentCard = ({
       {/* Hover overlay (desktop only) */}
       <div className="pointer-events-none absolute inset-0 z-[1] hidden items-center justify-center bg-black/0 opacity-0 transition-all duration-300 md:flex md:group-hover:bg-black/40 md:group-hover:opacity-100">
         <span className="rounded-full border border-white/20 bg-white/20 px-4 py-2 text-xs font-semibold text-white backdrop-blur-sm">
-          View Story
+          {labels.viewStory}
         </span>
       </div>
     </a>

@@ -35,7 +35,7 @@ export {
 export { default as PostCard } from "./components/explore/PostCard";
 export type { PostCardProps } from "./components/explore/PostCard";
 export { default as StoryContentCard } from "./components/explore/StoryContentCard";
-export type { StoryContentCardProps } from "./components/explore/StoryContentCard";
+export type { StoryContentCardProps, StoryContentCardLabels } from "./components/explore/StoryContentCard";
 export { default as CreatorRankCard } from "./components/explore/CreatorRankCard";
 export type { CreatorRankCardProps } from "./components/explore/CreatorRankCard";
 export { default as ExploreVideoCard } from "./components/explore/ExploreVideoCard";
@@ -64,7 +64,7 @@ export type {
   ExploreStartCreatingSectionProps,
   ExploreFooterSectionProps,
 } from "./components/explore/ExploreSections";
-export type { HeroSlide, HeroMedia, HeroSlideButton, HeroSlideButtonVariant, HeroSlideButtonIcon } from "./components/explore/CinematicHero";
+export type { HeroSlide, HeroMedia, HeroSlideButton, HeroSlideButtonVariant, HeroSlideButtonIcon, CinematicHeroLabels } from "./components/explore/CinematicHero";
 export { default as CinematicHero } from "./components/explore/CinematicHero";
 export { default as CinematicHeroPlaceholder } from "./components/explore/CinematicHeroPlaceholder";
 export type { CinematicHeroPlaceholderProps } from "./components/explore/CinematicHeroPlaceholder";

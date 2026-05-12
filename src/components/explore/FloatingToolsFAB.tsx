@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 export interface FloatingToolsFabItem {
   icon: ComponentType<{ className?: string }>;
   label: ReactNode;
-  ariaLabel: string;
   onClick: () => void;
 }
 
@@ -57,7 +56,6 @@ export interface FloatingToolsFABProps {
   items: FloatingToolsFabItem[];
   backdropClassName?: string;
   contentClassName?: string;
-
 }
 
 const FloatingToolsFAB = ({ items, backdropClassName, contentClassName }: FloatingToolsFABProps) => {
@@ -96,7 +94,6 @@ const FloatingToolsFAB = ({ items, backdropClassName, contentClassName }: Floati
                 tool.onClick();
                 setIsOpen(false);
               }}
-              aria-label={tool.ariaLabel}
               className={`group relative flex items-center transition-all duration-200 ease-out ${
                 isOpen
                   ? "pointer-events-auto translate-y-0 scale-100 opacity-100"

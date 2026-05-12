@@ -1,11 +1,16 @@
 import { useEffect, useRef, useState, type MutableRefObject, type ReactNode } from "react";
 import { Bell, Menu } from "lucide-react";
-import CinematicHero, { type HeroSlide } from "./explore/CinematicHero";
+import CinematicHero, {
+  type CinematicHeroLabels,
+  type HeroSlide,
+} from "./explore/CinematicHero";
 import SystemStatusIndicator from "./explore/SystemStatusIndicator";
-import type { Service } from "./explore/SystemStatusIndicator";
+import type { Service, SystemStatusIndicatorProps } from "./explore/SystemStatusIndicator";
 
 export interface ExploreViewProps {
   heroSlides: HeroSlide[];
+  /** Visible hero labels (supply defaults from the page, e.g. Explore) */
+  heroLabels: CinematicHeroLabels;
   onMenu: () => void;
   onNotifications?: () => void;
   notificationCount?: number;
@@ -15,6 +20,7 @@ export interface ExploreViewProps {
   systemStatus?: {
     services: Service[];
     message: string;
+    statusLabels?: SystemStatusIndicatorProps["statusLabels"];
   };
   children: ReactNode;
   className?: string;
@@ -115,7 +121,11 @@ export function ExploreHeaderActions({
   return (
     <div className="pointer-events-auto flex items-center gap-1">
       {systemStatus ? (
-        <SystemStatusIndicator services={systemStatus.services} message={systemStatus.message} />
+        <SystemStatusIndicator
+          services={systemStatus.services}
+          message={systemStatus.message}
+          statusLabels={systemStatus.statusLabels}
+        />
       ) : null}
       <ExploreNotificationsButton
         onClick={onNotifications}
@@ -128,6 +138,7 @@ export function ExploreHeaderActions({
 
 export function ExploreView({
   heroSlides,
+  heroLabels,
   onMenu,
   onNotifications,
   notificationCount,
@@ -165,7 +176,7 @@ export function ExploreView({
         </header>
 
         {/* Cinematic hero (full-bleed) */}
-        <CinematicHero slides={heroSlides} />
+        <CinematicHero slides={heroSlides} labels={heroLabels} />
 
         {/* Edge-to-edge content rows */}
         <div className="relative z-10 flex w-full flex-col gap-6 px-4 pb-16 pt-6 md:px-8 lg:px-12">

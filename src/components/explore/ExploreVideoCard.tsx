@@ -6,6 +6,7 @@ export interface ExploreVideoCardProps {
   href?: string;
   likes?: number | string;
   onClick?: () => void;
+  imageAlt: string;
 }
 
 const ExploreVideoCard = ({
@@ -13,6 +14,7 @@ const ExploreVideoCard = ({
   href = "#",
   likes,
   onClick,
+  imageAlt,
 }: ExploreVideoCardProps) => (
   <a
     href={href}
@@ -22,7 +24,7 @@ const ExploreVideoCard = ({
     <div className="relative aspect-[13/19] w-full overflow-hidden">
       <img
         src={imageUrl}
-        alt=""
+        alt={imageAlt}
         loading="lazy"
         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
       />

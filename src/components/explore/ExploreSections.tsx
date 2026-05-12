@@ -1,7 +1,7 @@
 import { ArrowUpRight, type LucideIcon } from "lucide-react"
 import PostCard from "./PostCard"
 import HScroll from "./HScroll"
-import StoryContentCard from "./StoryContentCard"
+import StoryContentCard, { type StoryContentCardLabels } from "./StoryContentCard"
 import CreatorRankCard from "./CreatorRankCard"
 import ExploreVideoCard from "./ExploreVideoCard"
 import ExploreWhatsNewCard from "./ExploreWhatsNewCard"
@@ -209,6 +209,7 @@ export interface ExploreStoriesSectionProps {
   posts: ExploreViewStory[]
   onPostClick?: (post: ExploreViewStory) => void
   className?: string
+  storyCardLabels: StoryContentCardLabels
 }
 
 export const ExploreStoriesSection = ({
@@ -219,6 +220,7 @@ export const ExploreStoriesSection = ({
   posts,
   onPostClick,
   className,
+  storyCardLabels,
 }: ExploreStoriesSectionProps) => (
   <section className={className}>
     <SectionTitle
@@ -241,6 +243,7 @@ export const ExploreStoriesSection = ({
           ratingCount={s.ratingCount}
           likes={s.likes}
           onClick={onPostClick ? () => onPostClick(s) : undefined}
+          labels={storyCardLabels}
         />
       ))}
     </HScroll>
@@ -257,6 +260,7 @@ export interface ExploreVideosSectionProps {
   posts: ExploreViewVideo[]
   onPostClick?: (post: ExploreViewVideo) => void
   className?: string
+  videoCardImageAlt: string
 }
 
 export const ExploreVideosSection = ({
@@ -269,6 +273,7 @@ export const ExploreVideosSection = ({
   posts,
   onPostClick,
   className,
+  videoCardImageAlt,
 }: ExploreVideosSectionProps) => (
   <section className={className}>
     <SectionTitle
@@ -288,6 +293,7 @@ export const ExploreVideosSection = ({
           href={v.href}
           likes={v.likes}
           onClick={onPostClick ? () => onPostClick(v) : undefined}
+          imageAlt={videoCardImageAlt}
         />
       ))}
     </HScroll>
@@ -302,6 +308,7 @@ export interface ExploreCreatorsSectionProps {
   posts: ExploreViewCreatorRank[]
   onPostClick?: (post: ExploreViewCreatorRank) => void
   className?: string
+  tierLabels?: Partial<Record<BadgeTier, string>>
 }
 
 export const ExploreCreatorsSection = ({
@@ -312,6 +319,7 @@ export const ExploreCreatorsSection = ({
   posts,
   onPostClick,
   className,
+  tierLabels,
 }: ExploreCreatorsSectionProps) => (
   <section className={className}>
     <SectionTitle
@@ -327,6 +335,7 @@ export const ExploreCreatorsSection = ({
           rank={c.rank}
           name={c.name}
           tier={c.tier}
+          tierLabel={tierLabels?.[c.tier]}
           verified={c.verified}
           avatarUrl={c.avatarUrl}
           href={c.href}
@@ -342,7 +351,7 @@ export interface ExploreWhatsNewSectionProps {
   actionLabel?: string
   actionHref?: string
   onAction?: () => void
-  readMoreLabel?: string
+  readMoreLabel: string
   posts: ExploreViewWhatsNew[]
   onPostClick?: (post: ExploreViewWhatsNew) => void
   className?: string
@@ -353,7 +362,7 @@ export const ExploreWhatsNewSection = ({
   actionLabel,
   actionHref,
   onAction,
-  readMoreLabel = "Read more",
+  readMoreLabel,
   posts,
   onPostClick,
   className,

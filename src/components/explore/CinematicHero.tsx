@@ -36,9 +36,9 @@ export interface HeroSlide {
   media?: HeroMedia[];
   tags?: string[];
   meta?: { messages?: string; likes?: string };
-  /** Optional override for the small pill above the headline (default: "Featured today") */
+  /** Optional pill above the headline; falls back to `labels.defaultFeaturedBadge` when omitted */
   badge?: string;
-  /** Row of CTAs under the copy — each slide defines its own actions */
+  /** Row of CTAs below the headline — each slide defines its own actions */
   buttons?: HeroSlideButton[];
   /** Visual treatment. "portrait" (default) shows a tall portrait panel on the right.
    *  "banner" shows a full-bleed wide image — better for promo / sale / feature cards.
@@ -57,6 +57,23 @@ export interface HeroSlide {
   premiumPlans?: { name: string; price: string; period: string; perks: string[]; highlight?: boolean; bonus?: string }[];
   /** Feature highlight, shown when layout === "feature" */
   featureMeta?: { eyebrow?: string; bullets?: string[] };
+}
+
+/** Visible UI strings for the hero; pass from the page for i18n / labels */
+export interface CinematicHeroLabels {
+  defaultFeaturedBadge: string;
+  storyBadgeLabel: string;
+  episodeSingular: string;
+  episodePlural: string;
+  chapterSingular: string;
+  chapterPlural: string;
+  chatsSuffix: string;
+  featureEyebrowFallback: string;
+  featureChipImage: string;
+  featureChipVideo: string;
+  featureChipVoice: string;
+  featureChipMusic: string;
+  defaultPremiumPlanName: string;
 }
 
 function heroSlideButtonClasses(btn: HeroSlideButton): string {
@@ -88,9 +105,15 @@ interface Props {
   intervalMs?: number;
   /** How long each media item within a slide stays before crossfading */
   mediaIntervalMs?: number;
+  labels: CinematicHeroLabels;
 }
 
-const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Props) => {
+const CinematicHero = ({
+  slides,
+  intervalMs = 7000,
+  mediaIntervalMs = 3500,
+  labels,
+}: Props) => {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
 
@@ -316,7 +339,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                         {/* Top-left Story badge */}
                         <div className="absolute left-2.5 top-2.5 z-10">
                           <span className="flex items-center gap-1 rounded-lg border border-border-v2/30 bg-background-v2/70 px-2.5 py-1 text-[11px] font-medium text-foreground-v2 backdrop-blur-sm">
-                            <BookOpen className="h-3.5 w-3.5" /> Story
+                            <BookOpen className="h-3.5 w-3.5" /> {labels.storyBadgeLabel}
                           </span>
                         </div>
 
@@ -342,13 +365,13 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                             {episodes != null && (
                               <span className="flex items-center gap-1 text-[11px] text-white/80">
                                 <Film className="h-3.5 w-3.5" />
-                                {episodes} {episodes === 1 ? "episode" : "episodes"}
+                                {episodes} {episodes === 1 ? labels.episodeSingular : labels.episodePlural}
                               </span>
                             )}
                             {chapters != null && (
                               <span className="flex items-center gap-1 text-[11px] text-white/80">
                                 <Layers className="h-3.5 w-3.5" />
-                                {chapters} {chapters === 1 ? "chapter" : "chapters"}
+                                {chapters} {chapters === 1 ? labels.chapterSingular : labels.chapterPlural}
                               </span>
                             )}
                             {likes && (
@@ -461,7 +484,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
 
             if (isPremium) {
               const plans = s.premiumPlans ?? (s.premiumPlan
-                ? [{ name: "Premium", price: s.premiumPlan.price, period: s.premiumPlan.period, perks: s.premiumPlan.perks }]
+                ? [{ name: labels.defaultPremiumPlanName, price: s.premiumPlan.price, period: s.premiumPlan.period, perks: s.premiumPlan.perks }]
                 : []);
               return (
                 <div className="absolute inset-0 overflow-hidden">
@@ -552,10 +575,10 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
             if (isFeature) {
               const bullets = s.featureMeta?.bullets ?? [];
               const mediaChips = [
-                { icon: ImageIcon, label: "Image", color: "hsl(213 100% 60%)" },
-                { icon: Film, label: "Video", color: "hsl(280 80% 65%)" },
-                { icon: Mic, label: "Voice", color: "hsl(160 70% 55%)" },
-                { icon: Music, label: "Music", color: "hsl(45 90% 60%)" },
+                { icon: ImageIcon, label: labels.featureChipImage, color: "hsl(213 100% 60%)" },
+                { icon: Film, label: labels.featureChipVideo, color: "hsl(280 80% 65%)" },
+                { icon: Mic, label: labels.featureChipVoice, color: "hsl(160 70% 55%)" },
+                { icon: Music, label: labels.featureChipMusic, color: "hsl(45 90% 60%)" },
               ];
               return (
                 <div className="absolute inset-0 overflow-hidden">
@@ -606,7 +629,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                             <Wand2 className="h-4 w-4 text-primary-v2" />
                           </div>
                           <div>
-                            <div className="text-[10px] font-bold uppercase tracking-wider text-primary-v2">{s.featureMeta?.eyebrow ?? "New feature"}</div>
+                            <div className="text-[10px] font-bold uppercase tracking-wider text-primary-v2">{s.featureMeta?.eyebrow ?? labels.featureEyebrowFallback}</div>
                             <div className="text-sm font-bold text-white">{s.name}</div>
                           </div>
                         </div>
@@ -813,7 +836,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
         >
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-white/80 backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-primary-v2" />
-            {slide.badge ?? "Featured today"}
+            {slide.badge ?? labels.defaultFeaturedBadge}
           </span>
           <h1 className="text-4xl font-extrabold leading-[1.05] text-white drop-shadow-lg md:text-6xl">
             {slide.name}
@@ -840,11 +863,15 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
               {slide.storyMeta.chapters != null && (
                 <span className="flex items-center gap-1.5">
                   <BookOpen className="h-3.5 w-3.5 text-primary-v2" />
-                  {slide.storyMeta.chapters} chapters
+                  {slide.storyMeta.chapters}{" "}
+                  {slide.storyMeta.chapters === 1 ? labels.chapterSingular : labels.chapterPlural}
                 </span>
               )}
               {slide.storyMeta.episodes != null && (
-                <span>{slide.storyMeta.episodes} episodes</span>
+                <span>
+                  {slide.storyMeta.episodes}{" "}
+                  {slide.storyMeta.episodes === 1 ? labels.episodeSingular : labels.episodePlural}
+                </span>
               )}
               {slide.storyMeta.rating != null && (
                 <span className="flex items-center gap-1">
@@ -865,7 +892,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
               {slide.meta.messages && (
                 <span className="flex items-center gap-1.5">
                   <ChatIcon className="h-3.5 w-3.5" />
-                  {slide.meta.messages} chats
+                  {slide.meta.messages} {labels.chatsSuffix}
                 </span>
               )}
               {slide.meta.likes && (

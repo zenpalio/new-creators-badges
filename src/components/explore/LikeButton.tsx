@@ -1,7 +1,7 @@
 import { useState, MouseEvent, ReactNode } from "react";
 import { Heart } from "lucide-react";
 
-interface LikeButtonProps {
+export interface LikeButtonProps {
   count?: number;
   initialLiked?: boolean;
   iconClassName?: string;

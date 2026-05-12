@@ -6,7 +6,7 @@ export interface ExploreWhatsNewCardProps {
   title: string;
   description: string;
   href?: string;
-  readMoreLabel?: string;
+  readMoreLabel: string;
   onClick?: () => void;
 }
 
@@ -16,7 +16,7 @@ const ExploreWhatsNewCard = ({
   title,
   description,
   href = "#",
-  readMoreLabel = "Read more",
+  readMoreLabel,
   onClick,
 }: ExploreWhatsNewCardProps) => (
   <a href={href} onClick={onClick} className="block shrink-0">
