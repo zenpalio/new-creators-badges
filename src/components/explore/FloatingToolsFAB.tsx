@@ -25,7 +25,7 @@ export const FloatingToolsFabMainButton = ({
     onClick={onToggle}
     aria-label={isOpen ? "Close menu" : "Open create menu"}
     aria-expanded={isOpen}
-    className="relative flex h-[52px] w-[52px] items-center justify-center rounded-full bg-primary shadow-lg shadow-primary/30 transition-all hover:shadow-xl hover:brightness-110 active:scale-90"
+    className="relative flex h-[52px] w-[52px] items-center justify-center rounded-full bg-primary-v2 shadow-lg shadow-primary-v2/30 transition-all hover:shadow-xl hover:brightness-110 active:scale-90"
   >
     <span
       className={`flex items-center justify-center transition-transform duration-300 ${
@@ -33,16 +33,16 @@ export const FloatingToolsFabMainButton = ({
       }`}
     >
       {isOpen ? (
-        <X className="h-6 w-6 text-primary-foreground" />
+        <X className="h-6 w-6 text-primary-v2-foreground" />
       ) : (
-        <Plus className="h-6 w-6 text-primary-foreground" />
+        <Plus className="h-6 w-6 text-primary-v2-foreground" />
       )}
     </span>
 
     {/* Pulse ring when closed */}
     {!isOpen && (
       <span
-        className="pointer-events-none absolute inset-0 animate-ping rounded-full bg-primary/40"
+        className="pointer-events-none absolute inset-0 animate-ping rounded-full bg-primary-v2/40"
         style={{ animationDuration: "3s" }}
       />
     )}
@@ -105,11 +105,11 @@ const FloatingToolsFAB = ({ items, backdropClassName, contentClassName }: Floati
               style={{ transitionDelay: isOpen ? `${reverseIdx * 40}ms` : "0ms" }}
             >
               {/* Label tooltip */}
-              <span className="pointer-events-none absolute right-full mr-3 whitespace-nowrap rounded-lg border border-border bg-card px-2.5 py-1 text-xs font-medium text-foreground opacity-0 shadow-lg transition-opacity group-hover:opacity-100">
+              <span className="pointer-events-none absolute right-full mr-3 whitespace-nowrap rounded-lg border border-border-v2 bg-card-v2 px-2.5 py-1 text-xs font-medium text-foreground-v2 opacity-0 shadow-lg transition-opacity group-hover:opacity-100">
                 {tool.label}
               </span>
-              <div className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card shadow-lg transition-all hover:scale-110 hover:bg-muted hover:shadow-xl">
-                <Icon className="h-5 w-5 text-foreground" />
+              <div className="flex h-11 w-11 items-center justify-center rounded-full border border-border-v2 bg-card-v2 shadow-lg transition-all hover:scale-110 hover:bg-muted-v2 hover:shadow-xl">
+                <Icon className="h-5 w-5 text-foreground-v2" />
               </div>
             </button>
           );

@@ -38,17 +38,17 @@ const ExploreSidebar = () => {
 
   return (
     <aside
-      className="fixed left-0 top-0 z-30 h-full w-sidebar-width flex-col border-r border-[#242529] bg-menu shadow-xl px-[17.75px] py-4 hidden md:flex"
+      className="fixed left-0 top-0 z-30 h-full w-sidebar-width flex-col border-r border-[#242529] bg-menu-v2 shadow-xl px-[17.75px] py-4 hidden md:flex"
     >
       {/* Logo + collapse */}
       <div className="flex items-center justify-between py-[9.25px] pl-2">
         <Link to="/" className="flex items-center gap-1.5">
-          <span className="text-base font-extrabold tracking-tight text-foreground">
-            mybabes<span className="text-primary">.ai</span>
+          <span className="text-base font-extrabold tracking-tight text-foreground-v2">
+            mybabes<span className="text-primary-v2">.ai</span>
           </span>
         </Link>
-        <button className="inline-flex w-[33px] h-[33px] items-center justify-center rounded-[5px] hover:bg-grey-dark-1 transition-colors">
-          <ChevronLeft className="h-5 w-5 text-grey-light-3" />
+        <button className="inline-flex w-[33px] h-[33px] items-center justify-center rounded-[5px] hover:bg-grey-dark-1-v2 transition-colors">
+          <ChevronLeft className="h-5 w-5 text-grey-light-3-v2" />
         </button>
       </div>
 
@@ -66,14 +66,14 @@ const ExploreSidebar = () => {
                   item.indent ? "pl-9" : ""
                 } ${
                   active
-                    ? "bg-grey-dark-1 text-white hover:bg-grey-dark-3"
-                    : "text-grey-light-3 hover:bg-grey-dark-1 hover:text-white"
+                    ? "bg-grey-dark-1-v2 text-white hover:bg-grey-dark-3-v2"
+                    : "text-grey-light-3-v2 hover:bg-grey-dark-1-v2 hover:text-white"
                 }`}
               >
                 <Icon className="h-[18px] w-[18px] shrink-0" />
                 <span className="flex-1 truncate">{item.label}</span>
                 {item.badge && (
-                  <span className="rounded-md bg-primary/20 px-1.5 py-0.5 text-[10px] font-bold text-primary">
+                  <span className="rounded-md bg-primary-v2/20 px-1.5 py-0.5 text-[10px] font-bold text-primary-v2">
                     {item.badge}
                   </span>
                 )}
@@ -89,7 +89,7 @@ const ExploreSidebar = () => {
         </button>
 
         {/* Latest conversations */}
-        <div className="mt-5 flex items-center gap-2 px-2 text-[13px] font-medium text-grey-light-4">
+        <div className="mt-5 flex items-center gap-2 px-2 text-[13px] font-medium text-grey-light-4-v2">
           <ChatIcon className="h-4 w-4" />
           Latest conversations
         </div>
@@ -97,9 +97,9 @@ const ExploreSidebar = () => {
           {recentChats.map((name, i) => (
             <button
               key={i}
-              className="flex items-center gap-2 rounded-lg px-[10px] py-[6px] text-sm text-grey-light-3 hover:bg-grey-dark-1 hover:text-white transition-colors text-left"
+              className="flex items-center gap-2 rounded-lg px-[10px] py-[6px] text-sm text-grey-light-3-v2 hover:bg-grey-dark-1-v2 hover:text-white transition-colors text-left"
             >
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-grey-dark-2 text-[10px] font-bold text-grey-light-2 shrink-0">
+              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-grey-dark-2-v2 text-[10px] font-bold text-grey-light-2-v2 shrink-0">
                 {initials(name)}
               </div>
               <span className="truncate">{name}</span>
@@ -112,15 +112,15 @@ const ExploreSidebar = () => {
       <div className="border-t border-[#242529] pt-3 mt-2">
         <Link
           to="/explore/subscription"
-          className="flex items-center justify-between rounded-lg bg-grey-dark-1 px-3 py-2 hover:bg-grey-dark-2 transition-colors"
+          className="flex items-center justify-between rounded-lg bg-grey-dark-1-v2 px-3 py-2 hover:bg-grey-dark-2-v2 transition-colors"
         >
           <div className="flex items-center gap-2">
-            <Coins className="h-4 w-4 text-accent-yellow" />
+            <Coins className="h-4 w-4 text-accent-yellow-v2" />
             <span className="text-sm font-bold text-white">90,163.5</span>
           </div>
-          <span className="rounded-md bg-primary px-2 py-0.5 text-[10px] font-bold text-white">+</span>
+          <span className="rounded-md bg-primary-v2 px-2 py-0.5 text-[10px] font-bold text-white">+</span>
         </Link>
-        <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 px-1 text-[11px] text-grey-light-4">
+        <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 px-1 text-[11px] text-grey-light-4-v2">
           <a href="#" className="hover:text-white">Terms & Privacy</a>
           <a href="#" className="hover:text-white">Guides</a>
         </div>

@@ -28,7 +28,7 @@ const PostCard = ({
     <a
       href={href}
       onClick={onClick}
-      className="group relative block w-[220px] shrink-0 cursor-pointer overflow-hidden rounded-2xl bg-grey-dark-1"
+      className="group relative block w-[220px] shrink-0 cursor-pointer overflow-hidden rounded-2xl bg-grey-dark-1-v2"
     >
       <div className="relative aspect-[13/19] w-full overflow-hidden">
         <img
@@ -51,7 +51,7 @@ const PostCard = ({
 
         <div className="absolute bottom-0 left-0 right-0 p-3">
           <h3 className="text-sm font-bold text-white leading-tight">{name}</h3>
-          <p className="mt-1 line-clamp-2 text-[11px] text-grey-light-3 leading-snug">
+          <p className="mt-1 line-clamp-2 text-[11px] text-grey-light-3-v2 leading-snug">
             {description}
           </p>
 

@@ -4,71 +4,71 @@
 
 @layer base {
   :root {
-    --background: 0 0% 7%;
-    --foreground: 0 0% 95%;
+    --background-v2: 0 0% 7%;
+    --foreground-v2: 0 0% 95%;
 
-    --card: 0 0% 7%;
-    --card-foreground: 0 0% 95%;
+    --card-v2: 0 0% 7%;
+    --card-foreground-v2: 0 0% 95%;
 
     --popover-v2: 0 0% 11%;
     --popover-foreground-v2: 0 0% 95%;
 
-    --primary: 213 100% 50%;
-    --primary-foreground: 0 0% 100%;
-    --primary-light: 213 100% 60%;
-    --primary-dark: 213 100% 40%;
-    --primary-disabled: 213 40% 40%;
+    --primary-v2: 213 100% 50%;
+    --primary-foreground-v2: 0 0% 100%;
+    --primary-light-v2: 213 100% 60%;
+    --primary-dark-v2: 213 100% 40%;
+    --primary-disabled-v2: 213 40% 40%;
 
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 0 0% 85%;
+    --secondary-v2: 0 0% 15%;
+    --secondary-foreground-v2: 0 0% 85%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 55%;
+    --muted-v2: 0 0% 15%;
+    --muted-foreground-v2: 0 0% 55%;
 
-    --accent: 0 0% 18%;
-    --accent-foreground: 0 0% 95%;
+    --accent-v2: 0 0% 18%;
+    --accent-foreground-v2: 0 0% 95%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive-v2: 0 84.2% 60.2%;
+    --destructive-foreground-v2: 0 0% 100%;
 
-    --border: 0 0% 18%;
-    --light-border: 0 0% 25%;
-    --input: 0 0% 18%;
-    --ring: 213 100% 50%;
+    --border-v2: 0 0% 18%;
+    --light-border-v2: 0 0% 25%;
+    --input-v2: 0 0% 18%;
+    --ring-v2: 213 100% 50%;
 
     --radius: 0.75rem;
 
-    --sidebar-bg: 0 0% 9%;
-    --sidebar-fg: 0 0% 75%;
-    --sidebar-hover: 0 0% 14%;
-    --sidebar-active: 0 0% 16%;
-    --sidebar-active-fg: 0 0% 100%;
+    --sidebar-bg-v2: 0 0% 9%;
+    --sidebar-fg-v2: 0 0% 75%;
+    --sidebar-hover-v2: 0 0% 14%;
+    --sidebar-active-v2: 0 0% 16%;
+    --sidebar-active-fg-v2: 0 0% 100%;
 
-    --tag-bg: 0 0% 20%;
-    --tag-fg: 0 0% 80%;
+    --tag-bg-v2: 0 0% 20%;
+    --tag-fg-v2: 0 0% 80%;
 
     /* Additional tokens from design system */
-    --selection-card: 0 0% 13%;
-    --selection-card-border: 0 0% 22%;
-    --trigger: 0 0% 14%;
-    --trigger-border: 0 0% 22%;
-    --message: 0 0% 12%;
-    --success: 142 71% 45%;
-    --warning: 38 92% 50%;
-    --divider: 0 0% 16%;
-    --menu: 0 0% 10%;
-    --premium: 43 96% 58%;
-    --white-secondary: 0 0% 75%;
-    --tertiary-text: 0 0% 45%;
-    --grey-dark-1: 0 0% 12%;
-    --grey-dark-2: 0 0% 16%;
-    --grey-dark-3: 0 0% 20%;
-    --grey-light-1: 0 0% 85%;
-    --grey-light-2: 0 0% 75%;
-    --grey-light-3: 0 0% 65%;
-    --grey-light-4: 0 0% 55%;
-    --accent-yellow: 43 96% 58%;
-    --system-red: 0 84% 60%;
+    --selection-card-v2: 0 0% 13%;
+    --selection-card-border-v2: 0 0% 22%;
+    --trigger-v2: 0 0% 14%;
+    --trigger-border-v2: 0 0% 22%;
+    --message-v2: 0 0% 12%;
+    --success-v2: 142 71% 45%;
+    --warning-v2: 38 92% 50%;
+    --divider-v2: 0 0% 16%;
+    --menu-v2: 0 0% 10%;
+    --premium-v2: 43 96% 58%;
+    --white-secondary-v2: 0 0% 75%;
+    --tertiary-text-v2: 0 0% 45%;
+    --grey-dark-1-v2: 0 0% 12%;
+    --grey-dark-2-v2: 0 0% 16%;
+    --grey-dark-3-v2: 0 0% 20%;
+    --grey-light-1-v2: 0 0% 85%;
+    --grey-light-2-v2: 0 0% 75%;
+    --grey-light-3-v2: 0 0% 65%;
+    --grey-light-4-v2: 0 0% 55%;
+    --accent-yellow-v2: 43 96% 58%;
+    --system-red-v2: 0 84% 60%;
 
     /* mybabes layout */
     --header-height: 56px;
@@ -79,10 +79,10 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border-v2;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background-v2 text-foreground-v2;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
 }

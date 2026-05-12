@@ -92,7 +92,7 @@ const tierBadgeGlowColors: Record<BadgeTier, string> = {
 };
 
 const statItems = [
-  { icon: Users, label: "FOLLOWERS", rank: "#1,438", count: "12.4K", iconClass: "w-4 h-4 text-primary mb-0.5" },
+  { icon: Users, label: "FOLLOWERS", rank: "#1,438", count: "12.4K", iconClass: "w-4 h-4 text-primary-v2 mb-0.5" },
   { icon: AuraIcon, label: "AURA", rank: "#892", count: "450", iconClass: "w-5 h-5 text-purple-500 mb-0.5" },
   { icon: Heart, label: "Likes", rank: "#2,105", count: "8.2K", iconClass: "w-4 h-4 text-red-500 fill-red-500 mb-0.5" },
 ];
@@ -251,11 +251,11 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background-v2">
       <SideNav open={navOpen} onClose={() => setNavOpen(false)} />
       <button
         onClick={() => setNavOpen(true)}
-        className={`fixed left-4 top-4 z-40 flex h-9 w-9 items-center justify-center text-foreground/90 transition-all duration-300 ease-out hover:opacity-70 ${
+        className={`fixed left-4 top-4 z-40 flex h-9 w-9 items-center justify-center text-foreground-v2/90 transition-all duration-300 ease-out hover:opacity-70 ${
           headerHidden ? "-translate-y-[150%] opacity-0" : "translate-y-0 opacity-100"
         }`}
         aria-label="Open menu"
@@ -357,20 +357,20 @@ const Profile = () => {
         </div>
 
         <div className="mb-6">
-          <p className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium mb-2 px-1">Ranking</p>
+          <p className="text-[11px] text-muted-v2-foreground uppercase tracking-wider font-medium mb-2 px-1">Ranking</p>
           <div className="grid grid-cols-3 gap-2 sm:gap-3">
             {statItems.map((stat) => (
               <div
                 key={stat.label}
-                className="flex flex-col items-center gap-1 rounded-xl p-3 sm:p-4 border border-border/30"
+                className="flex flex-col items-center gap-1 rounded-xl p-3 sm:p-4 border border-border-v2/30"
                 style={{ backgroundColor: "hsl(var(--popover-v2))", backgroundImage: "none" }}
               >
                 <stat.icon className={stat.iconClass} />
-                <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">
+                <span className="text-[10px] text-muted-v2-foreground uppercase tracking-wider font-medium">
                   {stat.label}
                 </span>
-                <span className="text-foreground font-bold text-lg sm:text-xl leading-tight">{stat.count}</span>
-                <span className="text-[10px] text-muted-foreground/60 font-medium">Rank {stat.rank}</span>
+                <span className="text-foreground-v2 font-bold text-lg sm:text-xl leading-tight">{stat.count}</span>
+                <span className="text-[10px] text-muted-v2-foreground/60 font-medium">Rank {stat.rank}</span>
               </div>
             ))}
           </div>
@@ -379,22 +379,22 @@ const Profile = () => {
         
 
         <Tabs defaultValue="aura" className="w-full">
-          <TabsList className="w-full bg-transparent border-b border-border/30 rounded-none h-auto p-0 mb-6">
+          <TabsList className="w-full bg-transparent border-b border-border-v2/30 rounded-none h-auto p-0 mb-6">
             <TabsTrigger
               value="aura"
-              className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-xs font-semibold uppercase tracking-wider py-3"
+              className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-primary-v2 data-[state=active]:bg-transparent data-[state=active]:shadow-none text-xs font-semibold uppercase tracking-wider py-3"
             >
               Aura Badges
             </TabsTrigger>
             <TabsTrigger
               value="activity"
-              className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-xs font-semibold uppercase tracking-wider py-3"
+              className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-primary-v2 data-[state=active]:bg-transparent data-[state=active]:shadow-none text-xs font-semibold uppercase tracking-wider py-3"
             >
               Activity
             </TabsTrigger>
             <TabsTrigger
               value="shop"
-              className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none text-xs font-semibold uppercase tracking-wider py-3"
+              className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-primary-v2 data-[state=active]:bg-transparent data-[state=active]:shadow-none text-xs font-semibold uppercase tracking-wider py-3"
             >
               Shop
             </TabsTrigger>
@@ -408,8 +408,8 @@ const Profile = () => {
 
           <TabsContent value="activity">
             <div className="mb-4">
-              <p className="text-xs text-muted-foreground mb-1">Complete activities to earn exclusive badges</p>
-              <p className="text-[10px] text-muted-foreground/60">{completedActivities.size}/{activityBadges.length} completed</p>
+              <p className="text-xs text-muted-v2-foreground mb-1">Complete activities to earn exclusive badges</p>
+              <p className="text-[10px] text-muted-v2-foreground/60">{completedActivities.size}/{activityBadges.length} completed</p>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
               {activityBadges.map((badge) => (
@@ -452,7 +452,7 @@ const Profile = () => {
 
           <TabsContent value="shop">
             <div className="mb-4">
-              <p className="text-xs text-muted-foreground mb-1">Buy exclusive badges with your tokens</p>
+              <p className="text-xs text-muted-v2-foreground mb-1">Buy exclusive badges with your tokens</p>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
               {shopBadges.map((badge) => (

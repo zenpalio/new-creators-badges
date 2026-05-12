@@ -50,9 +50,9 @@ const BadgePopup = ({ name, aura, tokens, tier, unlocked, claimed = true, imageS
   const isActiveBadge = activeTier === tier;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/85 backdrop-blur-md" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background-v2/85 backdrop-blur-md" onClick={onClose}>
       <div
-        className="relative w-[320px] sm:w-[380px] rounded-2xl border border-border/20 p-6 flex flex-col items-center text-center overflow-hidden animate-in zoom-in-90 fade-in duration-500"
+        className="relative w-[320px] sm:w-[380px] rounded-2xl border border-border-v2/20 p-6 flex flex-col items-center text-center overflow-hidden animate-in zoom-in-90 fade-in duration-500"
         onClick={(e) => e.stopPropagation()}
         style={{
           backgroundColor: "hsl(var(--popover-v2))",
@@ -93,7 +93,7 @@ const BadgePopup = ({ name, aura, tokens, tier, unlocked, claimed = true, imageS
           style={{
             background: unlocked
               ? `linear-gradient(90deg, transparent, ${accent}, transparent)`
-              : "linear-gradient(90deg, transparent, hsl(var(--muted-foreground) / 0.2), transparent)",
+              : "linear-gradient(90deg, transparent, hsl(var(--muted-foreground-v2) / 0.2), transparent)",
           }}
         />
 
@@ -123,12 +123,12 @@ const BadgePopup = ({ name, aura, tokens, tier, unlocked, claimed = true, imageS
             </span>
           )}
           {unlocked && claimed && (
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-muted-foreground" style={{ backgroundColor: "hsl(var(--muted))" }}>
+            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-muted-v2-foreground" style={{ backgroundColor: "hsl(var(--muted-v2))" }}>
               <Star className="w-3 h-3" /> Collected
             </span>
           )}
           {!unlocked && (
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-muted-foreground" style={{ backgroundColor: "hsl(var(--muted) / 0.5)" }}>
+            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-muted-v2-foreground" style={{ backgroundColor: "hsl(var(--muted-v2) / 0.5)" }}>
               <Lock className="w-3 h-3" /> Locked
             </span>
           )}
@@ -164,13 +164,13 @@ const BadgePopup = ({ name, aura, tokens, tier, unlocked, claimed = true, imageS
 
         {/* Name */}
         <div className="mb-0.5">
-          <h2 className="text-lg font-bold text-foreground tracking-tight">
+          <h2 className="text-lg font-bold text-foreground-v2 tracking-tight">
             {name}
           </h2>
         </div>
 
         {/* Subtitle */}
-        <p className="text-xs text-muted-foreground mb-4">
+        <p className="text-xs text-muted-v2-foreground mb-4">
           {isClaimable
             ? "Claim your token reward"
             : unlocked
@@ -204,8 +204,8 @@ const BadgePopup = ({ name, aura, tokens, tier, unlocked, claimed = true, imageS
               <TokenIcon className="w-6 h-6" />
             </div>
             <div className="flex items-baseline gap-2">
-              <span className="text-foreground font-extrabold text-xl leading-tight tracking-tight">+{tokens ?? aura}</span>
-              <span className="text-[10px] text-muted-foreground/70 uppercase tracking-widest font-medium">token reward</span>
+              <span className="text-foreground-v2 font-extrabold text-xl leading-tight tracking-tight">+{tokens ?? aura}</span>
+              <span className="text-[10px] text-muted-v2-foreground/70 uppercase tracking-widest font-medium">token reward</span>
             </div>
           </div>
         </div>
@@ -222,7 +222,7 @@ const BadgePopup = ({ name, aura, tokens, tier, unlocked, claimed = true, imageS
           </Button>
         ) : unlocked ? (
           <div className="w-full space-y-2">
-            <Button variant="ghost" size="lg" className="w-full rounded-xl border border-border/30" disabled style={{ backgroundColor: "hsl(var(--muted))" }}>
+            <Button variant="ghost" size="lg" className="w-full rounded-xl border border-border-v2/30" disabled style={{ backgroundColor: "hsl(var(--muted-v2))" }}>
               <Check className="w-4 h-4" /> Collected
             </Button>
             {onUseBadge && (
@@ -246,22 +246,22 @@ const BadgePopup = ({ name, aura, tokens, tier, unlocked, claimed = true, imageS
           </div>
         ) : (
           <div className="w-full space-y-2">
-            <div className="flex items-center justify-between text-[10px] text-muted-foreground font-semibold">
+            <div className="flex items-center justify-between text-[10px] text-muted-v2-foreground font-semibold">
               <span>{currentAura.toLocaleString()} / {aura.toLocaleString()} aura</span>
               <span>{Math.min(100, Math.round((currentAura / aura) * 100))}%</span>
             </div>
-            <div className="relative w-full h-2.5 rounded-full overflow-hidden border border-border/50" style={{ backgroundColor: "hsl(var(--muted))" }}>
+            <div className="relative w-full h-2.5 rounded-full overflow-hidden border border-border-v2/50" style={{ backgroundColor: "hsl(var(--muted-v2))" }}>
               <div
                 className="absolute inset-y-0 left-0 rounded-full transition-all duration-700 z-10"
                 style={{
                   width: `${Math.min(100, (currentAura / aura) * 100)}%`,
                   minWidth: currentAura > 0 ? "0.5rem" : "0",
-                  backgroundColor: "hsl(var(--primary))",
-                  boxShadow: "0 0 10px hsl(var(--primary) / 0.5)",
+                  backgroundColor: "hsl(var(--primary-v2))",
+                  boxShadow: "0 0 10px hsl(var(--primary-v2) / 0.5)",
                 }}
               />
             </div>
-            <p className="text-[10px] text-muted-foreground font-medium">
+            <p className="text-[10px] text-muted-v2-foreground font-medium">
               {(aura - currentAura).toLocaleString()} more aura needed
             </p>
             {onUnlock && (
@@ -280,7 +280,7 @@ const BadgePopup = ({ name, aura, tokens, tier, unlocked, claimed = true, imageS
 
         {/* Date */}
         {unlocked && (
-          <p className="text-[9px] text-muted-foreground/50 mt-3 uppercase tracking-widest">
+          <p className="text-[9px] text-muted-v2-foreground/50 mt-3 uppercase tracking-widest">
             {new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
           </p>
         )}

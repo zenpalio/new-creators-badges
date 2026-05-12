@@ -130,7 +130,7 @@ const BadgeCard = ({ name, aura, tier, unlocked, claimed = true, isNew = false, 
   return (
     <div className="flex flex-col items-center gap-1.5 sm:gap-2 min-w-[145px] sm:min-w-[170px] cursor-pointer" onClick={onClick}>
       <div
-        className={`relative w-[140px] h-[140px] sm:w-[164px] sm:h-[164px] rounded-[1.25rem] sm:rounded-[1.75rem] border border-border/30 flex items-center justify-center transition-transform duration-300 ${
+        className={`relative w-[140px] h-[140px] sm:w-[164px] sm:h-[164px] rounded-[1.25rem] sm:rounded-[1.75rem] border border-border-v2/30 flex items-center justify-center transition-transform duration-300 ${
           unlocked ? "hover:scale-[1.03]" : "opacity-45 grayscale"
         }`}
         style={{ backgroundColor: "hsl(var(--popover-v2))", backgroundImage: "none" }}
@@ -143,31 +143,31 @@ const BadgeCard = ({ name, aura, tier, unlocked, claimed = true, isNew = false, 
         />
 
         {!unlocked && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center rounded-[1.25rem] sm:rounded-[1.75rem] bg-background/35">
-            <Lock className="w-5 h-5 text-muted-foreground" />
+          <div className="absolute inset-0 z-20 flex items-center justify-center rounded-[1.25rem] sm:rounded-[1.75rem] bg-background-v2/35">
+            <Lock className="w-5 h-5 text-muted-v2-foreground" />
           </div>
         )}
 
         {showNew && (
-          <div className="absolute -top-1.5 -right-1.5 z-20 bg-primary text-primary-foreground text-[9px] font-bold px-2 py-0.5 rounded-full shadow-lg animate-pulse">
+          <div className="absolute -top-1.5 -right-1.5 z-20 bg-primary-v2 text-primary-v2-foreground text-[9px] font-bold px-2 py-0.5 rounded-full shadow-lg animate-pulse">
             NEW
           </div>
         )}
 
         {unlocked && !claimed && !showNew && (
-          <div className="absolute -top-1.5 -right-1.5 z-20 bg-primary text-primary-foreground text-[9px] font-bold px-2 py-0.5 rounded-full shadow-lg animate-pulse">
+          <div className="absolute -top-1.5 -right-1.5 z-20 bg-primary-v2 text-primary-v2-foreground text-[9px] font-bold px-2 py-0.5 rounded-full shadow-lg animate-pulse">
             NEW
           </div>
         )}
 
         {unlocked && claimed && !showNew && (
-          <div className="absolute -top-1.5 -right-1.5 z-20 text-[9px] font-bold px-2 py-0.5 rounded-full text-muted-foreground border border-border/30" style={{ backgroundColor: "hsl(var(--muted))" }}>
+          <div className="absolute -top-1.5 -right-1.5 z-20 text-[9px] font-bold px-2 py-0.5 rounded-full text-muted-v2-foreground border border-border-v2/30" style={{ backgroundColor: "hsl(var(--muted-v2))" }}>
             <Check className="w-3 h-3" />
           </div>
         )}
       </div>
-      <p className="text-xs font-semibold text-foreground capitalize">{name}</p>
-      <p className="text-[10px] text-muted-foreground">{aura.toLocaleString()} aura</p>
+      <p className="text-xs font-semibold text-foreground-v2 capitalize">{name}</p>
+      <p className="text-[10px] text-muted-v2-foreground">{aura.toLocaleString()} aura</p>
     </div>
   );
 };

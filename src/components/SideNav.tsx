@@ -24,15 +24,15 @@ const SideNav = ({ open, onClose }: SideNavProps) => {
         onClick={onClose}
       />
       <aside
-        className={`absolute left-0 top-0 h-full w-[280px] bg-card shadow-2xl transition-transform duration-300 ${
+        className={`absolute left-0 top-0 h-full w-[280px] bg-card-v2 shadow-2xl transition-transform duration-300 ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between px-4 h-14 border-b border-border/40">
-          <span className="text-foreground font-bold">Menu</span>
+        <div className="flex items-center justify-between px-4 h-14 border-b border-border-v2/40">
+          <span className="text-foreground-v2 font-bold">Menu</span>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
+            className="flex h-8 w-8 items-center justify-center rounded-full text-muted-v2-foreground hover:bg-muted-v2 hover:text-foreground-v2"
             aria-label="Close menu"
           >
             <X className="h-4 w-4" />
@@ -48,8 +48,8 @@ const SideNav = ({ open, onClose }: SideNavProps) => {
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                   isActive
-                    ? "bg-primary/15 text-primary"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    ? "bg-primary-v2/15 text-primary-v2"
+                    : "text-muted-v2-foreground hover:bg-muted-v2 hover:text-foreground-v2"
                 }`
               }
             >
@@ -57,12 +57,12 @@ const SideNav = ({ open, onClose }: SideNavProps) => {
               {label}
             </NavLink>
           ))}
-          <div className="my-2 h-px bg-border/40" />
-          <button className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+          <div className="my-2 h-px bg-border-v2/40" />
+          <button className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-v2-foreground hover:bg-muted-v2 hover:text-foreground-v2 transition-colors">
             <Settings className="h-4 w-4" />
             Settings
           </button>
-          <button className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+          <button className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-v2-foreground hover:bg-muted-v2 hover:text-foreground-v2 transition-colors">
             <LogOut className="h-4 w-4" />
             Log out
           </button>

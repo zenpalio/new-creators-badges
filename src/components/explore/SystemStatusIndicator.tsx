@@ -62,20 +62,20 @@ export default function SystemStatusIndicator({
       <PopoverContent
         align="end"
         sideOffset={8}
-        className="w-64 rounded-lg border border-border/60 bg-popover-v2/95 p-3 text-popover-v2-foreground backdrop-blur-xl"
+        className="w-64 rounded-lg border border-border-v2/60 bg-popover-v2/95 p-3 text-popover-v2-foreground backdrop-blur-xl"
       >
-        <p className="text-sm leading-snug text-foreground/90">{message}</p>
+        <p className="text-sm leading-snug text-foreground-v2/90">{message}</p>
         {affected.length > 0 && (
-          <ul className="mt-2 space-y-1.5 border-t border-border/50 pt-2 text-xs text-foreground/80">
+          <ul className="mt-2 space-y-1.5 border-t border-border-v2/50 pt-2 text-xs text-foreground-v2/80">
             {affected.map((s) => (
               <li key={s.name} className="leading-snug">
-                <span className="font-medium text-foreground">{s.name}</span>
-                <span className="text-foreground/60">
+                <span className="font-medium text-foreground-v2">{s.name}</span>
+                <span className="text-foreground-v2/60">
                   {" "}
                   — {labels[s.status]}
                 </span>
                 {s.note ? (
-                  <span className="block text-foreground/55">{s.note}</span>
+                  <span className="block text-foreground-v2/55">{s.note}</span>
                 ) : null}
               </li>
             ))}

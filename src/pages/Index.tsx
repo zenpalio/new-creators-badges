@@ -66,10 +66,10 @@ const dreammixModels = [
 ];
 
 const createTools = [
-  { title: "Create Custom Babe", color: "bg-gradient-to-br from-purple-500 to-purple-700", icon: <Sparkles className="w-6 h-6 text-primary-foreground" /> },
-  { title: "Video Generator", color: "bg-gradient-to-br from-red-400 to-red-600", icon: <Video className="w-6 h-6 text-primary-foreground" /> },
-  { title: "Image Generator", color: "bg-gradient-to-br from-blue-500 to-blue-700", icon: <ImageIcon className="w-6 h-6 text-primary-foreground" /> },
-  { title: "Create Template Babe", color: "bg-gradient-to-br from-green-500 to-green-700", icon: <Camera className="w-6 h-6 text-primary-foreground" /> },
+  { title: "Create Custom Babe", color: "bg-gradient-to-br from-purple-500 to-purple-700", icon: <Sparkles className="w-6 h-6 text-primary-v2-foreground" /> },
+  { title: "Video Generator", color: "bg-gradient-to-br from-red-400 to-red-600", icon: <Video className="w-6 h-6 text-primary-v2-foreground" /> },
+  { title: "Image Generator", color: "bg-gradient-to-br from-blue-500 to-blue-700", icon: <ImageIcon className="w-6 h-6 text-primary-v2-foreground" /> },
+  { title: "Create Template Babe", color: "bg-gradient-to-br from-green-500 to-green-700", icon: <Camera className="w-6 h-6 text-primary-v2-foreground" /> },
 ];
 
 const stories = [
@@ -84,7 +84,7 @@ const Index = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background-v2">
       <Sidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
 
       <main
@@ -94,11 +94,11 @@ const Index = () => {
       >
         {/* Header */}
         <header className="flex items-center justify-between px-8 py-5">
-          <h1 className="text-2xl font-bold text-foreground">
-            Welcome back, Arthur <span className="text-primary">💜</span>
+          <h1 className="text-2xl font-bold text-foreground-v2">
+            Welcome back, Arthur <span className="text-primary-v2">💜</span>
           </h1>
-          <button className="p-2 rounded-full hover:bg-muted transition-colors">
-            <Bell className="w-5 h-5 text-muted-foreground" />
+          <button className="p-2 rounded-full hover:bg-muted-v2 transition-colors">
+            <Bell className="w-5 h-5 text-muted-v2-foreground" />
           </button>
         </header>
 

@@ -77,7 +77,7 @@ export function ExploreMenuButton({
   return (
     <button
       onClick={onClick}
-      className="flex h-9 w-9 items-center justify-center text-foreground/90 transition-opacity hover:opacity-70"
+      className="flex h-9 w-9 items-center justify-center text-foreground-v2/90 transition-opacity hover:opacity-70"
       aria-label={ariaLabel}
     >
       <Menu className="h-5 w-5" strokeWidth={1.5} />
@@ -93,12 +93,12 @@ export function ExploreNotificationsButton({
   return (
     <button
       onClick={onClick}
-      className="relative flex h-9 w-9 items-center justify-center text-foreground/90 transition-opacity hover:opacity-70"
+      className="relative flex h-9 w-9 items-center justify-center text-foreground-v2/90 transition-opacity hover:opacity-70"
       aria-label={ariaLabel}
     >
       <Bell className="h-5 w-5" strokeWidth={1.5} />
       {notificationCount != null && notificationCount > 0 && (
-        <span className="absolute right-1 top-1 flex h-[12px] min-w-[12px] items-center justify-center rounded-full bg-primary px-[2px] text-[9px] font-semibold leading-[12px] text-primary-foreground">
+        <span className="absolute right-1 top-1 flex h-[12px] min-w-[12px] items-center justify-center rounded-full bg-primary-v2 px-[2px] text-[9px] font-semibold leading-[12px] text-primary-v2-foreground">
           {notificationCount}
         </span>
       )}
@@ -142,14 +142,14 @@ export function ExploreView({
 
   return (
     <div
-      className={`relative flex h-svh w-full overflow-hidden bg-background font-onest text-foreground${
+      className={`relative flex h-svh w-full overflow-hidden bg-background-v2 font-onest text-foreground-v2${
         className ? ` ${className}` : ""
       }`}
     >
       <main ref={mainRef} className="relative flex w-full flex-1 flex-col overflow-y-auto overflow-x-hidden">
         {/* Sticky top bar — slides away on scroll down, returns on scroll up */}
         <header
-          className={`pointer-events-none fixed inset-x-0 top-0 z-30 flex min-h-[62px] items-center justify-between px-6 py-4 bg-gradient-to-b from-background/40 via-background/15 to-transparent transition-transform duration-300 ease-out ${
+          className={`pointer-events-none fixed inset-x-0 top-0 z-30 flex min-h-[62px] items-center justify-between px-6 py-4 bg-gradient-to-b from-background-v2/40 via-background-v2/15 to-transparent transition-transform duration-300 ease-out ${
             headerHidden ? "-translate-y-full" : "translate-y-0"
           }`}
         >

@@ -8,7 +8,7 @@ const TagRow = () => (
     {tags.map((tag) => (
       <button
         key={tag}
-        className="flex-shrink-0 px-4 py-2 rounded-full bg-tag text-tag-foreground text-sm hover:bg-accent transition-colors"
+        className="flex-shrink-0 px-4 py-2 rounded-full bg-tag-v2 text-tag-v2-foreground text-sm hover:bg-accent-v2 transition-colors"
       >
         {tag}
       </button>

@@ -110,7 +110,7 @@ const SectionTitle = ({ title, actionLabel, actionHref = "#", onAction }: Sectio
       <a
         href={actionHref}
         onClick={onAction}
-        className="flex items-center gap-1 text-xs font-medium text-grey-light-3 hover:text-white transition-colors"
+        className="flex items-center gap-1 text-xs font-medium text-grey-light-3-v2 hover:text-white transition-colors"
       >
         {actionLabel}
         <ArrowUpRight className="h-3.5 w-3.5" />
@@ -132,7 +132,7 @@ const TagRow = ({ tags, onTagClick }: TagRowProps) => (
           href={t.href ?? "#"}
           onClick={onTagClick ? () => onTagClick(t) : undefined}
           key={t.id ?? `${t.label}-${i}`}
-          className="inline-flex h-[41px] shrink-0 items-center justify-center whitespace-nowrap rounded-[5px] bg-grey-dark-1 px-[16px] text-sm font-medium text-[#F2F2F2] transition-colors hover:bg-grey-dark-3 hover:text-white"
+          className="inline-flex h-[41px] shrink-0 items-center justify-center whitespace-nowrap rounded-[5px] bg-grey-dark-1-v2 px-[16px] text-sm font-medium text-[#F2F2F2] transition-colors hover:bg-grey-dark-3-v2 hover:text-white"
         >
           <span className="normal-case">{t.label}</span>
         </a>
@@ -419,13 +419,13 @@ export interface ExploreFooterSectionProps {
 
 export const ExploreFooterSection = ({ footer, className }: ExploreFooterSectionProps) => (
   <footer
-    className={`mt-8 grid grid-cols-2 gap-6 border-t border-[#242529] pt-6 text-[13px] text-grey-light-4 md:grid-cols-4${
+    className={`mt-8 grid grid-cols-2 gap-6 border-t border-[#242529] pt-6 text-[13px] text-grey-light-4-v2 md:grid-cols-4${
       className ? ` ${className}` : ""
     }`}
   >
     {([footer.social, footer.features, footer.legal, footer.resources]).map((group) => (
       <div key={group.title}>
-        <h4 className="mb-2 text-xs font-bold uppercase tracking-wider text-grey-light-2">
+        <h4 className="mb-2 text-xs font-bold uppercase tracking-wider text-grey-light-2-v2">
           {group.title}
         </h4>
         <ul className="space-y-1.5">

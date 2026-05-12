@@ -27,9 +27,9 @@ const ActivityBadgePopup = ({ name, description, imageUrl, completed, claimed, e
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/85 backdrop-blur-md" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background-v2/85 backdrop-blur-md" onClick={onClose}>
       <div
-        className="relative w-[320px] sm:w-[380px] rounded-2xl border border-border/20 p-6 flex flex-col items-center text-center overflow-hidden animate-in zoom-in-90 fade-in duration-500"
+        className="relative w-[320px] sm:w-[380px] rounded-2xl border border-border-v2/20 p-6 flex flex-col items-center text-center overflow-hidden animate-in zoom-in-90 fade-in duration-500"
         onClick={(e) => e.stopPropagation()}
         style={{
           backgroundColor: "hsl(var(--popover-v2))",
@@ -48,7 +48,7 @@ const ActivityBadgePopup = ({ name, description, imageUrl, completed, claimed, e
               ? `linear-gradient(90deg, transparent, ${effect.glowColor}, transparent)`
               : claimed
                 ? "linear-gradient(90deg, transparent, hsl(142 76% 36%), transparent)"
-                : "linear-gradient(90deg, transparent, hsl(var(--primary)), transparent)",
+                : "linear-gradient(90deg, transparent, hsl(var(--primary-v2)), transparent)",
           }}
         />
 
@@ -71,7 +71,7 @@ const ActivityBadgePopup = ({ name, description, imageUrl, completed, claimed, e
               <Gift className="w-3 h-3" /> Ready to Claim
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider" style={{ backgroundColor: "hsl(var(--primary) / 0.12)", color: "hsl(var(--primary))", border: "1px solid hsl(var(--primary) / 0.25)" }}>
+            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider" style={{ backgroundColor: "hsl(var(--primary-v2) / 0.12)", color: "hsl(var(--primary-v2))", border: "1px solid hsl(var(--primary-v2) / 0.25)" }}>
               In Progress
             </span>
           )}
@@ -85,8 +85,8 @@ const ActivityBadgePopup = ({ name, description, imageUrl, completed, claimed, e
           <img src={imageUrl} alt={name} className="relative z-10 w-full h-full object-contain" loading="lazy" width={512} height={512} />
         </div>
 
-        <h2 className="text-lg font-bold text-foreground tracking-tight mb-0.5">{name}</h2>
-        <p className="text-xs text-muted-foreground mb-5">{description}</p>
+        <h2 className="text-lg font-bold text-foreground-v2 tracking-tight mb-0.5">{name}</h2>
+        <p className="text-xs text-muted-v2-foreground mb-5">{description}</p>
 
         {/* Actions */}
         {!completed && !claimed ? (
@@ -109,7 +109,7 @@ const ActivityBadgePopup = ({ name, description, imageUrl, completed, claimed, e
             size="lg"
             className="w-full rounded-xl font-bold gap-2 hover:scale-[1.02] active:scale-95 transition-transform"
             onClick={onEquip}
-            style={{ background: `linear-gradient(135deg, ${effect.glowColor}, hsl(var(--primary)))` }}
+            style={{ background: `linear-gradient(135deg, ${effect.glowColor}, hsl(var(--primary-v2)))` }}
           >
             <Star className="w-4 h-4" />
             Equip on Profile

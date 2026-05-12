@@ -70,48 +70,48 @@ const config: Config = {
         "gallery-sidebar-width": "var(--gallery-sidebar-width)",
       },
       colors: {
-        border: {
-          DEFAULT: "hsl(var(--border))",
-          light: "hsl(var(--light-border))",
+        "border-v2": {
+          DEFAULT: "hsl(var(--border-v2))",
+          light: "hsl(var(--light-border-v2))",
         },
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          light: "hsl(var(--primary-light))",
-          dark: "hsl(var(--primary-dark))",
-          foreground: "hsl(var(--primary-foreground))",
-          disabled: "hsl(var(--primary-disabled))",
+        "input-v2": "hsl(var(--input-v2))",
+        "ring-v2": "hsl(var(--ring-v2))",
+        "background-v2": "hsl(var(--background-v2))",
+        "foreground-v2": "hsl(var(--foreground-v2))",
+        "primary-v2": {
+          DEFAULT: "hsl(var(--primary-v2))",
+          light: "hsl(var(--primary-light-v2))",
+          dark: "hsl(var(--primary-dark-v2))",
+          foreground: "hsl(var(--primary-foreground-v2))",
+          disabled: "hsl(var(--primary-disabled-v2))",
         },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+        "secondary-v2": {
+          DEFAULT: "hsl(var(--secondary-v2))",
+          foreground: "hsl(var(--secondary-foreground-v2))",
         },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+        "destructive-v2": {
+          DEFAULT: "hsl(var(--destructive-v2))",
+          foreground: "hsl(var(--destructive-foreground-v2))",
         },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+        "muted-v2": {
+          DEFAULT: "hsl(var(--muted-v2))",
+          foreground: "hsl(var(--muted-foreground-v2))",
         },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+        "accent-v2": {
+          DEFAULT: "hsl(var(--accent-v2))",
+          foreground: "hsl(var(--accent-foreground-v2))",
         },
         "popover-v2": {
           DEFAULT: "hsl(var(--popover-v2))",
           foreground: "hsl(var(--popover-foreground-v2))",
         },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+        "card-v2": {
+          DEFAULT: "hsl(var(--card-v2))",
+          foreground: "hsl(var(--card-foreground-v2))",
         },
-        "selection-card": {
-          DEFAULT: "hsl(var(--selection-card))",
-          border: "hsl(var(--selection-card-border))",
+        "selection-card-v2": {
+          DEFAULT: "hsl(var(--selection-card-v2))",
+          border: "hsl(var(--selection-card-border-v2))",
         },
         button: {
           DEFAULT: "#191B1F",
@@ -119,36 +119,36 @@ const config: Config = {
           disabled: "#393939",
           "disabled-text": "#666666",
         },
-        trigger: {
-          DEFAULT: "hsl(var(--trigger))",
-          border: "hsl(var(--trigger-border))",
+        "trigger-v2": {
+          DEFAULT: "hsl(var(--trigger-v2))",
+          border: "hsl(var(--trigger-border-v2))",
         },
-        message: "hsl(var(--message))",
-        success: "hsl(var(--success))",
-        divider: "hsl(var(--divider))",
-        menu: "hsl(var(--menu))",
-        premium: "hsl(var(--premium))",
-        "white-secondary": "hsl(var(--white-secondary))",
-        "tertiary-text": "hsl(var(--tertiary-text))",
-        "grey-dark-1": "hsl(var(--grey-dark-1))",
-        "grey-dark-2": "hsl(var(--grey-dark-2))",
-        "grey-dark-3": "hsl(var(--grey-dark-3))",
-        "grey-light-1": "hsl(var(--grey-light-1))",
-        "grey-light-2": "hsl(var(--grey-light-2))",
-        "grey-light-3": "hsl(var(--grey-light-3))",
-        "grey-light-4": "hsl(var(--grey-light-4))",
-        "accent-yellow": "hsl(var(--accent-yellow))",
-        "system-red": "hsl(var(--system-red))",
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-bg))",
-          foreground: "hsl(var(--sidebar-fg))",
-          hover: "hsl(var(--sidebar-hover))",
-          active: "hsl(var(--sidebar-active))",
-          "active-foreground": "hsl(var(--sidebar-active-fg))",
+        "message-v2": "hsl(var(--message-v2))",
+        "success-v2": "hsl(var(--success-v2))",
+        "divider-v2": "hsl(var(--divider-v2))",
+        "menu-v2": "hsl(var(--menu-v2))",
+        "premium-v2": "hsl(var(--premium-v2))",
+        "white-secondary-v2": "hsl(var(--white-secondary-v2))",
+        "tertiary-text-v2": "hsl(var(--tertiary-text-v2))",
+        "grey-dark-1-v2": "hsl(var(--grey-dark-1-v2))",
+        "grey-dark-2-v2": "hsl(var(--grey-dark-2-v2))",
+        "grey-dark-3-v2": "hsl(var(--grey-dark-3-v2))",
+        "grey-light-1-v2": "hsl(var(--grey-light-1-v2))",
+        "grey-light-2-v2": "hsl(var(--grey-light-2-v2))",
+        "grey-light-3-v2": "hsl(var(--grey-light-3-v2))",
+        "grey-light-4-v2": "hsl(var(--grey-light-4-v2))",
+        "accent-yellow-v2": "hsl(var(--accent-yellow-v2))",
+        "system-red-v2": "hsl(var(--system-red-v2))",
+        "sidebar-v2": {
+          DEFAULT: "hsl(var(--sidebar-bg-v2))",
+          foreground: "hsl(var(--sidebar-fg-v2))",
+          hover: "hsl(var(--sidebar-hover-v2))",
+          active: "hsl(var(--sidebar-active-v2))",
+          "active-foreground": "hsl(var(--sidebar-active-fg-v2))",
         },
-        tag: {
-          DEFAULT: "hsl(var(--tag-bg))",
-          foreground: "hsl(var(--tag-fg))",
+        "tag-v2": {
+          DEFAULT: "hsl(var(--tag-bg-v2))",
+          foreground: "hsl(var(--tag-fg-v2))",
         },
       },
       borderRadius: {
@@ -170,17 +170,17 @@ const config: Config = {
         shade:
           "linear-gradient(180deg, rgba(0, 0, 0, 0.01) 0%, rgba(0, 0, 0, 1) 100%)",
         "primary-gradient":
-          "linear-gradient(90deg, hsl(var(--primary)) 0%, hsl(var(--primary)) 20%, hsl(var(--primary-dark)) 80%, hsl(var(--primary-dark)) 100%)",
+          "linear-gradient(90deg, hsl(var(--primary-v2)) 0%, hsl(var(--primary-v2)) 20%, hsl(var(--primary-dark-v2)) 80%, hsl(var(--primary-dark-v2)) 100%)",
         "secondary-gradient":
           "linear-gradient(90deg, #F04438 0%, #F04438 20%, #F87171 80%, #F87171 100%)",
         "secondary-light-gradient":
           "linear-gradient(180deg, #F87171 37.94%, #F5542C 100%)",
         "active-stories": 'url("/active-stories.svg")',
         "active-card":
-          "linear-gradient(180deg, hsl(var(--message)) 45%, hsl(var(--primary)) 100%)",
+          "linear-gradient(180deg, hsl(var(--message-v2)) 45%, hsl(var(--primary-v2)) 100%)",
         "card-gradient": "linear-gradient(90deg, #0e0f11 45%, #191B1F 100%)",
         "countdown-card":
-          "linear-gradient(90deg, hsl(var(--secondary)) 0%, hsl(var(--primary)) 100%)",
+          "linear-gradient(90deg, hsl(var(--secondary-v2)) 0%, hsl(var(--primary-v2)) 100%)",
         footer:
           "linear-gradient(30deg, #0B0C14 0%, rgba(0, 121, 255, 0.30) 30%, rgba(0, 121, 255, 0.30) 60%, #0B0C14 100%)",
         "generator-queue":
@@ -192,8 +192,8 @@ const config: Config = {
         unlock: "0px 1px 5px 2px rgba(245, 84, 44, 0.5)",
         login: "0px 1px 5px 2px rgba(0, 121, 255, 0.5)",
         private: "0px 1px 20px 0px rgba(245, 84, 44, 1)",
-        dialog: "0px 12px 24px -6px hsl(var(--primary))",
-        "user-message": "0px 1px 40px -6px hsl(var(--primary))",
+        dialog: "0px 12px 24px -6px hsl(var(--primary-v2))",
+        "user-message": "0px 1px 40px -6px hsl(var(--primary-v2))",
         "selected-subscription":
           "0px 1px 15px 0px rgba(148, 148, 148, 0.50)",
       },
@@ -249,14 +249,14 @@ const config: Config = {
           "0%": {
             height: "30px",
             width: "30px",
-            fill: "var(--secondary)",
-            color: "var(--secondary)",
+            fill: "var(--secondary-v2)",
+            color: "var(--secondary-v2)",
           },
           "100%": {
             height: "26px",
             width: "26px",
-            fill: "var(--secondary)",
-            color: "var(--secondary)",
+            fill: "var(--secondary-v2)",
+            color: "var(--secondary-v2)",
           },
         },
         soundbar: {
@@ -267,14 +267,14 @@ const config: Config = {
           "0%": {
             height: "26px",
             width: "26px",
-            fill: "var(--background)",
-            color: "var(--primary)",
+            fill: "var(--background-v2)",
+            color: "var(--primary-v2)",
           },
           "100%": {
             height: "30px",
             width: "30px",
-            fill: "hsl(var(--background))",
-            color: "hsl(var(--primary))",
+            fill: "hsl(var(--background-v2))",
+            color: "hsl(var(--primary-v2))",
           },
         },
         hide: {
@@ -292,47 +292,47 @@ const config: Config = {
         "loading-horizontal": {
           "0%": {
             backgroundImage:
-              "linear-gradient(90deg, hsl(var(--primary)) 0%, rgba(196, 196, 196, 1) 20%)",
+              "linear-gradient(90deg, hsl(var(--primary-v2)) 0%, rgba(196, 196, 196, 1) 20%)",
           },
           "10%": {
             backgroundImage:
-              "linear-gradient(90deg, hsl(var(--primary)) 0%, rgba(196, 196, 196, 1) 30%)",
+              "linear-gradient(90deg, hsl(var(--primary-v2)) 0%, rgba(196, 196, 196, 1) 30%)",
           },
           "20%": {
             backgroundImage:
-              "linear-gradient(90deg, hsl(var(--primary)) 0%, rgba(196, 196, 196, 1) 40%)",
+              "linear-gradient(90deg, hsl(var(--primary-v2)) 0%, rgba(196, 196, 196, 1) 40%)",
           },
           "30%": {
             backgroundImage:
-              "linear-gradient(90deg, hsl(var(--primary)) 0%, rgba(196, 196, 196, 1) 50%)",
+              "linear-gradient(90deg, hsl(var(--primary-v2)) 0%, rgba(196, 196, 196, 1) 50%)",
           },
           "40%": {
             backgroundImage:
-              "linear-gradient(90deg, hsl(var(--primary)) 0%, rgba(196, 196, 196, 1) 60%)",
+              "linear-gradient(90deg, hsl(var(--primary-v2)) 0%, rgba(196, 196, 196, 1) 60%)",
           },
           "50%": {
             backgroundImage:
-              "linear-gradient(90deg, hsl(var(--primary)) 0%, rgba(196, 196, 196, 1) 70%)",
+              "linear-gradient(90deg, hsl(var(--primary-v2)) 0%, rgba(196, 196, 196, 1) 70%)",
           },
           "60%": {
             backgroundImage:
-              "linear-gradient(90deg, hsl(var(--primary)) 20%, rgba(196, 196, 196, 1) 80%)",
+              "linear-gradient(90deg, hsl(var(--primary-v2)) 20%, rgba(196, 196, 196, 1) 80%)",
           },
           "70%": {
             backgroundImage:
-              "linear-gradient(90deg, hsl(var(--primary)) 40%, rgba(196, 196, 196, 1) 90%)",
+              "linear-gradient(90deg, hsl(var(--primary-v2)) 40%, rgba(196, 196, 196, 1) 90%)",
           },
           "80%": {
             backgroundImage:
-              "linear-gradient(90deg, hsl(var(--primary)) 60%, rgba(196, 196, 196, 1) 100%)",
+              "linear-gradient(90deg, hsl(var(--primary-v2)) 60%, rgba(196, 196, 196, 1) 100%)",
           },
           "90%": {
             backgroundImage:
-              "linear-gradient(90deg, hsl(var(--primary)) 80%, rgba(196, 196, 196, 1) 100%)",
+              "linear-gradient(90deg, hsl(var(--primary-v2)) 80%, rgba(196, 196, 196, 1) 100%)",
           },
           "100%": {
             backgroundImage:
-              "linear-gradient(90deg, hsl(var(--primary)) 100%, rgba(196, 196, 196, 1) 100%)",
+              "linear-gradient(90deg, hsl(var(--primary-v2)) 100%, rgba(196, 196, 196, 1) 100%)",
           },
         },
       },
@@ -439,7 +439,7 @@ const config: Config = {
             "background-position 0.4s ease, filter 400ms ease, opacity 400ms ease",
         },
         ".bg-primary-solid": {
-          backgroundColor: theme("colors.primary.DEFAULT"),
+          backgroundColor: theme("colors.primary-v2.DEFAULT"),
         },
       });
     },

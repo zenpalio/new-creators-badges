@@ -57,10 +57,10 @@ const BadgeCategory = ({ title, subtitle, badges: initialBadges, progress, image
     <div className="mb-8">
       <div className="flex items-center justify-between mb-1">
         <div className="flex items-center gap-2">
-          <h3 className="text-foreground font-bold text-sm">{title}</h3>
+          <h3 className="text-foreground-v2 font-bold text-sm">{title}</h3>
           <Popover>
             <PopoverTrigger asChild>
-              <button className="text-muted-foreground hover:text-foreground transition-colors">
+              <button className="text-muted-v2-foreground hover:text-foreground-v2 transition-colors">
                 <Info className="w-4 h-4" />
               </button>
             </PopoverTrigger>
@@ -73,21 +73,21 @@ const BadgeCategory = ({ title, subtitle, badges: initialBadges, progress, image
           {aura !== undefined && (
             <div className="flex items-center gap-1">
               <AuraIcon className="w-3.5 h-3.5 text-purple-500" />
-              <span className="text-[11px] font-bold text-foreground">{aura.toLocaleString()}</span>
+              <span className="text-[11px] font-bold text-foreground-v2">{aura.toLocaleString()}</span>
             </div>
           )}
           <div className="flex items-center gap-2">
-            <div className="w-20 h-2 rounded-full overflow-hidden" style={{ backgroundColor: "hsl(var(--muted))" }}>
+            <div className="w-20 h-2 rounded-full overflow-hidden" style={{ backgroundColor: "hsl(var(--muted-v2))" }}>
               <div
                 className="h-full rounded-full transition-all"
-                style={{ width: `${progress}%`, backgroundColor: "hsl(var(--primary))" }}
+                style={{ width: `${progress}%`, backgroundColor: "hsl(var(--primary-v2))" }}
               />
             </div>
-            <span className="text-[10px] text-muted-foreground font-medium min-w-[28px]">{progress}%</span>
+            <span className="text-[10px] text-muted-v2-foreground font-medium min-w-[28px]">{progress}%</span>
           </div>
         </div>
       </div>
-      <p className="text-xs text-muted-foreground mb-4">{subtitle}</p>
+      <p className="text-xs text-muted-v2-foreground mb-4">{subtitle}</p>
       <HorizontalScroll>
         {badges.map((badge, i) => (
           <BadgeCard key={i} {...badge} imageSet={imageSet} onClick={() => setSelectedBadge(badge)} />

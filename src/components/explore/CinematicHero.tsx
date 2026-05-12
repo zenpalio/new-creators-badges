@@ -66,7 +66,7 @@ function heroSlideButtonClasses(btn: HeroSlideButton): string {
   switch (btn.variant) {
     case "primary":
       variant =
-        "font-bold bg-primary text-primary-foreground transition-transform hover:scale-[1.03]";
+        "font-bold bg-primary-v2 text-primary-v2-foreground transition-transform hover:scale-[1.03]";
       break;
     case "onHero":
       variant = "font-bold bg-white text-black transition-transform hover:scale-[1.03]";
@@ -77,7 +77,7 @@ function heroSlideButtonClasses(btn: HeroSlideButton): string {
       break;
     case "premiumMuted":
       variant =
-        "font-semibold text-white backdrop-blur transition-colors bg-primary/15 hover:bg-primary/25 ring-1 ring-primary/40";
+        "font-semibold text-white backdrop-blur transition-colors bg-primary-v2/15 hover:bg-primary-v2/25 ring-1 ring-primary-v2/40";
       break;
   }
   return `${core} ${variant} ${btn.className ?? ""}`.trim();
@@ -303,7 +303,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
 
                       {/* Main story card */}
                       <div
-                        className="absolute inset-0 rounded-xl overflow-hidden ring-1 ring-white/15 bg-card border border-border/50"
+                        className="absolute inset-0 rounded-xl overflow-hidden ring-1 ring-white/15 bg-card-v2 border border-border-v2/50"
                         style={{ boxShadow: "0 35px 60px -15px rgba(0,0,0,0.8)" }}
                       >
                         <img
@@ -315,7 +315,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
 
                         {/* Top-left Story badge */}
                         <div className="absolute left-2.5 top-2.5 z-10">
-                          <span className="flex items-center gap-1 rounded-lg border border-border/30 bg-background/70 px-2.5 py-1 text-[11px] font-medium text-foreground backdrop-blur-sm">
+                          <span className="flex items-center gap-1 rounded-lg border border-border-v2/30 bg-background-v2/70 px-2.5 py-1 text-[11px] font-medium text-foreground-v2 backdrop-blur-sm">
                             <BookOpen className="h-3.5 w-3.5" /> Story
                           </span>
                         </div>
@@ -323,7 +323,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                         {/* Top-right rating */}
                         {rating != null && (
                           <div className="absolute right-2.5 top-2.5 z-10">
-                            <span className="flex items-center gap-1 rounded-lg border border-border/30 bg-background/70 px-2 py-1 text-[11px] font-semibold text-yellow-400 backdrop-blur-sm">
+                            <span className="flex items-center gap-1 rounded-lg border border-border-v2/30 bg-background-v2/70 px-2 py-1 text-[11px] font-semibold text-yellow-400 backdrop-blur-sm">
                               <Star className="h-3.5 w-3.5 fill-yellow-400" />
                               {rating.toFixed(1)}
                             </span>
@@ -484,16 +484,16 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                             key={plan.name}
                             className={`relative w-[240px] rounded-2xl border p-5 backdrop-blur-xl transition-colors ${
                               highlight
-                                ? "border-primary/50 bg-primary/[0.06]"
+                                ? "border-primary-v2/50 bg-primary-v2/[0.06]"
                                 : "border-white/10 bg-white/[0.03]"
                             }`}
                           >
                             <div className="flex items-center justify-between">
-                              <span className={`text-[11px] font-bold uppercase tracking-[0.15em] ${highlight ? "text-primary" : "text-white/70"}`}>
+                              <span className={`text-[11px] font-bold uppercase tracking-[0.15em] ${highlight ? "text-primary-v2" : "text-white/70"}`}>
                                 {plan.name}
                               </span>
                               {plan.bonus && (
-                                <span className="rounded-full bg-primary/15 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary">
+                                <span className="rounded-full bg-primary-v2/15 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary-v2">
                                   {plan.bonus}
                                 </span>
                               )}
@@ -505,7 +505,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                             <ul className="mt-4 space-y-1.5">
                               {plan.perks.slice(0, 4).map((p) => (
                                 <li key={p} className="flex items-start gap-2 text-[12px] text-white/75">
-                                  <Check className={`mt-0.5 h-3.5 w-3.5 shrink-0 ${highlight ? "text-primary" : "text-white/40"}`} />
+                                  <Check className={`mt-0.5 h-3.5 w-3.5 shrink-0 ${highlight ? "text-primary-v2" : "text-white/40"}`} />
                                   <span>{p}</span>
                                 </li>
                               ))}
@@ -524,15 +524,15 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                         <div
                           key={plan.name}
                           className={`flex items-center justify-between rounded-xl border px-3 py-2.5 backdrop-blur-xl ${
-                            highlight ? "border-primary/50 bg-primary/[0.08]" : "border-white/10 bg-white/[0.04]"
+                            highlight ? "border-primary-v2/50 bg-primary-v2/[0.08]" : "border-white/10 bg-white/[0.04]"
                           }`}
                         >
                           <div className="flex items-center gap-2">
-                            <span className={`text-[11px] font-bold uppercase tracking-wider ${highlight ? "text-primary" : "text-white/80"}`}>
+                            <span className={`text-[11px] font-bold uppercase tracking-wider ${highlight ? "text-primary-v2" : "text-white/80"}`}>
                               {plan.name}
                             </span>
                             {plan.bonus && (
-                              <span className="rounded-full bg-primary/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary">
+                              <span className="rounded-full bg-primary-v2/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary-v2">
                                 {plan.bonus}
                               </span>
                             )}
@@ -602,11 +602,11 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                       {/* Header */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/20 ring-1 ring-primary/40">
-                            <Wand2 className="h-4 w-4 text-primary" />
+                          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-v2/20 ring-1 ring-primary-v2/40">
+                            <Wand2 className="h-4 w-4 text-primary-v2" />
                           </div>
                           <div>
-                            <div className="text-[10px] font-bold uppercase tracking-wider text-primary">{s.featureMeta?.eyebrow ?? "New feature"}</div>
+                            <div className="text-[10px] font-bold uppercase tracking-wider text-primary-v2">{s.featureMeta?.eyebrow ?? "New feature"}</div>
                             <div className="text-sm font-bold text-white">{s.name}</div>
                           </div>
                         </div>
@@ -680,7 +680,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
                             className="flex items-start gap-1.5 text-[10.5px] leading-snug text-white/75"
                             style={{ animation: `fade-in 0.5s ease-out ${0.3 + idx * 0.06}s both` }}
                           >
-                            <Check className="mt-0.5 h-3 w-3 shrink-0 text-primary" />
+                            <Check className="mt-0.5 h-3 w-3 shrink-0 text-primary-v2" />
                             <span>{b}</span>
                           </div>
                         ))}
@@ -780,7 +780,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
             className="pointer-events-none absolute inset-0 md:hidden"
             style={{
               background:
-                "linear-gradient(180deg, transparent 0%, hsl(var(--background) / 0.2) 35%, hsl(var(--background) / 0.85) 70%, hsl(var(--background)) 100%)",
+                "linear-gradient(180deg, transparent 0%, hsl(var(--background-v2) / 0.2) 35%, hsl(var(--background-v2) / 0.85) 70%, hsl(var(--background-v2)) 100%)",
             }}
           />
           {/* Desktop side gradient */}
@@ -788,7 +788,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
             className="pointer-events-none absolute inset-0 hidden md:block"
             style={{
               background:
-                "linear-gradient(90deg, hsl(var(--background) / 0.92) 0%, hsl(var(--background) / 0.7) 25%, hsl(var(--background) / 0.25) 55%, transparent 75%)",
+                "linear-gradient(90deg, hsl(var(--background-v2) / 0.92) 0%, hsl(var(--background-v2) / 0.7) 25%, hsl(var(--background-v2) / 0.25) 55%, transparent 75%)",
             }}
           />
           {/* Bottom-up vignette into rows */}
@@ -796,7 +796,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
             className="pointer-events-none absolute inset-x-0 bottom-0 h-40 hidden md:block"
             style={{
               background:
-                "linear-gradient(180deg, transparent 0%, hsl(var(--background)) 100%)",
+                "linear-gradient(180deg, transparent 0%, hsl(var(--background-v2)) 100%)",
             }}
           />
         </div>
@@ -812,13 +812,13 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
           className="max-w-xl animate-fade-in space-y-4"
         >
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-white/80 backdrop-blur">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+            <span className="h-1.5 w-1.5 rounded-full bg-primary-v2" />
             {slide.badge ?? "Featured today"}
           </span>
           <h1 className="text-4xl font-extrabold leading-[1.05] text-white drop-shadow-lg md:text-6xl">
             {slide.name}
           </h1>
-          <p className="max-w-lg text-sm text-white/90 line-clamp-3 [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] md:text-base md:text-grey-light-3 md:[text-shadow:none] md:line-clamp-3">
+          <p className="max-w-lg text-sm text-white/90 line-clamp-3 [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] md:text-base md:text-grey-light-3-v2 md:[text-shadow:none] md:line-clamp-3">
             {slide.description}
           </p>
 
@@ -839,7 +839,7 @@ const CinematicHero = ({ slides, intervalMs = 7000, mediaIntervalMs = 3500 }: Pr
             <div className="flex flex-wrap items-center gap-4 text-xs text-white/80">
               {slide.storyMeta.chapters != null && (
                 <span className="flex items-center gap-1.5">
-                  <BookOpen className="h-3.5 w-3.5 text-primary" />
+                  <BookOpen className="h-3.5 w-3.5 text-primary-v2" />
                   {slide.storyMeta.chapters} chapters
                 </span>
               )}
@@ -1071,7 +1071,7 @@ const HeroPanel = ({
           className="pointer-events-none absolute inset-y-0 left-0 w-24"
           style={{
             background:
-              "linear-gradient(90deg, hsl(var(--background) / 0.5) 0%, transparent 100%)",
+              "linear-gradient(90deg, hsl(var(--background-v2) / 0.5) 0%, transparent 100%)",
           }}
         />
       )}
@@ -1080,7 +1080,7 @@ const HeroPanel = ({
         className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
         style={{
           background:
-            "linear-gradient(180deg, transparent 0%, hsl(var(--background)) 100%)",
+            "linear-gradient(180deg, transparent 0%, hsl(var(--background-v2)) 100%)",
         }}
       />
     </div>

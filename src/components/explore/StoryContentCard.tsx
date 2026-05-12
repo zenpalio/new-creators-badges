@@ -34,7 +34,7 @@ const StoryContentCard = ({
     <a
       href={href}
       onClick={onClick}
-      className="group relative block w-[calc(100vw-2rem)] max-w-[460px] shrink-0 aspect-[5/3] rounded-xl overflow-hidden bg-card border border-border/50 cursor-pointer md:w-[460px]"
+      className="group relative block w-[calc(100vw-2rem)] max-w-[460px] shrink-0 aspect-[5/3] rounded-xl overflow-hidden bg-card-v2 border border-border-v2/50 cursor-pointer md:w-[460px]"
     >
       {/* Cover image */}
       {src ? (
@@ -45,14 +45,14 @@ const StoryContentCard = ({
           className="h-full w-full object-cover object-top transition-transform duration-300 md:group-hover:scale-[1.03]"
         />
       ) : (
-        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5">
-          <BookOpen className="h-10 w-10 text-muted-foreground/40" />
+        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary-v2/20 to-primary-v2/5">
+          <BookOpen className="h-10 w-10 text-muted-v2-foreground/40" />
         </div>
       )}
 
       {/* Top badge */}
       <div className="absolute left-2.5 top-2.5 z-10">
-        <span className="flex items-center gap-1 rounded-lg border border-border/30 bg-background/70 px-2.5 py-1 text-[11px] font-medium text-foreground backdrop-blur-sm">
+        <span className="flex items-center gap-1 rounded-lg border border-border-v2/30 bg-background-v2/70 px-2.5 py-1 text-[11px] font-medium text-foreground-v2 backdrop-blur-sm">
           <BookOpen className="h-3.5 w-3.5" /> Story
         </span>
       </div>
@@ -60,10 +60,10 @@ const StoryContentCard = ({
       {/* Rating badge */}
       {avgRating > 0 && (
         <div className="absolute right-2.5 top-2.5 z-10">
-          <span className="flex items-center gap-1 rounded-lg border border-border/30 bg-background/70 px-2 py-1 text-[11px] font-semibold text-yellow-400 backdrop-blur-sm">
+          <span className="flex items-center gap-1 rounded-lg border border-border-v2/30 bg-background-v2/70 px-2 py-1 text-[11px] font-semibold text-yellow-400 backdrop-blur-sm">
             <Star className="h-3.5 w-3.5 fill-yellow-400" />
             {avgRating.toFixed(1)}
-            <span className="font-normal text-foreground/50">({ratingCount})</span>
+            <span className="font-normal text-foreground-v2/50">({ratingCount})</span>
           </span>
         </div>
       )}

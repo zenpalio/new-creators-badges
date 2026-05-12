@@ -20,9 +20,9 @@ const ShopBadgePopup = ({ name, description, imageUrl, price, owned, equipped, o
   const effect = getBadgeEffect(name);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/85 backdrop-blur-md" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background-v2/85 backdrop-blur-md" onClick={onClose}>
       <div
-        className="relative w-[320px] sm:w-[380px] rounded-2xl border border-border/20 p-6 flex flex-col items-center text-center overflow-hidden animate-in zoom-in-90 fade-in duration-500"
+        className="relative w-[320px] sm:w-[380px] rounded-2xl border border-border-v2/20 p-6 flex flex-col items-center text-center overflow-hidden animate-in zoom-in-90 fade-in duration-500"
         onClick={(e) => e.stopPropagation()}
         style={{
           backgroundColor: "hsl(var(--popover-v2))",
@@ -42,7 +42,7 @@ const ShopBadgePopup = ({ name, description, imageUrl, price, owned, equipped, o
               ? `linear-gradient(90deg, transparent, ${effect.glowColor}, transparent)`
               : owned
                 ? "linear-gradient(90deg, transparent, hsl(43 96% 58%), transparent)"
-                : "linear-gradient(90deg, transparent, hsl(var(--primary)), transparent)",
+                : "linear-gradient(90deg, transparent, hsl(var(--primary-v2)), transparent)",
           }}
         />
 
@@ -61,7 +61,7 @@ const ShopBadgePopup = ({ name, description, imageUrl, price, owned, equipped, o
               <Check className="w-3 h-3" /> Owned
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider" style={{ backgroundColor: "hsl(var(--primary) / 0.12)", color: "hsl(var(--primary))", border: "1px solid hsl(var(--primary) / 0.25)" }}>
+            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider" style={{ backgroundColor: "hsl(var(--primary-v2) / 0.12)", color: "hsl(var(--primary-v2))", border: "1px solid hsl(var(--primary-v2) / 0.25)" }}>
               <ShoppingCart className="w-3 h-3" /> Available
             </span>
           )}
@@ -75,16 +75,16 @@ const ShopBadgePopup = ({ name, description, imageUrl, price, owned, equipped, o
           <img src={imageUrl} alt={name} className="relative z-10 w-full h-full object-contain" loading="lazy" width={512} height={512} />
         </div>
 
-        <h2 className="text-lg font-bold text-foreground tracking-tight mb-0.5">{name}</h2>
-        <p className="text-xs text-muted-foreground mb-3">{description}</p>
+        <h2 className="text-lg font-bold text-foreground-v2 tracking-tight mb-0.5">{name}</h2>
+        <p className="text-xs text-muted-v2-foreground mb-3">{description}</p>
 
         {/* Effect preview */}
         {owned && (
           <div className="mb-3 px-3 py-2 rounded-xl w-full text-left" style={{ background: "hsl(0 0% 100% / 0.03)", border: "1px solid hsl(0 0% 100% / 0.08)" }}>
-            <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-1">Badge Effect</p>
+            <p className="text-[10px] text-muted-v2-foreground uppercase tracking-wider font-medium mb-1">Badge Effect</p>
             <div className="flex items-center gap-2">
               <span className="text-sm">{effect.particleEmoji}</span>
-              <span className="text-xs text-foreground/80 capitalize">{effect.animation.replace(/-/g, " ")} animation</span>
+              <span className="text-xs text-foreground-v2/80 capitalize">{effect.animation.replace(/-/g, " ")} animation</span>
             </div>
           </div>
         )}
@@ -105,8 +105,8 @@ const ShopBadgePopup = ({ name, description, imageUrl, price, owned, equipped, o
               <TokenIcon className="w-6 h-6" />
             </div>
             <div className="flex items-baseline gap-2">
-              <span className="text-foreground font-extrabold text-xl leading-tight tracking-tight">{price.toLocaleString()}</span>
-              <span className="text-[10px] text-muted-foreground/70 uppercase tracking-widest font-medium">tokens</span>
+              <span className="text-foreground-v2 font-extrabold text-xl leading-tight tracking-tight">{price.toLocaleString()}</span>
+              <span className="text-[10px] text-muted-v2-foreground/70 uppercase tracking-widest font-medium">tokens</span>
             </div>
           </div>
         </div>
@@ -134,7 +134,7 @@ const ShopBadgePopup = ({ name, description, imageUrl, price, owned, equipped, o
                 size="lg"
                 className="w-full rounded-xl font-bold gap-2 hover:scale-[1.02] active:scale-95 transition-transform"
                 onClick={onEquip}
-                style={{ background: `linear-gradient(135deg, ${effect.glowColor}, hsl(var(--primary)))` }}
+                style={{ background: `linear-gradient(135deg, ${effect.glowColor}, hsl(var(--primary-v2)))` }}
               >
                 <Star className="w-4 h-4" />
                 Equip on Profile

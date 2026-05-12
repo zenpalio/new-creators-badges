@@ -17,7 +17,7 @@ const ExploreVideoCard = ({
   <a
     href={href}
     onClick={onClick}
-    className="group relative block w-[220px] shrink-0 overflow-hidden rounded-2xl bg-grey-dark-1"
+    className="group relative block w-[220px] shrink-0 overflow-hidden rounded-2xl bg-grey-dark-1-v2"
   >
     <div className="relative aspect-[13/19] w-full overflow-hidden">
       <img

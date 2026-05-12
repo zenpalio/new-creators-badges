@@ -154,7 +154,7 @@ export function CreatorsView({
   }, [creators, search, sortBy, creationType, showExtraFilters])
 
   return (
-    <div className={cn("min-h-screen bg-background relative w-full", className)}>
+    <div className={cn("min-h-screen bg-background-v2 relative w-full", className)}>
       <div className="absolute top-0 left-0 right-0 h-[500px] overflow-hidden pointer-events-none">
         <div
           className="absolute inset-0"
@@ -194,7 +194,7 @@ export function CreatorsView({
           className="absolute bottom-0 left-0 right-0 h-32"
           style={{
             background:
-              "linear-gradient(to top, hsl(var(--background)), transparent)",
+              "linear-gradient(to top, hsl(var(--background-v2)), transparent)",
           }}
         />
       </div>
@@ -208,7 +208,7 @@ export function CreatorsView({
           {onMenu ? (
             <button
               onClick={onMenu}
-              className="pointer-events-auto flex h-9 w-9 items-center justify-center text-foreground/90 transition-opacity hover:opacity-70"
+              className="pointer-events-auto flex h-9 w-9 items-center justify-center text-foreground-v2/90 transition-opacity hover:opacity-70"
               aria-label="Open menu"
             >
               <Menu className="h-5 w-5" strokeWidth={1.5} />
@@ -216,8 +216,8 @@ export function CreatorsView({
           ) : (
             <span />
           )}
-          <div className="pointer-events-auto flex h-9 items-center gap-2 bg-card/70 backdrop-blur-md border border-border/40 rounded-full px-3 w-[200px] focus-within:w-[260px] transition-all duration-200">
-            <Search className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+          <div className="pointer-events-auto flex h-9 items-center gap-2 bg-card-v2/70 backdrop-blur-md border border-border-v2/40 rounded-full px-3 w-[200px] focus-within:w-[260px] transition-all duration-200">
+            <Search className="w-4 h-4 text-muted-v2-foreground flex-shrink-0" />
             <input
               value={search}
               onChange={(e) => {
@@ -228,7 +228,7 @@ export function CreatorsView({
                 if (e.key === "Enter" && search.trim()) setSearchActive(true)
               }}
               placeholder={labels.searchPlaceholder}
-              className="bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none flex-1 min-w-0"
+              className="bg-transparent text-sm text-foreground-v2 placeholder:text-muted-v2-foreground focus:outline-none flex-1 min-w-0"
             />
             {search && (
               <button
@@ -236,7 +236,7 @@ export function CreatorsView({
                   setSearch("")
                   setSearchActive(false)
                 }}
-                className="text-muted-foreground hover:text-foreground text-xs flex-shrink-0"
+                className="text-muted-v2-foreground hover:text-foreground-v2 text-xs flex-shrink-0"
                 aria-label="Clear search"
               >
                 ✕
@@ -251,11 +251,11 @@ export function CreatorsView({
             <div className="relative">
               <button
                 onClick={() => setSortOpen(!sortOpen)}
-                className="flex items-center gap-2 bg-card border border-border rounded-xl px-4 py-2.5 text-sm font-medium text-foreground hover:bg-accent/50 transition-colors"
+                className="flex items-center gap-2 bg-card-v2 border border-border-v2 rounded-xl px-4 py-2.5 text-sm font-medium text-foreground-v2 hover:bg-accent-v2/50 transition-colors"
               >
                 {labels.sortBy[sortBy]}
                 <ChevronDown
-                  className={`w-4 h-4 text-muted-foreground transition-transform ${sortOpen ? "rotate-180" : ""}`}
+                  className={`w-4 h-4 text-muted-v2-foreground transition-transform ${sortOpen ? "rotate-180" : ""}`}
                 />
               </button>
               {sortOpen && (
@@ -264,7 +264,7 @@ export function CreatorsView({
                     className="fixed inset-0 z-40"
                     onClick={() => setSortOpen(false)}
                   />
-                  <div className="absolute top-full left-0 mt-2 z-50 bg-card border border-border rounded-xl overflow-hidden shadow-lg min-w-[180px] animate-in fade-in slide-in-from-top-2 duration-150">
+                  <div className="absolute top-full left-0 mt-2 z-50 bg-card-v2 border border-border-v2 rounded-xl overflow-hidden shadow-lg min-w-[180px] animate-in fade-in slide-in-from-top-2 duration-150">
                     {(["likes", "followers", "aura"] as SortBy[]).map(
                       (option) => (
                         <button
@@ -275,8 +275,8 @@ export function CreatorsView({
                           }}
                           className={`w-full text-left px-4 py-3 text-sm font-medium transition-colors flex items-center gap-2 ${
                             sortBy === option
-                              ? "bg-primary/10 text-primary"
-                              : "text-foreground hover:bg-accent/50"
+                              ? "bg-primary-v2/10 text-primary-v2"
+                              : "text-foreground-v2 hover:bg-accent-v2/50"
                           }`}
                         >
                           {labels.sortBy[option]}
@@ -292,12 +292,12 @@ export function CreatorsView({
               <div className="relative">
                 <button
                   onClick={() => setCreationOpen(!creationOpen)}
-                  className="flex items-center gap-2 bg-card border border-border rounded-xl px-4 py-2.5 text-sm font-medium text-foreground hover:bg-accent/50 transition-colors animate-in fade-in slide-in-from-left-2 duration-200"
+                  className="flex items-center gap-2 bg-card-v2 border border-border-v2 rounded-xl px-4 py-2.5 text-sm font-medium text-foreground-v2 hover:bg-accent-v2/50 transition-colors animate-in fade-in slide-in-from-left-2 duration-200"
                 >
                   {creationTypeIcons[creationType]}
                   {labels.creationType[creationType]}
                   <ChevronDown
-                    className={`w-4 h-4 text-muted-foreground transition-transform ${creationOpen ? "rotate-180" : ""}`}
+                    className={`w-4 h-4 text-muted-v2-foreground transition-transform ${creationOpen ? "rotate-180" : ""}`}
                   />
                 </button>
                 {creationOpen && (
@@ -306,7 +306,7 @@ export function CreatorsView({
                       className="fixed inset-0 z-40"
                       onClick={() => setCreationOpen(false)}
                     />
-                    <div className="absolute top-full left-0 mt-2 z-50 bg-card border border-border rounded-xl overflow-hidden shadow-lg min-w-[180px] animate-in fade-in slide-in-from-top-2 duration-150">
+                    <div className="absolute top-full left-0 mt-2 z-50 bg-card-v2 border border-border-v2 rounded-xl overflow-hidden shadow-lg min-w-[180px] animate-in fade-in slide-in-from-top-2 duration-150">
                       {creationOptions.map((option) => (
                         <button
                           key={option}
@@ -316,8 +316,8 @@ export function CreatorsView({
                           }}
                           className={`w-full text-left px-4 py-3 text-sm font-medium transition-colors flex items-center gap-2 ${
                             creationType === option
-                              ? "bg-primary/10 text-primary"
-                              : "text-foreground hover:bg-accent/50"
+                              ? "bg-primary-v2/10 text-primary-v2"
+                              : "text-foreground-v2 hover:bg-accent-v2/50"
                           }`}
                         >
                           {creationTypeIcons[option]}
@@ -334,11 +334,11 @@ export function CreatorsView({
               <div className="relative">
                 <button
                   onClick={() => setTimeOpen(!timeOpen)}
-                  className="flex items-center gap-2 bg-card border border-border rounded-xl px-4 py-2.5 text-sm font-medium text-foreground hover:bg-accent/50 transition-colors animate-in fade-in slide-in-from-left-2 duration-200"
+                  className="flex items-center gap-2 bg-card-v2 border border-border-v2 rounded-xl px-4 py-2.5 text-sm font-medium text-foreground-v2 hover:bg-accent-v2/50 transition-colors animate-in fade-in slide-in-from-left-2 duration-200"
                 >
                   {labels.timeFilter[filterBy]}
                   <ChevronDown
-                    className={`w-4 h-4 text-muted-foreground transition-transform ${timeOpen ? "rotate-180" : ""}`}
+                    className={`w-4 h-4 text-muted-v2-foreground transition-transform ${timeOpen ? "rotate-180" : ""}`}
                   />
                 </button>
                 {timeOpen && (
@@ -347,7 +347,7 @@ export function CreatorsView({
                       className="fixed inset-0 z-40"
                       onClick={() => setTimeOpen(false)}
                     />
-                    <div className="absolute top-full left-0 mt-2 z-50 bg-card border border-border rounded-xl overflow-hidden shadow-lg min-w-[180px] animate-in fade-in slide-in-from-top-2 duration-150">
+                    <div className="absolute top-full left-0 mt-2 z-50 bg-card-v2 border border-border-v2 rounded-xl overflow-hidden shadow-lg min-w-[180px] animate-in fade-in slide-in-from-top-2 duration-150">
                       {filterOptions.map((option) => (
                         <button
                           key={option}
@@ -357,8 +357,8 @@ export function CreatorsView({
                           }}
                           className={`w-full text-left px-4 py-3 text-sm font-medium transition-colors ${
                             filterBy === option
-                              ? "bg-primary/10 text-primary"
-                              : "text-foreground hover:bg-accent/50"
+                              ? "bg-primary-v2/10 text-primary-v2"
+                              : "text-foreground-v2 hover:bg-accent-v2/50"
                           }`}
                         >
                           {labels.timeFilter[option]}
@@ -375,7 +375,7 @@ export function CreatorsView({
         {!searchActive && !search && filtered.length >= 3 && (
           <div className="relative mb-8 pt-2">
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-48 h-48 rounded-full bg-primary/10 blur-[80px]" />
+              <div className="w-48 h-48 rounded-full bg-primary-v2/10 blur-[80px]" />
             </div>
 
             <div className="flex items-end justify-center gap-2 relative z-10">
@@ -428,7 +428,7 @@ export function CreatorsView({
                     </div>
 
                     <p
-                      className={`font-bold text-foreground truncate max-w-[110px] ${isFirst ? "text-base" : "text-sm"}`}
+                      className={`font-bold text-foreground-v2 truncate max-w-[110px] ${isFirst ? "text-base" : "text-sm"}`}
                     >
                       {creator.name}
                     </p>
@@ -456,7 +456,7 @@ export function CreatorsView({
                       ) : (
                         <AuraIcon className="w-3.5 h-3.5 text-purple-500" />
                       )}
-                      <span className="text-[11px] font-black text-foreground">
+                      <span className="text-[11px] font-black text-foreground-v2">
                         {sortBy === "likes"
                           ? creator.likes.toLocaleString()
                           : sortBy === "followers"
@@ -466,16 +466,16 @@ export function CreatorsView({
                     </div>
 
                     <div
-                      className="rounded-t-2xl flex flex-col items-center justify-center gap-1 border border-border/30"
+                      className="rounded-t-2xl flex flex-col items-center justify-center gap-1 border border-border-v2/30"
                       style={{
                         width: isFirst ? 106 : 86,
                         height: isFirst ? 110 : podiumRank === 2 ? 76 : 58,
                         background:
                           podiumRank === 1
-                            ? "linear-gradient(180deg, hsl(43 96% 58% / 0.15) 0%, hsl(var(--card)) 100%)"
+                            ? "linear-gradient(180deg, hsl(43 96% 58% / 0.15) 0%, hsl(var(--card-v2)) 100%)"
                             : podiumRank === 2
-                              ? "linear-gradient(180deg, hsl(0 0% 70% / 0.1) 0%, hsl(var(--card)) 100%)"
-                              : "linear-gradient(180deg, hsl(25 70% 45% / 0.1) 0%, hsl(var(--card)) 100%)",
+                              ? "linear-gradient(180deg, hsl(0 0% 70% / 0.1) 0%, hsl(var(--card-v2)) 100%)"
+                              : "linear-gradient(180deg, hsl(25 70% 45% / 0.1) 0%, hsl(var(--card-v2)) 100%)",
                       }}
                     >
                       <span
@@ -507,7 +507,7 @@ export function CreatorsView({
 
         <div className="space-y-2">
           {searchActive && search && (
-            <p className="text-xs text-muted-foreground mb-3">
+            <p className="text-xs text-muted-v2-foreground mb-3">
               {labels.searchResultsSummary(filtered.length, search)}
             </p>
           )}
@@ -532,7 +532,7 @@ export function CreatorsView({
                   />
                 ))}
           {filtered.length === 0 && (
-            <p className="text-center text-muted-foreground py-12 text-sm">
+            <p className="text-center text-muted-v2-foreground py-12 text-sm">
               {labels.emptyMessage}
             </p>
           )}
@@ -561,7 +561,7 @@ function CreatorRow({
   const glowHsl = tierGlowColors[creator.tier]
   const highTier = isHighTier(creator.tier)
 
-  const rankColor = rank <= 10 ? "text-foreground" : "text-muted-foreground"
+  const rankColor = rank <= 10 ? "text-foreground-v2" : "text-muted-v2-foreground"
 
   const secondary =
     creationType !== "all"
@@ -573,7 +573,7 @@ function CreatorRow({
 
   return (
     <div
-      className="flex items-center gap-3 bg-card rounded-xl border border-border/50 px-4 py-3 hover:bg-accent/50 transition-all duration-200 cursor-pointer group hover:scale-[1.01] hover:border-border"
+      className="flex items-center gap-3 bg-card-v2 rounded-xl border border-border-v2/50 px-4 py-3 hover:bg-accent-v2/50 transition-all duration-200 cursor-pointer group hover:scale-[1.01] hover:border-border-v2"
       style={{
         boxShadow: highTier ? `inset 0 0 30px hsl(${glowHsl} / 0.03)` : "none",
       }}
@@ -598,11 +598,11 @@ function CreatorRow({
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5">
-          <p className="text-sm font-semibold text-foreground truncate">
+          <p className="text-sm font-semibold text-foreground-v2 truncate">
             {creator.name}
           </p>
         </div>
-        <p className="text-[11px] text-muted-foreground">{secondary}</p>
+        <p className="text-[11px] text-muted-v2-foreground">{secondary}</p>
       </div>
 
       <div
@@ -613,17 +613,17 @@ function CreatorRow({
               ? "hsl(0 70% 50% / 0.1)"
               : highTier
                 ? `linear-gradient(135deg, hsl(${glowHsl} / 0.12), hsl(${glowHsl} / 0.05))`
-                : "hsl(var(--muted) / 0.6)",
+                : "hsl(var(--muted-v2) / 0.6)",
         }}
       >
         {sortBy === "likes" ? (
           <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" />
         ) : sortBy === "followers" ? (
-          <Users className="w-3.5 h-3.5 text-primary" />
+          <Users className="w-3.5 h-3.5 text-primary-v2" />
         ) : (
           <AuraIcon className="w-3.5 h-3.5 text-purple-500" />
         )}
-        <span className="text-xs font-bold text-foreground">
+        <span className="text-xs font-bold text-foreground-v2">
           {sortBy === "likes"
             ? creator.likes.toLocaleString()
             : sortBy === "followers"
@@ -645,7 +645,7 @@ function SearchResultCard({
   const borderColor = tierBorderColors[creator.tier]
 
   return (
-    <div className="flex items-center gap-4 bg-card rounded-xl border border-border/50 px-5 py-4 hover:bg-accent/50 transition-all duration-200 cursor-pointer group hover:border-border">
+    <div className="flex items-center gap-4 bg-card-v2 rounded-xl border border-border-v2/50 px-5 py-4 hover:bg-accent-v2/50 transition-all duration-200 cursor-pointer group hover:border-border-v2">
       <div
         className="w-14 h-14 rounded-full overflow-hidden flex-shrink-0"
         style={{ border: `1.5px solid ${borderColor}80` }}
@@ -659,15 +659,15 @@ function SearchResultCard({
       </div>
 
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-foreground truncate">
+        <p className="text-sm font-semibold text-foreground-v2 truncate">
           {creator.name}
         </p>
-        <p className="text-[11px] text-muted-foreground mt-0.5">
+        <p className="text-[11px] text-muted-v2-foreground mt-0.5">
           {labels.searchResultMeta(creator.followers, creator.aura)}
         </p>
       </div>
 
-      <div className="flex items-center gap-1.5 text-muted-foreground">
+      <div className="flex items-center gap-1.5 text-muted-v2-foreground">
         <Heart className="w-3.5 h-3.5" />
         <span className="text-xs font-medium">
           {creator.likes.toLocaleString()}

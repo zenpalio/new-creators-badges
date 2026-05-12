@@ -161,7 +161,7 @@ const badgeEffects: Record<string, {
 
 export const getBadgeEffect = (name: string) => badgeEffects[name] || {
   className: "",
-  glowColor: "hsl(var(--primary))",
+  glowColor: "hsl(var(--primary-v2))",
   animation: "float",
 };
 
@@ -194,7 +194,7 @@ const ProfileBadgeShowcase = ({ equippedBadges, onRemove }: ProfileBadgeShowcase
 
   return (
     <div className="mb-6">
-      <p className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium mb-2 px-1">
+      <p className="text-[11px] text-muted-v2-foreground uppercase tracking-wider font-medium mb-2 px-1">
         Equipped Badges
       </p>
       <div className="flex flex-wrap justify-center gap-3">
@@ -209,7 +209,7 @@ const ProfileBadgeShowcase = ({ equippedBadges, onRemove }: ProfileBadgeShowcase
               />
               {/* Badge container */}
               <div
-                className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border border-border/30 flex items-center justify-center cursor-pointer overflow-visible"
+                className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border border-border-v2/30 flex items-center justify-center cursor-pointer overflow-visible"
                 style={{ backgroundColor: "hsl(var(--popover-v2))" }}
               >
                 {/* Animated image */}
@@ -230,12 +230,12 @@ const ProfileBadgeShowcase = ({ equippedBadges, onRemove }: ProfileBadgeShowcase
                 {/* Remove button */}
                 <button
                   onClick={() => onRemove(badge.name)}
-                  className="absolute -top-1.5 -left-1.5 z-20 w-5 h-5 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute -top-1.5 -left-1.5 z-20 w-5 h-5 rounded-full bg-destructive-v2 text-destructive-v2-foreground flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                 >
                   <X className="w-3 h-3" />
                 </button>
               </div>
-              <p className="text-[9px] text-muted-foreground text-center mt-1.5 max-w-[80px] truncate">
+              <p className="text-[9px] text-muted-v2-foreground text-center mt-1.5 max-w-[80px] truncate">
                 {badge.name}
               </p>
             </div>

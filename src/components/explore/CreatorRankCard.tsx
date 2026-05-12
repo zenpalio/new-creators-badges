@@ -20,7 +20,7 @@ const resolveSrc = (image: string | { src: string }) =>
 const RankBackdrop = ({ rank }: { rank: number }) => (
   <span
     aria-hidden
-    className="pointer-events-none absolute -left-1 -bottom-5 z-0 select-none font-black leading-none text-foreground/[0.055]"
+    className="pointer-events-none absolute -left-1 -bottom-5 z-0 select-none font-black leading-none text-foreground-v2/[0.055]"
     style={{
       fontSize: rank >= 10 ? 118 : 142,
       fontVariantNumeric: "tabular-nums",
@@ -56,7 +56,7 @@ const CreatorRankCard = ({
     <a
       href={href}
       onClick={onClick}
-      className="group relative flex w-[300px] shrink-0 items-center gap-4 overflow-hidden rounded-2xl bg-grey-dark-1 pl-5 pr-4 py-3 text-left transition-colors hover:bg-grey-dark-2"
+      className="group relative flex w-[300px] shrink-0 items-center gap-4 overflow-hidden rounded-2xl bg-grey-dark-1-v2 pl-5 pr-4 py-3 text-left transition-colors hover:bg-grey-dark-2-v2"
     >
       <RankBackdrop rank={rank} />
 
@@ -90,12 +90,12 @@ const CreatorRankCard = ({
       {/* Name + tier */}
       <div className="relative z-10 flex min-w-0 flex-1 flex-col">
         <span className="truncate text-sm font-bold text-white">{name}</span>
-        <span className="mt-0.5 text-[10px] font-medium uppercase tracking-wider text-grey-light-3">
+        <span className="mt-0.5 text-[10px] font-medium uppercase tracking-wider text-grey-light-3-v2">
           {tier}
         </span>
       </div>
 
-      <ChevronRight className="relative z-10 h-5 w-5 text-grey-light-3 transition-colors group-hover:text-white" />
+      <ChevronRight className="relative z-10 h-5 w-5 text-grey-light-3-v2 transition-colors group-hover:text-white" />
     </a>
   );
 };
