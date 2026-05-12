@@ -1,13 +1,16 @@
 import { ArrowUpRight, type LucideIcon } from "lucide-react"
 import PostCard from "./PostCard"
 import HScroll from "./HScroll"
-import StoryContentCard, { type StoryContentCardLabels } from "./StoryContentCard"
+import StoryContentCard, {
+  type StoryContentCardLabels,
+} from "./StoryContentCard"
 import CreatorRankCard from "./CreatorRankCard"
 import ExploreVideoCard from "./ExploreVideoCard"
 import ExploreWhatsNewCard from "./ExploreWhatsNewCard"
 import ExploreCreateToolCard from "./ExploreCreateToolCard"
 import PromoBanner, { type PromoBannerVariant } from "./PromoBanner"
 import { type BadgeTier } from "../BadgeCard"
+import { MouseEvent } from "react"
 
 // ---- Public types ----
 
@@ -396,11 +399,13 @@ export const ExploreWhatsNewSection = ({
 export interface ExplorePromoSectionProps {
   promo: ExploreViewPromo
   className?: string
+  onClick?: (event: MouseEvent<HTMLAnchorElement>) => void
 }
 
 export const ExplorePromoSection = ({
   promo,
   className,
+  onClick,
 }: ExplorePromoSectionProps) => (
   <PromoBanner
     variant={promo.variant}
@@ -411,6 +416,7 @@ export const ExplorePromoSection = ({
     description={promo.description}
     cta={promo.cta}
     href={promo.href}
+    onClick={onClick}
     className={className}
   />
 )
