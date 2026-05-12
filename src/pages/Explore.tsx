@@ -18,6 +18,7 @@ import SideNav from "../components/SideNav";
 import NotificationsSidebar, { type Announcement } from "../components/NotificationsSidebar";
 import AnnouncementDialog from "../components/AnnouncementDialog";
 import { ExploreView } from "../components/ExploreView";
+import LikeButton from "../components/explore/LikeButton";
 import FloatingToolsFAB, { type FloatingToolsFabItem } from "../components/explore/FloatingToolsFAB";
 import {
   PostsSection,
@@ -39,7 +40,7 @@ import {
   type ExploreViewWhatsNew,
 } from "../components/explore/ExploreSections";
 import { exploreVideoFeed } from "../data/exploreVideoFeed";
-import { type CinematicHeroLabels, type HeroSlide } from "../components/explore/CinematicHero";
+import { type CinematicHeroLabels, type CinematicHeroRenderLikeButton, type HeroSlide } from "../components/explore/CinematicHero";
 import type { Service } from "../components/explore/SystemStatusIndicator";
 import type { StoryContentCardLabels } from "../components/explore/StoryContentCard";
 import { type BadgeTier } from "../components/BadgeCard";
@@ -866,6 +867,75 @@ const Explore = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [inlineAnnouncement, setInlineAnnouncement] = useState<Announcement | null>(null);
+  const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
+
+  const toggleLiked = (key: string) => {
+    setLikedMap((m) => ({ ...m, [key]: !m[key] }));
+  };
+
+  const babeLikeKey = (b: ExploreViewBabe) => `babe:${b.name}:${b.imageUrl}`;
+
+  const renderBabeLikeButton = (babe: ExploreViewBabe) => (
+    <LikeButton
+      variant="babeStats"
+      liked={!!likedMap[babeLikeKey(babe)]}
+      onClick={() => toggleLiked(babeLikeKey(babe))}
+    >
+      <span>{babe.likeCount ?? 0}</span>
+    </LikeButton>
+  );
+
+  const storyLikeKey = (s: ExploreViewStory) => `story:${s.id}`;
+
+  const renderStoryLikeButton = (story: ExploreViewStory) => {
+    if (story.likes == null) return null;
+    return (
+      <LikeButton
+        variant="story"
+        liked={!!likedMap[storyLikeKey(story)]}
+        onClick={() => toggleLiked(storyLikeKey(story))}
+      >
+        <span>{story.likes}</span>
+      </LikeButton>
+    );
+  };
+
+  const videoLikeKey = (v: ExploreViewVideo) => `video:${v.id}`;
+
+  const renderVideoLikeButton = (video: ExploreViewVideo) => {
+    if (video.likes == null) return null;
+    return (
+      <LikeButton
+        variant="video"
+        liked={!!likedMap[videoLikeKey(video)]}
+        onClick={() => toggleLiked(videoLikeKey(video))}
+      >
+        <span>{video.likes}</span>
+      </LikeButton>
+    );
+  };
+
+  const heroLikeKey = (slideIndex: number) => `hero:${slideIndex}`;
+
+  const renderHeroLikeButton: CinematicHeroRenderLikeButton = ({
+    slideIndex,
+    likes,
+    placement,
+  }) => (
+    <LikeButton
+      variant={
+        placement === "storyCard"
+          ? "story"
+          : placement === "storyCaption"
+            ? "hero"
+            : "heroMeta"
+      }
+      liked={!!likedMap[heroLikeKey(slideIndex)]}
+      onClick={() => toggleLiked(heroLikeKey(slideIndex))}
+    >
+      <span>{likes}</span>
+    </LikeButton>
+  );
 
   const yourBabes: ExploreViewBabe[] = yourBabesBase.map((b, i) => ({
     ...b,
@@ -955,6 +1025,7 @@ const Explore = () => {
       <ExploreView
         heroSlides={heroSlides}
         heroLabels={exploreHeroLabels}
+        renderHeroLikeButton={renderHeroLikeButton}
         onMenu={() => setSidebarOpen(true)}
         onNotifications={() => setNotificationsOpen(true)}
         notificationCount={14}
@@ -973,6 +1044,7 @@ const Explore = () => {
           posts={featuredStories}
           className="mt-2"
           storyCardLabels={exploreStoryCardLabels}
+          renderLikeButton={renderStoryLikeButton}
         />
         <ExploreVideosSection
           title="Top trending videos"
@@ -981,6 +1053,7 @@ const Explore = () => {
           posts={trendingVideos}
           className="mt-2"
           videoCardImageAlt={exploreVideoCardImageAlt}
+          renderLikeButton={renderVideoLikeButton}
         />
         <ExplorePromoSection promo={premiumPromo} />
         <ExploreCreatorsSection
@@ -1022,6 +1095,7 @@ const Explore = () => {
           posts={yourFollowing}
           variant="stats"
           className="mt-2"
+          renderLikeButton={renderBabeLikeButton}
         />
         <ExplorePromoSection promo={tokensPromo} />
         <PostsSection
@@ -1031,6 +1105,7 @@ const Explore = () => {
           posts={trendingBabes}
           variant="stats"
           className="mt-2"
+          renderLikeButton={renderBabeLikeButton}
         />
         <ExploreStoriesSection
           title="New story episodes"
@@ -1038,6 +1113,7 @@ const Explore = () => {
           posts={newEpisodes}
           className="mt-2"
           storyCardLabels={exploreStoryCardLabels}
+          renderLikeButton={renderStoryLikeButton}
         />
         <ExplorePromoSection promo={featurePromo} />
         <ExploreCreatorsSection
@@ -1060,6 +1136,7 @@ const Explore = () => {
           posts={continueStories}
           className="mt-2"
           storyCardLabels={exploreStoryCardLabels}
+          renderLikeButton={renderStoryLikeButton}
         />
         <ExploreVideosSection
           title="Hot right now"
@@ -1067,6 +1144,7 @@ const Explore = () => {
           posts={hotVideos}
           className="mt-2"
           videoCardImageAlt={exploreVideoCardImageAlt}
+          renderLikeButton={renderVideoLikeButton}
         />
         <ExplorePromoSection promo={premiumPromo2} />
         <PostsSection
@@ -1076,6 +1154,7 @@ const Explore = () => {
           posts={newBabes}
           variant="stats"
           className="mt-2"
+          renderLikeButton={renderBabeLikeButton}
         />
         <PostsSection
           title="Fan favorites"
@@ -1083,6 +1162,7 @@ const Explore = () => {
           posts={fanFavoritesBabes}
           variant="stats"
           className="mt-2"
+          renderLikeButton={renderBabeLikeButton}
         />
         <ExploreStartCreatingSection
           title="Start creating"

@@ -1,7 +1,6 @@
-import { type ComponentType, type TouchEvent, useEffect, useMemo, useRef, useState } from "react";
+import { type ComponentType, type ReactNode, type TouchEvent, useEffect, useMemo, useRef, useState } from "react";
 import { BookOpen, Check, ChevronLeft, ChevronRight, Crown, Film, GitBranch, Image as ImageIcon, Layers, Mic, Music, Play, Star, Wand2 } from "lucide-react";
 import ChatIcon from "../icons/ChatIcon";
-import LikeButton from "./LikeButton";
 
 export type HeroMedia =
   | { type: "image"; url: string }
@@ -100,12 +99,24 @@ function heroSlideButtonClasses(btn: HeroSlideButton): string {
   return `${core} ${variant} ${btn.className ?? ""}`.trim();
 }
 
+/** Where the hero injects the like control (styling may differ by row). */
+export type CinematicHeroLikePlacement = "storyCard" | "storyCaption" | "meta";
+
+export type CinematicHeroRenderLikeButton = (args: {
+  slideIndex: number;
+  slide: HeroSlide;
+  likes: string;
+  placement: CinematicHeroLikePlacement;
+}) => ReactNode;
+
 interface Props {
   slides: HeroSlide[];
   intervalMs?: number;
   /** How long each media item within a slide stays before crossfading */
   mediaIntervalMs?: number;
   labels: CinematicHeroLabels;
+  /** Parent-owned like UI (e.g. from Explore). When omitted, like counts are not interactive. */
+  renderLikeButton?: CinematicHeroRenderLikeButton;
 }
 
 const CinematicHero = ({
@@ -113,6 +124,7 @@ const CinematicHero = ({
   intervalMs = 7000,
   mediaIntervalMs = 3500,
   labels,
+  renderLikeButton,
 }: Props) => {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -374,11 +386,13 @@ const CinematicHero = ({
                                 {chapters} {chapters === 1 ? labels.chapterSingular : labels.chapterPlural}
                               </span>
                             )}
-                            {likes && (
-                              <LikeButton iconClassName="h-3.5 w-3.5" className="text-[11px] text-white/80 hover:text-white">
-                                <span>{likes}</span>
-                              </LikeButton>
-                            )}
+                            {likes &&
+                              renderLikeButton?.({
+                                slideIndex: i,
+                                slide: s,
+                                likes,
+                                placement: "storyCard",
+                              })}
                           </div>
                         </div>
                       </div>
@@ -879,11 +893,13 @@ const CinematicHero = ({
                   {slide.storyMeta.rating.toFixed(1)}
                 </span>
               )}
-              {slide.meta?.likes && (
-                <LikeButton iconClassName="h-3.5 w-3.5" className="gap-1.5 text-white/80 hover:text-white">
-                  <span>{slide.meta.likes}</span>
-                </LikeButton>
-              )}
+              {slide.meta?.likes &&
+                renderLikeButton?.({
+                  slideIndex: active,
+                  slide,
+                  likes: slide.meta.likes,
+                  placement: "storyCaption",
+                })}
             </div>
           )}
 
@@ -895,11 +911,13 @@ const CinematicHero = ({
                   {slide.meta.messages} {labels.chatsSuffix}
                 </span>
               )}
-              {slide.meta.likes && (
-                <LikeButton iconClassName="h-3.5 w-3.5" className="gap-1.5">
-                  <span>{slide.meta.likes}</span>
-                </LikeButton>
-              )}
+              {slide.meta.likes &&
+                renderLikeButton?.({
+                  slideIndex: active,
+                  slide,
+                  likes: slide.meta.likes,
+                  placement: "meta",
+                })}
             </div>
           )}
 

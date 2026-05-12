@@ -1,4 +1,4 @@
-import LikeButton from "./LikeButton";
+import type { ReactNode } from "react";
 import ChatIcon from "../icons/ChatIcon";
 import ResponsiveImage from "../ui/ResponsiveImage";
 
@@ -9,8 +9,9 @@ export interface PostCardProps {
   href?: string;
   onClick?: () => void;
   messageCount?: number | string;
-  likeCount?: number | string;
   variant?: "compact" | "stats";
+  /** Like control from parent (e.g. `PostsSection` `renderLikeButton`). Shown in the stats row on the right. */
+  likeButton?: ReactNode;
 }
 
 const PostCard = ({
@@ -20,8 +21,8 @@ const PostCard = ({
   href = "#",
   onClick,
   messageCount = 0,
-  likeCount,
   variant = "compact",
+  likeButton,
 }: PostCardProps) => {
   const showStats = variant === "stats";
 
@@ -64,9 +65,7 @@ const PostCard = ({
                 <ChatIcon className="h-3.5 w-3.5" />
                 {messageCount}
               </span>
-              <LikeButton className="text-[12px] font-medium text-white/90">
-                <span>{likeCount ?? 0}</span>
-              </LikeButton>
+              {likeButton}
             </div>
           )}
         </div>

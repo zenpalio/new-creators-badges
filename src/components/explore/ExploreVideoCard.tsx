@@ -1,24 +1,23 @@
-import { useEffect, useRef } from "react";
-import LikeButton from "./LikeButton";
+import { useEffect, useRef, type ReactNode } from "react";
 import ResponsiveImage from "../ui/ResponsiveImage";
 
 export interface ExploreVideoCardProps {
   poster?: string;
   video: string;
   href?: string;
-  likes?: number | string;
   onClick?: () => void;
   /** Passed to the card link as `aria-label` */
   imageAlt: string;
+  likeButton?: ReactNode;
 }
 
 const ExploreVideoCard = ({
   poster,
   video,
   href = "#",
-  likes,
   onClick,
   imageAlt,
+  likeButton,
 }: ExploreVideoCardProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hoverRef = useRef(false);
@@ -90,11 +89,9 @@ const ExploreVideoCard = ({
           </span>
         )}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-20 bg-gradient-to-t from-black/70 to-transparent" />
-        {likes != null && (
+        {likeButton != null && (
           <div className="absolute bottom-2 right-2 z-[3] text-[11px] font-medium text-white drop-shadow-md">
-            <LikeButton iconClassName="h-3.5 w-3.5">
-              <span>{likes}</span>
-            </LikeButton>
+            {likeButton}
           </div>
         )}
       </div>

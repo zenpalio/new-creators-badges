@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type MutableRefObject, type ReactNode } fr
 import { Bell, Menu } from "lucide-react";
 import CinematicHero, {
   type CinematicHeroLabels,
+  type CinematicHeroRenderLikeButton,
   type HeroSlide,
 } from "./explore/CinematicHero";
 import SystemStatusIndicator from "./explore/SystemStatusIndicator";
@@ -11,6 +12,8 @@ export interface ExploreViewProps {
   heroSlides: HeroSlide[];
   /** Visible hero labels (supply defaults from the page, e.g. Explore) */
   heroLabels: CinematicHeroLabels;
+  /** Optional like control for hero slides that expose `meta.likes`. */
+  renderHeroLikeButton?: CinematicHeroRenderLikeButton;
   onMenu: () => void;
   onNotifications?: () => void;
   notificationCount?: number;
@@ -139,6 +142,7 @@ export function ExploreHeaderActions({
 export function ExploreView({
   heroSlides,
   heroLabels,
+  renderHeroLikeButton,
   onMenu,
   onNotifications,
   notificationCount,
@@ -176,7 +180,11 @@ export function ExploreView({
         </header>
 
         {/* Cinematic hero (full-bleed) */}
-        <CinematicHero slides={heroSlides} labels={heroLabels} />
+        <CinematicHero
+          slides={heroSlides}
+          labels={heroLabels}
+          renderLikeButton={renderHeroLikeButton}
+        />
 
         {/* Edge-to-edge content rows */}
         <div className="relative z-10 flex w-full flex-col gap-6 px-4 pb-16 pt-6 md:px-8 lg:px-12">

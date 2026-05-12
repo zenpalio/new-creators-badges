@@ -10,7 +10,7 @@ import ExploreWhatsNewCard from "./ExploreWhatsNewCard"
 import ExploreCreateToolCard from "./ExploreCreateToolCard"
 import PromoBanner, { type PromoBannerVariant } from "./PromoBanner"
 import { type BadgeTier } from "../BadgeCard"
-import { MouseEvent } from "react"
+import { type MouseEvent, type ReactNode } from "react"
 
 // ---- Public types ----
 
@@ -161,6 +161,8 @@ export interface PostsSectionProps {
   onTagClick?: (tag: ExploreViewSectionCategory) => void
   posts: ExploreViewBabe[]
   onPostClick?: (post: ExploreViewBabe) => void
+  /** Optional like control per card; passed through to `PostCard` for `variant="stats"`. */
+  renderLikeButton?: (post: ExploreViewBabe) => ReactNode
   variant?: "compact" | "stats"
   className?: string
 }
@@ -174,6 +176,7 @@ export const PostsSection = ({
   onTagClick,
   posts,
   onPostClick,
+  renderLikeButton,
   variant = "compact",
   className,
 }: PostsSectionProps) => (
@@ -197,8 +200,8 @@ export const PostsSection = ({
           href={b.href}
           onClick={onPostClick ? () => onPostClick(b) : undefined}
           messageCount={b.messageCount}
-          likeCount={b.likeCount}
           variant={variant}
+          likeButton={renderLikeButton?.(b)}
         />
       ))}
     </HScroll>
@@ -214,6 +217,7 @@ export interface ExploreStoriesSectionProps {
   onPostClick?: (post: ExploreViewStory) => void
   className?: string
   storyCardLabels: StoryContentCardLabels
+  renderLikeButton?: (post: ExploreViewStory) => ReactNode
 }
 
 export const ExploreStoriesSection = ({
@@ -225,6 +229,7 @@ export const ExploreStoriesSection = ({
   onPostClick,
   className,
   storyCardLabels,
+  renderLikeButton,
 }: ExploreStoriesSectionProps) => (
   <section className={className}>
     <SectionTitle
@@ -245,9 +250,9 @@ export const ExploreStoriesSection = ({
           totalScenes={s.totalScenes}
           avgRating={s.avgRating}
           ratingCount={s.ratingCount}
-          likes={s.likes}
           onClick={onPostClick ? () => onPostClick(s) : undefined}
           labels={storyCardLabels}
+          likeButton={renderLikeButton?.(s)}
         />
       ))}
     </HScroll>
@@ -265,6 +270,7 @@ export interface ExploreVideosSectionProps {
   onPostClick?: (post: ExploreViewVideo) => void
   className?: string
   videoCardImageAlt: string
+  renderLikeButton?: (post: ExploreViewVideo) => ReactNode
 }
 
 export const ExploreVideosSection = ({
@@ -278,6 +284,7 @@ export const ExploreVideosSection = ({
   onPostClick,
   className,
   videoCardImageAlt,
+  renderLikeButton,
 }: ExploreVideosSectionProps) => (
   <section className={className}>
     <SectionTitle
@@ -296,9 +303,9 @@ export const ExploreVideosSection = ({
           poster={v.poster}
           video={v.video}
           href={v.href}
-          likes={v.likes}
           onClick={onPostClick ? () => onPostClick(v) : undefined}
           imageAlt={videoCardImageAlt}
+          likeButton={renderLikeButton?.(v)}
         />
       ))}
     </HScroll>

@@ -44,6 +44,8 @@ export { default as ExploreWhatsNewCard } from "./components/explore/ExploreWhat
 export type { ExploreWhatsNewCardProps } from "./components/explore/ExploreWhatsNewCard";
 export { default as ExploreCreateToolCard } from "./components/explore/ExploreCreateToolCard";
 export type { ExploreCreateToolCardProps } from "./components/explore/ExploreCreateToolCard";
+export { default as LikeButton } from "./components/explore/LikeButton";
+export type { LikeButtonProps, LikeButtonVariant } from "./components/explore/LikeButton";
 export type {
   ExploreViewBabe,
   ExploreViewStory,
@@ -64,7 +66,16 @@ export type {
   ExploreStartCreatingSectionProps,
   ExploreFooterSectionProps,
 } from "./components/explore/ExploreSections";
-export type { HeroSlide, HeroMedia, HeroSlideButton, HeroSlideButtonVariant, HeroSlideButtonIcon, CinematicHeroLabels } from "./components/explore/CinematicHero";
+export type {
+  HeroSlide,
+  HeroMedia,
+  HeroSlideButton,
+  HeroSlideButtonVariant,
+  HeroSlideButtonIcon,
+  CinematicHeroLabels,
+  CinematicHeroLikePlacement,
+  CinematicHeroRenderLikeButton,
+} from "./components/explore/CinematicHero";
 export { default as CinematicHero } from "./components/explore/CinematicHero";
 export { default as CinematicHeroPlaceholder } from "./components/explore/CinematicHeroPlaceholder";
 export type { CinematicHeroPlaceholderProps } from "./components/explore/CinematicHeroPlaceholder";

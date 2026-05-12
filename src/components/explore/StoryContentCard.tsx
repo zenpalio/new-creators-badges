@@ -1,5 +1,5 @@
+import type { ReactNode } from "react";
 import { BookOpen, Star, Layers, Film } from "lucide-react";
-import LikeButton from "./LikeButton";
 import ResponsiveImage from "../ui/ResponsiveImage";
 
 export type StoryContentCardLabels = {
@@ -21,9 +21,10 @@ export interface StoryContentCardProps {
   totalScenes?: number;
   avgRating?: number;
   ratingCount?: number;
-  likes?: number;
   onClick?: () => void;
   labels: StoryContentCardLabels;
+  /** Like control from parent (e.g. `ExploreStoriesSection` `renderLikeButton`). */
+  likeButton?: ReactNode;
 }
 
 /**
@@ -39,9 +40,9 @@ const StoryContentCard = ({
   totalScenes = 0,
   avgRating = 0,
   ratingCount = 0,
-  likes,
   onClick,
   labels,
+  likeButton,
 }: StoryContentCardProps) => {
   const episodeWord = episodeCount === 1 ? labels.episodeSingular : labels.episodePlural;
   const sceneWord = totalScenes === 1 ? labels.sceneSingular : labels.scenePlural;
@@ -107,9 +108,7 @@ const StoryContentCard = ({
             <Layers className="h-3.5 w-3.5" />
             {totalScenes} {sceneWord}
           </span>
-          {likes != null && (
-            <LikeButton count={likes} className="text-[11px] text-white/80 hover:text-white" />
-          )}
+          {likeButton}
         </div>
       </div>
 
