@@ -1,34 +1,34 @@
-import { useState } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { cn } from "../../lib/utils";
+import { useState } from "react"
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
+import { cn } from "../../lib/utils"
 
-export type ServiceStatus = "operational" | "degraded" | "down";
+export type ServiceStatus = "operational" | "degraded" | "down"
 
 export type Service = {
-  name: string;
-  status: ServiceStatus;
-  note?: string;
-};
+  name: string
+  status: ServiceStatus
+  note?: string
+}
 
 const defaultStatusLabels: Record<ServiceStatus, string> = {
   operational: "Operational",
   degraded: "Degraded",
   down: "Down",
-};
+}
 
 export type SystemStatusIndicatorProps = {
-  services: Service[];
+  services: Service[]
   /** Summary shown in the popover */
-  message: string;
+  message: string
   /** Override status labels (e.g. localization) */
-  statusLabels?: Partial<Record<ServiceStatus, string>>;
-  className?: string;
-};
+  statusLabels?: Partial<Record<ServiceStatus, string>>
+  className?: string
+}
 
 function overallStatus(list: Service[]): ServiceStatus {
-  if (list.some((s) => s.status === "down")) return "down";
-  if (list.some((s) => s.status === "degraded")) return "degraded";
-  return "operational";
+  if (list.some((s) => s.status === "down")) return "down"
+  if (list.some((s) => s.status === "degraded")) return "degraded"
+  return "operational"
 }
 
 export default function SystemStatusIndicator({
@@ -37,13 +37,11 @@ export default function SystemStatusIndicator({
   statusLabels: statusLabelsProp,
   className,
 }: SystemStatusIndicatorProps) {
-  const [open, setOpen] = useState(false);
-  const labels = { ...defaultStatusLabels, ...statusLabelsProp };
-  const overall = overallStatus(services);
+  const [open, setOpen] = useState(false)
+  const labels = { ...defaultStatusLabels, ...statusLabelsProp }
+  const overall = overallStatus(services)
 
-  const affected = services.filter((s) => s.status !== "operational");
-
-  if (overall === "operational") return null;
+  const affected = services.filter((s) => s.status !== "operational")
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -72,13 +70,18 @@ export default function SystemStatusIndicator({
             {affected.map((s) => (
               <li key={s.name} className="leading-snug">
                 <span className="font-medium text-foreground">{s.name}</span>
-                <span className="text-foreground/60"> — {labels[s.status]}</span>
-                {s.note ? <span className="block text-foreground/55">{s.note}</span> : null}
+                <span className="text-foreground/60">
+                  {" "}
+                  — {labels[s.status]}
+                </span>
+                {s.note ? (
+                  <span className="block text-foreground/55">{s.note}</span>
+                ) : null}
               </li>
             ))}
           </ul>
         )}
       </PopoverContent>
     </Popover>
-  );
+  )
 }
