@@ -1,109 +1,114 @@
-import { ArrowUpRight, type LucideIcon } from "lucide-react";
-import PostCard from "./PostCard";
-import HScroll from "./HScroll";
-import StoryContentCard from "./StoryContentCard";
-import CreatorRankCard from "./CreatorRankCard";
-import ExploreVideoCard from "./ExploreVideoCard";
-import ExploreWhatsNewCard from "./ExploreWhatsNewCard";
-import ExploreCreateToolCard from "./ExploreCreateToolCard";
-import PromoBanner, { type PromoBannerVariant } from "./PromoBanner";
-import { type BadgeTier } from "../BadgeCard";
+import { ArrowUpRight, type LucideIcon } from "lucide-react"
+import PostCard from "./PostCard"
+import HScroll from "./HScroll"
+import StoryContentCard from "./StoryContentCard"
+import CreatorRankCard from "./CreatorRankCard"
+import ExploreVideoCard from "./ExploreVideoCard"
+import ExploreWhatsNewCard from "./ExploreWhatsNewCard"
+import ExploreCreateToolCard from "./ExploreCreateToolCard"
+import PromoBanner, { type PromoBannerVariant } from "./PromoBanner"
+import { type BadgeTier } from "../BadgeCard"
 
 // ---- Public types ----
 
 export interface ExploreViewSectionCategory {
-  id?: string;
-  label: string;
-  href?: string;
+  id?: string
+  label: string
+  href?: string
 }
 
 export interface ExploreViewBabe {
-  name: string;
-  description: string;
-  imageUrl: string;
-  href?: string;
-  messageCount?: number | string;
-  likeCount?: number | string;
+  name: string
+  description: string
+  imageUrl: string
+  href?: string
+  messageCount?: number | string
+  likeCount?: number | string
 }
 
 export interface ExploreViewStory {
-  id: string;
-  src: string;
-  href?: string;
-  title?: string;
-  description?: string;
-  episodeCount?: number;
-  totalScenes?: number;
-  avgRating?: number;
-  ratingCount?: number;
-  likes?: number;
+  id: string
+  src: string
+  href?: string
+  title?: string
+  description?: string
+  episodeCount?: number
+  totalScenes?: number
+  avgRating?: number
+  ratingCount?: number
+  likes?: number
 }
 
 export interface ExploreViewVideo {
-  id: string;
-  imageUrl: string;
-  href?: string;
-  likes?: number | string;
+  id: string
+  imageUrl: string
+  href?: string
+  likes?: number | string
 }
 
 export interface ExploreViewCreatorRank {
-  rank: number;
-  name: string;
-  avatarUrl: string;
-  tier: BadgeTier;
-  verified?: boolean;
-  href?: string;
+  rank: number
+  name: string
+  avatarUrl: string
+  tier: BadgeTier
+  verified?: boolean
+  href?: string
 }
 
 export interface ExploreViewWhatsNew {
-  id?: string;
-  tag: string;
-  date: string;
-  title: string;
-  description: string;
-  href?: string;
+  id?: string
+  tag: string
+  date: string
+  title: string
+  description: string
+  href?: string
 }
 
 export interface ExploreViewPromo {
-  variant?: PromoBannerVariant;
-  Icon?: LucideIcon;
-  emoji?: string;
-  eyebrow?: string;
-  title: string;
-  description?: string;
-  cta?: string;
-  href?: string;
+  variant?: PromoBannerVariant
+  Icon?: LucideIcon
+  emoji?: string
+  eyebrow?: string
+  title: string
+  description?: string
+  cta?: string
+  href?: string
 }
 
 export interface ExploreViewCreateTool {
-  title: string;
-  subtitle: string;
-  Icon: LucideIcon;
-  href: string;
+  title: string
+  subtitle: string
+  Icon: LucideIcon
+  href: string
 }
 
 export interface ExploreViewFooterLinkGroup {
-  title: string;
-  links: { label: string; href: string }[];
+  title: string
+  links: { label: string; href: string }[]
 }
 
 export interface ExploreViewFooterLinks {
-  social: ExploreViewFooterLinkGroup;
-  features: ExploreViewFooterLinkGroup;
-  legal: ExploreViewFooterLinkGroup;
-  resources: ExploreViewFooterLinkGroup;
+  social: ExploreViewFooterLinkGroup
+  features: ExploreViewFooterLinkGroup
+  legal: ExploreViewFooterLinkGroup
+  resources: ExploreViewFooterLinkGroup
 }
 
 // ---- Internal helpers ----
 
 interface SectionTitleProps {
-  title: string;
-  actionLabel?: string;
-  actionHref?: string;
-  onAction?: () => void;
+  title: string
+  actionLabel?: string
+  actionHref?: string
+  onAction?: () => void
 }
 
-const SectionTitle = ({ title, actionLabel, actionHref = "#", onAction }: SectionTitleProps) => (
+const SectionTitle = ({
+  title,
+  actionLabel,
+  actionHref = "#",
+  onAction,
+}: SectionTitleProps) => (
   <div className="mb-3 flex items-end justify-between">
     <h2 className="text-xl font-bold leading-tight text-white">{title}</h2>
     {actionLabel && (
@@ -117,11 +122,11 @@ const SectionTitle = ({ title, actionLabel, actionHref = "#", onAction }: Sectio
       </a>
     )}
   </div>
-);
+)
 
 interface TagRowProps {
-  tags: ExploreViewSectionCategory[];
-  onTagClick?: (tag: ExploreViewSectionCategory) => void;
+  tags: ExploreViewSectionCategory[]
+  onTagClick?: (tag: ExploreViewSectionCategory) => void
 }
 
 const TagRow = ({ tags, onTagClick }: TagRowProps) => (
@@ -139,21 +144,21 @@ const TagRow = ({ tags, onTagClick }: TagRowProps) => (
       ))}
     </HScroll>
   </div>
-);
+)
 
 // ---- Section components ----
 
 export interface PostsSectionProps {
-  title: string;
-  actionLabel?: string;
-  actionHref?: string;
-  onAction?: () => void;
-  categories?: ExploreViewSectionCategory[];
-  onTagClick?: (tag: ExploreViewSectionCategory) => void;
-  posts: ExploreViewBabe[];
-  onPostClick?: (post: ExploreViewBabe) => void;
-  variant?: "compact" | "stats";
-  className?: string;
+  title: string
+  actionLabel?: string
+  actionHref?: string
+  onAction?: () => void
+  categories?: ExploreViewSectionCategory[]
+  onTagClick?: (tag: ExploreViewSectionCategory) => void
+  posts: ExploreViewBabe[]
+  onPostClick?: (post: ExploreViewBabe) => void
+  variant?: "compact" | "stats"
+  className?: string
 }
 
 export const PostsSection = ({
@@ -169,8 +174,15 @@ export const PostsSection = ({
   className,
 }: PostsSectionProps) => (
   <section className={className}>
-    <SectionTitle title={title} actionLabel={actionLabel} actionHref={actionHref} onAction={onAction} />
-    {categories && categories.length > 0 && <TagRow tags={categories} onTagClick={onTagClick} />}
+    <SectionTitle
+      title={title}
+      actionLabel={actionLabel}
+      actionHref={actionHref}
+      onAction={onAction}
+    />
+    {categories && categories.length > 0 && (
+      <TagRow tags={categories} onTagClick={onTagClick} />
+    )}
     <HScroll>
       {posts.map((b, i) => (
         <PostCard
@@ -187,16 +199,16 @@ export const PostsSection = ({
       ))}
     </HScroll>
   </section>
-);
+)
 
 export interface ExploreStoriesSectionProps {
-  title: string;
-  actionLabel?: string;
-  actionHref?: string;
-  onAction?: () => void;
-  posts: ExploreViewStory[];
-  onPostClick?: (post: ExploreViewStory) => void;
-  className?: string;
+  title: string
+  actionLabel?: string
+  actionHref?: string
+  onAction?: () => void
+  posts: ExploreViewStory[]
+  onPostClick?: (post: ExploreViewStory) => void
+  className?: string
 }
 
 export const ExploreStoriesSection = ({
@@ -209,7 +221,12 @@ export const ExploreStoriesSection = ({
   className,
 }: ExploreStoriesSectionProps) => (
   <section className={className}>
-    <SectionTitle title={title} actionLabel={actionLabel} actionHref={actionHref} onAction={onAction} />
+    <SectionTitle
+      title={title}
+      actionLabel={actionLabel}
+      actionHref={actionHref}
+      onAction={onAction}
+    />
     <HScroll>
       {posts.map((s, i) => (
         <StoryContentCard
@@ -228,18 +245,18 @@ export const ExploreStoriesSection = ({
       ))}
     </HScroll>
   </section>
-);
+)
 
 export interface ExploreVideosSectionProps {
-  title: string;
-  actionLabel?: string;
-  actionHref?: string;
-  onAction?: () => void;
-  categories?: ExploreViewSectionCategory[];
-  onTagClick?: (tag: ExploreViewSectionCategory) => void;
-  posts: ExploreViewVideo[];
-  onPostClick?: (post: ExploreViewVideo) => void;
-  className?: string;
+  title: string
+  actionLabel?: string
+  actionHref?: string
+  onAction?: () => void
+  categories?: ExploreViewSectionCategory[]
+  onTagClick?: (tag: ExploreViewSectionCategory) => void
+  posts: ExploreViewVideo[]
+  onPostClick?: (post: ExploreViewVideo) => void
+  className?: string
 }
 
 export const ExploreVideosSection = ({
@@ -254,8 +271,15 @@ export const ExploreVideosSection = ({
   className,
 }: ExploreVideosSectionProps) => (
   <section className={className}>
-    <SectionTitle title={title} actionLabel={actionLabel} actionHref={actionHref} onAction={onAction} />
-    {categories && categories.length > 0 && <TagRow tags={categories} onTagClick={onTagClick} />}
+    <SectionTitle
+      title={title}
+      actionLabel={actionLabel}
+      actionHref={actionHref}
+      onAction={onAction}
+    />
+    {categories && categories.length > 0 && (
+      <TagRow tags={categories} onTagClick={onTagClick} />
+    )}
     <HScroll>
       {posts.map((v, i) => (
         <ExploreVideoCard
@@ -268,16 +292,16 @@ export const ExploreVideosSection = ({
       ))}
     </HScroll>
   </section>
-);
+)
 
 export interface ExploreCreatorsSectionProps {
-  title: string;
-  actionLabel?: string;
-  actionHref?: string;
-  onAction?: () => void;
-  posts: ExploreViewCreatorRank[];
-  onPostClick?: (post: ExploreViewCreatorRank) => void;
-  className?: string;
+  title: string
+  actionLabel?: string
+  actionHref?: string
+  onAction?: () => void
+  posts: ExploreViewCreatorRank[]
+  onPostClick?: (post: ExploreViewCreatorRank) => void
+  className?: string
 }
 
 export const ExploreCreatorsSection = ({
@@ -290,7 +314,12 @@ export const ExploreCreatorsSection = ({
   className,
 }: ExploreCreatorsSectionProps) => (
   <section className={className}>
-    <SectionTitle title={title} actionLabel={actionLabel} actionHref={actionHref} onAction={onAction} />
+    <SectionTitle
+      title={title}
+      actionLabel={actionLabel}
+      actionHref={actionHref}
+      onAction={onAction}
+    />
     <HScroll>
       {posts.map((c) => (
         <CreatorRankCard
@@ -306,17 +335,17 @@ export const ExploreCreatorsSection = ({
       ))}
     </HScroll>
   </section>
-);
+)
 
 export interface ExploreWhatsNewSectionProps {
-  title: string;
-  actionLabel?: string;
-  actionHref?: string;
-  onAction?: () => void;
-  readMoreLabel?: string;
-  posts: ExploreViewWhatsNew[];
-  onPostClick?: (post: ExploreViewWhatsNew) => void;
-  className?: string;
+  title: string
+  actionLabel?: string
+  actionHref?: string
+  onAction?: () => void
+  readMoreLabel?: string
+  posts: ExploreViewWhatsNew[]
+  onPostClick?: (post: ExploreViewWhatsNew) => void
+  className?: string
 }
 
 export const ExploreWhatsNewSection = ({
@@ -330,7 +359,12 @@ export const ExploreWhatsNewSection = ({
   className,
 }: ExploreWhatsNewSectionProps) => (
   <section className={className}>
-    <SectionTitle title={title} actionLabel={actionLabel} actionHref={actionHref} onAction={onAction} />
+    <SectionTitle
+      title={title}
+      actionLabel={actionLabel}
+      actionHref={actionHref}
+      onAction={onAction}
+    />
     <HScroll>
       {posts.map((n, i) => (
         <ExploreWhatsNewCard
@@ -346,33 +380,35 @@ export const ExploreWhatsNewSection = ({
       ))}
     </HScroll>
   </section>
-);
+)
 
 export interface ExplorePromoSectionProps {
-  promo: ExploreViewPromo;
-  className?: string;
+  promo: ExploreViewPromo
+  className?: string
 }
 
-export const ExplorePromoSection = ({ promo, className }: ExplorePromoSectionProps) => (
-  <div className={className}>
-    <PromoBanner
-      variant={promo.variant}
-      icon={promo.Icon}
-      emoji={promo.emoji}
-      eyebrow={promo.eyebrow}
-      title={promo.title}
-      description={promo.description}
-      cta={promo.cta}
-      href={promo.href}
-    />
-  </div>
-);
+export const ExplorePromoSection = ({
+  promo,
+  className,
+}: ExplorePromoSectionProps) => (
+  <PromoBanner
+    variant={promo.variant}
+    icon={promo.Icon}
+    emoji={promo.emoji}
+    eyebrow={promo.eyebrow}
+    title={promo.title}
+    description={promo.description}
+    cta={promo.cta}
+    href={promo.href}
+    className={className}
+  />
+)
 
 export interface ExploreStartCreatingSectionProps {
-  title: string;
-  tools: ExploreViewCreateTool[];
-  onToolClick?: (tool: ExploreViewCreateTool) => void;
-  className?: string;
+  title: string
+  tools: ExploreViewCreateTool[]
+  onToolClick?: (tool: ExploreViewCreateTool) => void
+  className?: string
 }
 
 export const ExploreStartCreatingSection = ({
@@ -387,7 +423,7 @@ export const ExploreStartCreatingSection = ({
     Icon: t.Icon,
     href: t.href,
     onClick: onToolClick ? () => onToolClick(t) : undefined,
-  });
+  })
 
   return (
     <section className={className}>
@@ -409,35 +445,40 @@ export const ExploreStartCreatingSection = ({
         ))}
       </div>
     </section>
-  );
-};
-
-export interface ExploreFooterSectionProps {
-  footer: ExploreViewFooterLinks;
-  className?: string;
+  )
 }
 
-export const ExploreFooterSection = ({ footer, className }: ExploreFooterSectionProps) => (
+export interface ExploreFooterSectionProps {
+  footer: ExploreViewFooterLinks
+  className?: string
+}
+
+export const ExploreFooterSection = ({
+  footer,
+  className,
+}: ExploreFooterSectionProps) => (
   <footer
     className={`mt-8 grid grid-cols-2 gap-6 border-t border-[#242529] pt-6 text-[13px] text-grey-light-4-v2 md:grid-cols-4${
       className ? ` ${className}` : ""
     }`}
   >
-    {([footer.social, footer.features, footer.legal, footer.resources]).map((group) => (
-      <div key={group.title}>
-        <h4 className="mb-2 text-xs font-bold uppercase tracking-wider text-grey-light-2-v2">
-          {group.title}
-        </h4>
-        <ul className="space-y-1.5">
-          {group.links.map((link) => (
-            <li key={link.label}>
-              <a href={link.href} className="hover:text-white">
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    ))}
+    {[footer.social, footer.features, footer.legal, footer.resources].map(
+      (group) => (
+        <div key={group.title}>
+          <h4 className="mb-2 text-xs font-bold uppercase tracking-wider text-grey-light-2-v2">
+            {group.title}
+          </h4>
+          <ul className="space-y-1.5">
+            {group.links.map((link) => (
+              <li key={link.label}>
+                <a href={link.href} className="hover:text-white">
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ),
+    )}
   </footer>
-);
+)

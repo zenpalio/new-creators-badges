@@ -1,31 +1,35 @@
-import { ArrowRight, type LucideIcon } from "lucide-react";
+import { cn } from "@/lib/utils"
+import { ArrowRight, type LucideIcon } from "lucide-react"
+import type { MouseEvent } from "react"
 
-export type PromoBannerVariant = "premium" | "tokens" | "gift" | "feature";
+export type PromoBannerVariant = "premium" | "tokens" | "gift" | "feature"
 
 type PromoBannerProps = {
-  variant?: PromoBannerVariant;
-  icon?: LucideIcon;
-  emoji?: string;
-  eyebrow?: string;
-  title: string;
-  description?: string;
-  cta?: string;
-  href?: string;
-};
+  variant?: PromoBannerVariant
+  icon?: LucideIcon
+  emoji?: string
+  eyebrow?: string
+  title: string
+  description?: string
+  cta?: string
+  href?: string
+  onClick?: (event: MouseEvent<HTMLAnchorElement>) => void
+  className?: string
+}
 
 // Each variant: a moody gradient + soft accent glow + monogram art on the right.
 const variantStyles: Record<
   PromoBannerVariant,
   {
-    bg: string;
-    border: string;
-    eyebrow: string;
-    title: string;
-    description: string;
-    cta: string;
-    glow: string;
-    monogram: string;
-    monoColor: string;
+    bg: string
+    border: string
+    eyebrow: string
+    title: string
+    description: string
+    cta: string
+    glow: string
+    monogram: string
+    monoColor: string
   }
 > = {
   premium: {
@@ -72,7 +76,7 @@ const variantStyles: Record<
     monogram: "✦",
     monoColor: "text-black/60",
   },
-};
+}
 
 const PromoBanner = ({
   variant = "premium",
@@ -83,13 +87,19 @@ const PromoBanner = ({
   description,
   cta = "Learn more",
   href = "#",
+  onClick,
+  className,
 }: PromoBannerProps) => {
-  const s = variantStyles[variant];
+  const s = variantStyles[variant]
 
   return (
     <a
       href={href}
-      className={`group relative flex w-full items-stretch overflow-hidden rounded-2xl border transition-colors ${s.bg} ${s.border}`}
+      onClick={onClick}
+      className={cn(
+        `group relative flex w-full items-stretch overflow-hidden rounded-2xl border transition-colors ${s.bg} ${s.border}`,
+        className,
+      )}
     >
       {/* Soft colored glow */}
       <div className={`pointer-events-none absolute inset-0 ${s.glow}`} />
@@ -123,22 +133,31 @@ const PromoBanner = ({
               {emoji}
             </span>
           ) : Icon ? (
-            <Icon className="h-5 w-5 text-white md:h-[22px] md:w-[22px]" strokeWidth={1.5} />
+            <Icon
+              className="h-5 w-5 text-white md:h-[22px] md:w-[22px]"
+              strokeWidth={1.5}
+            />
           ) : null}
         </div>
 
         {/* Text */}
         <div className="min-w-0 flex-1">
           {eyebrow && (
-            <p className={`text-[10px] font-semibold uppercase tracking-[0.2em] ${s.eyebrow}`}>
+            <p
+              className={`text-[10px] font-semibold uppercase tracking-[0.2em] ${s.eyebrow}`}
+            >
               {eyebrow}
             </p>
           )}
-          <h3 className={`mt-0.5 truncate text-[15px] font-semibold leading-tight md:text-base ${s.title}`}>
+          <h3
+            className={`mt-0.5 truncate text-[15px] font-semibold leading-tight md:text-base ${s.title}`}
+          >
             {title}
           </h3>
           {description && (
-            <p className={`mt-0.5 line-clamp-1 text-xs leading-snug md:text-[13px] ${s.description}`}>
+            <p
+              className={`mt-0.5 line-clamp-1 text-xs leading-snug md:text-[13px] ${s.description}`}
+            >
               {description}
             </p>
           )}
@@ -154,7 +173,7 @@ const PromoBanner = ({
         <ArrowRight className="h-4 w-4 shrink-0 text-white/60 transition-transform group-hover:translate-x-0.5 sm:hidden" />
       </div>
     </a>
-  );
-};
+  )
+}
 
-export default PromoBanner;
+export default PromoBanner
