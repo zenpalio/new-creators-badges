@@ -92,5 +92,11 @@ export type {
   FloatingToolsFabItem,
 } from "./components/explore/FloatingToolsFAB";
 export { default as NotificationsSidebar } from "./components/NotificationsSidebar";
-export type { Notification, Announcement } from "./components/NotificationsSidebar";
+export type {
+  Notification,
+  Announcement,
+  NotificationsSidebarLabels,
+  NotificationsSidebarStatusItem,
+  NotificationsSidebarStatusType,
+} from "./components/NotificationsSidebar";
 export { default as AnnouncementDialog } from "./components/AnnouncementDialog";

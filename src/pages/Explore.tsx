@@ -15,7 +15,12 @@ import {
   Wand2,
 } from "lucide-react";
 import SideNav from "../components/SideNav";
-import NotificationsSidebar, { type Announcement } from "../components/NotificationsSidebar";
+import NotificationsSidebar, {
+  type Announcement,
+  type Notification,
+  type NotificationsSidebarLabels,
+  type NotificationsSidebarStatusItem,
+} from "../components/NotificationsSidebar";
 import AnnouncementDialog from "../components/AnnouncementDialog";
 import { ExploreView } from "../components/ExploreView";
 import LikeButton from "../components/explore/LikeButton";
@@ -806,6 +811,30 @@ const footerLinks: ExploreViewFooterLinks = {
   },
 };
 
+const exploreNotificationsSidebarLabels: NotificationsSidebarLabels = {
+  titleNotifications: "Notifications",
+  titleWhatsNew: "What's new",
+  markAllRead: "Mark all as read",
+  tabNotifications: "Notifications",
+  tabWhatsNew: "What's new?",
+  discordCta: "Join our Discord",
+  discordHref: "https://discord.gg/lovable-dev",
+};
+
+const exploreNotificationsSidebarStatusItems: NotificationsSidebarStatusItem[] = [
+  {
+    id: "all-operational",
+    type: "success",
+    message: "All systems operational",
+  },
+  {
+    id: "db-maintenance",
+    type: "warning",
+    message:
+      "We are performing database maintenance. Site will be down for ~10 mins. Thanks for your patience — we'll be back up shortly!",
+  },
+];
+
 const exploreHeroLabels: CinematicHeroLabels = {
   defaultFeaturedBadge: "Featured today",
   storyBadgeLabel: "Story",
@@ -869,8 +898,15 @@ const exploreSystemStatus: {
 const Explore = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>(() =>
+    mockNotifications.map((n) => ({ ...n }))
+  );
   const [inlineAnnouncement, setInlineAnnouncement] = useState<Announcement | null>(null);
   const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
+
+  const notificationUnreadCount = notifications.filter((n) => n.unread).length;
+  const markAllNotificationsRead = () =>
+    setNotifications((prev) => prev.map((n) => ({ ...n, unread: false })));
 
   const toggleLiked = (key: string) => {
     setLikedMap((m) => ({ ...m, [key]: !m[key] }));
@@ -1026,8 +1062,16 @@ const Explore = () => {
         open={notificationsOpen}
         onClose={() => setNotificationsOpen(false)}
         onReopen={() => setNotificationsOpen(true)}
-        notifications={mockNotifications}
+        notifications={notifications}
         announcements={announcements}
+        labels={exploreNotificationsSidebarLabels}
+        systemStatusItems={exploreNotificationsSidebarStatusItems}
+        onMarkAllRead={markAllNotificationsRead}
+        onNotificationClick={(n) =>
+          setNotifications((prev) =>
+            prev.map((x) => (x.id === n.id ? { ...x, unread: false } : x))
+          )
+        }
       />
       <ExploreView
         heroSlides={heroSlides}
@@ -1035,7 +1079,7 @@ const Explore = () => {
         renderHeroLikeButton={renderHeroLikeButton}
         onMenu={() => setSidebarOpen(true)}
         onNotifications={() => setNotificationsOpen(true)}
-        notificationCount={14}
+        notificationCount={notificationUnreadCount}
         systemStatus={exploreSystemStatus}
       >
         <PostsSection

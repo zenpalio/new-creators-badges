@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { CheckCheck, X } from "lucide-react";
 import AnnouncementDialog from "./AnnouncementDialog";
 
@@ -32,28 +33,81 @@ export type Notification = {
   unread?: boolean;
 };
 
+/** Status strip row in NotificationsSidebar — message copy comes from the parent. */
+export type NotificationsSidebarStatusType = "success" | "warning" | "error" | "info";
+
+export type NotificationsSidebarStatusItem = {
+  id: string;
+  type: NotificationsSidebarStatusType;
+  message: string;
+};
+
+const notificationsSidebarStatusColor: Record<NotificationsSidebarStatusType, string> = {
+  success: "hsl(var(--success-v2))",
+  warning: "hsl(var(--warning-v2))",
+  error: "hsl(var(--destructive-v2))",
+  info: "hsl(var(--primary-v2))",
+};
+
+function NotificationsSidebarStatusDot({ color }: { color: string }) {
+  return (
+    <span className="relative mt-0.5 flex h-2 w-2 shrink-0">
+      <span
+        className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
+        style={{ backgroundColor: color }}
+      />
+      <span className="relative inline-flex h-2 w-2 rounded-full" style={{ backgroundColor: color }} />
+    </span>
+  );
+}
+
+/** Visible UI copy for NotificationsSidebar — supply from the page (e.g. Explore). */
+export type NotificationsSidebarLabels = {
+  titleNotifications: string;
+  titleWhatsNew: string;
+  markAllRead: string;
+  tabNotifications: string;
+  tabWhatsNew: string;
+  discordCta: string;
+  discordHref: string;
+};
+
 interface NotificationsSidebarProps {
   open: boolean;
   onClose: () => void;
   onReopen?: () => void;
   notifications: Notification[];
   announcements: Announcement[];
+  labels: NotificationsSidebarLabels;
+  /** System status rows; omit or pass [] to hide the strip. */
+  systemStatusItems?: NotificationsSidebarStatusItem[];
+  onMarkAllRead: () => void;
+  onNotificationClick?: (notification: Notification) => void;
 }
 
-const NotificationsSidebar = ({ open, onClose, onReopen, notifications, announcements }: NotificationsSidebarProps) => {
+const NotificationsSidebar = ({
+  open,
+  onClose,
+  onReopen,
+  notifications,
+  announcements,
+  labels,
+  systemStatusItems = [],
+  onMarkAllRead,
+  onNotificationClick,
+}: NotificationsSidebarProps) => {
   const [tab, setTab] = useState<"notifications" | "whats-new">("notifications");
   const [openAnnouncement, setOpenAnnouncement] = useState<Announcement | null>(null);
-  const [readIds, setReadIds] = useState<Set<string>>(new Set());
-  const unreadCount = notifications.filter((n) => n.unread && !readIds.has(n.id)).length;
-  const markAllRead = () => setReadIds(new Set(notifications.map((n) => n.id)));
+  const unreadCount = notifications.filter((n) => n.unread).length;
 
   return (
     <>
-      <div
-        className={`fixed inset-0 z-[100] transition-opacity ${
-          open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
-        }`}
-      >
+      {createPortal(
+        <div
+          className={`fixed inset-0 z-[100] transition-opacity ${
+            open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+          }`}
+        >
         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
 
         <aside
@@ -64,7 +118,7 @@ const NotificationsSidebar = ({ open, onClose, onReopen, notifications, announce
           {/* Header */}
           <div className="flex items-center justify-between px-5 py-3.5">
             <h2 className="text-base font-bold text-foreground-v2">
-              {tab === "notifications" ? "Notifications" : "What's new"}
+              {tab === "notifications" ? labels.titleNotifications : labels.titleWhatsNew}
             </h2>
             <button
               onClick={onClose}
@@ -76,45 +130,30 @@ const NotificationsSidebar = ({ open, onClose, onReopen, notifications, announce
           </div>
 
           {/* System status indicators */}
-          <div className="border-y border-border-v2/40">
-            <div className="flex items-center gap-2 px-5 py-2.5 text-xs text-muted-v2-foreground">
-              <span className="relative flex h-2 w-2 shrink-0">
-                <span
-                  className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
-                  style={{ backgroundColor: "hsl(var(--success-v2))" }}
-                />
-                <span
-                  className="relative inline-flex h-2 w-2 rounded-full"
-                  style={{ backgroundColor: "hsl(var(--success-v2))" }}
-                />
-              </span>
-              <span>All systems operational</span>
+          {systemStatusItems.length > 0 && (
+            <div className="border-y border-border-v2/40">
+              {systemStatusItems.map((item, index) => (
+                <div
+                  key={item.id}
+                  className={`flex items-start gap-2 px-5 py-2.5 text-xs text-muted-v2-foreground ${
+                    index > 0 ? "border-t border-border-v2/40" : ""
+                  }`}
+                >
+                  <NotificationsSidebarStatusDot color={notificationsSidebarStatusColor[item.type]} />
+                  <span className="leading-snug">{item.message}</span>
+                </div>
+              ))}
             </div>
-            <div className="flex items-start gap-2 border-t border-border-v2/40 px-5 py-2.5 text-xs text-muted-v2-foreground">
-              <span className="relative mt-1 flex h-2 w-2 shrink-0">
-                <span
-                  className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
-                  style={{ backgroundColor: "hsl(var(--warning-v2))" }}
-                />
-                <span
-                  className="relative inline-flex h-2 w-2 rounded-full"
-                  style={{ backgroundColor: "hsl(var(--warning-v2))" }}
-                />
-              </span>
-              <span className="leading-snug">
-                We are performing database maintenance. Site will be down for ~10 mins. Thanks for your patience — we'll be back up shortly!
-              </span>
-            </div>
-          </div>
+          )}
 
           {/* Top action row — only when there are unread notifications */}
           {tab === "notifications" && unreadCount > 0 && (
             <button
-              onClick={markAllRead}
+              onClick={onMarkAllRead}
               className="flex items-center justify-center gap-2 border-b border-border-v2/40 py-2.5 text-xs font-medium text-foreground-v2/90 transition-colors hover:bg-muted-v2/40"
             >
               <CheckCheck className="h-3.5 w-3.5" />
-              Mark all as read ({unreadCount})
+              {labels.markAllRead} ({unreadCount})
             </button>
           )}
 
@@ -123,14 +162,12 @@ const NotificationsSidebar = ({ open, onClose, onReopen, notifications, announce
             {tab === "notifications" ? (
               <ul className="flex flex-col">
                 {notifications.map((n) => {
-                  const isUnread = n.unread && !readIds.has(n.id);
-                  return (
-                    <li
-                      key={n.id}
-                      className={`relative flex items-center gap-3 border-b border-border-v2/30 px-5 py-3 transition-colors hover:bg-muted-v2/30 ${
-                        isUnread ? "bg-primary-v2/5" : ""
-                      }`}
-                    >
+                  const isUnread = !!n.unread;
+                  const rowClassName = `relative flex w-full items-center gap-3 px-5 py-3 text-left transition-colors ${
+                    onNotificationClick ? "cursor-pointer hover:bg-muted-v2/30" : ""
+                  } ${isUnread ? "bg-primary-v2/5" : ""}`;
+                  const rowInner = (
+                    <>
                       {isUnread && (
                         <span className="absolute left-1.5 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-primary-v2" />
                       )}
@@ -152,6 +189,22 @@ const NotificationsSidebar = ({ open, onClose, onReopen, notifications, announce
                         <div className="h-9 w-9 shrink-0 overflow-hidden rounded-md bg-muted-v2">
                           <img src={n.thumbnail} alt="" className="h-full w-full object-cover" />
                         </div>
+                      )}
+                    </>
+                  );
+                  return (
+                    <li key={n.id} className="border-b border-border-v2/30">
+                      {onNotificationClick ? (
+                        <button
+                          type="button"
+                          className={rowClassName}
+                          aria-label={`${n.actor} ${n.action}${n.target ? ` ${n.target}` : ""}`}
+                          onClick={() => onNotificationClick(n)}
+                        >
+                          {rowInner}
+                        </button>
+                      ) : (
+                        <div className={rowClassName}>{rowInner}</div>
                       )}
                     </li>
                   );
@@ -191,7 +244,7 @@ const NotificationsSidebar = ({ open, onClose, onReopen, notifications, announce
                   : "text-muted-v2-foreground hover:bg-muted-v2/50 hover:text-foreground-v2"
               }`}
             >
-              Notifications
+              {labels.tabNotifications}
             </button>
             <button
               onClick={() => setTab("whats-new")}
@@ -202,7 +255,7 @@ const NotificationsSidebar = ({ open, onClose, onReopen, notifications, announce
               }`}
             >
               <span className="inline-flex items-center gap-1.5">
-                What's new?
+                {labels.tabWhatsNew}
                 {announcements.length > 0 && tab !== "whats-new" && (
                   <span className="relative flex h-1.5 w-1.5">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-v2 opacity-70" />
@@ -215,7 +268,7 @@ const NotificationsSidebar = ({ open, onClose, onReopen, notifications, announce
 
           {/* Discord link */}
           <a
-            href="https://discord.gg/lovable-dev"
+            href={labels.discordHref}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 border-t border-border-v2/40 px-5 py-2.5 text-xs font-medium text-muted-v2-foreground transition-colors hover:bg-muted-v2/40 hover:text-foreground-v2"
@@ -223,10 +276,12 @@ const NotificationsSidebar = ({ open, onClose, onReopen, notifications, announce
             <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden>
               <path d="M20.317 4.369A19.79 19.79 0 0 0 16.558 3a14.61 14.61 0 0 0-.617 1.265 18.27 18.27 0 0 0-5.487 0A14.61 14.61 0 0 0 9.837 3 19.79 19.79 0 0 0 6.077 4.369C2.61 9.534 1.67 14.568 2.14 19.527A19.94 19.94 0 0 0 8.18 22.5a14.66 14.66 0 0 0 1.262-2.05 12.85 12.85 0 0 1-1.987-.95c.166-.122.33-.25.487-.38a14.18 14.18 0 0 0 12.116 0c.158.13.32.258.487.38-.633.376-1.302.696-1.99.951.376.726.797 1.41 1.262 2.05a19.93 19.93 0 0 0 6.041-2.973c.55-5.748-.94-10.737-3.541-15.158ZM8.52 16.402c-1.182 0-2.157-1.085-2.157-2.418 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.333-.955 2.418-2.157 2.418Zm6.96 0c-1.183 0-2.158-1.085-2.158-2.418 0-1.333.955-2.418 2.158-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.333-.946 2.418-2.157 2.418Z" />
             </svg>
-            Join our Discord
+            {labels.discordCta}
           </a>
         </aside>
-      </div>
+        </div>,
+        document.body
+      )}
 
       <AnnouncementDialog
         announcement={openAnnouncement}
