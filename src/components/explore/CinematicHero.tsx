@@ -56,6 +56,8 @@ export interface HeroSlide {
   premiumPlans?: { name: string; price: string; period: string; perks: string[]; highlight?: boolean; bonus?: string }[];
   /** Feature highlight, shown when layout === "feature" */
   featureMeta?: { eyebrow?: string; bullets?: string[] };
+  /** Opaque payload for like/actions; use when `meta.likes` (or story like UI) is shown. */
+  data?: any;
 }
 
 /** Visible UI strings for the hero; pass from the page for i18n / labels */

@@ -1,7 +1,8 @@
 import type { ExploreViewVideo } from "../components/explore/ExploreSections"
 
 /** Real feed items (poster = generation still, video = MP4) for Explore demo sections */
-export const exploreVideoFeed: ExploreViewVideo[] = [
+export const exploreVideoFeed: ExploreViewVideo[] = (
+  [
   {
     id: "627e205e-e027-46fa-8aac-31400cbccedf",
     likes: 77,
@@ -162,4 +163,8 @@ export const exploreVideoFeed: ExploreViewVideo[] = [
     video:
       "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/8cf44981-60aa-4902-ac2b-712c442783c6/0a72b990-c4e5-4aa2-9bed-bc9b42bb0219.mp4",
   },
-]
+] satisfies ExploreViewVideo[]
+).map((v) => ({
+  ...v,
+  data: {},
+}))

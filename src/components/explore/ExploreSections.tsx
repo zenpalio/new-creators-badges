@@ -27,6 +27,8 @@ export interface ExploreViewBabe {
   href?: string
   messageCount?: number | string
   likeCount?: number | string
+  /** Opaque payload for like/actions (e.g. API entity); set when `likeCount` is used. */
+  data?: any
 }
 
 export interface ExploreViewStory {
@@ -40,6 +42,8 @@ export interface ExploreViewStory {
   avgRating?: number
   ratingCount?: number
   likes?: number
+  /** Opaque payload for like/actions; set when `likes` is present. */
+  data?: any
 }
 
 export interface ExploreViewVideo {
@@ -48,6 +52,8 @@ export interface ExploreViewVideo {
   video: string
   href?: string
   likes?: number | string
+  /** Opaque payload for like/actions; set when `likes` is present. */
+  data?: any
 }
 
 export interface ExploreViewCreatorRank {

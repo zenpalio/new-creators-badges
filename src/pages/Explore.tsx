@@ -240,7 +240,7 @@ const featuredStories: ExploreViewStory[] = [
     ratingCount: 174,
     likes: 1567,
   },
-];
+].map((s) => ({ ...s, data: {} }));
 
 const newEpisodes: ExploreViewStory[] = [
   {
@@ -298,7 +298,7 @@ const newEpisodes: ExploreViewStory[] = [
     ratingCount: 58,
     likes: 2980,
   },
-];
+].map((s) => ({ ...s, data: {} }));
 
 const heroSlides: HeroSlide[] = [
   {
@@ -308,6 +308,7 @@ const heroSlides: HeroSlide[] = [
     imageUrl: "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/c4bc02f2-4213-4bdd-b782-1dc4a44d4687/profile-picture-707144ba-b868-4cb5-9e78-3df93aa818d3.avif",
     tags: ["Goth", "Roleplay", "Dark Romance", "Editor's pick"],
     meta: { messages: "12.4K", likes: "8.9K" },
+    data: {},
     buttons: [
       { label: "Chat now", variant: "onHero", Icon: MessageCircle },
       { label: "View profile", variant: "ghost", Icon: User, visibility: "mdUp" },
@@ -325,6 +326,7 @@ const heroSlides: HeroSlide[] = [
     ],
     tags: ["Fantasy", "Witch", "Trending"],
     meta: { messages: "1.8K", likes: "2.2K" },
+    data: {},
     buttons: [
       { label: "Chat now", variant: "onHero", Icon: MessageCircle },
       { label: "View profile", variant: "ghost", Icon: User, visibility: "mdUp" },
@@ -337,6 +339,7 @@ const heroSlides: HeroSlide[] = [
     imageUrl: "https://prod-bckp.fra1.cdn.digitaloceanspaces.com/mybabes-prod/e8fe5e83-dc55-424d-930c-d0b16eaa6e75/profile-picture-77b22208-141b-4809-93d8-7186e4b6a3ec.avif",
     tags: ["Anime", "Roommate", "New"],
     meta: { messages: "9.1K", likes: "4.4K" },
+    data: {},
     buttons: [
       { label: "Chat now", variant: "onHero", Icon: MessageCircle },
       { label: "View profile", variant: "ghost", Icon: User, visibility: "mdUp" },
@@ -945,16 +948,19 @@ const Explore = () => {
   const yourFollowing: ExploreViewBabe[] = yourFollowingBase.map((b, i) => ({
     ...b,
     imageUrl: exploreBabeProfileUrls[(i + 3) % exploreBabeProfileUrls.length],
+    data: {},
   }));
 
   const trendingBabes: ExploreViewBabe[] = trendingBabesBase.map((b, i) => ({
     ...b,
     imageUrl: explorePictureUrls[(i + 2) % explorePictureUrls.length],
+    data: {},
   }));
 
   const newBabes: ExploreViewBabe[] = newBabesBase.map((b, i) => ({
     ...b,
     imageUrl: exploreBabeProfileUrls[(i + 7) % exploreBabeProfileUrls.length],
+    data: {},
   }));
 
   const recommendedBabes: ExploreViewBabe[] = [...yourBabesBase].reverse().map((b, i) => ({
@@ -965,6 +971,7 @@ const Explore = () => {
   const fanFavoritesBabes: ExploreViewBabe[] = [...trendingBabesBase, ...newBabesBase].map((b, i) => ({
     ...b,
     imageUrl: explorePictureUrls[(i + 5) % explorePictureUrls.length],
+    data: {},
   }));
 
   const trendingVideos: ExploreViewVideo[] = exploreVideoFeed;
