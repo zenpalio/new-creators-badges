@@ -1,12 +1,11 @@
 import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { X, Clock, Calendar, Trophy, FileText, Sparkles, ChevronDown, ChevronUp, Flame } from "lucide-react";
+import { ArrowLeft, Clock, Calendar, Trophy, FileText, Sparkles, ChevronDown, ChevronUp, Flame, Users, Upload } from "lucide-react";
 import SideNav from "../components/SideNav";
 import ExploreVideoCard from "../components/explore/ExploreVideoCard";
 import { exploreVideoFeed } from "../data/exploreVideoFeed";
 
-// Reuse the same event data shape as ExploreKling. Kept inline to avoid
-// extracting a shared module just for this prototype.
+// Reuse the same event data shape as ExploreKling.
 const eventsData = [
   {
     id: "stadium-broadcast",
@@ -66,7 +65,6 @@ const EventDetail = () => {
     [id]
   );
 
-  // Mock submissions — reuse the existing video feed.
   const submissions = exploreVideoFeed.slice(0, 18);
 
   return (
@@ -74,54 +72,69 @@ const EventDetail = () => {
       <SideNav open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="relative flex min-h-svh w-full bg-background-v2 font-onest text-foreground-v2">
         <main className="relative flex w-full flex-1 flex-col">
-          {/* Close button */}
+          {/* Back button — matches ExploreKling top-left controls */}
           <div className="fixed left-4 top-4 z-30">
             <button
               onClick={() => navigate("/explore")}
-              aria-label="Close"
-              className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-background-v2/70 text-foreground-v2 backdrop-blur-md hover:bg-background-v2/90"
+              aria-label="Back to explore"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-background-v2/70 px-3 py-2 text-sm font-medium text-foreground-v2 backdrop-blur-md hover:bg-background-v2/90 transition-colors"
             >
-              <X className="h-5 w-5" strokeWidth={1.5} />
+              <ArrowLeft className="h-4 w-4" />
+              <span className="hidden sm:inline">Back</span>
             </button>
           </div>
 
           {/* Hero banner */}
           <section className="relative w-full">
-            <div className="relative h-[260px] w-full overflow-hidden md:h-[360px]">
+            <div className="relative h-[260px] w-full overflow-hidden md:h-[380px]">
               <img
                 src={event.image}
                 alt={event.title}
                 className="absolute inset-0 h-full w-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-background-v2 via-background-v2/40 to-background-v2/20" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-black/80 via-black/40 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background-v2 to-transparent" />
             </div>
           </section>
 
-          <div className="mx-auto w-full max-w-5xl px-4 pb-24 md:px-8">
-            {/* Header info */}
-            <header className="-mt-10 flex flex-col gap-4">
-              <h1 className="text-2xl font-bold leading-tight text-white md:text-3xl">
+          <div className="mx-auto w-full max-w-6xl px-4 pb-24 md:px-8 lg:px-12">
+            {/* Header */}
+            <header className="-mt-16 flex flex-col gap-4 md:-mt-20">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-primary-v2/30 bg-primary-v2/10 px-2.5 py-0.5 font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-primary-v2">
+                  <Sparkles className="h-3 w-3" />
+                  Live Event
+                </span>
+              </div>
+              <h1 className="text-2xl font-bold leading-tight text-white md:text-4xl">
                 {event.title}
               </h1>
-              <div className="flex flex-wrap items-center gap-2 text-sm text-grey-light-3-v2">
-                <span className="font-medium text-foreground-v2/80">Event Duration</span>
-                <span>{event.duration}</span>
+              <p className="max-w-2xl text-sm text-grey-light-3-v2 md:text-base">
+                {event.subtitle}
+              </p>
+
+              {/* Stat chips */}
+              <div className="mt-1 flex flex-wrap items-center gap-2">
+                <Chip icon={<Clock className="h-3.5 w-3.5 text-primary-v2" />}>{event.deadline}</Chip>
+                <Chip icon={<Trophy className="h-3.5 w-3.5 text-yellow-400" />}>{event.prize}</Chip>
+                <Chip icon={<Users className="h-3.5 w-3.5 text-grey-light-3-v2" />}>
+                  {event.submissionCount.toLocaleString()} submissions
+                </Chip>
               </div>
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-grey-dark-2-v2 px-3 py-1.5 text-xs font-medium text-grey-light-2-v2">
-                  <Clock className="h-3.5 w-3.5" />
-                  {event.deadline}
-                </span>
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-grey-dark-2-v2 px-3 py-1.5 text-xs font-medium text-grey-light-2-v2">
-                  <Trophy className="h-3.5 w-3.5 text-yellow-400" />
-                  {event.prize}
-                </span>
+
+              {/* Primary CTA */}
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                <button className="inline-flex items-center gap-2 rounded-full bg-primary-v2 px-5 py-2.5 text-sm font-semibold text-primary-v2-foreground hover:bg-primary-v2/90 transition-colors">
+                  <Upload className="h-4 w-4" />
+                  Submit your entry
+                </button>
+                <span className="text-xs text-grey-light-4-v2">{event.duration}</span>
               </div>
             </header>
 
             {/* Description card */}
             <article
-              className={`relative mt-6 overflow-hidden rounded-2xl border border-white/5 bg-grey-dark-1-v2 p-5 md:p-6 ${
+              className={`relative mt-8 overflow-hidden rounded-2xl border border-white/5 bg-grey-dark-1-v2 p-5 md:p-6 ${
                 expanded ? "" : "max-h-[420px]"
               }`}
             >
@@ -147,18 +160,18 @@ const EventDetail = () => {
               >
                 <ul className="ml-5 list-disc space-y-1.5 marker:text-grey-light-3-v2">
                   <li>
-                    🎬 We're calling all fans to join the {event.title.split(":")[1]?.trim() ?? "Challenge"} and become the center of the spotlight! Show us your most creative, hilarious or passionate AI moments.
+                    🎬 Show us your most creative, hilarious or passionate AI moments for{" "}
+                    {event.title.split(":")[1]?.trim() ?? "this challenge"}.
                   </li>
                   <li>
-                    We recommend exploring the following directions to showcase the full creative potential:
+                    Recommended creative directions:
                     <ul className="ml-5 mt-1 list-[circle] space-y-1 marker:text-grey-light-3-v2">
                       <li>Tutorials: Share your tips and tricks for using the effect.</li>
                       <li>Reactions: Generate moments featuring funny gestures and expressive facial reactions.</li>
                     </ul>
                   </li>
                   <li>The content must be primarily generated using our tools.</li>
-                  <li>Showcase the full range of capabilities — eye-catching outcomes win.</li>
-                  <li>📐 Short films: no aspect ratio restrictions, but 720p or higher resolution required.</li>
+                  <li>📐 Short films: no aspect ratio restrictions, but 720p or higher.</li>
                 </ul>
               </Section>
 
@@ -167,7 +180,7 @@ const EventDetail = () => {
                 title="How to Participate"
               >
                 <ul className="ml-5 list-disc space-y-1 marker:text-grey-light-3-v2">
-                  <li>Click "Submit" in the bottom-left corner of the event page.</li>
+                  <li>Click "Submit your entry" at the top of the page.</li>
                   <li>Add a clear title and description for your submission.</li>
                   <li>Make sure your work was generated with our platform.</li>
                 </ul>
@@ -193,14 +206,10 @@ const EventDetail = () => {
             <div className="mt-3 flex justify-center">
               <button
                 onClick={() => setExpanded((v) => !v)}
-                className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-grey-dark-2-v2 px-4 py-2 text-sm font-medium text-foreground-v2 hover:bg-grey-dark-1-v2"
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-grey-dark-1-v2 px-4 py-2 text-sm font-medium text-foreground-v2 hover:bg-grey-dark-2-v2 transition-colors"
               >
-                {expanded ? "Less" : "More"}
-                {expanded ? (
-                  <ChevronUp className="h-4 w-4" />
-                ) : (
-                  <ChevronDown className="h-4 w-4" />
-                )}
+                {expanded ? "Show less" : "Show more"}
+                {expanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
               </button>
             </div>
 
@@ -208,24 +217,24 @@ const EventDetail = () => {
             <section className="mt-12">
               <div className="flex items-end justify-between gap-4">
                 <h2 className="text-xl font-bold text-white md:text-2xl">
-                  All Submissions{" "}
+                  Submissions{" "}
                   <span className="text-grey-light-3-v2">
                     ({event.submissionCount.toLocaleString()})
                   </span>
                 </h2>
               </div>
 
+              {/* Toolbar — explore-style pills */}
               <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-                {/* Tabs */}
-                <div className="inline-flex rounded-full border border-white/10 bg-grey-dark-2-v2 p-1">
+                <div className="inline-flex items-center gap-1 rounded-full bg-grey-dark-1-v2 p-1">
                   {(["Submitted", "Winners"] as SubmissionTab[]).map((t) => (
                     <button
                       key={t}
                       onClick={() => setActiveTab(t)}
-                      className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+                      className={`rounded-full px-3 md:px-4 py-1.5 text-sm font-medium transition-colors ${
                         activeTab === t
-                          ? "bg-foreground-v2 text-background-v2"
-                          : "text-grey-light-3-v2 hover:text-foreground-v2"
+                          ? "bg-primary-v2 text-primary-v2-foreground"
+                          : "text-grey-light-3-v2 hover:text-white"
                       }`}
                     >
                       {t}
@@ -233,16 +242,15 @@ const EventDetail = () => {
                   ))}
                 </div>
 
-                {/* Sort */}
-                <div className="flex items-center gap-4 text-sm">
-                  {(["Latest", "Hottest"] as SubmissionSort[]).map((s) => (
+                <div className="inline-flex items-center gap-1 rounded-full bg-grey-dark-1-v2 p-1">
+                  {(["Hottest", "Latest"] as SubmissionSort[]).map((s) => (
                     <button
                       key={s}
                       onClick={() => setSort(s)}
-                      className={`inline-flex items-center gap-1.5 transition-colors ${
+                      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs md:text-sm font-medium transition-colors ${
                         sort === s
-                          ? "font-semibold text-foreground-v2"
-                          : "text-grey-light-3-v2 hover:text-foreground-v2"
+                          ? "bg-grey-dark-2-v2 text-white"
+                          : "text-grey-light-3-v2 hover:text-white"
                       }`}
                     >
                       {s === "Hottest" && <Flame className="h-3.5 w-3.5 text-orange-400" />}
@@ -269,6 +277,13 @@ const EventDetail = () => {
     </>
   );
 };
+
+const Chip = ({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) => (
+  <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-grey-dark-1-v2 px-3 py-1.5 text-xs font-medium text-grey-light-2-v2">
+    {icon}
+    {children}
+  </span>
+);
 
 const Section = ({
   icon,
