@@ -67,7 +67,7 @@ const EventDetail = () => {
 
   const submissions = exploreVideoFeed.slice(0, 18).map((v, i) => ({
     ...v,
-    poster: `https://picsum.photos/seed/event-${event?.slug ?? "x"}-${i}/520/760`,
+    poster: `https://picsum.photos/seed/event-${event?.id ?? "x"}-${i}/520/760`,
     video: undefined as unknown as string,
   }));
 
