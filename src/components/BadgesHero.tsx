@@ -52,15 +52,15 @@ const BadgesHero = ({ activeBadge, tier = "legend" }: { activeBadge?: EquippedBa
                 }}
               />
             ) : (
-              <TierRingCanvas tier="legend" />
+              <TierRingCanvas tier={tier} />
             )}
             <div className="absolute inset-[4px] rounded-full overflow-hidden z-[1]">
               <img src={profileAvatar} alt="Profile" className="w-full h-full object-cover" />
             </div>
             <div className="absolute -bottom-1 -right-1 w-12 h-12 sm:w-16 sm:h-16 z-[2]">
               <img
-                src={activeBadge?.imageUrl ?? charLegend}
-                alt={activeBadge?.name ?? "Legend badge"}
+                src={activeBadge?.imageUrl ?? tierBadgeImg}
+                alt={activeBadge?.name ?? `${tierLabel} badge`}
                 className="relative z-10 w-full h-full object-contain"
                 style={{ filter: `drop-shadow(0 0 14px ${badgeEffect?.glowColor ?? tierGlowColor})` }}
               />
@@ -78,7 +78,7 @@ const BadgesHero = ({ activeBadge, tier = "legend" }: { activeBadge?: EquippedBa
               className="text-3xl md:text-4xl font-bold uppercase tracking-wide leading-none"
               style={{ color: tierBorderColor }}
             >
-              Legend
+              {tierLabel}
             </span>
           </div>
 
