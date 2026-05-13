@@ -462,4 +462,42 @@ const FilterSidebar = () => {
   );
 };
 
+// ---- Filter dropdown (sort/time pills) ----
+const FilterDropdown = ({
+  value,
+  options,
+  onChange,
+}: {
+  value: string;
+  options: string[];
+  onChange: (v: string) => void;
+}) => (
+  <DropdownMenu>
+    <DropdownMenuTrigger className="inline-flex items-center gap-2 rounded-full bg-grey-dark-1-v2 px-4 py-2 text-sm font-medium text-white hover:bg-grey-dark-2-v2 focus:outline-none focus:ring-2 focus:ring-primary-v2/40 transition-colors data-[state=open]:bg-grey-dark-2-v2">
+      {value}
+      <ChevronDown className="h-3.5 w-3.5 text-grey-light-3-v2" />
+    </DropdownMenuTrigger>
+    <DropdownMenuContent
+      align="start"
+      className="min-w-[160px] rounded-xl border-white/5 bg-grey-dark-1-v2 p-1.5 shadow-xl"
+    >
+      {options.map((o) => {
+        const active = o === value;
+        return (
+          <DropdownMenuItem
+            key={o}
+            onSelect={() => onChange(o)}
+            className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm cursor-pointer focus:bg-white/5 ${
+              active ? "text-white bg-white/5" : "text-grey-light-2-v2"
+            }`}
+          >
+            {o}
+            {active && <Check className="h-3.5 w-3.5 text-primary-v2" />}
+          </DropdownMenuItem>
+        );
+      })}
+    </DropdownMenuContent>
+  </DropdownMenu>
+);
+
 export default ExploreKling;
