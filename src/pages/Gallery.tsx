@@ -289,34 +289,14 @@ const Gallery = () => {
                     </div>
                   </>
                 )}
-                {activeTab === "Creators" && (
-                  <>
-                    <div className="hidden xl:block h-6 w-px bg-white/10" />
-                    <div className="relative hidden xl:block">
-                      <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-light-4-v2" />
-                      <input
-                        value={creatorsSearch}
-                        onChange={(e) => setCreatorsSearch(e.target.value)}
-                        placeholder="Search"
-                        className="h-9 w-64 rounded-full border border-white/5 bg-grey-dark-1-v2 pl-9 pr-3 text-sm text-white placeholder:text-grey-light-4-v2 outline-none focus:border-primary-v2/50"
-                      />
-                    </div>
-                  </>
-                )}
               </div>
 
               {/* Search + filters row (combined below xl) */}
               <div className="flex items-center gap-2 flex-wrap xl:flex-nowrap xl:contents">
-                {(activeTab === "Creations" || activeTab === "Creators") && (
+                {activeTab === "Creations" && (
                   <div className="relative xl:hidden w-full sm:flex-1 sm:min-w-[180px] sm:max-w-xs">
                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-light-4-v2" />
                     <input
-                      value={activeTab === "Creators" ? creatorsSearch : undefined}
-                      onChange={
-                        activeTab === "Creators"
-                          ? (e) => setCreatorsSearch(e.target.value)
-                          : undefined
-                      }
                       placeholder="Search"
                       className="h-9 w-full rounded-full border border-white/5 bg-grey-dark-1-v2 pl-9 pr-3 text-sm text-white placeholder:text-grey-light-4-v2 outline-none focus:border-primary-v2/50"
                     />
@@ -345,55 +325,12 @@ const Gallery = () => {
                   </div>
                 )}
               </div>
-              {activeTab === "Creators" && (
-                <div className="flex items-center gap-2 -mx-4 px-4 md:mx-0 md:px-0 overflow-x-auto scrollbar-hide flex-nowrap min-w-0 md:justify-end">
-                  <FilterDropdown
-                    value={
-                      ({ likes: "Most Liked", followers: "Most Followers", aura: "Most Aura" } as const)[creatorsSort]
-                    }
-                    options={["Most Liked", "Most Followers", "Most Aura"]}
-                    onChange={(v) =>
-                      setCreatorsSort(
-                        ({ "Most Liked": "likes", "Most Followers": "followers", "Most Aura": "aura" } as const)[
-                          v as "Most Liked" | "Most Followers" | "Most Aura"
-                        ],
-                      )
-                    }
-                  />
-                  <FilterDropdown
-                    value={
-                      ({ all: "All Creations", characters: "Characters", images: "Images", videos: "Videos", stories: "Stories" } as const)[creatorsCreation]
-                    }
-                    options={["All Creations", "Characters", "Images", "Videos", "Stories"]}
-                    onChange={(v) =>
-                      setCreatorsCreation(
-                        ({ "All Creations": "all", Characters: "characters", Images: "images", Videos: "videos", Stories: "stories" } as const)[
-                          v as "All Creations" | "Characters" | "Images" | "Videos" | "Stories"
-                        ],
-                      )
-                    }
-                  />
-                  <FilterDropdown
-                    value={
-                      ({ all: "All time", year: "Year", month: "Month", week: "Week" } as const)[creatorsTime]
-                    }
-                    options={["All time", "Year", "Month", "Week"]}
-                    onChange={(v) =>
-                      setCreatorsTime(
-                        ({ "All time": "all", Year: "year", Month: "month", Week: "week" } as const)[
-                          v as "All time" | "Year" | "Month" | "Week"
-                        ],
-                      )
-                    }
-                  />
-                </div>
-              )}
             </section>
 
 
 
             {/* Content type tabs */}
-            {activeTab !== "Creators" && activeTab !== "Events" && (
+            {activeTab === "Creations" && (
               <div className="flex items-center gap-5 border-b border-white/5 -mt-2">
                 {contentTabs.map((t) => (
                   <button
@@ -413,30 +350,12 @@ const Gallery = () => {
             )}
 
             {/* Feed */}
-            {activeTab === "Creators" ? (
-              <div className="-mx-4 md:-mx-8 lg:-mx-12">
-                <CreatorsView
-                  creators={mockCreators}
-                  labels={creatorsPageLabels}
-                  onBack={() => navigate(-1)}
-                  hideHeader
-                  hideToolbar
-                  search={creatorsSearch}
-                  onSearchChange={setCreatorsSearch}
-                  sortBy={creatorsSort}
-                  onSortByChange={setCreatorsSort}
-                  filterBy={creatorsTime}
-                  onFilterByChange={setCreatorsTime}
-                  creationType={creatorsCreation}
-                  onCreationTypeChange={setCreatorsCreation}
-                />
-              </div>
-            ) : activeTab === "Events" ? (
-              <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-                {exploreEvents.map((e) => (
-                  <EventCard key={e.title} {...e} />
+            {activeTab === "Badges" ? (
+              <div className="flex flex-col gap-2">
+                {badgeCategories.map((cat, i) => (
+                  <BadgeCategory key={i} {...cat} />
                 ))}
-              </section>
+              </div>
             ) : activeContent === "Stories" ? (
               <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 [&>*]:w-full [&>*]:max-w-none">
                 {exploreStories.map((s) => (
