@@ -362,7 +362,6 @@ const Gallery = () => {
             {/* Feed */}
             {activeTab === "Badges" ? (
               <div className="flex flex-col gap-2">
-                <BadgesHero />
                 <BadgesPanel value={badgesSubTab} />
               </div>
             ) : activeContent === "Stories" ? (
