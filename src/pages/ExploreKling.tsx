@@ -7,22 +7,32 @@ import ExploreVideoCard from "../components/explore/ExploreVideoCard";
 import LikeButton from "../components/explore/LikeButton";
 import { exploreVideoFeed } from "../data/exploreVideoFeed";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/ui/dropdown-menu";
+import sceneBuilderBg from "../assets/scene-builder-bg.jpg";
+import premiumBg from "../assets/premium-bg.jpg";
 
 // ---- Hero banners (left big, right secondary) ----
 const heroBanners = [
   {
     eyebrow: "New release",
-    title: "Scene Builder v2 is live",
+    title: "Scene Builder v2",
     description: "Cinematic, multi-shot scenes with characters, music and motion — all from one prompt.",
     cta: "Try Scene Builder",
-    accent: "from-primary-v2/40 via-primary-v2/10 to-transparent",
+    bg: sceneBuilderBg,
+    overlay: "from-black/85 via-black/55 to-black/20",
+    glow: "bg-primary-v2/30",
+    badgeIcon: Sparkles,
+    ctaClass: "bg-primary-v2 text-primary-v2-foreground hover:bg-primary-v2/90",
   },
   {
     eyebrow: "Premium",
     title: "Skip the queue",
     description: "Unlimited chats, HD videos, exclusive babes.",
     cta: "Upgrade",
-    accent: "from-fuchsia-500/30 via-purple-500/10 to-transparent",
+    bg: premiumBg,
+    overlay: "from-black/85 via-black/55 to-black/10",
+    glow: "bg-fuchsia-500/30",
+    badgeIcon: Crown,
+    ctaClass: "bg-white text-black hover:bg-white/90",
   },
 ];
 
@@ -99,30 +109,48 @@ const ExploreKling = () => {
           <div className="relative z-10 flex w-full flex-col gap-6 px-4 pb-16 pt-[72px] md:px-8 lg:px-12">
             {/* Hero banners row */}
             <section className="grid grid-cols-1 gap-3 lg:grid-cols-3">
-              {heroBanners.map((b, i) => (
-                <a
-                  key={b.title}
-                  href="#"
-                  className={`group relative overflow-hidden rounded-2xl border border-white/5 bg-grey-dark-1-v2 p-6 transition-all hover:-translate-y-0.5 hover:border-white/10 ${
-                    i === 0 ? "lg:col-span-2 min-h-[180px]" : "min-h-[180px]"
-                  }`}
-                >
-                  <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${b.accent}`} />
-                  <div className="relative flex h-full flex-col justify-between gap-4">
-                    <div>
-                      <span className="inline-block rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white/90 backdrop-blur">
-                        {b.eyebrow}
-                      </span>
-                      <h2 className="mt-3 text-2xl font-bold leading-tight text-white">{b.title}</h2>
-                      <p className="mt-1.5 max-w-md text-sm text-grey-light-3-v2">{b.description}</p>
+              {heroBanners.map((b, i) => {
+                const BadgeIcon = b.badgeIcon;
+                return (
+                  <a
+                    key={b.title}
+                    href="#"
+                    className={`group relative overflow-hidden rounded-2xl border border-white/10 bg-black transition-all hover:-translate-y-0.5 hover:border-white/20 hover:shadow-2xl ${
+                      i === 0 ? "lg:col-span-2 min-h-[220px]" : "min-h-[220px]"
+                    }`}
+                  >
+                    {/* Background image */}
+                    <img
+                      src={b.bg}
+                      alt=""
+                      loading="lazy"
+                      className="absolute inset-0 h-full w-full object-cover scale-105 transition-transform duration-700 group-hover:scale-110"
+                    />
+                    {/* Overlays */}
+                    <div className={`pointer-events-none absolute inset-0 bg-gradient-to-r ${b.overlay}`} />
+                    <div className={`pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full blur-3xl opacity-60 ${b.glow}`} />
+                    {/* Content */}
+                    <div className="relative flex h-full flex-col justify-between gap-6 p-7">
+                      <div>
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white backdrop-blur-md ring-1 ring-white/15">
+                          <BadgeIcon className="h-3 w-3" />
+                          {b.eyebrow}
+                        </span>
+                        <h2 className="mt-4 text-3xl font-bold leading-[1.1] text-white drop-shadow-lg md:text-4xl">
+                          {b.title}
+                        </h2>
+                        <p className="mt-2 max-w-md text-sm leading-relaxed text-white/75">
+                          {b.description}
+                        </p>
+                      </div>
+                      <div className={`inline-flex items-center gap-1.5 self-start rounded-full px-5 py-2.5 text-sm font-semibold transition-all group-hover:translate-x-1 ${b.ctaClass}`}>
+                        {b.cta}
+                        <ArrowRight className="h-4 w-4" />
+                      </div>
                     </div>
-                    <div className="inline-flex items-center gap-1.5 self-start rounded-full bg-primary-v2 px-4 py-2 text-sm font-semibold text-primary-v2-foreground transition-transform group-hover:translate-x-0.5">
-                      {b.cta}
-                      <ArrowRight className="h-4 w-4" />
-                    </div>
-                  </div>
-                </a>
-              ))}
+                  </a>
+                );
+              })}
             </section>
 
 
