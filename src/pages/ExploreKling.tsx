@@ -105,10 +105,7 @@ const feed = [...exploreVideoFeed, ...exploreVideoFeed].map((v, i) => ({
   likes: ((v.likes as number) ?? 0) + i * 3,
 }));
 
-const followingTags = [
-  "@luna_eclipse", "@nyx_shadow", "@zara_nova", "@kai_storm", "@mira_blaze",
-  "@ivy_frost", "@axel_drift", "@suki_dream",
-];
+// (followingTags removed — Following filter moved to right panel)
 
 const storyCardLabels: StoryContentCardLabels = {
   storyBadge: "Story",
