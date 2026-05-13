@@ -14,17 +14,25 @@ import premiumBg from "../assets/premium-bg.jpg";
 const heroBanners = [
   {
     eyebrow: "New release",
-    title: "Scene Builder v2 is live",
+    title: "Scene Builder v2",
     description: "Cinematic, multi-shot scenes with characters, music and motion — all from one prompt.",
     cta: "Try Scene Builder",
-    accent: "from-primary-v2/40 via-primary-v2/10 to-transparent",
+    bg: sceneBuilderBg,
+    overlay: "from-black/85 via-black/55 to-black/20",
+    glow: "bg-primary-v2/30",
+    badgeIcon: Sparkles,
+    ctaClass: "bg-primary-v2 text-primary-v2-foreground hover:bg-primary-v2/90",
   },
   {
     eyebrow: "Premium",
     title: "Skip the queue",
     description: "Unlimited chats, HD videos, exclusive babes.",
     cta: "Upgrade",
-    accent: "from-fuchsia-500/30 via-purple-500/10 to-transparent",
+    bg: premiumBg,
+    overlay: "from-black/85 via-black/55 to-black/10",
+    glow: "bg-fuchsia-500/30",
+    badgeIcon: Crown,
+    ctaClass: "bg-white text-black hover:bg-white/90",
   },
 ];
 
