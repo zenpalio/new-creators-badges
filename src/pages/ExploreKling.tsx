@@ -564,6 +564,7 @@ const FilterSidebar = ({
 }) => {
   const setOpen = onOpenChange;
   const [liked, setLiked] = useState(false);
+  const [followingOnly, setFollowingOnly] = useState(false);
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(filterGroups.map((g) => [g.label, true])),
   );
