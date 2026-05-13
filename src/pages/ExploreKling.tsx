@@ -16,6 +16,7 @@ import LikeButton from "../components/explore/LikeButton";
 import { exploreVideoFeed } from "../data/exploreVideoFeed";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/ui/dropdown-menu";
 import sceneBuilderBg from "../assets/scene-builder-bg.jpg";
+import storyCreatorBg from "../assets/story-creator-bg.jpg";
 import premiumBg from "../assets/premium-bg.jpg";
 import storySummer from "../assets/story-summer.jpg";
 import storyDark from "../assets/story-dark.jpg";
@@ -42,22 +43,22 @@ import { useNavigate } from "react-router-dom";
 // ---- Hero banners (left big, right secondary) ----
 const heroBanners = [
   {
-    code: "SYS//SCN-002",
-    eyebrow: "New release",
-    title: "Scene Builder",
-    version: "v2.0",
-    description: "Cinematic, multi-shot scenes with characters, music and motion — all from one prompt.",
-    cta: "Initialize",
-    bg: sceneBuilderBg,
-    overlay: "from-black/90 via-black/60 to-black/20",
+    code: "SYS//STR-001",
+    eyebrow: "Featured tool",
+    title: "Story Creator",
+    version: "v1.0",
+    description: "Craft epic anime adventures, fantasy worlds and episodic sagas — chapter by chapter.",
+    cta: "Start writing",
+    bg: storyCreatorBg,
+    overlay: "from-black/90 via-black/55 to-black/10",
     accent: "primary-v2",
     accentHsl: "213 100% 50%",
-    badgeIcon: Sparkles,
+    badgeIcon: BookOpen,
     ctaClass: "bg-primary-v2 text-primary-v2-foreground hover:bg-primary-v2/90",
     stats: [
-      { label: "SHOTS", value: "08" },
-      { label: "AUDIO", value: "ON" },
-      { label: "FPS", value: "24" },
+      { label: "EPISODES", value: "∞" },
+      { label: "GENRES", value: "12" },
+      { label: "MODEL", value: "PRO" },
     ],
   },
   {
