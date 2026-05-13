@@ -260,7 +260,7 @@ const ExploreKling = () => {
 
 
             {/* Tabs + Search + Publish */}
-            <section className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-4 min-w-0">
+            <section className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-4 min-w-0">
               <div className="flex items-center gap-3 -mx-4 px-4 md:mx-0 md:px-0 overflow-x-auto scrollbar-hide min-w-0">
                 <div className="flex items-center gap-1 rounded-full bg-grey-dark-1-v2 p-1 shrink-0">
                   {tabs.map((t) => (
@@ -279,8 +279,8 @@ const ExploreKling = () => {
                 </div>
                 {activeTab === "Community" && (
                   <>
-                    <div className="hidden md:block h-6 w-px bg-white/10" />
-                    <div className="relative hidden md:block">
+                    <div className="hidden lg:block h-6 w-px bg-white/10" />
+                    <div className="relative hidden lg:block">
                       <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-light-4-v2" />
                       <input
                         placeholder="Search"
@@ -291,8 +291,8 @@ const ExploreKling = () => {
                 )}
                 {activeTab === "Creators" && (
                   <>
-                    <div className="hidden md:block h-6 w-px bg-white/10" />
-                    <div className="relative hidden md:block">
+                    <div className="hidden lg:block h-6 w-px bg-white/10" />
+                    <div className="relative hidden lg:block">
                       <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-light-4-v2" />
                       <input
                         value={creatorsSearch}
@@ -307,7 +307,7 @@ const ExploreKling = () => {
 
               {/* Mobile-only search bar (full width) */}
               {(activeTab === "Community" || activeTab === "Creators") && (
-                <div className="relative md:hidden">
+                <div className="relative lg:hidden">
                   <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-light-4-v2" />
                   <input
                     value={activeTab === "Creators" ? creatorsSearch : undefined}
