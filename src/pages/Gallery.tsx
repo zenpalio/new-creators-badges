@@ -401,9 +401,38 @@ const Gallery = () => {
               </div>
             ) : activeContent === "Stories" ? (
               <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 [&>*]:w-full [&>*]:max-w-none">
-                {exploreStories.map((s) => (
-                  <StoryContentCard key={s.title} {...s} labels={storyCardLabels} />
-                ))}
+                {exploreStories.map((s) => {
+                  const sid = `story-${s.title}`;
+                  const isSelected = selectedIds.has(sid);
+                  return (
+                    <div key={s.title} className="relative">
+                      <StoryContentCard {...s} labels={storyCardLabels} />
+                      {editMode && (
+                        <button
+                          type="button"
+                          onClick={() => toggleSelected(sid)}
+                          aria-label={isSelected ? "Deselect item" : "Select item"}
+                          aria-pressed={isSelected}
+                          className={`absolute inset-0 z-10 flex items-start justify-start rounded-xl ring-2 ring-inset transition-all ${
+                            isSelected
+                              ? "bg-primary-v2/25 ring-primary-v2"
+                              : "bg-black/10 ring-transparent hover:bg-black/20"
+                          }`}
+                        >
+                          <span
+                            className={`m-2 flex h-6 w-6 items-center justify-center rounded-md border-2 transition-colors ${
+                              isSelected
+                                ? "border-primary-v2 bg-primary-v2 text-primary-v2-foreground"
+                                : "border-white/80 bg-black/40"
+                            }`}
+                          >
+                            {isSelected && <Check className="h-4 w-4" strokeWidth={3} />}
+                          </span>
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
               </section>
             ) : (
               <section className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
