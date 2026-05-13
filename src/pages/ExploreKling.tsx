@@ -316,7 +316,7 @@ const ExploreKling = () => {
                         <p className="mt-1.5 max-w-md text-[13px] leading-relaxed text-white/70">
                           {b.description}
                         </p>
-                        <div className={`mt-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all group-hover:translate-x-1 ${b.ctaClass}`}>
+                        <div className={`mt-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${b.ctaClass}`}>
                           {b.cta}
                           <ArrowRight className="h-4 w-4" />
                         </div>
