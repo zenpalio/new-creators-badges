@@ -566,7 +566,7 @@ const HeroBannerCard = ({ banner: b, large }: { banner: typeof heroBanners[numbe
         className="pointer-events-none absolute -bottom-24 -left-16 h-64 w-64 rounded-full blur-3xl opacity-40"
         style={{ background: `hsl(var(--accent) / 0.5)` }}
       />
-      <div className="relative flex h-full items-end p-4 md:p-5">
+      <div className="relative flex h-full items-center p-4 md:p-5">
         <div className="w-full rounded-xl border border-white/10 bg-black/35 p-4 backdrop-blur-md md:p-5">
           <div className="flex items-center gap-2">
             <span
