@@ -507,7 +507,7 @@ const HeroBanners = () => {
   return (
     <section>
       {/* Mobile: snap slider */}
-      <div className="lg:hidden">
+      <div className="xl:hidden">
         <div
           ref={scrollerRef}
           className="-mx-4 flex snap-x snap-mandatory overflow-x-auto scrollbar-hide scroll-smooth"
@@ -531,7 +531,7 @@ const HeroBanners = () => {
       </div>
 
       {/* Desktop: grid */}
-      <div className="hidden lg:grid grid-cols-3 gap-3">
+      <div className="hidden xl:grid grid-cols-3 gap-3">
         {heroBanners.map((b, i) => (
           <HeroBannerCard key={b.title} banner={b} large={i === 0} />
         ))}
