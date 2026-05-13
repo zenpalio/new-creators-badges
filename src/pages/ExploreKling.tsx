@@ -609,10 +609,16 @@ const FilterSidebar = ({
     setLiked(false);
   };
 
-  if (!open) return null;
-
   return (
-    <aside className="hidden lg:flex w-80 shrink-0 flex-col border-l border-white/5 bg-background-v2">
+    <>
+      {/* Backdrop */}
+      <div
+        onClick={() => setOpen(false)}
+        className={`fixed inset-0 z-40 bg-black/50 transition-opacity lg:hidden ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}
+      />
+      <aside
+        className={`fixed right-0 top-0 z-50 flex h-full w-80 flex-col border-l border-white/5 bg-background-v2 shadow-2xl transition-transform duration-300 ${open ? "translate-x-0" : "translate-x-full"}`}
+      >
       {/* Header */}
       <div className="flex items-center justify-between px-5 pt-5 pb-4">
         <div className="flex items-center gap-2">
