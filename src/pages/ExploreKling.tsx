@@ -141,6 +141,38 @@ const exploreEvents = [
   { title: "Kreate Contest #51: Fashion Spotlight Challenge", subtitle: "Redefining Fashion with Kling AI!", deadline: "21 days and 22 hours before deadline", prize: "Credits", heat: 1368, image: "https://picsum.photos/seed/event-4/800/500" },
 ];
 
+// Notifications (mirrors logic from /)
+const ExploreNotificationLink = ({ href, children, ...rest }: NotificationRowLinkProps) => (
+  <Link to={href} {...rest}>
+    {children}
+  </Link>
+);
+
+const mockNotifications: Notification[] = [
+  { id: "n1", actor: "energetic_lion_0991", initials: "EN", action: "liked video of", target: "Mia", unread: true, href: "#" },
+  { id: "n2", actor: "calm_beaver_6740", initials: "CA", action: "liked video of", target: "Ellie – The Reclusive Stepsister", unread: true },
+  { id: "n3", actor: "amiable_leopard_8696", initials: "AM", action: "liked", target: "Nyx", unread: true },
+  { id: "n4", actor: "cheerful_ibis_4482", initials: "CH", action: "liked video of", target: "Ella" },
+  { id: "n5", actor: "charming_capybara_7956", initials: "CH", action: "liked", target: "Hikari" },
+  { id: "n6", actor: "Sandwiches", initials: "SA", action: "liked video of", target: "Elipses..." },
+  { id: "n7", actor: "blessed_gecko_6782", initials: "BL", action: "liked video of", target: "Lucy" },
+  { id: "n8", actor: "appealing_camel_9047", initials: "AP", action: "started following you", href: "https://discord.gg/lovable-dev", hrefTarget: "_blank" as const },
+];
+
+const exploreNotificationsSidebarLabels: NotificationsSidebarLabels = {
+  titleNotifications: "Notifications",
+  titleWhatsNew: "What's new",
+  markAllRead: "Mark all as read",
+  tabNotifications: "Notifications",
+  tabWhatsNew: "What's new?",
+  discordCta: "Join our Discord",
+  discordHref: "https://discord.gg/lovable-dev",
+};
+
+const exploreNotificationsSidebarStatusItems: NotificationsSidebarStatusItem[] = [
+  { id: "all-operational", type: "success", message: "All systems operational" },
+];
+
 const ExploreKling = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
