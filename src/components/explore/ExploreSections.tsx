@@ -9,8 +9,47 @@ import ExploreVideoCard from "./ExploreVideoCard"
 import ExploreWhatsNewCard from "./ExploreWhatsNewCard"
 import ExploreCreateToolCard from "./ExploreCreateToolCard"
 import PromoBanner, { type PromoBannerVariant } from "./PromoBanner"
+import { Skeleton } from "../ui/skeleton"
 import { type BadgeTier } from "../BadgeCard"
 import { type MouseEvent, type ReactNode } from "react"
+
+const DEFAULT_EXPLORE_SECTION_SKELETON_COUNT = 6
+
+const CATEGORY_PLACEHOLDER_WIDTHS_PX = [72, 96, 88, 104, 80]
+
+// ---- Loading skeletons (dimensions match real cards) ----
+
+const TagRowSkeleton = () => (
+  <div className="mb-3" aria-hidden>
+    <HScroll>
+      {CATEGORY_PLACEHOLDER_WIDTHS_PX.map((w, i) => (
+        <Skeleton
+          key={i}
+          className="h-[41px] shrink-0 rounded-[5px] bg-muted-v2/50"
+          style={{ width: w }}
+        />
+      ))}
+    </HScroll>
+  </div>
+)
+
+const PostOrVideoCardSkeleton = () => (
+  <div
+    aria-hidden
+    className="relative block w-[220px] shrink-0 overflow-hidden rounded-2xl bg-grey-dark-1-v2"
+  >
+    <Skeleton className="aspect-[13/19] w-full rounded-none bg-muted-v2/50" />
+  </div>
+)
+
+const ExploreStoryCardSkeleton = () => (
+  <div
+    aria-hidden
+    className="w-[calc(100vw-2rem)] max-w-[460px] shrink-0 md:w-[460px]"
+  >
+    <Skeleton className="aspect-[5/3] w-full rounded-xl bg-muted-v2/50" />
+  </div>
+)
 
 // ---- Public types ----
 
@@ -171,6 +210,16 @@ export interface PostsSectionProps {
   renderLikeButton?: (post: ExploreViewBabe) => ReactNode
   variant?: "compact" | "stats"
   className?: string
+  /** When true, card rail shows skeleton placeholders instead of `posts`. */
+  loading?: boolean
+  /** Number of skeleton cards when `loading` is true. Defaults to 6. */
+  skeletonCount?: number
+  /**
+   * When `loading` and there are no `categories` yet, show skeleton pills in the tag row.
+   * Set to false to hide the category strip until real tags load.
+   * @default true
+   */
+  showCategoryPlaceholders?: boolean
 }
 
 export const PostsSection = ({
@@ -185,34 +234,49 @@ export const PostsSection = ({
   renderLikeButton,
   variant = "compact",
   className,
-}: PostsSectionProps) => (
-  <section className={className}>
-    <SectionTitle
-      title={title}
-      actionLabel={actionLabel}
-      actionHref={actionHref}
-      onAction={onAction}
-    />
-    {categories && categories.length > 0 && (
-      <TagRow tags={categories} onTagClick={onTagClick} />
-    )}
-    <HScroll>
-      {posts.map((b, i) => (
-        <PostCard
-          key={i}
-          name={b.name}
-          description={b.description}
-          imageUrl={b.imageUrl}
-          href={b.href}
-          onClick={onPostClick ? () => onPostClick(b) : undefined}
-          messageCount={b.messageCount}
-          variant={variant}
-          likeButton={renderLikeButton?.(b)}
-        />
-      ))}
-    </HScroll>
-  </section>
-)
+  loading = false,
+  skeletonCount = DEFAULT_EXPLORE_SECTION_SKELETON_COUNT,
+  showCategoryPlaceholders = true,
+}: PostsSectionProps) => {
+  const showTagSkeleton =
+    loading &&
+    showCategoryPlaceholders &&
+    !(categories && categories.length > 0)
+
+  return (
+    <section className={className} aria-busy={loading}>
+      <SectionTitle
+        title={title}
+        actionLabel={actionLabel}
+        actionHref={actionHref}
+        onAction={onAction}
+      />
+      {categories && categories.length > 0 && (
+        <TagRow tags={categories} onTagClick={onTagClick} />
+      )}
+      {showTagSkeleton && <TagRowSkeleton />}
+      <HScroll>
+        {loading
+          ? Array.from({ length: skeletonCount }, (_, i) => (
+              <PostOrVideoCardSkeleton key={i} />
+            ))
+          : posts.map((b, i) => (
+              <PostCard
+                key={i}
+                name={b.name}
+                description={b.description}
+                imageUrl={b.imageUrl}
+                href={b.href}
+                onClick={onPostClick ? () => onPostClick(b) : undefined}
+                messageCount={b.messageCount}
+                variant={variant}
+                likeButton={renderLikeButton?.(b)}
+              />
+            ))}
+      </HScroll>
+    </section>
+  )
+}
 
 export interface ExploreStoriesSectionProps {
   title: string
@@ -224,6 +288,8 @@ export interface ExploreStoriesSectionProps {
   className?: string
   storyCardLabels: StoryContentCardLabels
   renderLikeButton?: (post: ExploreViewStory) => ReactNode
+  loading?: boolean
+  skeletonCount?: number
 }
 
 export const ExploreStoriesSection = ({
@@ -236,8 +302,10 @@ export const ExploreStoriesSection = ({
   className,
   storyCardLabels,
   renderLikeButton,
+  loading = false,
+  skeletonCount = DEFAULT_EXPLORE_SECTION_SKELETON_COUNT,
 }: ExploreStoriesSectionProps) => (
-  <section className={className}>
+  <section className={className} aria-busy={loading}>
     <SectionTitle
       title={title}
       actionLabel={actionLabel}
@@ -245,22 +313,26 @@ export const ExploreStoriesSection = ({
       onAction={onAction}
     />
     <HScroll>
-      {posts.map((s, i) => (
-        <StoryContentCard
-          key={`${s.id}-${i}`}
-          src={s.src}
-          href={s.href}
-          title={s.title}
-          description={s.description}
-          episodeCount={s.episodeCount}
-          totalScenes={s.totalScenes}
-          avgRating={s.avgRating}
-          ratingCount={s.ratingCount}
-          onClick={onPostClick ? () => onPostClick(s) : undefined}
-          labels={storyCardLabels}
-          likeButton={renderLikeButton?.(s)}
-        />
-      ))}
+      {loading
+        ? Array.from({ length: skeletonCount }, (_, i) => (
+            <ExploreStoryCardSkeleton key={i} />
+          ))
+        : posts.map((s, i) => (
+            <StoryContentCard
+              key={`${s.id}-${i}`}
+              src={s.src}
+              href={s.href}
+              title={s.title}
+              description={s.description}
+              episodeCount={s.episodeCount}
+              totalScenes={s.totalScenes}
+              avgRating={s.avgRating}
+              ratingCount={s.ratingCount}
+              onClick={onPostClick ? () => onPostClick(s) : undefined}
+              labels={storyCardLabels}
+              likeButton={renderLikeButton?.(s)}
+            />
+          ))}
     </HScroll>
   </section>
 )
@@ -277,6 +349,9 @@ export interface ExploreVideosSectionProps {
   className?: string
   videoCardImageAlt: string
   renderLikeButton?: (post: ExploreViewVideo) => ReactNode
+  loading?: boolean
+  skeletonCount?: number
+  showCategoryPlaceholders?: boolean
 }
 
 export const ExploreVideosSection = ({
@@ -291,32 +366,47 @@ export const ExploreVideosSection = ({
   className,
   videoCardImageAlt,
   renderLikeButton,
-}: ExploreVideosSectionProps) => (
-  <section className={className}>
-    <SectionTitle
-      title={title}
-      actionLabel={actionLabel}
-      actionHref={actionHref}
-      onAction={onAction}
-    />
-    {categories && categories.length > 0 && (
-      <TagRow tags={categories} onTagClick={onTagClick} />
-    )}
-    <HScroll>
-      {posts.map((v, i) => (
-        <ExploreVideoCard
-          key={`${v.id}-${i}`}
-          poster={v.poster}
-          video={v.video}
-          href={v.href}
-          onClick={onPostClick ? () => onPostClick(v) : undefined}
-          imageAlt={videoCardImageAlt}
-          likeButton={renderLikeButton?.(v)}
-        />
-      ))}
-    </HScroll>
-  </section>
-)
+  loading = false,
+  skeletonCount = DEFAULT_EXPLORE_SECTION_SKELETON_COUNT,
+  showCategoryPlaceholders = true,
+}: ExploreVideosSectionProps) => {
+  const showTagSkeleton =
+    loading &&
+    showCategoryPlaceholders &&
+    !(categories && categories.length > 0)
+
+  return (
+    <section className={className} aria-busy={loading}>
+      <SectionTitle
+        title={title}
+        actionLabel={actionLabel}
+        actionHref={actionHref}
+        onAction={onAction}
+      />
+      {categories && categories.length > 0 && (
+        <TagRow tags={categories} onTagClick={onTagClick} />
+      )}
+      {showTagSkeleton && <TagRowSkeleton />}
+      <HScroll>
+        {loading
+          ? Array.from({ length: skeletonCount }, (_, i) => (
+              <PostOrVideoCardSkeleton key={i} />
+            ))
+          : posts.map((v, i) => (
+              <ExploreVideoCard
+                key={`${v.id}-${i}`}
+                poster={v.poster}
+                video={v.video}
+                href={v.href}
+                onClick={onPostClick ? () => onPostClick(v) : undefined}
+                imageAlt={videoCardImageAlt}
+                likeButton={renderLikeButton?.(v)}
+              />
+            ))}
+      </HScroll>
+    </section>
+  )
+}
 
 export interface ExploreCreatorsSectionProps {
   title: string

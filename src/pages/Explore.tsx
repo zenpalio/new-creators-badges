@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Sparkles,
   Video,
@@ -926,6 +926,13 @@ const Explore = () => {
   );
   const [inlineAnnouncement, setInlineAnnouncement] = useState<Announcement | null>(null);
   const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
+  /** Mock: horizontal card rails show skeletons briefly, as if data were fetching. */
+  const [sectionRailsLoading, setSectionRailsLoading] = useState(true);
+
+  useEffect(() => {
+    const id = window.setTimeout(() => setSectionRailsLoading(false), 1000);
+    return () => clearTimeout(id);
+  }, []);
 
   const notificationUnreadCount = notifications.filter((n) => n.unread).length;
   const markAllNotificationsRead = () =>
@@ -1111,6 +1118,7 @@ const Explore = () => {
           actionLabel="See all"
           categories={babeCategories}
           posts={yourBabes}
+          loading={sectionRailsLoading}
         />
         <ExplorePromoSection promo={giftPromo} />
         <ExploreStoriesSection
@@ -1120,6 +1128,7 @@ const Explore = () => {
           className="mt-2"
           storyCardLabels={exploreStoryCardLabels}
           renderLikeButton={renderStoryLikeButton}
+          loading={sectionRailsLoading}
         />
         <ExploreVideosSection
           title="Top trending videos"
@@ -1129,6 +1138,7 @@ const Explore = () => {
           className="mt-2"
           videoCardImageAlt={exploreVideoCardImageAlt}
           renderLikeButton={renderVideoLikeButton}
+          loading={sectionRailsLoading}
         />
         <ExplorePromoSection promo={premiumPromo} />
         <ExploreCreatorsSection
@@ -1171,6 +1181,7 @@ const Explore = () => {
           variant="stats"
           className="mt-2"
           renderLikeButton={renderBabeLikeButton}
+          loading={sectionRailsLoading}
         />
         <ExplorePromoSection promo={tokensPromo} />
         <PostsSection
@@ -1181,6 +1192,7 @@ const Explore = () => {
           variant="stats"
           className="mt-2"
           renderLikeButton={renderBabeLikeButton}
+          loading={sectionRailsLoading}
         />
         <ExploreStoriesSection
           title="New story episodes"
@@ -1189,6 +1201,7 @@ const Explore = () => {
           className="mt-2"
           storyCardLabels={exploreStoryCardLabels}
           renderLikeButton={renderStoryLikeButton}
+          loading={sectionRailsLoading}
         />
         <ExplorePromoSection promo={featurePromo} />
         <ExploreCreatorsSection
@@ -1203,6 +1216,7 @@ const Explore = () => {
           actionLabel="See all"
           posts={recommendedBabes}
           className="mt-2"
+          loading={sectionRailsLoading}
         />
         <ExplorePromoSection promo={giftPromo2} />
         <ExploreStoriesSection
@@ -1212,6 +1226,7 @@ const Explore = () => {
           className="mt-2"
           storyCardLabels={exploreStoryCardLabels}
           renderLikeButton={renderStoryLikeButton}
+          loading={sectionRailsLoading}
         />
         <ExploreVideosSection
           title="Hot right now"
@@ -1220,6 +1235,7 @@ const Explore = () => {
           className="mt-2"
           videoCardImageAlt={exploreVideoCardImageAlt}
           renderLikeButton={renderVideoLikeButton}
+          loading={sectionRailsLoading}
         />
         <ExplorePromoSection promo={premiumPromo2} />
         <PostsSection
@@ -1230,6 +1246,7 @@ const Explore = () => {
           variant="stats"
           className="mt-2"
           renderLikeButton={renderBabeLikeButton}
+          loading={sectionRailsLoading}
         />
         <PostsSection
           title="Fan favorites"
@@ -1238,6 +1255,7 @@ const Explore = () => {
           variant="stats"
           className="mt-2"
           renderLikeButton={renderBabeLikeButton}
+          loading={sectionRailsLoading}
         />
         <ExploreStartCreatingSection
           title="Start creating"
