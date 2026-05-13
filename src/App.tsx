@@ -7,6 +7,7 @@ import Profile from "./pages/Profile.tsx";
 import Creators from "./pages/Creators.tsx";
 import Explore from "./pages/Explore.tsx";
 import ExploreKling from "./pages/ExploreKling.tsx";
+import Gallery from "./pages/Gallery.tsx";
 import EventDetail from "./pages/EventDetail.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
