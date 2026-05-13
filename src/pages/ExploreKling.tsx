@@ -473,6 +473,16 @@ const ExploreKling = () => {
 
 // ---- Right-side filter sidebar ----
 const filterGroups: Array<{ label: string; value?: string; type: "check" | "chip"; options: string[] }> = [
+  {
+    label: "Following",
+    value: "All",
+    type: "check",
+    options: [
+      "@luna_eclipse", "@nyx_shadow", "@zara_nova", "@kai_storm", "@mira_blaze",
+      "@ivy_frost", "@axel_drift", "@suki_dream", "@phoenix_gale", "@orion_void",
+      "@ember_wilde", "@violet_haze", "@ronin_drift",
+    ],
+  },
   { label: "Gender", value: "All", type: "check", options: ["Female", "Futa", "Transgender"] },
   { label: "Style", value: "All", type: "check", options: ["Realistic", "Anime"] },
   { label: "Age", value: "All", type: "check", options: ["20s", "Milf"] },
