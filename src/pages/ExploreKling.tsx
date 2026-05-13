@@ -458,6 +458,12 @@ const ExploreKling = () => {
                   onCreationTypeChange={setCreatorsCreation}
                 />
               </div>
+            ) : activeContent === "Stories" ? (
+              <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 [&>*]:w-full [&>*]:max-w-none">
+                {exploreStories.map((s) => (
+                  <StoryCard key={s.title} {...s} />
+                ))}
+              </section>
             ) : (
               <section className="columns-2 gap-1.5 md:columns-3 lg:columns-4 xl:columns-5 [&>*]:mb-1.5 [&>*]:break-inside-avoid">
                 {feed.map((v) => (
