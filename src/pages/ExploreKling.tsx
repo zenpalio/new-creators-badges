@@ -205,6 +205,21 @@ const ExploreKling = () => {
   return (
     <>
       <SideNav open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <NotificationsSidebar
+        open={notificationsOpen}
+        onClose={() => setNotificationsOpen(false)}
+        onReopen={() => setNotificationsOpen(true)}
+        notifications={notifications}
+        labels={exploreNotificationsSidebarLabels}
+        systemStatusItems={exploreNotificationsSidebarStatusItems}
+        notificationLinkComponent={ExploreNotificationLink}
+        onMarkAllRead={markAllNotificationsRead}
+        onNotificationClick={(n) =>
+          setNotifications((prev) =>
+            prev.map((x) => (x.id === n.id ? { ...x, unread: false } : x))
+          )
+        }
+      />
       <div className="relative flex h-svh w-full overflow-hidden bg-background-v2 font-onest text-foreground-v2">
         <main ref={mainRef} className="relative flex w-full flex-1 flex-col overflow-y-auto overflow-x-hidden">
           {/* Top header */}
