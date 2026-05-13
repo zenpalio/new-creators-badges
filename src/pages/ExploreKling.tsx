@@ -276,7 +276,7 @@ const filterGroups: Array<{ label: string; value?: string; type: "check" | "chip
 ];
 
 const FilterSidebar = () => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [liked, setLiked] = useState(false);
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(filterGroups.map((g) => [g.label, true])),
