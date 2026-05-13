@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Bell, Menu, Search, Upload, ArrowRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown, ChevronDown, Heart } from "lucide-react";
+import { Bell, Menu, Search, Upload, ArrowRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown, ChevronDown, Heart, SlidersHorizontal, X } from "lucide-react";
 import SideNav from "../components/SideNav";
 import { useHeaderScrollTracking } from "../components/ExploreView";
 import ExploreCreateToolCard from "../components/explore/ExploreCreateToolCard";
@@ -288,58 +288,176 @@ const filterGroups: Array<{ label: string; value?: string; type: "check" | "chip
 ];
 
 const FilterSidebar = () => {
+  const [open, setOpen] = useState(true);
   const [liked, setLiked] = useState(false);
-  return (
-    <aside className="hidden lg:block w-72 shrink-0 border-l border-white/5 bg-background-v2 overflow-y-auto">
-      <div className="px-5 py-5 flex flex-col gap-5">
-        <div className="flex items-center justify-between">
-          <h3 className="text-base font-bold text-white">Filter</h3>
-        </div>
-        <button
-          onClick={() => setLiked((v) => !v)}
-          className="flex items-center gap-3 text-sm text-white"
-        >
-          <span className={`relative h-5 w-9 rounded-full transition-colors ${liked ? "bg-primary-v2" : "bg-grey-dark-2-v2"}`}>
-            <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white transition-all ${liked ? "left-[18px]" : "left-0.5"}`} />
-          </span>
-          <span className="flex items-center gap-1.5 text-grey-light-3-v2">
-            Liked only <Heart className="h-3.5 w-3.5 fill-red-500 text-red-500" />
-          </span>
-        </button>
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(filterGroups.map((g) => [g.label, true])),
+  );
+  const [selected, setSelected] = useState<Record<string, Set<string>>>(() =>
+    Object.fromEntries(filterGroups.map((g) => [g.label, new Set<string>()])),
+  );
 
-        {filterGroups.map((g) => (
-          <details key={g.label} open className="group border-t border-white/5 pt-4">
-            <summary className="flex cursor-pointer list-none items-center justify-between text-sm text-grey-light-3-v2">
-              <span>
-                {g.label}: <span className="text-white">{g.value}</span>
-              </span>
-              <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
-            </summary>
-            <div className="mt-3">
-              {g.type === "check" ? (
-                <div className="flex flex-col gap-2.5">
-                  {g.options.map((o) => (
-                    <label key={o} className="flex items-center gap-2.5 text-sm text-white cursor-pointer">
-                      <input type="checkbox" className="h-4 w-4 rounded border-white/20 bg-grey-dark-1-v2 accent-primary-v2" />
-                      {o}
-                    </label>
-                  ))}
+  const totalSelected = Object.values(selected).reduce((n, s) => n + s.size, 0) + (liked ? 1 : 0);
+
+  const toggleOption = (group: string, opt: string) =>
+    setSelected((prev) => {
+      const next = new Set(prev[group]);
+      next.has(opt) ? next.delete(opt) : next.add(opt);
+      return { ...prev, [group]: next };
+    });
+
+  const clearAll = () => {
+    setSelected(Object.fromEntries(filterGroups.map((g) => [g.label, new Set<string>()])));
+    setLiked(false);
+  };
+
+  // Collapsed rail (desktop)
+  if (!open) {
+    return (
+      <aside className="hidden lg:flex w-14 shrink-0 flex-col items-center border-l border-white/5 bg-background-v2 py-4">
+        <button
+          onClick={() => setOpen(true)}
+          aria-label="Open filters"
+          className="relative flex h-10 w-10 items-center justify-center rounded-full bg-grey-dark-1-v2 text-white hover:bg-grey-dark-2-v2 transition-colors"
+        >
+          <SlidersHorizontal className="h-4 w-4" />
+          {totalSelected > 0 && (
+            <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary-v2 px-1 text-[10px] font-bold text-primary-v2-foreground">
+              {totalSelected}
+            </span>
+          )}
+        </button>
+      </aside>
+    );
+  }
+
+  return (
+    <aside className="hidden lg:flex w-80 shrink-0 flex-col border-l border-white/5 bg-background-v2">
+      {/* Header */}
+      <div className="flex items-center justify-between px-5 pt-5 pb-4">
+        <div className="flex items-center gap-2">
+          <SlidersHorizontal className="h-4 w-4 text-grey-light-3-v2" />
+          <h3 className="text-sm font-bold tracking-wide text-white">Filters</h3>
+          {totalSelected > 0 && (
+            <span className="ml-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary-v2/15 px-1.5 text-[11px] font-semibold text-primary-v2">
+              {totalSelected}
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-1">
+          {totalSelected > 0 && (
+            <button
+              onClick={clearAll}
+              className="rounded-md px-2 py-1 text-[11px] font-medium text-grey-light-3-v2 hover:text-white hover:bg-white/5 transition-colors"
+            >
+              Clear
+            </button>
+          )}
+          <button
+            onClick={() => setOpen(false)}
+            aria-label="Collapse filters"
+            className="flex h-7 w-7 items-center justify-center rounded-md text-grey-light-3-v2 hover:text-white hover:bg-white/5 transition-colors"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+
+      {/* Scrollable content */}
+      <div className="flex-1 overflow-y-auto px-5 pb-6">
+        {/* Liked toggle pinned at top */}
+        <div className="flex items-center justify-between rounded-xl border border-white/5 bg-grey-dark-1-v2/60 px-3.5 py-3 mb-4">
+          <span className="flex items-center gap-2 text-sm text-white">
+            <Heart className={`h-3.5 w-3.5 ${liked ? "fill-red-500 text-red-500" : "text-grey-light-3-v2"}`} />
+            Liked only
+          </span>
+          <button
+            onClick={() => setLiked((v) => !v)}
+            role="switch"
+            aria-checked={liked}
+            className={`relative h-5 w-9 rounded-full transition-colors ${liked ? "bg-primary-v2" : "bg-white/10"}`}
+          >
+            <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${liked ? "left-[18px]" : "left-0.5"}`} />
+          </button>
+        </div>
+
+        <div className="flex flex-col">
+          {filterGroups.map((g) => {
+            const isOpen = openGroups[g.label];
+            const sel = selected[g.label];
+            const summary = sel.size > 0 ? `${sel.size} selected` : g.value ?? "All";
+            return (
+              <div key={g.label} className="border-t border-white/5 first:border-t-0">
+                <button
+                  onClick={() => setOpenGroups((p) => ({ ...p, [g.label]: !p[g.label] }))}
+                  className="flex w-full items-center justify-between py-3.5 text-left"
+                >
+                  <span className="text-[13px] font-semibold uppercase tracking-wider text-grey-light-4-v2">
+                    {g.label}
+                    <span className="ml-2 text-xs font-medium normal-case tracking-normal text-white/90">
+                      {summary}
+                    </span>
+                  </span>
+                  <ChevronDown className={`h-4 w-4 text-grey-light-3-v2 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+                </button>
+                <div
+                  className={`grid transition-all duration-200 ease-out ${isOpen ? "grid-rows-[1fr] opacity-100 pb-4" : "grid-rows-[0fr] opacity-0"}`}
+                >
+                  <div className="overflow-hidden">
+                    {g.type === "check" ? (
+                      <div className="flex flex-col gap-1">
+                        {g.options.map((o) => {
+                          const active = sel.has(o);
+                          return (
+                            <button
+                              key={o}
+                              onClick={() => toggleOption(g.label, o)}
+                              className={`flex items-center gap-2.5 rounded-lg px-2 py-2 text-sm transition-colors text-left ${
+                                active ? "bg-primary-v2/10 text-white" : "text-grey-light-2-v2 hover:bg-white/5 hover:text-white"
+                              }`}
+                            >
+                              <span
+                                className={`flex h-4 w-4 items-center justify-center rounded border transition-colors ${
+                                  active ? "border-primary-v2 bg-primary-v2" : "border-white/20"
+                                }`}
+                              >
+                                {active && (
+                                  <svg viewBox="0 0 12 12" className="h-2.5 w-2.5 text-primary-v2-foreground" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                    <path d="M2 6.5l2.5 2.5L10 3.5" strokeLinecap="round" strokeLinejoin="round" />
+                                  </svg>
+                                )}
+                              </span>
+                              {o}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div className="flex flex-wrap gap-1.5">
+                        {g.options.map((o) => {
+                          const active = sel.has(o);
+                          return (
+                            <button
+                              key={o}
+                              onClick={() => toggleOption(g.label, o)}
+                              className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                                active
+                                  ? "bg-primary-v2 text-primary-v2-foreground"
+                                  : "bg-grey-dark-1-v2 text-grey-light-2-v2 hover:bg-grey-dark-2-v2 hover:text-white"
+                              }`}
+                            >
+                              {o}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              ) : (
-                <div className="flex flex-wrap gap-1.5">
-                  {g.options.map((o) => (
-                    <button
-                      key={o}
-                      className="rounded-full bg-grey-dark-1-v2 px-3 py-1 text-xs text-white hover:bg-grey-dark-2-v2"
-                    >
-                      {o}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </details>
-        ))}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </aside>
   );
