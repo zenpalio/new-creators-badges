@@ -92,6 +92,7 @@ export interface CreatorsViewProps {
   onBack: () => void
   onMenu?: () => void
   className?: string
+  hideHeader?: boolean
 }
 
 export function CreatorsView({
@@ -100,6 +101,7 @@ export function CreatorsView({
   onBack,
   onMenu,
   className,
+  hideHeader,
 }: CreatorsViewProps) {
   const [search, setSearch] = useState("")
   const [searchActive, setSearchActive] = useState(false)
@@ -200,51 +202,55 @@ export function CreatorsView({
       </div>
 
       <div className="max-w-2xl mx-auto px-4 py-6 relative z-10">
-        <div
-          className={`fixed inset-x-0 top-0 z-40 flex items-start justify-between px-4 pt-4 transition-transform duration-300 ease-out pointer-events-none ${
-            headerHidden ? "-translate-y-full" : "translate-y-0"
-          }`}
-        >
-          {onMenu ? (
-            <button
-              onClick={onMenu}
-              className="pointer-events-auto flex h-9 w-9 items-center justify-center text-foreground-v2/90 transition-opacity hover:opacity-70"
-              aria-label="Open menu"
+        {!hideHeader && (
+          <>
+            <div
+              className={`fixed inset-x-0 top-0 z-40 flex items-start justify-between px-4 pt-4 transition-transform duration-300 ease-out pointer-events-none ${
+                headerHidden ? "-translate-y-full" : "translate-y-0"
+              }`}
             >
-              <Menu className="h-5 w-5" strokeWidth={1.5} />
-            </button>
-          ) : (
-            <span />
-          )}
-          <div className="pointer-events-auto flex h-9 items-center gap-2 bg-card-v2/70 backdrop-blur-md border border-border-v2/40 rounded-full px-3 w-[200px] focus-within:w-[260px] transition-all duration-200">
-            <Search className="w-4 h-4 text-muted-v2-foreground flex-shrink-0" />
-            <input
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value)
-                if (!e.target.value) setSearchActive(false)
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && search.trim()) setSearchActive(true)
-              }}
-              placeholder={labels.searchPlaceholder}
-              className="bg-transparent text-sm text-foreground-v2 placeholder:text-muted-v2-foreground focus:outline-none flex-1 min-w-0"
-            />
-            {search && (
-              <button
-                onClick={() => {
-                  setSearch("")
-                  setSearchActive(false)
-                }}
-                className="text-muted-v2-foreground hover:text-foreground-v2 text-xs flex-shrink-0"
-                aria-label="Clear search"
-              >
-                ✕
-              </button>
-            )}
-          </div>
-        </div>
-        <div className="h-9 mb-4" />
+              {onMenu ? (
+                <button
+                  onClick={onMenu}
+                  className="pointer-events-auto flex h-9 w-9 items-center justify-center text-foreground-v2/90 transition-opacity hover:opacity-70"
+                  aria-label="Open menu"
+                >
+                  <Menu className="h-5 w-5" strokeWidth={1.5} />
+                </button>
+              ) : (
+                <span />
+              )}
+              <div className="pointer-events-auto flex h-9 items-center gap-2 bg-card-v2/70 backdrop-blur-md border border-border-v2/40 rounded-full px-3 w-[200px] focus-within:w-[260px] transition-all duration-200">
+                <Search className="w-4 h-4 text-muted-v2-foreground flex-shrink-0" />
+                <input
+                  value={search}
+                  onChange={(e) => {
+                    setSearch(e.target.value)
+                    if (!e.target.value) setSearchActive(false)
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && search.trim()) setSearchActive(true)
+                  }}
+                  placeholder={labels.searchPlaceholder}
+                  className="bg-transparent text-sm text-foreground-v2 placeholder:text-muted-v2-foreground focus:outline-none flex-1 min-w-0"
+                />
+                {search && (
+                  <button
+                    onClick={() => {
+                      setSearch("")
+                      setSearchActive(false)
+                    }}
+                    className="text-muted-v2-foreground hover:text-foreground-v2 text-xs flex-shrink-0"
+                    aria-label="Clear search"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="h-9 mb-4" />
+          </>
+        )}
 
         {!searchActive && !search && (
           <div className="flex items-center gap-2 mb-6 flex-wrap">
