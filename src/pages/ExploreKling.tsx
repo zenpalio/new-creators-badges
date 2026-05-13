@@ -851,6 +851,7 @@ const CreatorPillDropdown = ({
 };
 
 const EventCard = ({
+  id,
   title,
   subtitle,
   deadline,
@@ -858,6 +859,7 @@ const EventCard = ({
   heat,
   image,
 }: {
+  id: string;
   title: string;
   subtitle: string;
   deadline: string;
@@ -866,7 +868,7 @@ const EventCard = ({
   image: string;
 }) => (
   <a
-    href="#"
+    href={`/explore/event/${id}`}
     className="group flex flex-col sm:flex-row overflow-hidden rounded-2xl border border-white/5 bg-grey-dark-1-v2 hover:border-primary-v2/30 transition-colors"
   >
     <div className="relative w-full sm:w-[40%] sm:max-w-[260px] shrink-0 aspect-[16/10] sm:aspect-auto overflow-hidden bg-black">
