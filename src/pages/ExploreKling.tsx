@@ -185,6 +185,7 @@ const ExploreKling = () => {
   const markAllNotificationsRead = () =>
     setNotifications((prev) => prev.map((n) => ({ ...n, unread: false })));
   const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Community");
+  const [followsSort, setFollowsSort] = useState<"Newest to oldest" | "Oldest to newest">("Newest to oldest");
   const [activeContent, setActiveContent] = useState<(typeof contentTabs)[number]>("Babes");
   const [activeSort, setActiveSort] = useState<(typeof sortOptions)[number]>("Trending");
   const [activeTime, setActiveTime] = useState<(typeof timeOptions)[number]>("All time");
@@ -405,6 +406,13 @@ const ExploreKling = () => {
                         onChange={(v) => setActiveTime(v as typeof activeTime)}
                       />
                     </>
+                  )}
+                  {activeTab === "Follows" && (
+                    <FilterDropdown
+                      value={followsSort}
+                      options={["Newest to oldest", "Oldest to newest"]}
+                      onChange={(v) => setFollowsSort(v as "Newest to oldest" | "Oldest to newest")}
+                    />
                   )}
                   <button
                     onClick={() => setFiltersOpen(true)}
