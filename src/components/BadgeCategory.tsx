@@ -26,9 +26,10 @@ interface BadgeCategoryProps {
   aura?: number;
   activeTier?: BadgeTier;
   onUseBadge?: (tier: BadgeTier) => void;
+  layout?: "scroll" | "grid";
 }
 
-const BadgeCategory = ({ title, subtitle, badges: initialBadges, progress, imageSet = "aura", tooltip, aura, activeTier, onUseBadge }: BadgeCategoryProps) => {
+const BadgeCategory = ({ title, subtitle, badges: initialBadges, progress, imageSet = "aura", tooltip, aura, activeTier, onUseBadge, layout = "scroll" }: BadgeCategoryProps) => {
   const [selectedBadge, setSelectedBadge] = useState<Badge | null>(null);
   const [claimedTiers, setClaimedTiers] = useState<Set<BadgeTier>>(new Set());
   const [unlockedTiers, setUnlockedTiers] = useState<Set<BadgeTier>>(new Set());
@@ -88,11 +89,19 @@ const BadgeCategory = ({ title, subtitle, badges: initialBadges, progress, image
         </div>
       </div>
       <p className="text-xs text-muted-v2-foreground mb-4">{subtitle}</p>
-      <HorizontalScroll>
-        {badges.map((badge, i) => (
-          <BadgeCard key={i} {...badge} imageSet={imageSet} onClick={() => setSelectedBadge(badge)} />
-        ))}
-      </HorizontalScroll>
+      {layout === "grid" ? (
+        <div className="grid gap-3 grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 [&>*]:w-full">
+          {badges.map((badge, i) => (
+            <BadgeCard key={i} {...badge} imageSet={imageSet} onClick={() => setSelectedBadge(badge)} />
+          ))}
+        </div>
+      ) : (
+        <HorizontalScroll>
+          {badges.map((badge, i) => (
+            <BadgeCard key={i} {...badge} imageSet={imageSet} onClick={() => setSelectedBadge(badge)} />
+          ))}
+        </HorizontalScroll>
+      )}
 
       {selectedBadge && (
         <BadgePopup
