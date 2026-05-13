@@ -299,6 +299,20 @@ const ExploreKling = () => {
                     </div>
                   </>
                 )}
+                {activeTab === "Creators" && (
+                  <>
+                    <div className="hidden md:block h-6 w-px bg-white/10" />
+                    <div className="relative hidden md:block">
+                      <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-light-4-v2" />
+                      <input
+                        value={creatorsSearch}
+                        onChange={(e) => setCreatorsSearch(e.target.value)}
+                        placeholder="Search"
+                        className="h-9 w-64 rounded-full border border-white/5 bg-grey-dark-1-v2 pl-9 pr-3 text-sm text-white placeholder:text-grey-light-4-v2 outline-none focus:border-primary-v2/50"
+                      />
+                    </div>
+                  </>
+                )}
               </div>
               {(activeTab === "Community" || activeTab === "Follows") && (
                 <div className="flex items-center gap-2">
