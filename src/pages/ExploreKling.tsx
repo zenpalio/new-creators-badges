@@ -65,8 +65,8 @@ const tools = [
 ];
 
 // ---- Tabs ----
-const tabs = ["Community", "Follows", "Events"] as const;
-const contentTabs = ["Babes", "Images", "Videos", "Stories", "Creators"] as const;
+const tabs = ["Community", "Follows", "Events", "Creators"] as const;
+const contentTabs = ["Babes", "Images", "Videos", "Stories"] as const;
 const sortOptions = ["Trending", "Newest", "Most Liked"] as const;
 const timeOptions = ["All time", "Year", "Month", "Week", "Today"] as const;
 
@@ -302,25 +302,27 @@ const ExploreKling = () => {
             </section>
 
             {/* Content type tabs */}
-            <div className="flex items-center gap-5 border-b border-white/5 -mt-2">
-              {contentTabs.map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setActiveContent(t)}
-                  className={`relative pb-2.5 text-sm font-medium transition-colors ${
-                    activeContent === t ? "text-white" : "text-grey-light-4-v2 hover:text-white"
-                  }`}
-                >
-                  {t}
-                  {activeContent === t && (
-                    <span className="absolute bottom-[-1px] left-0 right-0 h-0.5 rounded-full bg-primary-v2" />
-                  )}
-                </button>
-              ))}
-            </div>
+            {activeTab !== "Creators" && (
+              <div className="flex items-center gap-5 border-b border-white/5 -mt-2">
+                {contentTabs.map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setActiveContent(t)}
+                    className={`relative pb-2.5 text-sm font-medium transition-colors ${
+                      activeContent === t ? "text-white" : "text-grey-light-4-v2 hover:text-white"
+                    }`}
+                  >
+                    {t}
+                    {activeContent === t && (
+                      <span className="absolute bottom-[-1px] left-0 right-0 h-0.5 rounded-full bg-primary-v2" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
 
             {/* Feed */}
-            {activeContent === "Creators" ? (
+            {activeTab === "Creators" ? (
               <div className="-mx-4 md:-mx-8 lg:-mx-12">
                 <CreatorsView
                   creators={mockCreators}
