@@ -93,6 +93,15 @@ export interface CreatorsViewProps {
   onMenu?: () => void
   className?: string
   hideHeader?: boolean
+  hideToolbar?: boolean
+  search?: string
+  onSearchChange?: (v: string) => void
+  sortBy?: SortBy
+  onSortByChange?: (v: SortBy) => void
+  filterBy?: FilterBy
+  onFilterByChange?: (v: FilterBy) => void
+  creationType?: CreationType
+  onCreationTypeChange?: (v: CreationType) => void
 }
 
 export function CreatorsView({
@@ -102,15 +111,32 @@ export function CreatorsView({
   onMenu,
   className,
   hideHeader,
+  hideToolbar,
+  search: searchProp,
+  onSearchChange,
+  sortBy: sortByProp,
+  onSortByChange,
+  filterBy: filterByProp,
+  onFilterByChange,
+  creationType: creationTypeProp,
+  onCreationTypeChange,
 }: CreatorsViewProps) {
-  const [search, setSearch] = useState("")
+  const [internalSearch, setInternalSearch] = useState("")
+  const search = searchProp !== undefined ? searchProp : internalSearch
+  const setSearch = (v: string) => (onSearchChange ?? setInternalSearch)(v)
   const [searchActive, setSearchActive] = useState(false)
-  const [sortBy, setSortBy] = useState<SortBy>("likes")
+  const [internalSortBy, setInternalSortBy] = useState<SortBy>("likes")
+  const sortBy = sortByProp ?? internalSortBy
+  const setSortBy = (v: SortBy) => (onSortByChange ?? setInternalSortBy)(v)
   const [sortOpen, setSortOpen] = useState(false)
   const [creationOpen, setCreationOpen] = useState(false)
   const [timeOpen, setTimeOpen] = useState(false)
-  const [filterBy, setFilterBy] = useState<FilterBy>("all")
-  const [creationType, setCreationType] = useState<CreationType>("all")
+  const [internalFilterBy, setInternalFilterBy] = useState<FilterBy>("all")
+  const filterBy = filterByProp ?? internalFilterBy
+  const setFilterBy = (v: FilterBy) => (onFilterByChange ?? setInternalFilterBy)(v)
+  const [internalCreationType, setInternalCreationType] = useState<CreationType>("all")
+  const creationType = creationTypeProp ?? internalCreationType
+  const setCreationType = (v: CreationType) => (onCreationTypeChange ?? setInternalCreationType)(v)
   const [headerHidden, setHeaderHidden] = useState(false)
   const lastScrollY = useRef(0)
 
@@ -252,7 +278,7 @@ export function CreatorsView({
           </>
         )}
 
-        {!searchActive && !search && (
+        {!hideToolbar && !searchActive && !search && (
           <div className="flex items-center gap-2 mb-6 flex-wrap">
             <div className="relative">
               <button

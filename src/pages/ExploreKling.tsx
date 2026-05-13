@@ -9,7 +9,12 @@ import { exploreVideoFeed } from "../data/exploreVideoFeed";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/ui/dropdown-menu";
 import sceneBuilderBg from "../assets/scene-builder-bg.jpg";
 import premiumBg from "../assets/premium-bg.jpg";
-import { CreatorsView } from "../components/CreatorsView";
+import {
+  CreatorsView,
+  type SortBy as CreatorsSortBy,
+  type FilterBy as CreatorsFilterBy,
+  type CreationType as CreatorsCreationType,
+} from "../components/CreatorsView";
 
 import { mockCreators, creatorsPageLabels } from "./Creators";
 import { useNavigate } from "react-router-dom";
@@ -79,6 +84,11 @@ const feed = [...exploreVideoFeed, ...exploreVideoFeed].map((v, i) => ({
   likes: ((v.likes as number) ?? 0) + i * 3,
 }));
 
+const followingTags = [
+  "@luna_eclipse", "@nyx_shadow", "@zara_nova", "@kai_storm", "@mira_blaze",
+  "@ivy_frost", "@axel_drift", "@suki_dream",
+];
+
 const ExploreKling = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -91,6 +101,12 @@ const ExploreKling = () => {
   const { headerHidden } = useHeaderScrollTracking(mainRef);
 
   const [filtersOpen, setFiltersOpen] = useState(false);
+
+  // Creators tab controls (lifted out of CreatorsView)
+  const [creatorsSearch, setCreatorsSearch] = useState("");
+  const [creatorsSort, setCreatorsSort] = useState<CreatorsSortBy>("likes");
+  const [creatorsTime, setCreatorsTime] = useState<CreatorsFilterBy>("all");
+  const [creatorsCreation, setCreatorsCreation] = useState<CreatorsCreationType>("all");
 
   const toggleLiked = (id: string) =>
     setLikedMap((m) => ({ ...m, [id]: !m[id] }));
@@ -314,7 +330,67 @@ const ExploreKling = () => {
                   </button>
                 </div>
               )}
+              {activeTab === "Creators" && (
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="relative">
+                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-v2-foreground" />
+                    <input
+                      value={creatorsSearch}
+                      onChange={(e) => setCreatorsSearch(e.target.value)}
+                      placeholder="Search creators..."
+                      className="h-10 w-56 rounded-xl border border-border-v2 bg-card-v2 pl-9 pr-3 text-sm text-foreground-v2 placeholder:text-muted-v2-foreground outline-none focus:border-primary-v2/60"
+                    />
+                  </div>
+                  <CreatorPillDropdown
+                    value={creatorsSort}
+                    options={[
+                      { value: "likes", label: "Most Liked" },
+                      { value: "followers", label: "Most Followers" },
+                      { value: "aura", label: "Most Aura" },
+                    ]}
+                    onChange={(v) => setCreatorsSort(v as CreatorsSortBy)}
+                  />
+                  <CreatorPillDropdown
+                    value={creatorsCreation}
+                    options={[
+                      { value: "all", label: "All Creations" },
+                      { value: "characters", label: "Characters" },
+                      { value: "images", label: "Images" },
+                      { value: "videos", label: "Videos" },
+                      { value: "stories", label: "Stories" },
+                    ]}
+                    onChange={(v) => setCreatorsCreation(v as CreatorsCreationType)}
+                  />
+                  <CreatorPillDropdown
+                    value={creatorsTime}
+                    options={[
+                      { value: "all", label: "All time" },
+                      { value: "year", label: "Year" },
+                      { value: "month", label: "Month" },
+                      { value: "week", label: "Week" },
+                    ]}
+                    onChange={(v) => setCreatorsTime(v as CreatorsFilterBy)}
+                  />
+                </div>
+              )}
             </section>
+
+            {/* Follows: following tags */}
+            {activeTab === "Follows" && (
+              <div className="flex flex-wrap items-center gap-2 -mt-2">
+                {followingTags.map((tag) => (
+                  <button
+                    key={tag}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-grey-dark-1-v2 px-3 py-1.5 text-xs font-medium text-white hover:border-primary-v2/40 hover:bg-grey-dark-2-v2 transition-colors"
+                  >
+                    {tag}
+                  </button>
+                ))}
+                <button className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium text-grey-light-3-v2 hover:text-white transition-colors">
+                  See all →
+                </button>
+              </div>
+            )}
 
 
             {/* Content type tabs */}
@@ -345,6 +421,15 @@ const ExploreKling = () => {
                   labels={creatorsPageLabels}
                   onBack={() => navigate(-1)}
                   hideHeader
+                  hideToolbar
+                  search={creatorsSearch}
+                  onSearchChange={setCreatorsSearch}
+                  sortBy={creatorsSort}
+                  onSortByChange={setCreatorsSort}
+                  filterBy={creatorsTime}
+                  onFilterByChange={setCreatorsTime}
+                  creationType={creatorsCreation}
+                  onCreationTypeChange={setCreatorsCreation}
                 />
               </div>
             ) : (
@@ -627,5 +712,45 @@ const FilterDropdown = ({
     </DropdownMenuContent>
   </DropdownMenu>
 );
+
+const CreatorPillDropdown = ({
+  value,
+  options,
+  onChange,
+}: {
+  value: string;
+  options: { value: string; label: string }[];
+  onChange: (v: string) => void;
+}) => {
+  const current = options.find((o) => o.value === value);
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger className="inline-flex items-center gap-2 rounded-xl border border-border-v2 bg-card-v2 px-4 py-2.5 text-sm font-medium text-foreground-v2 hover:bg-accent-v2/50 focus:outline-none transition-colors data-[state=open]:bg-accent-v2/50">
+        {current?.label ?? value}
+        <ChevronDown className="h-4 w-4 text-muted-v2-foreground" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        align="start"
+        className="min-w-[180px] rounded-xl border-border-v2 bg-card-v2 p-1.5 shadow-xl"
+      >
+        {options.map((o) => {
+          const active = o.value === value;
+          return (
+            <DropdownMenuItem
+              key={o.value}
+              onSelect={() => onChange(o.value)}
+              className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm cursor-pointer focus:bg-accent-v2/50 ${
+                active ? "bg-primary-v2/10 text-primary-v2" : "text-foreground-v2"
+              }`}
+            >
+              {o.label}
+              {active && <Check className="h-3.5 w-3.5" />}
+            </DropdownMenuItem>
+          );
+        })}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
 export default ExploreKling;
