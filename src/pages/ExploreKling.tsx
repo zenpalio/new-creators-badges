@@ -812,7 +812,7 @@ const FilterDropdown = ({
     </DropdownMenuTrigger>
     <DropdownMenuContent
       align="start"
-      className="min-w-[160px] rounded-xl border-white/5 bg-grey-dark-1-v2 p-1.5 shadow-xl"
+      className="min-w-[160px] rounded-xl border-white/5 bg-grey-dark-1-v2 p-2 shadow-xl space-y-1"
     >
       {options.map((o) => {
         const active = o === value;
@@ -820,7 +820,7 @@ const FilterDropdown = ({
           <DropdownMenuItem
             key={o}
             onSelect={() => onChange(o)}
-            className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm cursor-pointer focus:bg-white/5 ${
+            className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm cursor-pointer focus:bg-white/5 ${
               active ? "text-white bg-white/5" : "text-grey-light-2-v2"
             }`}
           >
