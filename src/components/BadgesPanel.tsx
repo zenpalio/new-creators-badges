@@ -102,7 +102,7 @@ const BadgesPanel = ({ value }: { value: BadgesTab }) => {
       <div className="mb-4">
         <p className="text-xs text-muted-v2-foreground mb-1">Buy exclusive badges with your tokens</p>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-6 gap-3 sm:gap-4">
         {shopBadges.map((badge) => (
           <ShopBadgeCard
             key={badge.name}
