@@ -182,7 +182,7 @@ const Gallery = () => {
   const notificationUnreadCount = notifications.filter((n) => n.unread).length;
   const markAllNotificationsRead = () =>
     setNotifications((prev) => prev.map((n) => ({ ...n, unread: false })));
-  const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Community");
+  const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Creations");
   
   const [activeContent, setActiveContent] = useState<(typeof contentTabs)[number]>("Babes");
   const [activeSort, setActiveSort] = useState<(typeof sortOptions)[number]>("Trending");
@@ -277,7 +277,7 @@ const Gallery = () => {
                     </button>
                   ))}
                 </div>
-                {activeTab === "Community" && (
+                {activeTab === "Creations" && (
                   <>
                     <div className="hidden xl:block h-6 w-px bg-white/10" />
                     <div className="relative hidden xl:block">
@@ -307,7 +307,7 @@ const Gallery = () => {
 
               {/* Search + filters row (combined below xl) */}
               <div className="flex items-center gap-2 flex-wrap xl:flex-nowrap xl:contents">
-                {(activeTab === "Community" || activeTab === "Creators") && (
+                {(activeTab === "Creations" || activeTab === "Creators") && (
                   <div className="relative xl:hidden w-full sm:flex-1 sm:min-w-[180px] sm:max-w-xs">
                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-light-4-v2" />
                     <input
@@ -322,7 +322,7 @@ const Gallery = () => {
                     />
                   </div>
                 )}
-                {activeTab === "Community" && (
+                {activeTab === "Creations" && (
                   <div className="flex items-center gap-2 -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto scrollbar-hide flex-nowrap min-w-0 sm:ml-auto xl:ml-0 xl:justify-end">
                     <FilterDropdown
                       value={activeSort}
