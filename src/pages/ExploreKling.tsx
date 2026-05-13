@@ -259,8 +259,8 @@ const ExploreKling = () => {
 
 
             {/* Tabs + Search + Publish */}
-            <section className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-              <div className="flex items-center gap-3 -mx-4 px-4 md:mx-0 md:px-0 overflow-x-auto scrollbar-hide">
+            <section className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-4 min-w-0">
+              <div className="flex items-center gap-3 -mx-4 px-4 md:mx-0 md:px-0 overflow-x-auto scrollbar-hide min-w-0">
                 <div className="flex items-center gap-1 rounded-full bg-grey-dark-1-v2 p-1 shrink-0">
                   {tabs.map((t) => (
                     <button
