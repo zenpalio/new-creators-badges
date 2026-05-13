@@ -176,6 +176,13 @@ const exploreNotificationsSidebarStatusItems: NotificationsSidebarStatusItem[] =
 const ExploreKling = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>(() =>
+    mockNotifications.map((n) => ({ ...n }))
+  );
+  const notificationUnreadCount = notifications.filter((n) => n.unread).length;
+  const markAllNotificationsRead = () =>
+    setNotifications((prev) => prev.map((n) => ({ ...n, unread: false })));
   const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Community");
   const [activeContent, setActiveContent] = useState<(typeof contentTabs)[number]>("Babes");
   const [activeSort, setActiveSort] = useState<(typeof sortOptions)[number]>("Trending");
