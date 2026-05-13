@@ -88,7 +88,7 @@ const CinematicHeroPlaceholder = ({
             <Skeleton className="h-7 w-16 rounded-[5px] " />
           </div>
           <div className="flex flex-wrap items-center gap-3 pt-2">
-            <Skeleton className="h-11 w-36 rounded-full bg-white/15" />
+            <Skeleton className="h-11 w-36 rounded-full " />
             <Skeleton className="h-11 w-28 rounded-full " />
           </div>
         </div>
