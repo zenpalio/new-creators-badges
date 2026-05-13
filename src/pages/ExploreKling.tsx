@@ -170,8 +170,8 @@ const ExploreKling = () => {
                     key={b.title}
                     href="#"
                     style={{ ['--accent' as any]: b.accentHsl }}
-                    className={`group relative overflow-hidden rounded-2xl border border-white/10 bg-black transition-all hover:-translate-y-0.5 hover:border-[hsl(var(--accent)/0.5)] hover:shadow-[0_20px_60px_-20px_hsl(var(--accent)/0.5)] ${
-                      i === 0 ? "lg:col-span-2 min-h-[240px]" : "min-h-[240px]"
+                    className={`group relative overflow-hidden rounded-2xl border border-white/5 bg-black transition-all hover:-translate-y-0.5 hover:border-[hsl(var(--accent)/0.4)] hover:shadow-[0_20px_60px_-20px_hsl(var(--accent)/0.4)] ${
+                      i === 0 ? "lg:col-span-2 min-h-[220px]" : "min-h-[220px]"
                     }`}
                   >
                     {/* Background image */}
@@ -179,106 +179,51 @@ const ExploreKling = () => {
                       src={b.bg}
                       alt=""
                       loading="lazy"
-                      className="absolute inset-0 h-full w-full object-cover scale-105 transition-transform duration-700 group-hover:scale-110"
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                     />
-                    {/* Dark overlay */}
-                    <div className={`pointer-events-none absolute inset-0 bg-gradient-to-r ${b.overlay}`} />
 
-                    {/* Tech grid overlay */}
+                    {/* Soft dark gradient for legibility */}
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-black/70 via-black/20 to-transparent" />
+
+                    {/* Subtle accent glow */}
                     <div
-                      className="pointer-events-none absolute inset-0 opacity-[0.18] mix-blend-overlay"
-                      style={{
-                        backgroundImage:
-                          "linear-gradient(to right, rgba(255,255,255,0.25) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.25) 1px, transparent 1px)",
-                        backgroundSize: "44px 44px",
-                        maskImage: "radial-gradient(ellipse at top right, black 30%, transparent 75%)",
-                        WebkitMaskImage: "radial-gradient(ellipse at top right, black 30%, transparent 75%)",
-                      }}
+                      className="pointer-events-none absolute -bottom-24 -left-16 h-64 w-64 rounded-full blur-3xl opacity-40 transition-opacity duration-500 group-hover:opacity-60"
+                      style={{ background: `hsl(var(--accent) / 0.5)` }}
                     />
 
-                    {/* Scanline */}
-                    <div
-                      className="pointer-events-none absolute inset-0 opacity-[0.08]"
-                      style={{
-                        backgroundImage:
-                          "repeating-linear-gradient(0deg, rgba(255,255,255,0.6) 0px, rgba(255,255,255,0.6) 1px, transparent 1px, transparent 3px)",
-                      }}
-                    />
-
-                    {/* Accent glow */}
-                    <div
-                      className="pointer-events-none absolute -top-20 -right-20 h-72 w-72 rounded-full blur-3xl opacity-50 transition-opacity duration-500 group-hover:opacity-80"
-                      style={{ background: `hsl(var(--accent) / 0.45)` }}
-                    />
-
-                    {/* Corner brackets */}
-                    {[
-                      "top-3 left-3 border-l border-t",
-                      "top-3 right-3 border-r border-t",
-                      "bottom-3 left-3 border-l border-b",
-                      "bottom-3 right-3 border-r border-b",
-                    ].map((pos) => (
+                    {/* Tiny tech tag (top-right) */}
+                    <div className="pointer-events-none absolute right-4 top-4 flex items-center gap-1.5 font-mono text-[10px] tracking-widest text-white/55">
                       <span
-                        key={pos}
-                        className={`pointer-events-none absolute h-3 w-3 ${pos} border-white/40`}
-                      />
-                    ))}
-
-                    {/* Top-right HUD: code + version */}
-                    <div className="pointer-events-none absolute right-5 top-5 flex items-center gap-2 font-mono text-[10px] tracking-widest text-white/60">
-                      <span
-                        className="h-1.5 w-1.5 rounded-full animate-pulse"
+                        className="h-1.5 w-1.5 rounded-full"
                         style={{ background: `hsl(var(--accent))`, boxShadow: `0 0 8px hsl(var(--accent))` }}
                       />
-                      <span>{b.code}</span>
+                      {b.code}
                     </div>
 
-                    {/* Content */}
-                    <div className="relative flex h-full flex-col justify-between gap-6 p-6 md:p-7">
-                      <div>
-                        <span
-                          className="inline-flex items-center gap-1.5 rounded-sm border px-2 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-md"
-                          style={{
-                            background: `hsl(var(--accent) / 0.12)`,
-                            borderColor: `hsl(var(--accent) / 0.5)`,
-                          }}
-                        >
-                          <BadgeIcon className="h-3 w-3" style={{ color: `hsl(var(--accent))` }} />
-                          {b.eyebrow}
-                        </span>
-                        <h2 className="mt-4 flex flex-wrap items-end gap-x-3 gap-y-1 text-3xl font-bold leading-[1] text-white drop-shadow-lg md:text-4xl">
-                          {b.title}
+                    {/* Content — glass panel */}
+                    <div className="relative flex h-full items-end p-4 md:p-5">
+                      <div className="w-full rounded-xl border border-white/10 bg-black/35 p-4 backdrop-blur-md md:p-5">
+                        <div className="flex items-center gap-2">
                           <span
-                            className="font-mono text-xs font-medium tracking-widest"
-                            style={{ color: `hsl(var(--accent))` }}
+                            className="inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-white/90"
+                            style={{
+                              background: `hsl(var(--accent) / 0.14)`,
+                              borderColor: `hsl(var(--accent) / 0.4)`,
+                            }}
                           >
-                            [{b.version}]
+                            <BadgeIcon className="h-3 w-3" style={{ color: `hsl(var(--accent))` }} />
+                            {b.eyebrow}
                           </span>
+                        </div>
+                        <h2 className="mt-2 text-2xl font-semibold leading-tight text-white md:text-3xl">
+                          {b.title}
                         </h2>
-                        <p className="mt-3 max-w-md text-sm leading-relaxed text-white/75">
+                        <p className="mt-1.5 max-w-md text-[13px] leading-relaxed text-white/70">
                           {b.description}
                         </p>
-                      </div>
-
-                      <div className="flex items-end justify-between gap-4">
-                        <div
-                          className={`inline-flex items-center gap-2 self-start rounded-sm px-5 py-2.5 text-sm font-semibold transition-all group-hover:translate-x-1 ${b.ctaClass}`}
-                        >
-                          <span className="font-mono text-[10px] tracking-widest opacity-60">{">"}</span>
+                        <div className={`mt-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all group-hover:translate-x-1 ${b.ctaClass}`}>
                           {b.cta}
                           <ArrowRight className="h-4 w-4" />
-                        </div>
-
-                        {/* Stats readout */}
-                        <div className="hidden sm:flex items-center gap-4 font-mono text-[10px] uppercase tracking-widest">
-                          {b.stats.map((s) => (
-                            <div key={s.label} className="flex flex-col items-end leading-tight">
-                              <span className="text-white/40">{s.label}</span>
-                              <span className="text-sm font-bold text-white" style={{ textShadow: `0 0 12px hsl(var(--accent) / 0.6)` }}>
-                                {s.value}
-                              </span>
-                            </div>
-                          ))}
                         </div>
                       </div>
                     </div>
