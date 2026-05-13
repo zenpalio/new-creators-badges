@@ -548,7 +548,7 @@ export const ExploreStartCreatingSection = ({
 
   return (
     <section className={className}>
-      <SectionTitle title={title} />
+      {title && <SectionTitle title={title} />}
       {/* Tablet & mobile: horizontal scroll */}
       <div className="xl:hidden">
         <HScroll>
