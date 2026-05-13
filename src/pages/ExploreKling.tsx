@@ -62,7 +62,8 @@ const feed = [...exploreVideoFeed, ...exploreVideoFeed].map((v, i) => {
 const ExploreKling = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Recommended");
-  const [activeSort, setActiveSort] = useState<(typeof sortTabs)[number]>("Recommended");
+  const [activeSort, setActiveSort] = useState<(typeof sortOptions)[number]>("Trending");
+  const [activeTime, setActiveTime] = useState<(typeof timeOptions)[number]>("All time");
   const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
   const mainRef = useRef<HTMLElement>(null);
   const { headerHidden } = useHeaderScrollTracking(mainRef);
