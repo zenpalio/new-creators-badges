@@ -228,6 +228,7 @@ const ExploreVideoCardFull = ({
   poster,
   video,
   likes,
+  aspect = "aspect-[13/19]",
   liked,
   onLike,
 }: {
@@ -235,6 +236,7 @@ const ExploreVideoCardFull = ({
   poster?: string;
   video: string;
   likes: number;
+  aspect?: string;
   liked: boolean;
   onLike: () => void;
 }) => (
@@ -243,7 +245,7 @@ const ExploreVideoCardFull = ({
     aria-label="Video preview"
     className="group relative block w-full overflow-hidden rounded-2xl bg-grey-dark-1-v2"
   >
-    <div className="relative aspect-[13/19] w-full overflow-hidden">
+    <div className={`relative ${aspect} w-full overflow-hidden`}>
       {poster && (
         <img
           src={poster}
