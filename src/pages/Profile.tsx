@@ -97,7 +97,7 @@ const statItems = [
   { icon: Heart, label: "Likes", rank: "#2,105", count: "8.2K", iconClass: "w-4 h-4 text-red-500 fill-red-500 mb-0.5" },
 ];
 
-const badgeCategories = [
+export const badgeCategories = [
   {
     title: "Total Aura",
     subtitle: "Earn More Aura And Claim Free Tokens",
