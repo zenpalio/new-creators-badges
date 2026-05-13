@@ -14,7 +14,8 @@ const statItems = [
   { icon: Heart, label: "LIKES", rank: "#2,105", count: "8.2K", iconClass: "w-4 h-4 text-red-500 fill-red-500" },
 ];
 
-const BadgesHero = () => {
+const BadgesHero = ({ activeBadge }: { activeBadge?: EquippedBadge | null }) => {
+  const badgeEffect = activeBadge ? getBadgeEffect(activeBadge.name) : null;
   return (
     <div
       className="relative w-full overflow-hidden rounded-2xl border border-border-v2/30"
@@ -23,7 +24,7 @@ const BadgesHero = () => {
       {/* Soft gold ambient glow */}
       <div
         className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full blur-3xl opacity-30"
-        style={{ background: tierGlowColor }}
+        style={{ background: badgeEffect?.glowColor ?? tierGlowColor }}
       />
       <div
         className="pointer-events-none absolute -bottom-32 -right-20 h-72 w-72 rounded-full blur-3xl opacity-20"
@@ -37,16 +38,29 @@ const BadgesHero = () => {
             className="relative w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40"
             style={{ overflow: "visible" }}
           >
-            <TierRingCanvas tier="legend" />
+            {activeBadge && badgeEffect ? (
+              <div
+                className="absolute rounded-full pointer-events-none"
+                style={{
+                  inset: "-4px",
+                  border: `3px solid ${badgeEffect.glowColor}`,
+                  boxShadow: `0 0 15px ${badgeEffect.glowColor.replace(")", " / 0.5)")}, 0 0 30px ${badgeEffect.glowColor.replace(")", " / 0.25)")}`,
+                  animation: "badge-border-pulse 2.5s ease-in-out infinite",
+                  zIndex: 2,
+                }}
+              />
+            ) : (
+              <TierRingCanvas tier="legend" />
+            )}
             <div className="absolute inset-[4px] rounded-full overflow-hidden z-[1]">
               <img src={profileAvatar} alt="Profile" className="w-full h-full object-cover" />
             </div>
             <div className="absolute -bottom-1 -right-1 w-12 h-12 sm:w-16 sm:h-16 z-[2]">
               <img
-                src={charLegend}
-                alt="Legend badge"
+                src={activeBadge?.imageUrl ?? charLegend}
+                alt={activeBadge?.name ?? "Legend badge"}
                 className="relative z-10 w-full h-full object-contain"
-                style={{ filter: `drop-shadow(0 0 14px ${tierGlowColor})` }}
+                style={{ filter: `drop-shadow(0 0 14px ${badgeEffect?.glowColor ?? tierGlowColor})` }}
               />
             </div>
           </div>
