@@ -210,6 +210,7 @@ const ExploreKling = () => {
         onClose={() => setNotificationsOpen(false)}
         onReopen={() => setNotificationsOpen(true)}
         notifications={notifications}
+        announcements={[]}
         labels={exploreNotificationsSidebarLabels}
         systemStatusItems={exploreNotificationsSidebarStatusItems}
         notificationLinkComponent={ExploreNotificationLink}
