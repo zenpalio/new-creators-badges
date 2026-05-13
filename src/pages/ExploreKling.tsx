@@ -19,6 +19,10 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import sceneBuilderBg from "../assets/scene-builder-bg.jpg";
 import storyCreatorBg from "../assets/story-creator-bg.jpg";
 import premiumBg from "../assets/premium-bg.jpg";
+import badgesBannerBg from "../assets/badges-banner-bg.jpg";
+import charImmortal from "../assets/badges/char-immortal.png";
+import charMythic from "../assets/badges/char-mythic.png";
+import charLegend from "../assets/badges/char-legend.png";
 import storySummer from "../assets/story-summer.jpg";
 import storyDark from "../assets/story-dark.jpg";
 import storyCampus from "../assets/story-campus.jpg";
