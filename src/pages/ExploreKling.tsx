@@ -11,6 +11,7 @@ import sceneBuilderBg from "../assets/scene-builder-bg.jpg";
 import premiumBg from "../assets/premium-bg.jpg";
 import { CreatorsView } from "../components/CreatorsView";
 import { mockCreators, creatorsPageLabels } from "./Creators";
+import { useNavigate } from "react-router-dom";
 
 // ---- Hero banners (left big, right secondary) ----
 const heroBanners = [
