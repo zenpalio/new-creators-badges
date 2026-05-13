@@ -349,7 +349,7 @@ const ExploreKling = () => {
                   )}
                   <button
                     onClick={() => setFiltersOpen(true)}
-                    className="inline-flex items-center gap-2 rounded-full bg-grey-dark-1-v2 px-4 py-2 text-sm font-medium text-white hover:bg-grey-dark-2-v2 transition-colors"
+                    className="shrink-0 whitespace-nowrap inline-flex items-center gap-2 rounded-full bg-grey-dark-1-v2 px-4 py-2 text-sm font-medium text-white hover:bg-grey-dark-2-v2 transition-colors"
                   >
                     <SlidersHorizontal className="h-4 w-4" />
                     Filters
@@ -357,7 +357,7 @@ const ExploreKling = () => {
                 </div>
               )}
               {activeTab === "Creators" && (
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex items-center gap-2 -mx-4 px-4 md:mx-0 md:px-0 overflow-x-auto scrollbar-hide flex-nowrap">
                   <FilterDropdown
                     value={
                       ({ likes: "Most Liked", followers: "Most Followers", aura: "Most Aura" } as const)[creatorsSort]
