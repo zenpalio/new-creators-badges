@@ -556,8 +556,8 @@ const HeroBannerCard = ({ banner: b, large }: { banner: typeof heroBanners[numbe
     <a
       href="#"
       style={{ ['--accent' as any]: b.accentHsl }}
-      className={`group relative block overflow-hidden rounded-2xl border border-white/5 bg-black transition-colors hover:border-white/15 min-h-[220px] ${
-        large ? "lg:col-span-2" : ""
+      className={`group relative block overflow-hidden rounded-2xl border border-white/5 bg-black transition-colors hover:border-white/15 ${
+        large ? "h-[265px] sm:h-[285px] md:h-[305px] lg:h-[320px]" : "min-h-[220px]"
       }`}
     >
       <img src={b.bg} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
