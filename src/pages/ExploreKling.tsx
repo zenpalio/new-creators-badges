@@ -308,7 +308,7 @@ const ExploreKling = () => {
               {/* Search + filters row (combined below xl) */}
               <div className="flex items-center gap-2 flex-wrap xl:flex-nowrap xl:contents">
                 {(activeTab === "Community" || activeTab === "Creators") && (
-                  <div className="relative xl:hidden flex-1 min-w-[180px] max-w-xs">
+                  <div className="relative xl:hidden w-full sm:flex-1 sm:min-w-[180px] sm:max-w-xs">
                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-light-4-v2" />
                     <input
                       value={activeTab === "Creators" ? creatorsSearch : undefined}
@@ -323,7 +323,7 @@ const ExploreKling = () => {
                   </div>
                 )}
                 {activeTab === "Community" && (
-                  <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide flex-nowrap min-w-0 ml-auto xl:ml-0 xl:justify-end">
+                  <div className="flex items-center gap-2 -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto scrollbar-hide flex-nowrap min-w-0 sm:ml-auto xl:ml-0 xl:justify-end">
                     <FilterDropdown
                       value={activeSort}
                       options={sortOptions as unknown as string[]}
