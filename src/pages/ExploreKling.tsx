@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { Bell, Menu, Search, Upload, ArrowRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown, ChevronDown, Heart, SlidersHorizontal, X, Check, Plus, Clock, Flame, Users } from "lucide-react";
 import SideNav from "../components/SideNav";
@@ -555,9 +555,9 @@ const HeroBannerCard = ({ banner: b, large }: { banner: typeof heroBanners[numbe
   return (
     <a
       href="#"
-      style={{ ['--accent' as any]: b.accentHsl }}
-      className={`group relative block overflow-hidden rounded-2xl border border-white/5 bg-black transition-colors hover:border-white/15 min-h-[220px] ${
-        large ? "lg:col-span-2" : ""
+      style={{ "--accent": b.accentHsl } as CSSProperties & { "--accent": string }}
+      className={`group relative block overflow-hidden rounded-2xl border border-white/5 bg-black transition-colors hover:border-white/15 ${
+        large ? "h-[265px] sm:h-[285px] md:h-[305px] lg:h-[320px]" : "min-h-[220px]"
       }`}
     >
       <img src={b.bg} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
@@ -624,7 +624,11 @@ const FilterSidebar = ({
   const toggleOption = (group: string, opt: string) =>
     setSelected((prev) => {
       const next = new Set(prev[group]);
-      next.has(opt) ? next.delete(opt) : next.add(opt);
+      if (next.has(opt)) {
+        next.delete(opt);
+      } else {
+        next.add(opt);
+      }
       return { ...prev, [group]: next };
     });
 
