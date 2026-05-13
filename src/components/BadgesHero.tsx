@@ -3,6 +3,7 @@ import AuraIcon from "./AuraIcon";
 import TierRingCanvas from "./TierRingCanvas";
 import charLegend from "../assets/badges/char-legend.png";
 import profileAvatar from "../assets/profile-avatar.svg";
+import { type EquippedBadge, getBadgeEffect } from "./ProfileBadgeShowcase";
 
 const tierBorderColor = "hsl(43 96% 58%)";
 const tierGlowColor = "hsl(43 96% 58%)";
