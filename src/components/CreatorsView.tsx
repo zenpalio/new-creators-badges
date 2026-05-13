@@ -405,7 +405,7 @@ export function CreatorsView({
         )}
 
         {!searchActive && !search && filtered.length >= 3 && (
-          <div className="relative mb-8 pt-2">
+          <div className="relative mb-3 pt-2">
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="w-48 h-48 rounded-full bg-primary-v2/10 blur-[80px]" />
             </div>
