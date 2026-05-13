@@ -746,6 +746,7 @@ const FilterSidebar = ({
         </div>
       </div>
     </aside>
+    </>
   );
 };
 
