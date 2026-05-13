@@ -1,12 +1,10 @@
 import { Users, Heart } from "lucide-react";
 import AuraIcon from "./AuraIcon";
 import TierRingCanvas from "./TierRingCanvas";
-import charLegend from "../assets/badges/char-legend.png";
 import profileAvatar from "../assets/profile-avatar.svg";
 import { type EquippedBadge, getBadgeEffect } from "./ProfileBadgeShowcase";
-
-const tierBorderColor = "hsl(43 96% 58%)";
-const tierGlowColor = "hsl(43 96% 58%)";
+import { type BadgeTier } from "./BadgeCard";
+import { tierBadgeImages, tierBorderColors, tierBadgeGlowColors, tierLabels } from "../pages/Profile";
 
 const statItems = [
   { icon: Users, label: "FOLLOWERS", rank: "#1,438", count: "12.4K", iconClass: "w-4 h-4 text-primary-v2" },
@@ -14,8 +12,12 @@ const statItems = [
   { icon: Heart, label: "LIKES", rank: "#2,105", count: "8.2K", iconClass: "w-4 h-4 text-red-500 fill-red-500" },
 ];
 
-const BadgesHero = ({ activeBadge }: { activeBadge?: EquippedBadge | null }) => {
+const BadgesHero = ({ activeBadge, tier = "legend" }: { activeBadge?: EquippedBadge | null; tier?: BadgeTier }) => {
   const badgeEffect = activeBadge ? getBadgeEffect(activeBadge.name) : null;
+  const tierGlowColor = tierBadgeGlowColors[tier];
+  const tierBorderColor = tierBorderColors[tier];
+  const tierBadgeImg = tierBadgeImages[tier];
+  const tierLabel = tierLabels[tier];
   return (
     <div
       className="relative w-full overflow-hidden rounded-2xl border border-border-v2/30"
