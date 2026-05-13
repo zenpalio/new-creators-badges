@@ -185,7 +185,7 @@ export const badgeCategories = [
   },
 ];
 
-const activityBadges = [
+export const activityBadges = [
   { name: "Hype Man", description: "Join our Discord server", imageUrl: actHypeman, completed: false, actionLabel: "Join Discord", actionUrl: "https://discord.gg" },
   { name: "Squad Goals", description: "Leave a review on our trustpilot page", imageUrl: actSquad, completed: false, actionLabel: "Review Now", actionUrl: "https://trustpilot.com" },
   { name: "First Date", description: "Follow 100 creators on the platform", imageUrl: actFirstdate, completed: false, actionLabel: "Browse Creators" },
@@ -194,7 +194,7 @@ const activityBadges = [
   { name: "Fanfic Lord", description: "Write and publish your first story", imageUrl: actFanfic, completed: true, actionLabel: "Write Story" },
 ];
 
-const shopBadges = [
+export const shopBadges = [
   { name: "Waifu Collector", description: "You don't need real girls when you have pixels", imageUrl: shopWaifu, price: 500, owned: false },
   { name: "Touch Grass Never", description: "Grass is temporary. AI babes are forever", imageUrl: shopTouchgrass, price: 800, owned: false },
   { name: "AI Over Real", description: "Why deal with drama when AI gets you?", imageUrl: shopAiover, price: 1200, owned: false },
