@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Bell, Menu, Search, Upload, ArrowRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown, ChevronDown, Heart, SlidersHorizontal, X, Check, Plus } from "lucide-react";
+import { Bell, Menu, Search, Upload, ArrowRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown, ChevronDown, Heart, SlidersHorizontal, X, Check, Plus, Clock, Flame } from "lucide-react";
 import SideNav from "../components/SideNav";
 import StoryCard from "../components/StoryCard";
 import { useHeaderScrollTracking } from "../components/ExploreView";
@@ -99,6 +99,13 @@ const exploreStories = [
   { title: "Neon Nights", description: "Synthwave-soaked rendezvous in a city that never sleeps.", imageUrl: "https://picsum.photos/seed/story-6/640/400", episodes: 2, scenes: 9 },
   { title: "Velvet Hours", description: "Slow-burn elegance behind closed velvet curtains.", imageUrl: "https://picsum.photos/seed/story-7/640/400", episodes: 1, scenes: 5 },
   { title: "Crimson Affair", description: "An untamed romance written in scarlet ink.", imageUrl: "https://picsum.photos/seed/story-8/640/400", episodes: 3, scenes: 11 },
+];
+
+const exploreEvents = [
+  { title: "Kreate Contest #52: Stadium Broadcast Challenge", subtitle: "Recreate the big screen live moments with Kling AI!", deadline: "13 days and 22 hours before deadline", prize: "Credits", heat: 3564, image: "https://picsum.photos/seed/event-1/800/500" },
+  { title: "KlingAI NEXTGEN 2026 University Creator Challenge", subtitle: "Your creation lights up the future", deadline: "28 days and 7 hours before deadline", prize: "Prize Pool $10,000", heat: 5332, image: "https://picsum.photos/seed/event-2/800/500" },
+  { title: "Holiday Sparks #9: Frames of Her Love", subtitle: "Reimagine your cherished memories with Kling AI!", deadline: "24 days and 22 hours before deadline", prize: "Credits", heat: 586, image: "https://picsum.photos/seed/event-3/800/500" },
+  { title: "Kreate Contest #51: Fashion Spotlight Challenge", subtitle: "Redefining Fashion with Kling AI!", deadline: "21 days and 22 hours before deadline", prize: "Credits", heat: 1368, image: "https://picsum.photos/seed/event-4/800/500" },
 ];
 
 const ExploreKling = () => {
@@ -470,6 +477,12 @@ const ExploreKling = () => {
                   onCreationTypeChange={setCreatorsCreation}
                 />
               </div>
+            ) : activeTab === "Events" ? (
+              <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                {exploreEvents.map((e) => (
+                  <EventCard key={e.title} {...e} />
+                ))}
+              </section>
             ) : activeContent === "Stories" ? (
               <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 [&>*]:w-full [&>*]:max-w-none">
                 {exploreStories.map((s) => (
@@ -796,5 +809,55 @@ const CreatorPillDropdown = ({
     </DropdownMenu>
   );
 };
+
+const EventCard = ({
+  title,
+  subtitle,
+  deadline,
+  prize,
+  heat,
+  image,
+}: {
+  title: string;
+  subtitle: string;
+  deadline: string;
+  prize: string;
+  heat: number;
+  image: string;
+}) => (
+  <a
+    href="#"
+    className="group flex flex-col sm:flex-row overflow-hidden rounded-2xl border border-white/5 bg-grey-dark-1-v2 hover:border-primary-v2/30 transition-colors"
+  >
+    <div className="relative w-full sm:w-[40%] sm:max-w-[260px] shrink-0 aspect-[16/10] sm:aspect-auto overflow-hidden bg-black">
+      <img
+        src={image}
+        alt={title}
+        loading="lazy"
+        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+      />
+    </div>
+    <div className="flex flex-1 flex-col gap-3 p-4">
+      <div>
+        <h3 className="text-base font-semibold text-white leading-snug line-clamp-2">{title}</h3>
+        <p className="mt-1 text-sm text-grey-light-3-v2 line-clamp-2">{subtitle}</p>
+      </div>
+      <div className="mt-auto flex flex-wrap items-center gap-2">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-grey-dark-2-v2 px-3 py-1.5 text-xs font-medium text-grey-light-2-v2">
+          <Clock className="h-3.5 w-3.5" />
+          {deadline}
+        </span>
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-grey-dark-2-v2 px-3 py-1.5 text-xs font-medium text-grey-light-2-v2">
+          <span className="inline-flex h-3.5 w-3.5 items-center justify-center rounded-full bg-emerald-500/90 text-[9px] font-bold text-black">$</span>
+          {prize}
+        </span>
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-grey-dark-2-v2 px-3 py-1.5 text-xs font-medium text-grey-light-2-v2">
+          <Flame className="h-3.5 w-3.5 text-orange-400" />
+          {heat.toLocaleString()}
+        </span>
+      </div>
+    </div>
+  </a>
+);
 
 export default ExploreKling;
