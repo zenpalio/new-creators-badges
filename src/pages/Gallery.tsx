@@ -361,6 +361,19 @@ const Gallery = () => {
                     )}
                   </button>
                 ))}
+                {activeContent !== "Stories" && (
+                  <button
+                    onClick={() => (editMode ? exitEditMode() : setEditMode(true))}
+                    aria-label={editMode ? "Exit edit mode" : "Edit / select to delete"}
+                    className={`ml-auto mb-2 flex h-9 w-9 items-center justify-center rounded-full transition-colors ${
+                      editMode
+                        ? "bg-primary-v2 text-primary-v2-foreground"
+                        : "bg-grey-dark-1-v2 text-white hover:bg-grey-dark-2-v2"
+                    }`}
+                  >
+                    {editMode ? <X className="h-4 w-4" /> : <Pencil className="h-4 w-4" />}
+                  </button>
+                )}
               </div>
             )}
 
