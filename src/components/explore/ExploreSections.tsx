@@ -25,7 +25,7 @@ const TagRowSkeleton = () => (
       {CATEGORY_PLACEHOLDER_WIDTHS_PX.map((w, i) => (
         <Skeleton
           key={i}
-          className="h-[41px] shrink-0 rounded-[5px] bg-muted-v2/50"
+          className="h-[41px] shrink-0 rounded-[5px]"
           style={{ width: w }}
         />
       ))}
@@ -38,7 +38,7 @@ const PostOrVideoCardSkeleton = () => (
     aria-hidden
     className="relative block w-[220px] shrink-0 overflow-hidden rounded-2xl bg-grey-dark-1-v2"
   >
-    <Skeleton className="aspect-[13/19] w-full rounded-none bg-muted-v2/50" />
+    <Skeleton className="aspect-[13/19] w-full rounded-none" />
   </div>
 )
 
@@ -47,7 +47,7 @@ const ExploreStoryCardSkeleton = () => (
     aria-hidden
     className="w-[calc(100vw-2rem)] max-w-[460px] shrink-0 md:w-[460px]"
   >
-    <Skeleton className="aspect-[5/3] w-full rounded-xl bg-muted-v2/50" />
+    <Skeleton className="aspect-[5/3] w-full rounded-xl" />
   </div>
 )
 
