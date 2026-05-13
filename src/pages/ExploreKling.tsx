@@ -91,7 +91,7 @@ const tools = [
 ];
 
 // ---- Tabs ----
-const tabs = ["Community", "Follows", "Events", "Creators"] as const;
+const tabs = ["Community", "Events", "Creators"] as const;
 const contentTabs = ["Babes", "Images", "Videos", "Stories"] as const;
 const sortOptions = ["Trending", "Newest", "Most Liked"] as const;
 const timeOptions = ["All time", "Year", "Month", "Week", "Today"] as const;
