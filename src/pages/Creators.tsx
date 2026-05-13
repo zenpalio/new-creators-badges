@@ -19,7 +19,7 @@ import creator8 from "../assets/creators/creator8.jpg";
 import creator9 from "../assets/creators/creator9.jpg";
 import creator10 from "../assets/creators/creator10.jpg";
 
-const creatorsPageLabels: CreatorsViewLabels = {
+export const creatorsPageLabels: CreatorsViewLabels = {
   title: "Creators",
   searchPlaceholder: "Search creators...",
   sortBy: {
@@ -50,7 +50,7 @@ const creatorsPageLabels: CreatorsViewLabels = {
     `${followers.toLocaleString()} followers · ${aura.toLocaleString()} aura`,
 };
 
-const mockCreators: CreatorsViewCreator[] = Array.from({ length: 30 }, (_, i) => {
+export const mockCreators: CreatorsViewCreator[] = Array.from({ length: 30 }, (_, i) => {
   const tiers: BadgeTier[] = ["immortal", "mythic", "grandmaster", "elite", "legend", "master", "newbie"];
   const tier = tiers[Math.min(Math.floor(i / 4), tiers.length - 1)];
   const names = [
