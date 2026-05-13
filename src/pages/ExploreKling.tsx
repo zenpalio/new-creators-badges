@@ -9,7 +9,12 @@ import { exploreVideoFeed } from "../data/exploreVideoFeed";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/ui/dropdown-menu";
 import sceneBuilderBg from "../assets/scene-builder-bg.jpg";
 import premiumBg from "../assets/premium-bg.jpg";
-import { CreatorsView } from "../components/CreatorsView";
+import {
+  CreatorsView,
+  type SortBy as CreatorsSortBy,
+  type FilterBy as CreatorsFilterBy,
+  type CreationType as CreatorsCreationType,
+} from "../components/CreatorsView";
 
 import { mockCreators, creatorsPageLabels } from "./Creators";
 import { useNavigate } from "react-router-dom";
