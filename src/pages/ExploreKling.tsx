@@ -62,7 +62,7 @@ const heroBanners = [
     ],
   },
   {
-    code: "TIER//PRM-01",
+    code: "",
     eyebrow: "Premium",
     title: "Skip the queue",
     version: "ELITE",
