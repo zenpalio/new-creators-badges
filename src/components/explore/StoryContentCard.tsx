@@ -55,13 +55,11 @@ const StoryContentCard = ({
     >
       {/* Cover image */}
       {src ? (
-        <ResponsiveImage
+        <img
           src={src}
           alt={title || labels.imageAltFallback}
-          fill
-          absolute
-          sizes="(max-width: 767px) calc(100vw - 2rem), 460px"
-          className="object-top transition-transform duration-300 md:group-hover:scale-[1.03]"
+          loading="lazy"
+          className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-300 md:group-hover:scale-[1.03]"
         />
       ) : (
         <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary-v2/20 to-primary-v2/5">
