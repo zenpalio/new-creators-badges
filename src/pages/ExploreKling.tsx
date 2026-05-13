@@ -125,34 +125,6 @@ const ExploreKling = () => {
               ))}
             </section>
 
-            {/* Tools row */}
-            <section>
-              {/* Mobile/tablet: horizontal scroll */}
-              <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-1 xl:hidden">
-                {tools.map((t) => (
-                  <div key={t.title} className="w-[220px] shrink-0">
-                    <ExploreCreateToolCard
-                      title={t.title}
-                      subtitle={t.subtitle}
-                      Icon={t.Icon}
-                      href={t.href}
-                    />
-                  </div>
-                ))}
-              </div>
-              {/* Desktop: grid */}
-              <div className="hidden gap-3 xl:grid xl:grid-cols-5">
-                {tools.map((t) => (
-                  <ExploreCreateToolCard
-                    key={t.title}
-                    title={t.title}
-                    subtitle={t.subtitle}
-                    Icon={t.Icon}
-                    href={t.href}
-                  />
-                ))}
-              </div>
-            </section>
 
             {/* Tabs + Search + Publish */}
             <section className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
