@@ -80,6 +80,25 @@ const heroBanners = [
       { label: "QUEUE", value: "00" },
     ],
   },
+  {
+    code: "SYS//BDG-001",
+    eyebrow: "Aura Badges",
+    title: "Collect badges, level up",
+    version: "v1.0",
+    description: "Earn aura, unlock tiers and flex rare badges on your profile.",
+    cta: "View badges",
+    bg: storyCreatorBg,
+    overlay: "from-black/90 via-black/55 to-black/10",
+    accent: "primary-v2",
+    accentHsl: "213 100% 50%",
+    badgeIcon: Sparkles,
+    ctaClass: "bg-primary-v2 text-primary-v2-foreground hover:bg-primary-v2/90",
+    stats: [
+      { label: "TIERS", value: "7" },
+      { label: "BADGES", value: "30+" },
+      { label: "AURA", value: "∞" },
+    ],
+  },
 ];
 
 // ---- Tool tiles (Kling-style) ----
