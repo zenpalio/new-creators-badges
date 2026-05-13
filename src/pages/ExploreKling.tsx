@@ -325,7 +325,7 @@ const ExploreKling = () => {
                   creators={mockCreators}
                   labels={creatorsPageLabels}
                   onBack={() => navigate(-1)}
-                  onMenu={() => setSidebarOpen(true)}
+                  hideHeader
                 />
               </div>
             ) : (
