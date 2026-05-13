@@ -29,7 +29,7 @@ const BadgesHero = () => {
         style={{ background: "hsl(213 100% 50%)" }}
       />
 
-      <div className="relative flex flex-col md:flex-row md:items-center gap-6 md:gap-8 p-5 sm:p-6 md:p-8">
+      <div className="relative flex flex-col md:flex-row md:items-center gap-6 md:gap-8 px-3 py-5 sm:p-6 md:p-8">
         {/* Avatar + tier ring */}
         <div className="flex flex-col items-center md:items-start md:shrink-0">
           <div
