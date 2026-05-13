@@ -323,7 +323,7 @@ const ExploreKling = () => {
                   </div>
                 )}
                 {activeTab === "Community" && (
-                  <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide flex-nowrap min-w-0 ml-auto xl:ml-0 xl:justify-end">
+                  <div className="flex items-center gap-2 -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto scrollbar-hide flex-nowrap min-w-0 sm:ml-auto xl:ml-0 xl:justify-end">
                     <FilterDropdown
                       value={activeSort}
                       options={sortOptions as unknown as string[]}
