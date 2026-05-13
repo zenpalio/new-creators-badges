@@ -689,7 +689,7 @@ const FilterSidebar = ({
               aria-checked={followingOnly}
               className={`relative shrink-0 h-6 w-11 rounded-full transition-colors ${followingOnly ? "bg-primary-v2" : "bg-white/10"}`}
             >
-              <span className={`absolute top-1/2 -translate-y-1/2 h-5 w-5 rounded-full bg-white shadow transition-all ${followingOnly ? "left-[22px]" : "left-0.5"}`} />
+              <span className={`absolute top-1/2 -translate-y-1/2 h-5 w-5 rounded-full bg-white shadow transition-all ${followingOnly ? "left-[calc(100%-1.375rem)]" : "left-0.5"}`} />
             </button>
           </div>
           <div className="flex items-center justify-between rounded-xl border border-white/5 bg-grey-dark-1-v2/60 px-3.5 py-3">
@@ -703,7 +703,7 @@ const FilterSidebar = ({
               aria-checked={liked}
               className={`relative shrink-0 h-6 w-11 rounded-full transition-colors ${liked ? "bg-primary-v2" : "bg-white/10"}`}
             >
-              <span className={`absolute top-1/2 -translate-y-1/2 h-5 w-5 rounded-full bg-white shadow transition-all ${liked ? "left-[22px]" : "left-0.5"}`} />
+              <span className={`absolute top-1/2 -translate-y-1/2 h-5 w-5 rounded-full bg-white shadow transition-all ${liked ? "left-[calc(100%-1.375rem)]" : "left-0.5"}`} />
             </button>
           </div>
         </div>
