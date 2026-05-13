@@ -182,7 +182,7 @@ const ExploreKling = () => {
   const markAllNotificationsRead = () =>
     setNotifications((prev) => prev.map((n) => ({ ...n, unread: false })));
   const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Community");
-  const [followsSort, setFollowsSort] = useState<"Newest to oldest" | "Oldest to newest">("Newest to oldest");
+  
   const [activeContent, setActiveContent] = useState<(typeof contentTabs)[number]>("Babes");
   const [activeSort, setActiveSort] = useState<(typeof sortOptions)[number]>("Trending");
   const [activeTime, setActiveTime] = useState<(typeof timeOptions)[number]>("All time");
