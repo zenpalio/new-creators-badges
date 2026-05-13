@@ -70,11 +70,12 @@ const ExploreVideoCard = ({
         <video
           ref={videoRef}
           src={video}
+          poster={poster}
           muted
           playsInline
           loop
-          preload="auto"
-          className="absolute inset-0 z-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          preload="metadata"
+          className="absolute inset-0 z-0 h-full w-full bg-grey-dark-1-v2 object-cover transition-transform duration-500 group-hover:scale-105"
         />
         {poster != null && poster !== "" && (
           <span className="pointer-events-none absolute inset-0 z-[1] block">
