@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Compass, Users, Award, X, LogOut, Settings, Home } from "lucide-react";
+import { Compass, Users, Award, X, LogOut, Settings, Home, Image as ImageIcon } from "lucide-react";
 
 interface SideNavProps {
   open: boolean;
@@ -9,6 +9,7 @@ interface SideNavProps {
 const links = [
   { label: "Home", icon: Home, to: "/" },
   { label: "Explore", icon: Compass, to: "/explore" },
+  { label: "Gallery", icon: ImageIcon, to: "/gallery" },
   { label: "Creators", icon: Users, to: "/creators" },
   { label: "Badges", icon: Award, to: "/badges" },
 ];
