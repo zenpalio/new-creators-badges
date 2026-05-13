@@ -291,8 +291,8 @@ const ExploreKling = () => {
                 )}
                 {activeTab === "Creators" && (
                   <>
-                    <div className="hidden md:block h-6 w-px bg-white/10" />
-                    <div className="relative hidden md:block">
+                    <div className="hidden lg:block h-6 w-px bg-white/10" />
+                    <div className="relative hidden lg:block">
                       <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-light-4-v2" />
                       <input
                         value={creatorsSearch}
