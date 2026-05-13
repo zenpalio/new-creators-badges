@@ -42,6 +42,7 @@ import {
 import { mockCreators, creatorsPageLabels } from "./Creators";
 import { badgeCategories } from "./Profile";
 import BadgeCategory from "../components/BadgeCategory";
+import BadgesHero from "../components/BadgesHero";
 import { useNavigate } from "react-router-dom";
 
 // ---- Hero banners (left big, right secondary) ----
@@ -342,6 +343,7 @@ const Gallery = () => {
             {/* Feed */}
             {activeTab === "Badges" ? (
               <div className="flex flex-col gap-2">
+                <BadgesHero />
                 {badgeCategories.map((cat, i) => (
                   <BadgeCategory key={i} {...cat} layout="grid" />
                 ))}
