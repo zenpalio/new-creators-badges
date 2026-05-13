@@ -278,7 +278,7 @@ export function CreatorsView({
           </>
         )}
 
-        {!searchActive && !search && (
+        {!hideToolbar && !searchActive && !search && (
           <div className="flex items-center gap-2 mb-6 flex-wrap">
             <div className="relative">
               <button
