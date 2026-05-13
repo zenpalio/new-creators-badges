@@ -343,7 +343,7 @@ const FilterSidebar = ({
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto px-5 pb-6">
+      <div className="flex-1 overflow-y-auto scrollbar-hide px-5 pb-6">
         {/* Liked toggle pinned at top */}
         <div className="flex items-center justify-between rounded-xl border border-white/5 bg-grey-dark-1-v2/60 px-3.5 py-3 mb-4">
           <span className="flex items-center gap-2 text-sm text-white">
