@@ -65,22 +65,22 @@ const BadgesHero = () => {
             </span>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 sm:gap-3 w-full">
+          <div className="grid grid-cols-3 gap-1.5 sm:gap-3 w-full">
             {statItems.map((stat) => (
               <div
                 key={stat.label}
-                className="flex flex-col items-center md:items-start gap-1 rounded-xl p-3 sm:p-4 border border-border-v2/30 bg-background-v2/40 backdrop-blur-sm"
+                className="flex flex-col items-center md:items-start gap-0.5 sm:gap-1 rounded-xl p-2 sm:p-4 border border-border-v2/30 bg-background-v2/40 backdrop-blur-sm min-w-0"
               >
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1 sm:gap-1.5 min-w-0">
                   <stat.icon className={stat.iconClass} />
-                  <span className="text-[10px] text-muted-v2-foreground uppercase tracking-wider font-medium">
+                  <span className="text-[9px] sm:text-[10px] text-muted-v2-foreground uppercase tracking-wider font-medium truncate">
                     {stat.label}
                   </span>
                 </div>
-                <span className="text-foreground-v2 font-bold text-xl sm:text-2xl leading-tight">
+                <span className="text-foreground-v2 font-bold text-base sm:text-2xl leading-tight tabular-nums">
                   {stat.count}
                 </span>
-                <span className="text-[10px] text-muted-v2-foreground/60 font-medium">
+                <span className="text-[9px] sm:text-[10px] text-muted-v2-foreground/60 font-medium truncate max-w-full">
                   Rank {stat.rank}
                 </span>
               </div>
@@ -88,21 +88,20 @@ const BadgesHero = () => {
           </div>
 
           {/* Secondary meta stats */}
-          <div className="flex flex-wrap items-stretch justify-center md:justify-start rounded-xl border border-border-v2/30 bg-background-v2/40 backdrop-blur-sm overflow-hidden divide-x divide-border-v2/30">
+          <div className="flex items-stretch justify-center md:justify-start rounded-xl border border-border-v2/30 bg-background-v2/40 backdrop-blur-sm overflow-hidden divide-x divide-border-v2/30 w-full">
             {[
               { value: "14,412", label: "Interactions" },
               { value: "86", label: "Videos" },
               { value: "37", label: "Images" },
-            
             ].map((m) => (
               <div
                 key={m.label}
-                className="flex flex-col items-center md:items-start gap-0.5 px-3 sm:px-4 py-2 flex-1 min-w-[88px]"
+                className="flex flex-col items-center md:items-start gap-0.5 px-2 sm:px-4 py-2 flex-1 min-w-0"
               >
                 <span className="font-bold text-foreground-v2 text-sm sm:text-base leading-none tabular-nums">
                   {m.value}
                 </span>
-                <span className="text-[10px] uppercase tracking-wider text-muted-v2-foreground font-medium">
+                <span className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-v2-foreground font-medium truncate max-w-full">
                   {m.label}
                 </span>
               </div>
