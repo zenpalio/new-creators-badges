@@ -23,6 +23,7 @@ const App = () => (
           <Route path="/" element={<Explore />} />
           <Route path="/explore" element={<ExploreKling />} />
           <Route path="/explore/event/:id" element={<EventDetail />} />
+          <Route path="/gallery" element={<Gallery />} />
           <Route path="/badges" element={<Profile />} />
           <Route path="/creators" element={<Creators />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
