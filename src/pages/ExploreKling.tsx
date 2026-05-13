@@ -265,7 +265,7 @@ const ExploreKling = () => {
                     key={b.title}
                     href="#"
                     style={{ ['--accent' as any]: b.accentHsl }}
-                    className={`group relative overflow-hidden rounded-2xl border border-white/5 bg-black transition-all hover:-translate-y-0.5 hover:border-[hsl(var(--accent)/0.4)] hover:shadow-[0_20px_60px_-20px_hsl(var(--accent)/0.4)] ${
+                    className={`group relative overflow-hidden rounded-2xl border border-white/5 bg-black transition-colors hover:border-white/15 ${
                       i === 0 ? "lg:col-span-2 min-h-[220px]" : "min-h-[220px]"
                     }`}
                   >
@@ -274,7 +274,7 @@ const ExploreKling = () => {
                       src={b.bg}
                       alt=""
                       loading="lazy"
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                      className="absolute inset-0 h-full w-full object-cover"
                     />
 
                     {/* Soft dark gradient for legibility */}
@@ -282,7 +282,7 @@ const ExploreKling = () => {
 
                     {/* Subtle accent glow */}
                     <div
-                      className="pointer-events-none absolute -bottom-24 -left-16 h-64 w-64 rounded-full blur-3xl opacity-40 transition-opacity duration-500 group-hover:opacity-60"
+                      className="pointer-events-none absolute -bottom-24 -left-16 h-64 w-64 rounded-full blur-3xl opacity-40"
                       style={{ background: `hsl(var(--accent) / 0.5)` }}
                     />
 
