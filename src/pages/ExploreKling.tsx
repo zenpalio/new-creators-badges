@@ -530,19 +530,23 @@ const ExploreKling = () => {
                 ))}
               </section>
             ) : (
-              <section className="columns-2 gap-1.5 md:columns-3 lg:columns-4 xl:columns-5 [&>*]:mb-1.5 [&>*]:break-inside-avoid">
+              <section className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
                 {feed.map((v) => (
-                  <div key={v.id} className="w-full">
-                    <ExploreVideoCardFull
-                      id={v.id}
-                      poster={v.poster}
-                      video={v.video}
-                      likes={v.likes as number}
-                      aspect={v.aspect}
-                      liked={!!likedMap[v.id]}
-                      onLike={() => toggleLiked(v.id)}
-                    />
-                  </div>
+                  <ExploreVideoCard
+                    key={v.id}
+                    poster={v.poster}
+                    video={v.video}
+                    imageAlt={`Preview ${v.id}`}
+                    likeButton={
+                      <LikeButton
+                        variant="video"
+                        liked={!!likedMap[v.id]}
+                        onClick={() => toggleLiked(v.id)}
+                      >
+                        <span>{v.likes as number}</span>
+                      </LikeButton>
+                    }
+                  />
                 ))}
               </section>
             )}
@@ -555,47 +559,6 @@ const ExploreKling = () => {
   );
 };
 
-// Width-flexible variant of ExploreVideoCard (for masonry columns)
-const ExploreVideoCardFull = ({
-  id,
-  poster,
-  video,
-  likes,
-  aspect = "aspect-[13/19]",
-  liked,
-  onLike,
-}: {
-  id: string;
-  poster?: string;
-  video: string;
-  likes: number;
-  aspect?: string;
-  liked: boolean;
-  onLike: () => void;
-}) => (
-  <a
-    href="#"
-    aria-label="Video preview"
-    className="group relative block w-full overflow-hidden rounded-2xl bg-grey-dark-1-v2"
-  >
-    <div className={`relative ${aspect} w-full overflow-hidden`}>
-      {poster && (
-        <img
-          src={poster}
-          alt=""
-          loading="lazy"
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-      )}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/70 to-transparent" />
-      <div className="absolute bottom-2 right-2 z-[3]" onClick={(e) => { e.preventDefault(); onLike(); }}>
-        <LikeButton variant="video" liked={liked} onClick={onLike}>
-          <span>{likes}</span>
-        </LikeButton>
-      </div>
-    </div>
-  </a>
-);
 
 // ---- Right-side filter sidebar ----
 const filterGroups: Array<{ label: string; value?: string; type: "check" | "chip"; options: string[] }> = [
