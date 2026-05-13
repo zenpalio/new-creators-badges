@@ -228,6 +228,8 @@ const ExploreKling = () => {
             </section>
           </div>
         </main>
+        {/* Right filter sidebar */}
+        <FilterSidebar />
       </div>
     </>
   );
