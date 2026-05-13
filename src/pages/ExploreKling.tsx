@@ -507,7 +507,7 @@ const HeroBanners = () => {
   return (
     <section>
       {/* Mobile: snap slider */}
-      <div className="lg:hidden">
+      <div className="xl:hidden">
         <div
           ref={scrollerRef}
           className="-mx-4 flex snap-x snap-mandatory overflow-x-auto scrollbar-hide scroll-smooth"
