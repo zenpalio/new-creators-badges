@@ -7,6 +7,8 @@ import ExploreVideoCard from "../components/explore/ExploreVideoCard";
 import LikeButton from "../components/explore/LikeButton";
 import { exploreVideoFeed } from "../data/exploreVideoFeed";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/ui/dropdown-menu";
+import sceneBuilderBg from "../assets/scene-builder-bg.jpg";
+import premiumBg from "../assets/premium-bg.jpg";
 
 // ---- Hero banners (left big, right secondary) ----
 const heroBanners = [
