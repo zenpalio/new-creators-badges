@@ -65,8 +65,8 @@ const tools = [
 ];
 
 // ---- Tabs ----
-const tabs = ["Community", "Follows", "Events"] as const;
-const contentTabs = ["Babes", "Images", "Videos", "Stories", "Creators"] as const;
+const tabs = ["Community", "Follows", "Events", "Creators"] as const;
+const contentTabs = ["Babes", "Images", "Videos", "Stories"] as const;
 const sortOptions = ["Trending", "Newest", "Most Liked"] as const;
 const timeOptions = ["All time", "Year", "Month", "Week", "Today"] as const;
 
@@ -320,7 +320,7 @@ const ExploreKling = () => {
             </div>
 
             {/* Feed */}
-            {activeContent === "Creators" ? (
+            {activeTab === "Creators" ? (
               <div className="-mx-4 md:-mx-8 lg:-mx-12">
                 <CreatorsView
                   creators={mockCreators}
