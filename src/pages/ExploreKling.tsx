@@ -531,7 +531,7 @@ const HeroBanners = () => {
       </div>
 
       {/* Desktop: grid */}
-      <div className="hidden lg:grid grid-cols-3 gap-3">
+      <div className="hidden xl:grid grid-cols-3 gap-3">
         {heroBanners.map((b, i) => (
           <HeroBannerCard key={b.title} banner={b} large={i === 0} />
         ))}
