@@ -207,6 +207,9 @@ const Gallery = () => {
   const toggleLiked = (id: string) =>
     setLikedMap((m) => ({ ...m, [id]: !m[id] }));
 
+  // Equipped badge (lifted so BadgesHero reflects it)
+  const [activeBadge, setActiveBadge] = useState<EquippedBadge | null>(null);
+
   // Edit mode (mass-delete) for content grid
   const [editMode, setEditMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
