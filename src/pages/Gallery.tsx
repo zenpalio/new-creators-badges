@@ -345,7 +345,7 @@ const Gallery = () => {
               <div className="flex flex-col gap-2">
                 <BadgesHero />
                 {badgeCategories.map((cat, i) => (
-                  <BadgeCategory key={i} {...cat} layout="grid" />
+                  <BadgeCategory key={i} {...cat} />
                 ))}
               </div>
             ) : activeContent === "Stories" ? (
