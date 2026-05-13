@@ -299,11 +299,6 @@ const ExploreKling = () => {
                     </div>
                   </>
                 )}
-                {activeTab === "Follows" && (
-                  <span className="text-sm text-grey-light-3-v2">
-                    <span className="font-semibold text-white">128</span> following
-                  </span>
-                )}
               </div>
               {(activeTab === "Community" || activeTab === "Follows") && (
                 <div className="flex items-center gap-2">
