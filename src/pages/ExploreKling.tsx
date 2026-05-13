@@ -202,6 +202,24 @@ const ExploreKling = () => {
               </div>
             </section>
 
+            {/* Content type tabs */}
+            <div className="flex items-center gap-5 border-b border-white/5 -mt-2">
+              {contentTabs.map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setActiveContent(t)}
+                  className={`relative pb-2.5 text-sm font-medium transition-colors ${
+                    activeContent === t ? "text-white" : "text-grey-light-4-v2 hover:text-white"
+                  }`}
+                >
+                  {t}
+                  {activeContent === t && (
+                    <span className="absolute bottom-[-1px] left-0 right-0 h-0.5 rounded-full bg-primary-v2" />
+                  )}
+                </button>
+              ))}
+            </div>
+
             {/* Masonry feed */}
             <section className="columns-2 gap-1.5 md:columns-3 lg:columns-4 xl:columns-5 [&>*]:mb-1.5 [&>*]:break-inside-avoid">
               {feed.map((v) => (
