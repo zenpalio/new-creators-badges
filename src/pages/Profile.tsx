@@ -185,7 +185,7 @@ export const badgeCategories = [
   },
 ];
 
-const activityBadges = [
+export const activityBadges = [
   { name: "Hype Man", description: "Join our Discord server", imageUrl: actHypeman, completed: false, actionLabel: "Join Discord", actionUrl: "https://discord.gg" },
   { name: "Squad Goals", description: "Leave a review on our trustpilot page", imageUrl: actSquad, completed: false, actionLabel: "Review Now", actionUrl: "https://trustpilot.com" },
   { name: "First Date", description: "Follow 100 creators on the platform", imageUrl: actFirstdate, completed: false, actionLabel: "Browse Creators" },
