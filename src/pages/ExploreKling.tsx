@@ -590,6 +590,7 @@ const HeroBanners = () => {
 
 const HeroBannerCard = ({ banner: b, large }: { banner: typeof heroBanners[number]; large: boolean }) => {
   const BadgeIcon = b.badgeIcon;
+  const decorBadges = (b as { decorBadges?: string[] }).decorBadges;
   return (
     <a
       href="#"
@@ -604,6 +605,33 @@ const HeroBannerCard = ({ banner: b, large }: { banner: typeof heroBanners[numbe
         className="pointer-events-none absolute -bottom-24 -left-16 h-64 w-64 rounded-full blur-3xl opacity-40"
         style={{ background: `hsl(var(--accent) / 0.5)` }}
       />
+      {decorBadges && (
+        <div className="pointer-events-none absolute inset-y-0 right-0 hidden sm:flex items-center justify-end pr-3 md:pr-6">
+          <div className="relative flex items-end gap-1">
+            <img
+              src={decorBadges[2]}
+              alt=""
+              loading="lazy"
+              className="h-16 w-16 md:h-20 md:w-20 object-contain opacity-80 -rotate-12 translate-y-2"
+              style={{ filter: "drop-shadow(0 6px 18px hsl(43 96% 58% / 0.4))" }}
+            />
+            <img
+              src={decorBadges[0]}
+              alt=""
+              loading="lazy"
+              className="h-24 w-24 md:h-32 md:w-32 object-contain"
+              style={{ filter: "drop-shadow(0 10px 30px hsl(213 100% 50% / 0.55))" }}
+            />
+            <img
+              src={decorBadges[1]}
+              alt=""
+              loading="lazy"
+              className="h-16 w-16 md:h-20 md:w-20 object-contain opacity-80 rotate-12 translate-y-2"
+              style={{ filter: "drop-shadow(0 6px 18px hsl(281 85% 62% / 0.4))" }}
+            />
+          </div>
+        </div>
+      )}
       <div className="relative flex h-full items-center p-4 md:p-5">
         <div className="w-full rounded-xl border border-white/10 bg-black/35 p-4 backdrop-blur-md md:p-5">
           <div className="flex items-center gap-2">
