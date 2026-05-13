@@ -271,13 +271,13 @@ const ExploreKling = () => {
 
             {/* Tabs + Search + Publish */}
             <section className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1 rounded-full bg-grey-dark-1-v2 p-1">
+              <div className="flex items-center gap-3 -mx-4 px-4 md:mx-0 md:px-0 overflow-x-auto scrollbar-hide">
+                <div className="flex items-center gap-1 rounded-full bg-grey-dark-1-v2 p-1 shrink-0">
                   {tabs.map((t) => (
                     <button
                       key={t}
                       onClick={() => setActiveTab(t)}
-                      className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+                      className={`whitespace-nowrap rounded-full px-3 md:px-4 py-1.5 text-sm font-medium transition-colors ${
                         activeTab === t
                           ? "bg-primary-v2 text-primary-v2-foreground"
                           : "text-grey-light-3-v2 hover:text-white"
@@ -314,6 +314,23 @@ const ExploreKling = () => {
                   </>
                 )}
               </div>
+
+              {/* Mobile-only search bar (full width) */}
+              {(activeTab === "Community" || activeTab === "Creators") && (
+                <div className="relative md:hidden">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-light-4-v2" />
+                  <input
+                    value={activeTab === "Creators" ? creatorsSearch : undefined}
+                    onChange={
+                      activeTab === "Creators"
+                        ? (e) => setCreatorsSearch(e.target.value)
+                        : undefined
+                    }
+                    placeholder="Search"
+                    className="h-9 w-full rounded-full border border-white/5 bg-grey-dark-1-v2 pl-9 pr-3 text-sm text-white placeholder:text-grey-light-4-v2 outline-none focus:border-primary-v2/50"
+                  />
+                </div>
+              )}
               {(activeTab === "Community" || activeTab === "Follows") && (
                 <div className="flex items-center gap-2">
                   {activeTab === "Community" && (
