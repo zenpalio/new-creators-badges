@@ -27,16 +27,13 @@ const ExploreVideoCard = ({
     >
       <div className="relative aspect-[13/19] w-full overflow-hidden bg-grey-dark-1-v2">
         {poster != null && poster !== "" && (
-          <span className="pointer-events-none absolute inset-0 z-0 block">
-            <ResponsiveImage
-              src={poster}
-              alt=""
-              fill
-              absolute
-              sizes="(max-width: 479px) min(220px, 72vw), 220px"
-              className="transition-transform duration-500 group-hover:scale-105"
-            />
-          </span>
+          <img
+            src={poster}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 z-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
         )}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-20 bg-gradient-to-t from-black/70 to-transparent" />
         {likeButton != null && (
