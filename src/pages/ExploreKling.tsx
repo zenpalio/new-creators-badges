@@ -332,7 +332,8 @@ const ExploreKling = () => {
                 </div>
               )}
               {(activeTab === "Community" || activeTab === "Follows") && (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 -mx-4 px-4 md:mx-0 md:px-0 overflow-x-auto scrollbar-hide flex-nowrap">
+                  <span className="contents">{/* shrink-0 wrapper applied via FilterDropdown */}</span>
                   {activeTab === "Community" && (
                     <>
                       <FilterDropdown
