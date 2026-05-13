@@ -1,11 +1,12 @@
 import { useRef, useState } from "react";
-import { Bell, Menu, Search, Upload, ArrowRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown, ChevronDown, Heart, SlidersHorizontal, X } from "lucide-react";
+import { Bell, Menu, Search, Upload, ArrowRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown, ChevronDown, Heart, SlidersHorizontal, X, Check } from "lucide-react";
 import SideNav from "../components/SideNav";
 import { useHeaderScrollTracking } from "../components/ExploreView";
 import ExploreCreateToolCard from "../components/explore/ExploreCreateToolCard";
 import ExploreVideoCard from "../components/explore/ExploreVideoCard";
 import LikeButton from "../components/explore/LikeButton";
 import { exploreVideoFeed } from "../data/exploreVideoFeed";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/ui/dropdown-menu";
 
 // ---- Hero banners (left big, right secondary) ----
 const heroBanners = [
