@@ -288,13 +288,15 @@ const ExploreKling = () => {
                     />
 
                     {/* Tiny tech tag (top-right) */}
-                    <div className="pointer-events-none absolute right-4 top-4 flex items-center gap-1.5 font-mono text-[10px] tracking-widest text-white/55">
-                      <span
-                        className="h-1.5 w-1.5 rounded-full"
-                        style={{ background: `hsl(var(--accent))`, boxShadow: `0 0 8px hsl(var(--accent))` }}
-                      />
-                      {b.code}
-                    </div>
+                    {b.code && (
+                      <div className="pointer-events-none absolute right-4 top-4 flex items-center gap-1.5 font-mono text-[10px] tracking-widest text-white/55">
+                        <span
+                          className="h-1.5 w-1.5 rounded-full"
+                          style={{ background: `hsl(var(--accent))`, boxShadow: `0 0 8px hsl(var(--accent))` }}
+                        />
+                        {b.code}
+                      </div>
+                    )}
 
                     {/* Content — glass panel */}
                     <div className="relative flex h-full items-end p-4 md:p-5">
