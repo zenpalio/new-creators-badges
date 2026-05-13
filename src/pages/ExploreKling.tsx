@@ -332,44 +332,53 @@ const ExploreKling = () => {
               )}
               {activeTab === "Creators" && (
                 <div className="flex flex-wrap items-center gap-2">
-                  <div className="relative">
-                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-v2-foreground" />
+                  <div className="relative hidden md:block">
+                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-light-4-v2" />
                     <input
                       value={creatorsSearch}
                       onChange={(e) => setCreatorsSearch(e.target.value)}
-                      placeholder="Search creators..."
-                      className="h-10 w-56 rounded-xl border border-border-v2 bg-card-v2 pl-9 pr-3 text-sm text-foreground-v2 placeholder:text-muted-v2-foreground outline-none focus:border-primary-v2/60"
+                      placeholder="Search"
+                      className="h-9 w-56 rounded-full border border-white/5 bg-grey-dark-1-v2 pl-9 pr-3 text-sm text-white placeholder:text-grey-light-4-v2 outline-none focus:border-primary-v2/50"
                     />
                   </div>
-                  <CreatorPillDropdown
-                    value={creatorsSort}
-                    options={[
-                      { value: "likes", label: "Most Liked" },
-                      { value: "followers", label: "Most Followers" },
-                      { value: "aura", label: "Most Aura" },
-                    ]}
-                    onChange={(v) => setCreatorsSort(v as CreatorsSortBy)}
+                  <FilterDropdown
+                    value={
+                      ({ likes: "Most Liked", followers: "Most Followers", aura: "Most Aura" } as const)[creatorsSort]
+                    }
+                    options={["Most Liked", "Most Followers", "Most Aura"]}
+                    onChange={(v) =>
+                      setCreatorsSort(
+                        ({ "Most Liked": "likes", "Most Followers": "followers", "Most Aura": "aura" } as const)[
+                          v as "Most Liked" | "Most Followers" | "Most Aura"
+                        ],
+                      )
+                    }
                   />
-                  <CreatorPillDropdown
-                    value={creatorsCreation}
-                    options={[
-                      { value: "all", label: "All Creations" },
-                      { value: "characters", label: "Characters" },
-                      { value: "images", label: "Images" },
-                      { value: "videos", label: "Videos" },
-                      { value: "stories", label: "Stories" },
-                    ]}
-                    onChange={(v) => setCreatorsCreation(v as CreatorsCreationType)}
+                  <FilterDropdown
+                    value={
+                      ({ all: "All Creations", characters: "Characters", images: "Images", videos: "Videos", stories: "Stories" } as const)[creatorsCreation]
+                    }
+                    options={["All Creations", "Characters", "Images", "Videos", "Stories"]}
+                    onChange={(v) =>
+                      setCreatorsCreation(
+                        ({ "All Creations": "all", Characters: "characters", Images: "images", Videos: "videos", Stories: "stories" } as const)[
+                          v as "All Creations" | "Characters" | "Images" | "Videos" | "Stories"
+                        ],
+                      )
+                    }
                   />
-                  <CreatorPillDropdown
-                    value={creatorsTime}
-                    options={[
-                      { value: "all", label: "All time" },
-                      { value: "year", label: "Year" },
-                      { value: "month", label: "Month" },
-                      { value: "week", label: "Week" },
-                    ]}
-                    onChange={(v) => setCreatorsTime(v as CreatorsFilterBy)}
+                  <FilterDropdown
+                    value={
+                      ({ all: "All time", year: "Year", month: "Month", week: "Week" } as const)[creatorsTime]
+                    }
+                    options={["All time", "Year", "Month", "Week"]}
+                    onChange={(v) =>
+                      setCreatorsTime(
+                        ({ "All time": "all", Year: "year", Month: "month", Week: "week" } as const)[
+                          v as "All time" | "Year" | "Month" | "Week"
+                        ],
+                      )
+                    }
                   />
                 </div>
               )}
