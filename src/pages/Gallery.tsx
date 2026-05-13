@@ -409,26 +409,85 @@ const Gallery = () => {
               </section>
             ) : (
               <section className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
-                {feed.map((v) => (
-                  <ExploreVideoCard
-                    key={v.id}
-                    poster={v.poster}
-                    video={v.video}
-                    imageAlt={`Preview ${v.id}`}
-                    likeButton={
-                      <LikeButton
-                        variant="video"
-                        liked={!!likedMap[v.id]}
-                        onClick={() => toggleLiked(v.id)}
-                      >
-                        <span>{v.likes as number}</span>
-                      </LikeButton>
-                    }
-                  />
-                ))}
+                {feed.map((v) => {
+                  const isSelected = selectedIds.has(v.id);
+                  return (
+                    <div key={v.id} className="relative">
+                      <ExploreVideoCard
+                        poster={v.poster}
+                        video={v.video}
+                        imageAlt={`Preview ${v.id}`}
+                        likeButton={
+                          <LikeButton
+                            variant="video"
+                            liked={!!likedMap[v.id]}
+                            onClick={() => toggleLiked(v.id)}
+                          >
+                            <span>{v.likes as number}</span>
+                          </LikeButton>
+                        }
+                      />
+                      {editMode && (
+                        <button
+                          type="button"
+                          onClick={() => toggleSelected(v.id)}
+                          aria-label={isSelected ? "Deselect item" : "Select item"}
+                          aria-pressed={isSelected}
+                          className={`absolute inset-0 z-10 flex items-start justify-start rounded-xl ring-2 ring-inset transition-all ${
+                            isSelected
+                              ? "bg-primary-v2/25 ring-primary-v2"
+                              : "bg-black/10 ring-transparent hover:bg-black/20"
+                          }`}
+                        >
+                          <span
+                            className={`m-2 flex h-6 w-6 items-center justify-center rounded-md border-2 transition-colors ${
+                              isSelected
+                                ? "border-primary-v2 bg-primary-v2 text-primary-v2-foreground"
+                                : "border-white/80 bg-black/40"
+                            }`}
+                          >
+                            {isSelected && <Check className="h-4 w-4" strokeWidth={3} />}
+                          </span>
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
               </section>
             )}
           </div>
+          {/* Sticky selection action bar */}
+          {editMode && (
+            <div className="pointer-events-none sticky bottom-4 z-40 flex justify-center px-4">
+              <div className="pointer-events-auto flex items-center gap-2 rounded-full border border-white/10 bg-grey-dark-1-v2/95 p-1.5 shadow-2xl backdrop-blur-md">
+                <button
+                  type="button"
+                  onClick={handleDeleteSelected}
+                  disabled={selectedIds.size === 0}
+                  className="flex items-center gap-2 rounded-full bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Delete {selectedIds.size > 0 ? `${selectedIds.size} item${selectedIds.size === 1 ? "" : "s"}` : ""}
+                </button>
+                <button
+                  type="button"
+                  onClick={clearSelection}
+                  disabled={selectedIds.size === 0}
+                  className="rounded-full px-3 py-2 text-sm text-white/80 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Clear Selection
+                </button>
+                <button
+                  type="button"
+                  onClick={exitEditMode}
+                  className="flex items-center gap-2 rounded-full bg-primary-v2 px-4 py-2 text-sm font-semibold text-primary-v2-foreground transition-colors hover:bg-primary-v2/90"
+                >
+                  <Check className="h-4 w-4" />
+                  Done
+                </button>
+              </div>
+            </div>
+          )}
         </main>
         {/* Right filter sidebar */}
         <FilterSidebar open={filtersOpen} onOpenChange={setFiltersOpen} />
