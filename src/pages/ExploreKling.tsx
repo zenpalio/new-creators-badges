@@ -472,18 +472,20 @@ const ExploreKling = () => {
 
             {/* Follows: following tags */}
             {activeTab === "Follows" && (
-              <div className="flex flex-wrap items-center gap-2 -mt-2">
-                {followingTags.map((tag) => (
-                  <button
-                    key={tag}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-grey-dark-1-v2 px-3 py-1.5 text-xs font-medium text-white hover:border-primary-v2/40 hover:bg-grey-dark-2-v2 transition-colors"
-                  >
-                    {tag}
+              <div className="-mx-4 md:-mx-8 lg:-mx-12 -mt-2">
+                <div className="flex items-center gap-2 overflow-x-auto scrollbar-none px-4 md:px-8 lg:px-12 pb-1">
+                  {followingTags.map((tag) => (
+                    <button
+                      key={tag}
+                      className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/10 bg-grey-dark-1-v2 px-3 py-1.5 text-xs font-medium text-white hover:border-primary-v2/40 hover:bg-grey-dark-2-v2 transition-colors"
+                    >
+                      {tag}
+                    </button>
+                  ))}
+                  <button className="inline-flex shrink-0 items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium text-grey-light-3-v2 hover:text-white transition-colors">
+                    See all →
                   </button>
-                ))}
-                <button className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium text-grey-light-3-v2 hover:text-white transition-colors">
-                  See all →
-                </button>
+                </div>
               </div>
             )}
 
