@@ -307,23 +307,10 @@ const Gallery = () => {
                 {activeTab === "Creations" && (
                   <div className="flex items-center gap-2 -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto scrollbar-hide flex-nowrap min-w-0 sm:ml-auto xl:ml-0 xl:justify-end">
                     <FilterDropdown
-                      value={activeSort}
-                      options={sortOptions as unknown as string[]}
-                      onChange={(v) => setActiveSort(v as typeof activeSort)}
-                    />
-                    <FilterDropdown
                       value={activeTime}
                       options={timeOptions as unknown as string[]}
                       onChange={(v) => setActiveTime(v as typeof activeTime)}
                     />
-                    <button
-                      onClick={() => setFiltersOpen(true)}
-                      aria-label="Filters"
-                      className="shrink-0 whitespace-nowrap inline-flex items-center gap-2 rounded-full bg-grey-dark-1-v2 px-3 min-[1000px]:px-4 py-2 text-sm font-medium text-white hover:bg-grey-dark-2-v2 transition-colors"
-                    >
-                      <SlidersHorizontal className="h-4 w-4" />
-                      <span className="hidden min-[1000px]:inline">Filters</span>
-                    </button>
                   </div>
                 )}
               </div>
