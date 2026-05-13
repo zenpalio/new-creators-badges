@@ -340,13 +340,30 @@ const Gallery = () => {
               </div>
             )}
 
+            {activeTab === "Badges" && (
+              <div className="flex items-center gap-5 border-b border-white/5 -mt-2">
+                {badgesTabs.map((t) => (
+                  <button
+                    key={t.value}
+                    onClick={() => setBadgesSubTab(t.value)}
+                    className={`relative pb-2.5 text-sm font-medium transition-colors ${
+                      badgesSubTab === t.value ? "text-white" : "text-grey-light-4-v2 hover:text-white"
+                    }`}
+                  >
+                    {t.label}
+                    {badgesSubTab === t.value && (
+                      <span className="absolute bottom-[-1px] left-0 right-0 h-0.5 rounded-full bg-primary-v2" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+
             {/* Feed */}
             {activeTab === "Badges" ? (
               <div className="flex flex-col gap-2">
                 <BadgesHero />
-                {badgeCategories.map((cat, i) => (
-                  <BadgeCategory key={i} {...cat} />
-                ))}
+                <BadgesPanel value={badgesSubTab} />
               </div>
             ) : activeContent === "Stories" ? (
               <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 [&>*]:w-full [&>*]:max-w-none">
