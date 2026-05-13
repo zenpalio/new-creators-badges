@@ -630,20 +630,36 @@ const FilterSidebar = ({
 
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto scrollbar-themed pl-5 pr-3 pb-6">
-        {/* Liked toggle pinned at top */}
-        <div className="flex items-center justify-between rounded-xl border border-white/5 bg-grey-dark-1-v2/60 px-3.5 py-3 mb-4">
-          <span className="flex items-center gap-2 text-sm text-white">
-            <Heart className={`h-3.5 w-3.5 ${liked ? "fill-red-500 text-red-500" : "text-grey-light-3-v2"}`} />
-            Liked only
-          </span>
-          <button
-            onClick={() => setLiked((v) => !v)}
-            role="switch"
-            aria-checked={liked}
-            className={`relative h-5 w-9 rounded-full transition-colors ${liked ? "bg-primary-v2" : "bg-white/10"}`}
-          >
-            <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${liked ? "left-[18px]" : "left-0.5"}`} />
-          </button>
+        {/* Quick toggles pinned at top */}
+        <div className="flex flex-col gap-2 mb-4">
+          <div className="flex items-center justify-between rounded-xl border border-white/5 bg-grey-dark-1-v2/60 px-3.5 py-3">
+            <span className="flex items-center gap-2 text-sm text-white">
+              <Users className={`h-3.5 w-3.5 ${followingOnly ? "text-primary-v2" : "text-grey-light-3-v2"}`} />
+              Following only
+            </span>
+            <button
+              onClick={() => setFollowingOnly((v) => !v)}
+              role="switch"
+              aria-checked={followingOnly}
+              className={`relative h-5 w-9 rounded-full transition-colors ${followingOnly ? "bg-primary-v2" : "bg-white/10"}`}
+            >
+              <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${followingOnly ? "left-[18px]" : "left-0.5"}`} />
+            </button>
+          </div>
+          <div className="flex items-center justify-between rounded-xl border border-white/5 bg-grey-dark-1-v2/60 px-3.5 py-3">
+            <span className="flex items-center gap-2 text-sm text-white">
+              <Heart className={`h-3.5 w-3.5 ${liked ? "fill-red-500 text-red-500" : "text-grey-light-3-v2"}`} />
+              Liked only
+            </span>
+            <button
+              onClick={() => setLiked((v) => !v)}
+              role="switch"
+              aria-checked={liked}
+              className={`relative h-5 w-9 rounded-full transition-colors ${liked ? "bg-primary-v2" : "bg-white/10"}`}
+            >
+              <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${liked ? "left-[18px]" : "left-0.5"}`} />
+            </button>
+          </div>
         </div>
 
         <div className="flex flex-col">
