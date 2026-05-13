@@ -97,7 +97,7 @@ const tools = [
 const tabs = ["Creations", "Badges"] as const;
 const contentTabs = ["Babes", "Images", "Videos", "Stories"] as const;
 const sortOptions = ["Trending", "Newest", "Most Liked"] as const;
-const timeOptions = ["All time", "Year", "Month", "Week", "Today"] as const;
+const timeOptions = ["Newest", "Oldest", "Most Liked"] as const;
 
 // ---- Masonry feed (mock images, fixed 13:19 aspect) ----
 const feed = [...exploreVideoFeed, ...exploreVideoFeed].map((v, i) => ({
