@@ -88,20 +88,24 @@ const BadgesHero = () => {
           </div>
 
           {/* Secondary meta stats */}
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-2 text-[12px] text-muted-v2-foreground">
+          <div className="flex flex-wrap items-stretch justify-center md:justify-start rounded-xl border border-border-v2/30 bg-background-v2/40 backdrop-blur-sm overflow-hidden divide-x divide-border-v2/30">
             {[
-              { value: "14,412", label: "interactions" },
-              { value: "86", label: "videos" },
-              { value: "37", label: "images" },
-              { value: "44", label: "following" },
-              { value: "24", label: "followers" },
-            ].map((m, i, arr) => (
-              <div key={m.label} className="flex items-center gap-1.5">
-                <span className="font-semibold text-foreground-v2">{m.value}</span>
-                <span>{m.label}</span>
-                {i < arr.length - 1 && (
-                  <span className="ml-3 hidden sm:inline h-1 w-1 rounded-full bg-muted-v2-foreground/40" />
-                )}
+              { value: "14,412", label: "Interactions" },
+              { value: "86", label: "Videos" },
+              { value: "37", label: "Images" },
+              { value: "44", label: "Following" },
+              { value: "24", label: "Followers" },
+            ].map((m) => (
+              <div
+                key={m.label}
+                className="flex flex-col items-center md:items-start gap-0.5 px-3 sm:px-4 py-2 flex-1 min-w-[88px]"
+              >
+                <span className="font-bold text-foreground-v2 text-sm sm:text-base leading-none tabular-nums">
+                  {m.value}
+                </span>
+                <span className="text-[10px] uppercase tracking-wider text-muted-v2-foreground font-medium">
+                  {m.label}
+                </span>
               </div>
             ))}
           </div>
