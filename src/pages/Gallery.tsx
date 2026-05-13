@@ -48,22 +48,22 @@ import { useNavigate } from "react-router-dom";
 // ---- Hero banners (left big, right secondary) ----
 const heroBanners = [
   {
-    code: "SYS//STR-001",
-    eyebrow: "Featured tool",
-    title: "Story Creator",
+    code: "SYS//BDG-001",
+    eyebrow: "Aura Badges",
+    title: "Collect badges, level up",
     version: "v1.0",
-    description: "Write epic stories, chapter by chapter.",
-    cta: "Start writing",
+    description: "Earn aura, unlock tiers and flex rare badges on your profile.",
+    cta: "View badges",
     bg: storyCreatorBg,
     overlay: "from-black/90 via-black/55 to-black/10",
     accent: "primary-v2",
     accentHsl: "213 100% 50%",
-    badgeIcon: BookOpen,
+    badgeIcon: Sparkles,
     ctaClass: "bg-primary-v2 text-primary-v2-foreground hover:bg-primary-v2/90",
     stats: [
-      { label: "EPISODES", value: "∞" },
-      { label: "GENRES", value: "12" },
-      { label: "MODEL", value: "PRO" },
+      { label: "TIERS", value: "7" },
+      { label: "BADGES", value: "30+" },
+      { label: "AURA", value: "∞" },
     ],
   },
   {
@@ -72,7 +72,7 @@ const heroBanners = [
     title: "Skip the queue",
     version: "ELITE",
     description: "Unlimited chats, HD videos, exclusive babes.",
-    cta: "Upgrade",
+    cta: "Get Premium",
     bg: premiumBg,
     overlay: "from-black/90 via-black/55 to-black/10",
     accent: "fuchsia-400",
@@ -260,7 +260,7 @@ const Gallery = () => {
 
           <div className="relative z-10 flex w-full flex-col gap-6 px-4 pb-16 pt-14 md:px-8 lg:px-12">
             {/* Hero banners row */}
-            <ExploreStartCreatingSection title="" tools={tools} />
+            <HeroBanners />
 
 
             {/* Tabs + Search + Publish */}
