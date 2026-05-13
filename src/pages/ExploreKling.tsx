@@ -1,11 +1,12 @@
 import { useRef, useState } from "react";
-import { Bell, Menu, Search, Upload, ArrowRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown, ChevronDown, Heart, SlidersHorizontal, X } from "lucide-react";
+import { Bell, Menu, Search, Upload, ArrowRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown, ChevronDown, Heart, SlidersHorizontal, X, Check } from "lucide-react";
 import SideNav from "../components/SideNav";
 import { useHeaderScrollTracking } from "../components/ExploreView";
 import ExploreCreateToolCard from "../components/explore/ExploreCreateToolCard";
 import ExploreVideoCard from "../components/explore/ExploreVideoCard";
 import LikeButton from "../components/explore/LikeButton";
 import { exploreVideoFeed } from "../data/exploreVideoFeed";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/ui/dropdown-menu";
 
 // ---- Hero banners (left big, right secondary) ----
 const heroBanners = [
@@ -36,7 +37,8 @@ const tools = [
 
 // ---- Tabs ----
 const tabs = ["Recommended", "Follows", "Events"] as const;
-const sortTabs = ["Recommended", "Time"] as const;
+const sortOptions = ["Trending", "Newest", "Most Liked"] as const;
+const timeOptions = ["All time", "Year", "Month", "Week", "Today"] as const;
 
 // ---- Masonry feed (mock images with varied aspect ratios) ----
 const aspects: Array<{ cls: string; w: number; h: number }> = [
@@ -61,7 +63,8 @@ const feed = [...exploreVideoFeed, ...exploreVideoFeed].map((v, i) => {
 const ExploreKling = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Recommended");
-  const [activeSort, setActiveSort] = useState<(typeof sortTabs)[number]>("Recommended");
+  const [activeSort, setActiveSort] = useState<(typeof sortOptions)[number]>("Trending");
+  const [activeTime, setActiveTime] = useState<(typeof timeOptions)[number]>("All time");
   const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
   const mainRef = useRef<HTMLElement>(null);
   const { headerHidden } = useHeaderScrollTracking(mainRef);
@@ -191,22 +194,18 @@ const ExploreKling = () => {
               </button>
             </section>
 
-            {/* Sort sub-tabs */}
-            <div className="flex items-center gap-5 border-b border-white/5 pb-2 -mt-2">
-              {sortTabs.map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setActiveSort(t)}
-                  className={`relative text-sm font-medium transition-colors ${
-                    activeSort === t ? "text-white" : "text-grey-light-4-v2 hover:text-white"
-                  }`}
-                >
-                  {t}
-                  {activeSort === t && (
-                    <span className="absolute -bottom-2 left-0 right-0 h-0.5 rounded-full bg-primary-v2" />
-                  )}
-                </button>
-              ))}
+            {/* Sort + Time dropdowns */}
+            <div className="flex items-center gap-2 -mt-2">
+              <FilterDropdown
+                value={activeSort}
+                options={sortOptions as unknown as string[]}
+                onChange={(v) => setActiveSort(v as typeof activeSort)}
+              />
+              <FilterDropdown
+                value={activeTime}
+                options={timeOptions as unknown as string[]}
+                onChange={(v) => setActiveTime(v as typeof activeTime)}
+              />
             </div>
 
             {/* Masonry feed */}
@@ -462,5 +461,43 @@ const FilterSidebar = () => {
     </aside>
   );
 };
+
+// ---- Filter dropdown (sort/time pills) ----
+const FilterDropdown = ({
+  value,
+  options,
+  onChange,
+}: {
+  value: string;
+  options: string[];
+  onChange: (v: string) => void;
+}) => (
+  <DropdownMenu>
+    <DropdownMenuTrigger className="inline-flex items-center gap-2 rounded-full bg-grey-dark-1-v2 px-4 py-2 text-sm font-medium text-white hover:bg-grey-dark-2-v2 focus:outline-none focus:ring-2 focus:ring-primary-v2/40 transition-colors data-[state=open]:bg-grey-dark-2-v2">
+      {value}
+      <ChevronDown className="h-3.5 w-3.5 text-grey-light-3-v2" />
+    </DropdownMenuTrigger>
+    <DropdownMenuContent
+      align="start"
+      className="min-w-[160px] rounded-xl border-white/5 bg-grey-dark-1-v2 p-1.5 shadow-xl"
+    >
+      {options.map((o) => {
+        const active = o === value;
+        return (
+          <DropdownMenuItem
+            key={o}
+            onSelect={() => onChange(o)}
+            className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm cursor-pointer focus:bg-white/5 ${
+              active ? "text-white bg-white/5" : "text-grey-light-2-v2"
+            }`}
+          >
+            {o}
+            {active && <Check className="h-3.5 w-3.5 text-primary-v2" />}
+          </DropdownMenuItem>
+        );
+      })}
+    </DropdownMenuContent>
+  </DropdownMenu>
+);
 
 export default ExploreKling;
