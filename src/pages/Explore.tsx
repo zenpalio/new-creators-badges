@@ -745,7 +745,7 @@ const mockNotifications = [
     initials: "AP",
     action: "started following you",
     href: "https://discord.gg/lovable-dev",
-    hrefTarget: "_blank",
+    hrefTarget: "_blank" as const,
   },
 ];
 
