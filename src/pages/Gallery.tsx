@@ -42,6 +42,7 @@ import {
 import { mockCreators, creatorsPageLabels } from "./Creators";
 import BadgesHero from "../components/BadgesHero";
 import BadgesPanel, { badgesTabs, type BadgesTab } from "../components/BadgesPanel";
+import { type EquippedBadge } from "../components/ProfileBadgeShowcase";
 import { useNavigate } from "react-router-dom";
 
 // ---- Hero banners (left big, right secondary) ----
@@ -206,6 +207,9 @@ const Gallery = () => {
   const toggleLiked = (id: string) =>
     setLikedMap((m) => ({ ...m, [id]: !m[id] }));
 
+  // Equipped badge (lifted so BadgesHero reflects it)
+  const [activeBadge, setActiveBadge] = useState<EquippedBadge | null>(null);
+
   // Edit mode (mass-delete) for content grid
   const [editMode, setEditMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -284,7 +288,7 @@ const Gallery = () => {
 
           <div className="relative z-10 flex w-full flex-col gap-6 px-4 pb-16 pt-14 md:px-8 lg:px-12">
             {/* Hero banners row */}
-            <BadgesHero />
+            <BadgesHero activeBadge={activeBadge} />
 
 
             {/* Tabs + Search + Publish */}
@@ -397,7 +401,7 @@ const Gallery = () => {
             {/* Feed */}
             {activeTab === "Badges" ? (
               <div className="flex flex-col gap-2">
-                <BadgesPanel value={badgesSubTab} />
+                <BadgesPanel value={badgesSubTab} activeBadge={activeBadge} onActiveBadgeChange={setActiveBadge} />
               </div>
             ) : activeContent === "Stories" ? (
               <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 [&_a]:!w-full [&_a]:!max-w-none [&>*]:w-full [&>*]:max-w-none">
