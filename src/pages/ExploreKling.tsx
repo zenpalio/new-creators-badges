@@ -60,7 +60,8 @@ const ExploreKling = () => {
 
   const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const toggleLiked_unused = null;
+  const toggleLiked = (id: string) =>
+    setLikedMap((m) => ({ ...m, [id]: !m[id] }));
 
   return (
     <>
