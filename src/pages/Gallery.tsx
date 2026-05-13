@@ -206,6 +206,30 @@ const Gallery = () => {
   const toggleLiked = (id: string) =>
     setLikedMap((m) => ({ ...m, [id]: !m[id] }));
 
+  // Edit mode (mass-delete) for content grid
+  const [editMode, setEditMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const toggleSelected = (id: string) =>
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  const exitEditMode = () => {
+    setEditMode(false);
+    setSelectedIds(new Set());
+  };
+  const clearSelection = () => setSelectedIds(new Set());
+  const handleDeleteSelected = () => {
+    // TODO: wire to backend; for now just clear
+    exitEditMode();
+  };
+  // Reset edit mode when switching tabs/content
+  useEffect(() => {
+    exitEditMode();
+  }, [activeTab, activeContent]);
+
   return (
     <>
       <SideNav open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
