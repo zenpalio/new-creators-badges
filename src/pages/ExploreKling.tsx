@@ -51,7 +51,7 @@ const feed = [...exploreVideoFeed, ...exploreVideoFeed].map((v, i) => ({
 
 const ExploreKling = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Recommended");
+  const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Babes");
   const [activeSort, setActiveSort] = useState<(typeof sortOptions)[number]>("Trending");
   const [activeTime, setActiveTime] = useState<(typeof timeOptions)[number]>("All time");
   const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
