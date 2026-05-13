@@ -713,4 +713,44 @@ const FilterDropdown = ({
   </DropdownMenu>
 );
 
+const CreatorPillDropdown = ({
+  value,
+  options,
+  onChange,
+}: {
+  value: string;
+  options: { value: string; label: string }[];
+  onChange: (v: string) => void;
+}) => {
+  const current = options.find((o) => o.value === value);
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger className="inline-flex items-center gap-2 rounded-xl border border-border-v2 bg-card-v2 px-4 py-2.5 text-sm font-medium text-foreground-v2 hover:bg-accent-v2/50 focus:outline-none transition-colors data-[state=open]:bg-accent-v2/50">
+        {current?.label ?? value}
+        <ChevronDown className="h-4 w-4 text-muted-v2-foreground" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        align="start"
+        className="min-w-[180px] rounded-xl border-border-v2 bg-card-v2 p-1.5 shadow-xl"
+      >
+        {options.map((o) => {
+          const active = o.value === value;
+          return (
+            <DropdownMenuItem
+              key={o.value}
+              onSelect={() => onChange(o.value)}
+              className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm cursor-pointer focus:bg-accent-v2/50 ${
+                active ? "bg-primary-v2/10 text-primary-v2" : "text-foreground-v2"
+              }`}
+            >
+              {o.label}
+              {active && <Check className="h-3.5 w-3.5" />}
+            </DropdownMenuItem>
+          );
+        })}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
 export default ExploreKling;
