@@ -10,7 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import sceneBuilderBg from "../assets/scene-builder-bg.jpg";
 import premiumBg from "../assets/premium-bg.jpg";
 import { CreatorsView } from "../components/CreatorsView";
-import CreateFloatingButton from "../components/CreateFloatingButton";
+
 import { mockCreators, creatorsPageLabels } from "./Creators";
 import { useNavigate } from "react-router-dom";
 
@@ -368,8 +368,6 @@ const ExploreKling = () => {
         </main>
         {/* Right filter sidebar */}
         <FilterSidebar open={filtersOpen} onOpenChange={setFiltersOpen} />
-        {/* Floating create button */}
-        <CreateFloatingButton tools={tools} />
       </div>
     </>
   );
