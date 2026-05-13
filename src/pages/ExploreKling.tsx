@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Bell, Menu, Search, Upload, ArrowRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown, ChevronDown, Heart, SlidersHorizontal, X, Check } from "lucide-react";
+import { Bell, Menu, Search, Upload, ArrowRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown, ChevronDown, Heart, SlidersHorizontal, X, Check, Plus } from "lucide-react";
 import SideNav from "../components/SideNav";
 import { useHeaderScrollTracking } from "../components/ExploreView";
 import ExploreCreateToolCard from "../components/explore/ExploreCreateToolCard";
@@ -125,34 +125,6 @@ const ExploreKling = () => {
               ))}
             </section>
 
-            {/* Tools row */}
-            <section>
-              {/* Mobile/tablet: horizontal scroll */}
-              <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-1 xl:hidden">
-                {tools.map((t) => (
-                  <div key={t.title} className="w-[220px] shrink-0">
-                    <ExploreCreateToolCard
-                      title={t.title}
-                      subtitle={t.subtitle}
-                      Icon={t.Icon}
-                      href={t.href}
-                    />
-                  </div>
-                ))}
-              </div>
-              {/* Desktop: grid */}
-              <div className="hidden gap-3 xl:grid xl:grid-cols-5">
-                {tools.map((t) => (
-                  <ExploreCreateToolCard
-                    key={t.title}
-                    title={t.title}
-                    subtitle={t.subtitle}
-                    Icon={t.Icon}
-                    href={t.href}
-                  />
-                ))}
-              </div>
-            </section>
 
             {/* Tabs + Search + Publish */}
             <section className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -240,6 +212,35 @@ const ExploreKling = () => {
         </main>
         {/* Right filter sidebar */}
         <FilterSidebar open={filtersOpen} onOpenChange={setFiltersOpen} />
+        {/* Floating create button */}
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            aria-label="Create content"
+            className="fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 rounded-full bg-primary-v2 px-5 py-3 text-sm font-semibold text-primary-v2-foreground shadow-xl shadow-primary-v2/30 hover:opacity-90 transition-opacity focus:outline-none"
+          >
+            <Plus className="h-5 w-5" />
+            Create
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="end"
+            side="top"
+            className="min-w-[220px] rounded-xl border-white/5 bg-grey-dark-1-v2 p-1.5 shadow-xl mb-2"
+          >
+            {tools.map((t) => (
+              <DropdownMenuItem
+                key={t.title}
+                onSelect={() => { window.location.href = t.href; }}
+                className="flex items-start gap-3 rounded-lg px-3 py-2.5 text-sm text-white cursor-pointer focus:bg-white/5"
+              >
+                <t.Icon className="h-4 w-4 mt-0.5 text-primary-v2 shrink-0" />
+                <div className="flex flex-col">
+                  <span className="font-medium leading-tight">{t.title}</span>
+                  <span className="text-xs text-grey-light-3-v2">{t.subtitle}</span>
+                </div>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </>
   );
