@@ -288,7 +288,7 @@ const Gallery = () => {
 
           <div className="relative z-10 flex w-full flex-col gap-6 px-4 pb-16 pt-14 md:px-8 lg:px-12">
             {/* Hero banners row */}
-            <BadgesHero />
+            <BadgesHero activeBadge={activeBadge} />
 
 
             {/* Tabs + Search + Publish */}
