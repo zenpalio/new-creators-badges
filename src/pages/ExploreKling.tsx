@@ -90,15 +90,25 @@ const followingTags = [
   "@ivy_frost", "@axel_drift", "@suki_dream",
 ];
 
+const storyCardLabels: StoryContentCardLabels = {
+  storyBadge: "Story",
+  viewStory: "View story",
+  episodeSingular: "episode",
+  episodePlural: "episodes",
+  sceneSingular: "scene",
+  scenePlural: "scenes",
+  imageAltFallback: "Story cover",
+};
+
 const exploreStories = [
-  { title: "Summer Adventures", description: "A sun-drenched escape filled with chance encounters and lingering glances.", imageUrl: "https://picsum.photos/seed/story-1/640/400", episodes: 1, scenes: 6 },
-  { title: "Dark Desires", description: "A thrilling journey through the shadows of the city where nothing is as it seems.", imageUrl: "https://picsum.photos/seed/story-2/640/400", episodes: 3, scenes: 12 },
-  { title: "Campus Life", description: "Wild adventures of college students navigating love, drama and late-night study sessions.", imageUrl: "https://picsum.photos/seed/story-3/640/400", episodes: 2, scenes: 8 },
-  { title: "Midnight Whispers", description: "Secrets unfold under the moonlight as two strangers meet at a masquerade ball.", imageUrl: "https://picsum.photos/seed/story-4/640/400", episodes: 1, scenes: 4 },
-  { title: "Island Escape", description: "Stranded on a tropical paradise with a beautiful stranger, every day brings new temptation.", imageUrl: "https://picsum.photos/seed/story-5/640/400", episodes: 4, scenes: 18 },
-  { title: "Neon Nights", description: "Synthwave-soaked rendezvous in a city that never sleeps.", imageUrl: "https://picsum.photos/seed/story-6/640/400", episodes: 2, scenes: 9 },
-  { title: "Velvet Hours", description: "Slow-burn elegance behind closed velvet curtains.", imageUrl: "https://picsum.photos/seed/story-7/640/400", episodes: 1, scenes: 5 },
-  { title: "Crimson Affair", description: "An untamed romance written in scarlet ink.", imageUrl: "https://picsum.photos/seed/story-8/640/400", episodes: 3, scenes: 11 },
+  { title: "Summer Adventures", description: "A sun-drenched escape filled with chance encounters and lingering glances.", src: "https://picsum.photos/seed/story-1/640/400", episodeCount: 1, totalScenes: 6, avgRating: 4.6, ratingCount: 128 },
+  { title: "Dark Desires", description: "A thrilling journey through the shadows of the city where nothing is as it seems.", src: "https://picsum.photos/seed/story-2/640/400", episodeCount: 3, totalScenes: 12, avgRating: 4.8, ratingCount: 312 },
+  { title: "Campus Life", description: "Wild adventures of college students navigating love, drama and late-night study sessions.", src: "https://picsum.photos/seed/story-3/640/400", episodeCount: 2, totalScenes: 8, avgRating: 4.3, ratingCount: 87 },
+  { title: "Midnight Whispers", description: "Secrets unfold under the moonlight as two strangers meet at a masquerade ball.", src: "https://picsum.photos/seed/story-4/640/400", episodeCount: 1, totalScenes: 4, avgRating: 4.5, ratingCount: 54 },
+  { title: "Island Escape", description: "Stranded on a tropical paradise with a beautiful stranger, every day brings new temptation.", src: "https://picsum.photos/seed/story-5/640/400", episodeCount: 4, totalScenes: 18, avgRating: 4.9, ratingCount: 421 },
+  { title: "Neon Nights", description: "Synthwave-soaked rendezvous in a city that never sleeps.", src: "https://picsum.photos/seed/story-6/640/400", episodeCount: 2, totalScenes: 9, avgRating: 4.4, ratingCount: 96 },
+  { title: "Velvet Hours", description: "Slow-burn elegance behind closed velvet curtains.", src: "https://picsum.photos/seed/story-7/640/400", episodeCount: 1, totalScenes: 5, avgRating: 4.7, ratingCount: 142 },
+  { title: "Crimson Affair", description: "An untamed romance written in scarlet ink.", src: "https://picsum.photos/seed/story-8/640/400", episodeCount: 3, totalScenes: 11, avgRating: 4.6, ratingCount: 203 },
 ];
 
 const exploreEvents = [
