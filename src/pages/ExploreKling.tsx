@@ -193,22 +193,18 @@ const ExploreKling = () => {
               </button>
             </section>
 
-            {/* Sort sub-tabs */}
-            <div className="flex items-center gap-5 border-b border-white/5 pb-2 -mt-2">
-              {sortTabs.map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setActiveSort(t)}
-                  className={`relative text-sm font-medium transition-colors ${
-                    activeSort === t ? "text-white" : "text-grey-light-4-v2 hover:text-white"
-                  }`}
-                >
-                  {t}
-                  {activeSort === t && (
-                    <span className="absolute -bottom-2 left-0 right-0 h-0.5 rounded-full bg-primary-v2" />
-                  )}
-                </button>
-              ))}
+            {/* Sort + Time dropdowns */}
+            <div className="flex items-center gap-2 -mt-2">
+              <FilterDropdown
+                value={activeSort}
+                options={sortOptions as unknown as string[]}
+                onChange={(v) => setActiveSort(v as typeof activeSort)}
+              />
+              <FilterDropdown
+                value={activeTime}
+                options={timeOptions as unknown as string[]}
+                onChange={(v) => setActiveTime(v as typeof activeTime)}
+              />
             </div>
 
             {/* Masonry feed */}
