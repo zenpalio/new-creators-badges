@@ -209,7 +209,7 @@ const ExploreKling = () => {
             </div>
 
             {/* Masonry feed */}
-            <section className="columns-2 gap-3 md:columns-3 lg:columns-4 xl:columns-5 [&>*]:mb-3 [&>*]:break-inside-avoid">
+            <section className="columns-2 gap-1.5 md:columns-3 lg:columns-4 xl:columns-5 [&>*]:mb-1.5 [&>*]:break-inside-avoid">
               {feed.map((v) => (
                 <div key={v.id} className="w-full">
                   <ExploreVideoCardFull
