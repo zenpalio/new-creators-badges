@@ -1,5 +1,4 @@
 import { type ReactNode } from "react";
-import ResponsiveImage from "../ui/ResponsiveImage";
 
 export interface ExploreVideoCardProps {
   poster?: string;
