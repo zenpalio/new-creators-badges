@@ -36,7 +36,8 @@ const tools = [
 
 // ---- Tabs ----
 const tabs = ["Recommended", "Follows", "Events"] as const;
-const sortTabs = ["Recommended", "Time"] as const;
+const sortOptions = ["Trending", "Newest", "Most Liked"] as const;
+const timeOptions = ["All time", "Year", "Month", "Week", "Today"] as const;
 
 // ---- Masonry feed (mock images with varied aspect ratios) ----
 const aspects: Array<{ cls: string; w: number; h: number }> = [
