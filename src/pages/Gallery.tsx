@@ -343,6 +343,7 @@ const Gallery = () => {
             {/* Feed */}
             {activeTab === "Badges" ? (
               <div className="flex flex-col gap-2">
+                <BadgesHero />
                 {badgeCategories.map((cat, i) => (
                   <BadgeCategory key={i} {...cat} layout="grid" />
                 ))}
