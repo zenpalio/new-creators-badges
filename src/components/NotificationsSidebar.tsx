@@ -1,4 +1,10 @@
-import { useState, type ComponentType, type AnchorHTMLAttributes, type ElementType } from "react";
+import {
+  useEffect,
+  useState,
+  type ComponentType,
+  type AnchorHTMLAttributes,
+  type ElementType,
+} from "react";
 import { createPortal } from "react-dom";
 import { CheckCheck, X } from "lucide-react";
 import AnnouncementDialog from "./AnnouncementDialog";
@@ -110,11 +116,17 @@ const NotificationsSidebar = ({
 }: NotificationsSidebarProps) => {
   const [tab, setTab] = useState<"notifications" | "whats-new">("notifications");
   const [openAnnouncement, setOpenAnnouncement] = useState<Announcement | null>(null);
+  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
   const unreadCount = notifications.filter((n) => n.unread).length;
+
+  useEffect(() => {
+    setPortalTarget(document.body);
+  }, []);
 
   return (
     <>
-      {createPortal(
+      {portalTarget &&
+        createPortal(
         <div
           className={`fixed inset-0 z-[100] transition-opacity ${
             open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
@@ -309,8 +321,8 @@ const NotificationsSidebar = ({
           </a>
         </aside>
         </div>,
-        document.body
-      )}
+        portalTarget
+        )}
 
       <AnnouncementDialog
         announcement={openAnnouncement}
