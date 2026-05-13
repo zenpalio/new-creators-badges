@@ -36,7 +36,8 @@ const tools = [
 ];
 
 // ---- Tabs ----
-const tabs = ["Babes", "Images", "Videos", "Stories"] as const;
+const tabs = ["Recommended", "Follows", "Events"] as const;
+const contentTabs = ["Babes", "Images", "Videos", "Stories"] as const;
 const sortOptions = ["Trending", "Newest", "Most Liked"] as const;
 const timeOptions = ["All time", "Year", "Month", "Week", "Today"] as const;
 
@@ -51,7 +52,8 @@ const feed = [...exploreVideoFeed, ...exploreVideoFeed].map((v, i) => ({
 
 const ExploreKling = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Babes");
+  const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Recommended");
+  const [activeContent, setActiveContent] = useState<(typeof contentTabs)[number]>("Babes");
   const [activeSort, setActiveSort] = useState<(typeof sortOptions)[number]>("Trending");
   const [activeTime, setActiveTime] = useState<(typeof timeOptions)[number]>("All time");
   const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
@@ -199,6 +201,24 @@ const ExploreKling = () => {
                 </button>
               </div>
             </section>
+
+            {/* Content type tabs */}
+            <div className="flex items-center gap-5 border-b border-white/5 -mt-2">
+              {contentTabs.map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setActiveContent(t)}
+                  className={`relative pb-2.5 text-sm font-medium transition-colors ${
+                    activeContent === t ? "text-white" : "text-grey-light-4-v2 hover:text-white"
+                  }`}
+                >
+                  {t}
+                  {activeContent === t && (
+                    <span className="absolute bottom-[-1px] left-0 right-0 h-0.5 rounded-full bg-primary-v2" />
+                  )}
+                </button>
+              ))}
+            </div>
 
             {/* Masonry feed */}
             <section className="columns-2 gap-1.5 md:columns-3 lg:columns-4 xl:columns-5 [&>*]:mb-1.5 [&>*]:break-inside-avoid">
