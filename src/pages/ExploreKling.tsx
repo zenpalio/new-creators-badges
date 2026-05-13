@@ -279,8 +279,8 @@ const ExploreKling = () => {
                 </div>
                 {activeTab === "Community" && (
                   <>
-                    <div className="hidden min-[1000px]:block h-6 w-px bg-white/10" />
-                    <div className="relative hidden min-[1000px]:block">
+                    <div className="hidden xl:block h-6 w-px bg-white/10" />
+                    <div className="relative hidden xl:block">
                       <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-light-4-v2" />
                       <input
                         placeholder="Search"
@@ -291,8 +291,8 @@ const ExploreKling = () => {
                 )}
                 {activeTab === "Creators" && (
                   <>
-                    <div className="hidden min-[1000px]:block h-6 w-px bg-white/10" />
-                    <div className="relative hidden min-[1000px]:block">
+                    <div className="hidden xl:block h-6 w-px bg-white/10" />
+                    <div className="relative hidden xl:block">
                       <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-light-4-v2" />
                       <input
                         value={creatorsSearch}
@@ -307,7 +307,7 @@ const ExploreKling = () => {
 
               {/* Mobile-only search bar (full width) */}
               {(activeTab === "Community" || activeTab === "Creators") && (
-                <div className="relative min-[1000px]:hidden">
+                <div className="relative xl:hidden">
                   <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-light-4-v2" />
                   <input
                     value={activeTab === "Creators" ? creatorsSearch : undefined}
