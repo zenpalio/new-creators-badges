@@ -224,10 +224,16 @@ const ExploreKling = () => {
             </div>
             <div className="pointer-events-auto flex items-center gap-1">
               <button
+                onClick={() => setNotificationsOpen(true)}
                 aria-label="Notifications"
-                className="flex h-9 w-9 items-center justify-center text-foreground-v2/90 hover:opacity-70"
+                className="relative flex h-9 w-9 items-center justify-center text-foreground-v2/90 hover:opacity-70"
               >
                 <Bell className="h-5 w-5" strokeWidth={1.5} />
+                {notificationUnreadCount > 0 && (
+                  <span className="absolute right-1 top-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-primary-v2 px-1 text-[10px] font-semibold text-white">
+                    {notificationUnreadCount}
+                  </span>
+                )}
               </button>
             </div>
           </header>
