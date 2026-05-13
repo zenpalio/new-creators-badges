@@ -418,11 +418,28 @@ const ExploreKling = () => {
                   )}
                   <button
                     onClick={() => setFiltersOpen(true)}
-                    className="shrink-0 whitespace-nowrap inline-flex items-center gap-2 rounded-full bg-grey-dark-1-v2 px-4 py-2 text-sm font-medium text-white hover:bg-grey-dark-2-v2 transition-colors"
+                    aria-label="Filters"
+                    className="shrink-0 whitespace-nowrap inline-flex items-center gap-2 rounded-full bg-grey-dark-1-v2 px-3 md:px-4 py-2 text-sm font-medium text-white hover:bg-grey-dark-2-v2 transition-colors"
                   >
                     <SlidersHorizontal className="h-4 w-4" />
-                    Filters
+                    <span className="hidden md:inline">Filters</span>
                   </button>
+                  {activeTab === "Follows" && (
+                    <>
+                      <div className="shrink-0 h-6 w-px bg-white/10 mx-1" />
+                      {followingTags.map((tag) => (
+                        <button
+                          key={tag}
+                          className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/10 bg-grey-dark-1-v2 px-3 py-1.5 text-xs font-medium text-white hover:border-primary-v2/40 hover:bg-grey-dark-2-v2 transition-colors"
+                        >
+                          {tag}
+                        </button>
+                      ))}
+                      <button className="shrink-0 inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium text-grey-light-3-v2 hover:text-white transition-colors">
+                        See all →
+                      </button>
+                    </>
+                  )}
                 </div>
               )}
               {activeTab === "Creators" && (
