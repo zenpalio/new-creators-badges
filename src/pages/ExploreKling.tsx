@@ -145,7 +145,7 @@ const ExploreKling = () => {
                 ))}
               </div>
               {/* Desktop: grid */}
-              <div className="hidden gap-3 xl:grid xl:grid-cols-6">
+              <div className="hidden gap-3 xl:grid xl:grid-cols-5">
                 {tools.map((t) => (
                   <ExploreCreateToolCard
                     key={t.title}
