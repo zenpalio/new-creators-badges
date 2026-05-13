@@ -343,7 +343,7 @@ const ExploreKling = () => {
                 </div>
               )}
               {activeTab === "Creators" && (
-                <div className="flex items-center gap-2 -mx-4 px-4 md:mx-0 md:px-0 overflow-x-auto scrollbar-hide flex-nowrap">
+                <div className="flex items-center gap-2 -mx-4 px-4 md:mx-0 md:px-0 overflow-x-auto scrollbar-hide flex-nowrap min-w-0 md:justify-end">
                   <FilterDropdown
                     value={
                       ({ likes: "Most Liked", followers: "Most Followers", aura: "Most Aura" } as const)[creatorsSort]
