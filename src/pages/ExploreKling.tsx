@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Bell, Menu, Search, Upload, ArrowRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown, ChevronDown, Heart, SlidersHorizontal, X, Check, Plus, Clock, Flame } from "lucide-react";
+import { Bell, Menu, Search, Upload, ArrowRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown, ChevronDown, Heart, SlidersHorizontal, X, Check, Plus, Clock, Flame, Users } from "lucide-react";
 import SideNav from "../components/SideNav";
 import NotificationsSidebar, {
   type Notification,
@@ -91,7 +91,7 @@ const tools = [
 ];
 
 // ---- Tabs ----
-const tabs = ["Community", "Follows", "Events", "Creators"] as const;
+const tabs = ["Community", "Events", "Creators"] as const;
 const contentTabs = ["Babes", "Images", "Videos", "Stories"] as const;
 const sortOptions = ["Trending", "Newest", "Most Liked"] as const;
 const timeOptions = ["All time", "Year", "Month", "Week", "Today"] as const;
@@ -105,10 +105,7 @@ const feed = [...exploreVideoFeed, ...exploreVideoFeed].map((v, i) => ({
   likes: ((v.likes as number) ?? 0) + i * 3,
 }));
 
-const followingTags = [
-  "@luna_eclipse", "@nyx_shadow", "@zara_nova", "@kai_storm", "@mira_blaze",
-  "@ivy_frost", "@axel_drift", "@suki_dream",
-];
+// (followingTags removed — Following filter moved to right panel)
 
 const storyCardLabels: StoryContentCardLabels = {
   storyBadge: "Story",
@@ -185,7 +182,7 @@ const ExploreKling = () => {
   const markAllNotificationsRead = () =>
     setNotifications((prev) => prev.map((n) => ({ ...n, unread: false })));
   const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Community");
-  const [followsSort, setFollowsSort] = useState<"Newest to oldest" | "Oldest to newest">("Newest to oldest");
+  
   const [activeContent, setActiveContent] = useState<(typeof contentTabs)[number]>("Babes");
   const [activeSort, setActiveSort] = useState<(typeof sortOptions)[number]>("Trending");
   const [activeTime, setActiveTime] = useState<(typeof timeOptions)[number]>("All time");
@@ -393,29 +390,18 @@ const ExploreKling = () => {
                   />
                 </div>
               )}
-              {(activeTab === "Community" || activeTab === "Follows") && (
+              {activeTab === "Community" && (
                 <div className="flex items-center gap-2 -mx-4 px-4 md:mx-0 md:px-0 overflow-x-auto scrollbar-hide flex-nowrap">
-                  {activeTab === "Community" && (
-                    <>
-                      <FilterDropdown
-                        value={activeSort}
-                        options={sortOptions as unknown as string[]}
-                        onChange={(v) => setActiveSort(v as typeof activeSort)}
-                      />
-                      <FilterDropdown
-                        value={activeTime}
-                        options={timeOptions as unknown as string[]}
-                        onChange={(v) => setActiveTime(v as typeof activeTime)}
-                      />
-                    </>
-                  )}
-                  {activeTab === "Follows" && (
-                    <FilterDropdown
-                      value={followsSort}
-                      options={["Newest to oldest", "Oldest to newest"]}
-                      onChange={(v) => setFollowsSort(v as "Newest to oldest" | "Oldest to newest")}
-                    />
-                  )}
+                  <FilterDropdown
+                    value={activeSort}
+                    options={sortOptions as unknown as string[]}
+                    onChange={(v) => setActiveSort(v as typeof activeSort)}
+                  />
+                  <FilterDropdown
+                    value={activeTime}
+                    options={timeOptions as unknown as string[]}
+                    onChange={(v) => setActiveTime(v as typeof activeTime)}
+                  />
                   <button
                     onClick={() => setFiltersOpen(true)}
                     aria-label="Filters"
@@ -424,22 +410,6 @@ const ExploreKling = () => {
                     <SlidersHorizontal className="h-4 w-4" />
                     <span className="hidden md:inline">Filters</span>
                   </button>
-                  {activeTab === "Follows" && (
-                    <>
-                      <div className="shrink-0 h-6 w-px bg-white/10 mx-1" />
-                      {followingTags.map((tag) => (
-                        <button
-                          key={tag}
-                          className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/10 bg-grey-dark-1-v2 px-3 py-1.5 text-xs font-medium text-white hover:border-primary-v2/40 hover:bg-grey-dark-2-v2 transition-colors"
-                        >
-                          {tag}
-                        </button>
-                      ))}
-                      <button className="shrink-0 inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium text-grey-light-3-v2 hover:text-white transition-colors">
-                        See all →
-                      </button>
-                    </>
-                  )}
                 </div>
               )}
               {activeTab === "Creators" && (
@@ -591,6 +561,7 @@ const FilterSidebar = ({
 }) => {
   const setOpen = onOpenChange;
   const [liked, setLiked] = useState(false);
+  const [followingOnly, setFollowingOnly] = useState(false);
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(filterGroups.map((g) => [g.label, true])),
   );
@@ -598,7 +569,8 @@ const FilterSidebar = ({
     Object.fromEntries(filterGroups.map((g) => [g.label, new Set<string>()])),
   );
 
-  const totalSelected = Object.values(selected).reduce((n, s) => n + s.size, 0) + (liked ? 1 : 0);
+  const totalSelected =
+    Object.values(selected).reduce((n, s) => n + s.size, 0) + (liked ? 1 : 0) + (followingOnly ? 1 : 0);
 
   const toggleOption = (group: string, opt: string) =>
     setSelected((prev) => {
@@ -610,6 +582,7 @@ const FilterSidebar = ({
   const clearAll = () => {
     setSelected(Object.fromEntries(filterGroups.map((g) => [g.label, new Set<string>()])));
     setLiked(false);
+    setFollowingOnly(false);
   };
 
   return (
@@ -654,20 +627,36 @@ const FilterSidebar = ({
 
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto scrollbar-themed pl-5 pr-3 pb-6">
-        {/* Liked toggle pinned at top */}
-        <div className="flex items-center justify-between rounded-xl border border-white/5 bg-grey-dark-1-v2/60 px-3.5 py-3 mb-4">
-          <span className="flex items-center gap-2 text-sm text-white">
-            <Heart className={`h-3.5 w-3.5 ${liked ? "fill-red-500 text-red-500" : "text-grey-light-3-v2"}`} />
-            Liked only
-          </span>
-          <button
-            onClick={() => setLiked((v) => !v)}
-            role="switch"
-            aria-checked={liked}
-            className={`relative h-5 w-9 rounded-full transition-colors ${liked ? "bg-primary-v2" : "bg-white/10"}`}
-          >
-            <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${liked ? "left-[18px]" : "left-0.5"}`} />
-          </button>
+        {/* Quick toggles pinned at top */}
+        <div className="flex flex-col gap-2 mb-4">
+          <div className="flex items-center justify-between rounded-xl border border-white/5 bg-grey-dark-1-v2/60 px-3.5 py-3">
+            <span className="flex items-center gap-2 text-sm text-white">
+              <Users className={`h-3.5 w-3.5 ${followingOnly ? "text-primary-v2" : "text-grey-light-3-v2"}`} />
+              Following only
+            </span>
+            <button
+              onClick={() => setFollowingOnly((v) => !v)}
+              role="switch"
+              aria-checked={followingOnly}
+              className={`relative h-5 w-9 rounded-full transition-colors ${followingOnly ? "bg-primary-v2" : "bg-white/10"}`}
+            >
+              <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${followingOnly ? "left-[18px]" : "left-0.5"}`} />
+            </button>
+          </div>
+          <div className="flex items-center justify-between rounded-xl border border-white/5 bg-grey-dark-1-v2/60 px-3.5 py-3">
+            <span className="flex items-center gap-2 text-sm text-white">
+              <Heart className={`h-3.5 w-3.5 ${liked ? "fill-red-500 text-red-500" : "text-grey-light-3-v2"}`} />
+              Liked only
+            </span>
+            <button
+              onClick={() => setLiked((v) => !v)}
+              role="switch"
+              aria-checked={liked}
+              className={`relative h-5 w-9 rounded-full transition-colors ${liked ? "bg-primary-v2" : "bg-white/10"}`}
+            >
+              <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all ${liked ? "left-[18px]" : "left-0.5"}`} />
+            </button>
+          </div>
         </div>
 
         <div className="flex flex-col">
