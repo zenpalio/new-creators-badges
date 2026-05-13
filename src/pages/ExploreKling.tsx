@@ -39,10 +39,13 @@ const tools = [
 const tabs = ["Recommended", "Follows", "Events"] as const;
 const sortTabs = ["Recommended", "Time"] as const;
 
-// ---- Masonry feed (mix of videos from existing feed) ----
+// ---- Masonry feed (mock images with varied aspect ratios) ----
+const aspects = ["aspect-[3/4]", "aspect-[4/5]", "aspect-[2/3]", "aspect-[1/1]", "aspect-[9/16]", "aspect-[4/3]"];
 const feed = [...exploreVideoFeed, ...exploreVideoFeed].map((v, i) => ({
   ...v,
   id: `${v.id}-${i}`,
+  aspect: aspects[i % aspects.length],
+  likes: ((v.likes as number) ?? 0) + i * 3,
 }));
 
 const ExploreKling = () => {
@@ -205,6 +208,7 @@ const ExploreKling = () => {
                     poster={v.poster}
                     video={v.video}
                     likes={v.likes as number}
+                    aspect={v.aspect}
                     liked={!!likedMap[v.id]}
                     onLike={() => toggleLiked(v.id)}
                   />
@@ -224,6 +228,7 @@ const ExploreVideoCardFull = ({
   poster,
   video,
   likes,
+  aspect = "aspect-[13/19]",
   liked,
   onLike,
 }: {
@@ -231,6 +236,7 @@ const ExploreVideoCardFull = ({
   poster?: string;
   video: string;
   likes: number;
+  aspect?: string;
   liked: boolean;
   onLike: () => void;
 }) => (
@@ -239,7 +245,7 @@ const ExploreVideoCardFull = ({
     aria-label="Video preview"
     className="group relative block w-full overflow-hidden rounded-2xl bg-grey-dark-1-v2"
   >
-    <div className="relative aspect-[13/19] w-full overflow-hidden">
+    <div className={`relative ${aspect} w-full overflow-hidden`}>
       {poster && (
         <img
           src={poster}
