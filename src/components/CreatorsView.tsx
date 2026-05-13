@@ -425,15 +425,6 @@ export function CreatorsView({
                     className="flex flex-col items-center gap-1.5 cursor-pointer group"
                     style={{ marginTop: isFirst ? 0 : "28px" }}
                   >
-                    {isFirst && (
-                      <div className="relative">
-                        <Crown
-                          className="w-8 h-8 text-yellow-400 animate-bounce"
-                          style={{ animationDuration: "2s" }}
-                        />
-                      </div>
-                    )}
-
                     <div
                       className="relative group-hover:scale-110 transition-transform duration-300"
                       style={{
