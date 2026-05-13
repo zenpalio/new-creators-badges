@@ -8,58 +8,84 @@ const tierBorderColor = "hsl(43 96% 58%)";
 const tierGlowColor = "hsl(43 96% 58%)";
 
 const statItems = [
-  { icon: Users, label: "FOLLOWERS", rank: "#1,438", count: "12.4K", iconClass: "w-4 h-4 text-primary-v2 mb-0.5" },
-  { icon: AuraIcon, label: "AURA", rank: "#892", count: "450", iconClass: "w-5 h-5 text-purple-500 mb-0.5" },
-  { icon: Heart, label: "LIKES", rank: "#2,105", count: "8.2K", iconClass: "w-4 h-4 text-red-500 fill-red-500 mb-0.5" },
+  { icon: Users, label: "FOLLOWERS", rank: "#1,438", count: "12.4K", iconClass: "w-4 h-4 text-primary-v2" },
+  { icon: AuraIcon, label: "AURA", rank: "#892", count: "450", iconClass: "w-5 h-5 text-purple-500" },
+  { icon: Heart, label: "LIKES", rank: "#2,105", count: "8.2K", iconClass: "w-4 h-4 text-red-500 fill-red-500" },
 ];
 
 const BadgesHero = () => {
   return (
-    <div className="w-full">
-      <div className="relative flex flex-col items-center mb-6">
-        <div
-          className="relative mb-3 w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40"
-          style={{ overflow: "visible", margin: "12px auto" }}
-        >
-          <TierRingCanvas tier="legend" />
-          <div className="absolute inset-[4px] rounded-full overflow-hidden z-[1]">
-            <img src={profileAvatar} alt="Profile" className="w-full h-full object-cover" />
-          </div>
-          <div className="absolute -bottom-1 -right-1 w-12 h-12 sm:w-16 sm:h-16 z-[2]">
-            <img
-              src={charLegend}
-              alt="Legend badge"
-              className="relative z-10 w-full h-full object-contain"
-              style={{ filter: `drop-shadow(0 0 14px ${tierGlowColor})` }}
-            />
-          </div>
-        </div>
-        <div className="flex flex-col items-center gap-1">
-          <span className="text-lg font-bold uppercase tracking-wide" style={{ color: tierBorderColor }}>
-            Legend
-          </span>
-        </div>
-      </div>
+    <div
+      className="relative w-full overflow-hidden rounded-2xl border border-border-v2/30"
+      style={{ backgroundColor: "hsl(var(--popover-v2))" }}
+    >
+      {/* Soft gold ambient glow */}
+      <div
+        className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full blur-3xl opacity-30"
+        style={{ background: tierGlowColor }}
+      />
+      <div
+        className="pointer-events-none absolute -bottom-32 -right-20 h-72 w-72 rounded-full blur-3xl opacity-20"
+        style={{ background: "hsl(213 100% 50%)" }}
+      />
 
-      <div className="mb-6">
-        <p className="text-[11px] text-muted-v2-foreground uppercase tracking-wider font-medium mb-2 px-1">
-          Ranking
-        </p>
-        <div className="grid grid-cols-3 gap-2 sm:gap-3">
-          {statItems.map((stat) => (
-            <div
-              key={stat.label}
-              className="flex flex-col items-center gap-1 rounded-xl p-3 sm:p-4 border border-border-v2/30"
-              style={{ backgroundColor: "hsl(var(--popover-v2))", backgroundImage: "none" }}
-            >
-              <stat.icon className={stat.iconClass} />
-              <span className="text-[10px] text-muted-v2-foreground uppercase tracking-wider font-medium">
-                {stat.label}
-              </span>
-              <span className="text-foreground-v2 font-bold text-lg sm:text-xl leading-tight">{stat.count}</span>
-              <span className="text-[10px] text-muted-v2-foreground/60 font-medium">Rank {stat.rank}</span>
+      <div className="relative flex flex-col md:flex-row md:items-center gap-6 md:gap-8 p-5 sm:p-6 md:p-8">
+        {/* Avatar + tier ring */}
+        <div className="flex flex-col items-center md:items-start md:shrink-0">
+          <div
+            className="relative w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40"
+            style={{ overflow: "visible" }}
+          >
+            <TierRingCanvas tier="legend" />
+            <div className="absolute inset-[4px] rounded-full overflow-hidden z-[1]">
+              <img src={profileAvatar} alt="Profile" className="w-full h-full object-cover" />
             </div>
-          ))}
+            <div className="absolute -bottom-1 -right-1 w-12 h-12 sm:w-16 sm:h-16 z-[2]">
+              <img
+                src={charLegend}
+                alt="Legend badge"
+                className="relative z-10 w-full h-full object-contain"
+                style={{ filter: `drop-shadow(0 0 14px ${tierGlowColor})` }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Right side: tier label + stats */}
+        <div className="flex-1 min-w-0 flex flex-col gap-4 md:gap-5 w-full">
+          <div className="flex flex-col items-center md:items-start gap-1">
+            <span className="text-[11px] text-muted-v2-foreground uppercase tracking-[0.2em] font-medium">
+              Current tier
+            </span>
+            <span
+              className="text-3xl md:text-4xl font-bold uppercase tracking-wide leading-none"
+              style={{ color: tierBorderColor }}
+            >
+              Legend
+            </span>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2 sm:gap-3 w-full">
+            {statItems.map((stat) => (
+              <div
+                key={stat.label}
+                className="flex flex-col items-center md:items-start gap-1 rounded-xl p-3 sm:p-4 border border-border-v2/30 bg-background-v2/40 backdrop-blur-sm"
+              >
+                <div className="flex items-center gap-1.5">
+                  <stat.icon className={stat.iconClass} />
+                  <span className="text-[10px] text-muted-v2-foreground uppercase tracking-wider font-medium">
+                    {stat.label}
+                  </span>
+                </div>
+                <span className="text-foreground-v2 font-bold text-xl sm:text-2xl leading-tight">
+                  {stat.count}
+                </span>
+                <span className="text-[10px] text-muted-v2-foreground/60 font-medium">
+                  Rank {stat.rank}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
