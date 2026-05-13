@@ -1,6 +1,13 @@
 import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { Bell, Menu, Search, Upload, ArrowRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown, ChevronDown, Heart, SlidersHorizontal, X, Check, Plus, Clock, Flame } from "lucide-react";
 import SideNav from "../components/SideNav";
+import NotificationsSidebar, {
+  type Notification,
+  type NotificationRowLinkProps,
+  type NotificationsSidebarLabels,
+  type NotificationsSidebarStatusItem,
+} from "../components/NotificationsSidebar";
 import StoryContentCard, { type StoryContentCardLabels } from "../components/explore/StoryContentCard";
 import { useHeaderScrollTracking } from "../components/ExploreView";
 import ExploreCreateToolCard from "../components/explore/ExploreCreateToolCard";
