@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useId, useState } from "react"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { cn } from "../../lib/utils"
 
@@ -37,6 +37,7 @@ export default function SystemStatusIndicator({
   statusLabels: statusLabelsProp,
   className,
 }: SystemStatusIndicatorProps) {
+  const id = useId()
   const [open, setOpen] = useState(false)
   const labels = { ...defaultStatusLabels, ...statusLabelsProp }
   const overall = overallStatus(services)
@@ -45,7 +46,7 @@ export default function SystemStatusIndicator({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild id={`system-status-indicator-${id}`}>
         <button
           type="button"
           className={cn(
