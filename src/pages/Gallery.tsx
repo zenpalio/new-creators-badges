@@ -172,7 +172,7 @@ const exploreNotificationsSidebarStatusItems: NotificationsSidebarStatusItem[] =
   { id: "all-operational", type: "success", message: "All systems operational" },
 ];
 
-const ExploreKling = () => {
+const Gallery = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -927,4 +927,4 @@ const EventCard = ({
   </a>
 );
 
-export default ExploreKling;
+export default Gallery;
