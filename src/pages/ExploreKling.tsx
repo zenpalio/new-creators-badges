@@ -27,12 +27,11 @@ const heroBanners = [
 
 // ---- Tool tiles (Kling-style) ----
 const tools = [
-  { title: "Omni Does It All", subtitle: "Experience Now", Icon: Sparkles, href: "#", featured: true },
-  { title: "Image Generation", subtitle: "Create stunning visuals", Icon: ImageIcon, href: "#" },
-  { title: "Video Generation", subtitle: "Bring scenes to life", Icon: Film, href: "#" },
-  { title: "Character Builder", subtitle: "Design your babe", Icon: User, href: "#" },
-  { title: "Story Studio", subtitle: "Branching roleplay", Icon: BookOpen, href: "#" },
-  { title: "Magic Edit", subtitle: "Inpaint & refine", Icon: Wand2, href: "#" },
+  { title: "Create Custom Babe", subtitle: "Design your dream character", Icon: Sparkles, href: "/explore/create-babe" },
+  { title: "Video Generator", subtitle: "Bring scenes to life", Icon: Film, href: "/explore/video-generator" },
+  { title: "Image Generator", subtitle: "Render any moment", Icon: ImageIcon, href: "/explore/image-generator" },
+  { title: "Story Creator", subtitle: "Write episodic adventures", Icon: BookOpen, href: "/explore/story-creator" },
+  { title: "Create Template Babe", subtitle: "Start from a preset", Icon: User, href: "/explore/create-template" },
 ];
 
 // ---- Tabs ----
