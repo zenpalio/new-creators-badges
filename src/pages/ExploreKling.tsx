@@ -482,6 +482,115 @@ const filterGroups: Array<{ label: string; value?: string; type: "check" | "chip
   { label: "Model", value: "All", type: "chip", options: ["Anime3d", "Artea", "Aphrodite", "Truelook", "Dreammix", "Cartoon", "Darkfantasy", "Furry", "Fantasy", "Anthro", "Velvetheat"] },
 ];
 
+// ---- Hero banners (mobile slider, lg grid) ----
+const HeroBanners = () => {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const [activeIdx, setActiveIdx] = useState(0);
+
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const idx = Math.round(el.scrollLeft / el.clientWidth);
+      setActiveIdx(idx);
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const goTo = (i: number) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
+  };
+
+  return (
+    <section>
+      {/* Mobile: snap slider */}
+      <div className="lg:hidden">
+        <div
+          ref={scrollerRef}
+          className="-mx-4 flex snap-x snap-mandatory overflow-x-auto scrollbar-hide scroll-smooth"
+        >
+          {heroBanners.map((b) => (
+            <div key={b.title} className="w-full shrink-0 snap-center px-4">
+              <HeroBannerCard banner={b} large />
+            </div>
+          ))}
+        </div>
+        <div className="mt-3 flex items-center justify-center gap-1.5">
+          {heroBanners.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              aria-label={`Go to banner ${i + 1}`}
+              className={`h-1.5 rounded-full transition-all ${activeIdx === i ? "w-5 bg-white" : "w-1.5 bg-white/30"}`}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Desktop: grid */}
+      <div className="hidden lg:grid grid-cols-3 gap-3">
+        {heroBanners.map((b, i) => (
+          <HeroBannerCard key={b.title} banner={b} large={i === 0} />
+        ))}
+      </div>
+    </section>
+  );
+};
+
+const HeroBannerCard = ({ banner: b, large }: { banner: typeof heroBanners[number]; large: boolean }) => {
+  const BadgeIcon = b.badgeIcon;
+  return (
+    <a
+      href="#"
+      style={{ ['--accent' as any]: b.accentHsl }}
+      className={`group relative block overflow-hidden rounded-2xl border border-white/5 bg-black transition-colors hover:border-white/15 min-h-[220px] ${
+        large ? "lg:col-span-2" : ""
+      }`}
+    >
+      <img src={b.bg} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-black/70 via-black/20 to-transparent" />
+      <div
+        className="pointer-events-none absolute -bottom-24 -left-16 h-64 w-64 rounded-full blur-3xl opacity-40"
+        style={{ background: `hsl(var(--accent) / 0.5)` }}
+      />
+      {b.code && (
+        <div className="pointer-events-none absolute right-4 top-4 flex items-center gap-1.5 font-mono text-[10px] tracking-widest text-white/55">
+          <span
+            className="h-1.5 w-1.5 rounded-full"
+            style={{ background: `hsl(var(--accent))`, boxShadow: `0 0 8px hsl(var(--accent))` }}
+          />
+          {b.code}
+        </div>
+      )}
+      <div className="relative flex h-full items-end p-4 md:p-5">
+        <div className="w-full rounded-xl border border-white/10 bg-black/35 p-4 backdrop-blur-md md:p-5">
+          <div className="flex items-center gap-2">
+            <span
+              className="inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-white/90"
+              style={{
+                background: `hsl(var(--accent) / 0.14)`,
+                borderColor: `hsl(var(--accent) / 0.4)`,
+              }}
+            >
+              <BadgeIcon className="h-3 w-3" style={{ color: `hsl(var(--accent))` }} />
+              {b.eyebrow}
+            </span>
+          </div>
+          <h2 className="mt-2 text-2xl font-semibold leading-tight text-white md:text-3xl">{b.title}</h2>
+          <p className="mt-1.5 max-w-md text-[13px] leading-relaxed text-white/70">{b.description}</p>
+          <div className={`mt-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${b.ctaClass}`}>
+            {b.cta}
+            <ArrowRight className="h-4 w-4" />
+          </div>
+        </div>
+      </div>
+    </a>
+  );
+};
+
 const FilterSidebar = ({
   open,
   onOpenChange,
