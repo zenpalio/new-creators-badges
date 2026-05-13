@@ -208,6 +208,7 @@ const ExploreKling = () => {
                     poster={v.poster}
                     video={v.video}
                     likes={v.likes as number}
+                    aspect={v.aspect}
                     liked={!!likedMap[v.id]}
                     onLike={() => toggleLiked(v.id)}
                   />
