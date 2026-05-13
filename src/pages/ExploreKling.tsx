@@ -572,7 +572,8 @@ const FilterSidebar = ({
     Object.fromEntries(filterGroups.map((g) => [g.label, new Set<string>()])),
   );
 
-  const totalSelected = Object.values(selected).reduce((n, s) => n + s.size, 0) + (liked ? 1 : 0);
+  const totalSelected =
+    Object.values(selected).reduce((n, s) => n + s.size, 0) + (liked ? 1 : 0) + (followingOnly ? 1 : 0);
 
   const toggleOption = (group: string, opt: string) =>
     setSelected((prev) => {
@@ -584,6 +585,7 @@ const FilterSidebar = ({
   const clearAll = () => {
     setSelected(Object.fromEntries(filterGroups.map((g) => [g.label, new Set<string>()])));
     setLiked(false);
+    setFollowingOnly(false);
   };
 
   return (
