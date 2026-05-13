@@ -49,7 +49,7 @@ import profileAvatar from "../assets/profile-avatar.svg";
 
 const allTiers: BadgeTier[] = ["newbie", "master", "legend", "elite", "grandmaster", "mythic", "immortal"];
 
-const tierBadgeImages: Record<BadgeTier, string> = {
+export const tierBadgeImages: Record<BadgeTier, string> = {
   newbie: charNewbie,
   master: charMaster,
   legend: charLegend,
@@ -59,7 +59,7 @@ const tierBadgeImages: Record<BadgeTier, string> = {
   immortal: charImmortal,
 };
 
-const tierBorderColors: Record<BadgeTier, string> = {
+export const tierBorderColors: Record<BadgeTier, string> = {
   newbie: "hsl(25 45% 52%)",
   master: "hsl(213 100% 60%)",
   legend: "hsl(43 96% 58%)",
@@ -69,9 +69,9 @@ const tierBorderColors: Record<BadgeTier, string> = {
   immortal: "hsl(43 96% 58%)",
 };
 
-const isHighTier = (tier: BadgeTier) => ["elite", "grandmaster", "mythic", "immortal"].includes(tier);
+export const isHighTier = (tier: BadgeTier) => ["elite", "grandmaster", "mythic", "immortal"].includes(tier);
 
-const tierLabels: Record<BadgeTier, string> = {
+export const tierLabels: Record<BadgeTier, string> = {
   newbie: "Newbie",
   master: "Master",
   legend: "Legend",
@@ -81,7 +81,7 @@ const tierLabels: Record<BadgeTier, string> = {
   immortal: "Immortal",
 };
 
-const tierBadgeGlowColors: Record<BadgeTier, string> = {
+export const tierBadgeGlowColors: Record<BadgeTier, string> = {
   newbie: "hsl(25 45% 52%)",
   master: "hsl(213 100% 60%)",
   legend: "hsl(43 96% 58%)",

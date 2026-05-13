@@ -43,6 +43,7 @@ import { mockCreators, creatorsPageLabels } from "./Creators";
 import BadgesHero from "../components/BadgesHero";
 import BadgesPanel, { badgesTabs, type BadgesTab } from "../components/BadgesPanel";
 import { type EquippedBadge } from "../components/ProfileBadgeShowcase";
+import { type BadgeTier } from "../components/BadgeCard";
 import { useNavigate } from "react-router-dom";
 
 // ---- Hero banners (left big, right secondary) ----
@@ -207,8 +208,9 @@ const Gallery = () => {
   const toggleLiked = (id: string) =>
     setLikedMap((m) => ({ ...m, [id]: !m[id] }));
 
-  // Equipped badge (lifted so BadgesHero reflects it)
+  // Equipped badge + tier preview (lifted so BadgesHero reflects them)
   const [activeBadge, setActiveBadge] = useState<EquippedBadge | null>(null);
+  const [previewTier, setPreviewTier] = useState<BadgeTier>("legend");
 
   // Edit mode (mass-delete) for content grid
   const [editMode, setEditMode] = useState(false);
@@ -288,7 +290,7 @@ const Gallery = () => {
 
           <div className="relative z-10 flex w-full flex-col gap-6 px-4 pb-16 pt-14 md:px-8 lg:px-12">
             {/* Hero banners row */}
-            <BadgesHero activeBadge={activeBadge} />
+            <BadgesHero activeBadge={activeBadge} tier={previewTier} />
 
 
             {/* Tabs + Search + Publish */}
@@ -401,7 +403,13 @@ const Gallery = () => {
             {/* Feed */}
             {activeTab === "Badges" ? (
               <div className="flex flex-col gap-2">
-                <BadgesPanel value={badgesSubTab} activeBadge={activeBadge} onActiveBadgeChange={setActiveBadge} />
+                <BadgesPanel
+                  value={badgesSubTab}
+                  activeBadge={activeBadge}
+                  onActiveBadgeChange={setActiveBadge}
+                  previewTier={previewTier}
+                  onPreviewTierChange={setPreviewTier}
+                />
               </div>
             ) : activeContent === "Stories" ? (
               <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 [&_a]:!w-full [&_a]:!max-w-none [&>*]:w-full [&>*]:max-w-none">
