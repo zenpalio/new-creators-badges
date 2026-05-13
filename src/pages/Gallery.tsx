@@ -97,7 +97,7 @@ const tools = [
 const tabs = ["Creations", "Badges"] as const;
 const contentTabs = ["Babes", "Images", "Videos", "Stories"] as const;
 const sortOptions = ["Trending", "Newest", "Most Liked"] as const;
-const timeOptions = ["All time", "Year", "Month", "Week", "Today"] as const;
+const timeOptions = ["Newest", "Oldest", "Most Liked"] as const;
 
 // ---- Masonry feed (mock images, fixed 13:19 aspect) ----
 const feed = [...exploreVideoFeed, ...exploreVideoFeed].map((v, i) => ({
@@ -188,7 +188,7 @@ const Gallery = () => {
   
   const [activeContent, setActiveContent] = useState<(typeof contentTabs)[number]>("Babes");
   const [activeSort, setActiveSort] = useState<(typeof sortOptions)[number]>("Trending");
-  const [activeTime, setActiveTime] = useState<(typeof timeOptions)[number]>("All time");
+  const [activeTime, setActiveTime] = useState<(typeof timeOptions)[number]>("Newest");
   const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
   const mainRef = useRef<HTMLElement>(null);
   const { headerHidden } = useHeaderScrollTracking(mainRef);
