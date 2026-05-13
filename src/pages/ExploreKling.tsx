@@ -467,6 +467,14 @@ const ExploreKling = () => {
         {/* Right filter sidebar */}
         <FilterSidebar open={filtersOpen} onOpenChange={setFiltersOpen} />
       </div>
+      <FloatingToolsFAB
+        items={[
+          { icon: Users, label: "Create Babe", onClick: () => {} },
+          { icon: ImageIcon, label: "Create Image", onClick: () => {} },
+          { icon: Film, label: "Create Video", onClick: () => {} },
+          { icon: BookOpen, label: "Create Story", onClick: () => {} },
+        ] satisfies FloatingToolsFabItem[]}
+      />
     </>
   );
 };
