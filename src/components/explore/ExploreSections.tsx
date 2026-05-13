@@ -393,15 +393,16 @@ export const ExploreVideosSection = ({
               <PostOrVideoCardSkeleton key={i} />
             ))
           : posts.map((v, i) => (
-              <ExploreVideoCard
-                key={`${v.id}-${i}`}
-                poster={v.poster}
-                video={v.video}
-                href={v.href}
-                onClick={onPostClick ? () => onPostClick(v) : undefined}
-                imageAlt={videoCardImageAlt}
-                likeButton={renderLikeButton?.(v)}
-              />
+              <div key={`${v.id}-${i}`} className="w-[220px] shrink-0">
+                <ExploreVideoCard
+                  poster={v.poster}
+                  video={v.video}
+                  href={v.href}
+                  onClick={onPostClick ? () => onPostClick(v) : undefined}
+                  imageAlt={videoCardImageAlt}
+                  likeButton={renderLikeButton?.(v)}
+                />
+              </div>
             ))}
       </HScroll>
     </section>
