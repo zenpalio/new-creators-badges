@@ -393,29 +393,18 @@ const ExploreKling = () => {
                   />
                 </div>
               )}
-              {(activeTab === "Community" || activeTab === "Follows") && (
+              {activeTab === "Community" && (
                 <div className="flex items-center gap-2 -mx-4 px-4 md:mx-0 md:px-0 overflow-x-auto scrollbar-hide flex-nowrap">
-                  {activeTab === "Community" && (
-                    <>
-                      <FilterDropdown
-                        value={activeSort}
-                        options={sortOptions as unknown as string[]}
-                        onChange={(v) => setActiveSort(v as typeof activeSort)}
-                      />
-                      <FilterDropdown
-                        value={activeTime}
-                        options={timeOptions as unknown as string[]}
-                        onChange={(v) => setActiveTime(v as typeof activeTime)}
-                      />
-                    </>
-                  )}
-                  {activeTab === "Follows" && (
-                    <FilterDropdown
-                      value={followsSort}
-                      options={["Newest to oldest", "Oldest to newest"]}
-                      onChange={(v) => setFollowsSort(v as "Newest to oldest" | "Oldest to newest")}
-                    />
-                  )}
+                  <FilterDropdown
+                    value={activeSort}
+                    options={sortOptions as unknown as string[]}
+                    onChange={(v) => setActiveSort(v as typeof activeSort)}
+                  />
+                  <FilterDropdown
+                    value={activeTime}
+                    options={timeOptions as unknown as string[]}
+                    onChange={(v) => setActiveTime(v as typeof activeTime)}
+                  />
                   <button
                     onClick={() => setFiltersOpen(true)}
                     aria-label="Filters"
@@ -424,22 +413,6 @@ const ExploreKling = () => {
                     <SlidersHorizontal className="h-4 w-4" />
                     <span className="hidden md:inline">Filters</span>
                   </button>
-                  {activeTab === "Follows" && (
-                    <>
-                      <div className="shrink-0 h-6 w-px bg-white/10 mx-1" />
-                      {followingTags.map((tag) => (
-                        <button
-                          key={tag}
-                          className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/10 bg-grey-dark-1-v2 px-3 py-1.5 text-xs font-medium text-white hover:border-primary-v2/40 hover:bg-grey-dark-2-v2 transition-colors"
-                        >
-                          {tag}
-                        </button>
-                      ))}
-                      <button className="shrink-0 inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium text-grey-light-3-v2 hover:text-white transition-colors">
-                        See all →
-                      </button>
-                    </>
-                  )}
                 </div>
               )}
               {activeTab === "Creators" && (
