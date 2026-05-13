@@ -188,7 +188,7 @@ const Gallery = () => {
   
   const [activeContent, setActiveContent] = useState<(typeof contentTabs)[number]>("Babes");
   const [activeSort, setActiveSort] = useState<(typeof sortOptions)[number]>("Trending");
-  const [activeTime, setActiveTime] = useState<(typeof timeOptions)[number]>("All time");
+  const [activeTime, setActiveTime] = useState<(typeof timeOptions)[number]>("Newest");
   const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
   const mainRef = useRef<HTMLElement>(null);
   const { headerHidden } = useHeaderScrollTracking(mainRef);
