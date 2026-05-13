@@ -39,10 +39,13 @@ const tools = [
 const tabs = ["Recommended", "Follows", "Events"] as const;
 const sortTabs = ["Recommended", "Time"] as const;
 
-// ---- Masonry feed (mix of videos from existing feed) ----
+// ---- Masonry feed (mock images with varied aspect ratios) ----
+const aspects = ["aspect-[3/4]", "aspect-[4/5]", "aspect-[2/3]", "aspect-[1/1]", "aspect-[9/16]", "aspect-[4/3]"];
 const feed = [...exploreVideoFeed, ...exploreVideoFeed].map((v, i) => ({
   ...v,
   id: `${v.id}-${i}`,
+  aspect: aspects[i % aspects.length],
+  likes: ((v.likes as number) ?? 0) + i * 3,
 }));
 
 const ExploreKling = () => {
