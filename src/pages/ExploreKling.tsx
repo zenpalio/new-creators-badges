@@ -82,7 +82,7 @@ const ExploreKling = () => {
         <main ref={mainRef} className="relative flex w-full flex-1 flex-col overflow-y-auto overflow-x-hidden">
           {/* Top header */}
           <header
-            className={`pointer-events-none fixed inset-x-0 top-0 z-30 flex min-h-[62px] items-center justify-between px-6 py-4 bg-gradient-to-b from-background-v2/80 via-background-v2/40 to-transparent transition-transform duration-300 ${
+            className={`pointer-events-none fixed inset-x-0 top-0 z-30 flex min-h-[48px] items-center justify-between px-4 py-2 bg-gradient-to-b from-background-v2/80 via-background-v2/40 to-transparent transition-transform duration-300 ${
               headerHidden ? "-translate-y-full" : "translate-y-0"
             }`}
           >
@@ -94,7 +94,6 @@ const ExploreKling = () => {
               >
                 <Menu className="h-5 w-5" strokeWidth={1.5} />
               </button>
-              <span className="text-sm font-bold tracking-wide text-white">Explore</span>
             </div>
             <div className="pointer-events-auto flex items-center gap-1">
               <button
