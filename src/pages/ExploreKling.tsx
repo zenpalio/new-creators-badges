@@ -179,25 +179,26 @@ const ExploreKling = () => {
                   />
                 </div>
               </div>
-              <button className="inline-flex items-center gap-1.5 self-start rounded-full bg-primary-v2 px-5 py-2 text-sm font-semibold text-primary-v2-foreground hover:opacity-90">
-                <Upload className="h-4 w-4" />
-                Publish
-              </button>
+              <div className="flex items-center gap-2">
+                <FilterDropdown
+                  value={activeSort}
+                  options={sortOptions as unknown as string[]}
+                  onChange={(v) => setActiveSort(v as typeof activeSort)}
+                />
+                <FilterDropdown
+                  value={activeTime}
+                  options={timeOptions as unknown as string[]}
+                  onChange={(v) => setActiveTime(v as typeof activeTime)}
+                />
+                <button
+                  onClick={() => setFiltersOpen(true)}
+                  className="inline-flex items-center gap-2 rounded-full bg-grey-dark-1-v2 px-4 py-2 text-sm font-medium text-white hover:bg-grey-dark-2-v2 transition-colors"
+                >
+                  <SlidersHorizontal className="h-4 w-4" />
+                  Filters
+                </button>
+              </div>
             </section>
-
-            {/* Sort + Time dropdowns */}
-            <div className="flex items-center gap-2 -mt-2">
-              <FilterDropdown
-                value={activeSort}
-                options={sortOptions as unknown as string[]}
-                onChange={(v) => setActiveSort(v as typeof activeSort)}
-              />
-              <FilterDropdown
-                value={activeTime}
-                options={timeOptions as unknown as string[]}
-                onChange={(v) => setActiveTime(v as typeof activeTime)}
-              />
-            </div>
 
             {/* Masonry feed */}
             <section className="columns-2 gap-1.5 md:columns-3 lg:columns-4 xl:columns-5 [&>*]:mb-1.5 [&>*]:break-inside-avoid">
