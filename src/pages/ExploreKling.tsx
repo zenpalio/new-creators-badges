@@ -58,6 +58,8 @@ const ExploreKling = () => {
   const mainRef = useRef<HTMLElement>(null);
   const { headerHidden } = useHeaderScrollTracking(mainRef);
 
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
   const toggleLiked = (id: string) =>
     setLikedMap((m) => ({ ...m, [id]: !m[id] }));
 
@@ -177,25 +179,26 @@ const ExploreKling = () => {
                   />
                 </div>
               </div>
-              <button className="inline-flex items-center gap-1.5 self-start rounded-full bg-primary-v2 px-5 py-2 text-sm font-semibold text-primary-v2-foreground hover:opacity-90">
-                <Upload className="h-4 w-4" />
-                Publish
-              </button>
+              <div className="flex items-center gap-2">
+                <FilterDropdown
+                  value={activeSort}
+                  options={sortOptions as unknown as string[]}
+                  onChange={(v) => setActiveSort(v as typeof activeSort)}
+                />
+                <FilterDropdown
+                  value={activeTime}
+                  options={timeOptions as unknown as string[]}
+                  onChange={(v) => setActiveTime(v as typeof activeTime)}
+                />
+                <button
+                  onClick={() => setFiltersOpen(true)}
+                  className="inline-flex items-center gap-2 rounded-full bg-grey-dark-1-v2 px-4 py-2 text-sm font-medium text-white hover:bg-grey-dark-2-v2 transition-colors"
+                >
+                  <SlidersHorizontal className="h-4 w-4" />
+                  Filters
+                </button>
+              </div>
             </section>
-
-            {/* Sort + Time dropdowns */}
-            <div className="flex items-center gap-2 -mt-2">
-              <FilterDropdown
-                value={activeSort}
-                options={sortOptions as unknown as string[]}
-                onChange={(v) => setActiveSort(v as typeof activeSort)}
-              />
-              <FilterDropdown
-                value={activeTime}
-                options={timeOptions as unknown as string[]}
-                onChange={(v) => setActiveTime(v as typeof activeTime)}
-              />
-            </div>
 
             {/* Masonry feed */}
             <section className="columns-2 gap-1.5 md:columns-3 lg:columns-4 xl:columns-5 [&>*]:mb-1.5 [&>*]:break-inside-avoid">
@@ -216,7 +219,7 @@ const ExploreKling = () => {
           </div>
         </main>
         {/* Right filter sidebar */}
-        <FilterSidebar />
+        <FilterSidebar open={filtersOpen} onOpenChange={setFiltersOpen} />
       </div>
     </>
   );
@@ -275,8 +278,14 @@ const filterGroups: Array<{ label: string; value?: string; type: "check" | "chip
   { label: "Model", value: "All", type: "chip", options: ["Anime3d", "Artea", "Aphrodite", "Truelook", "Dreammix", "Cartoon", "Darkfantasy", "Furry", "Fantasy", "Anthro", "Velvetheat"] },
 ];
 
-const FilterSidebar = () => {
-  const [open, setOpen] = useState(false);
+const FilterSidebar = ({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+}) => {
+  const setOpen = onOpenChange;
   const [liked, setLiked] = useState(false);
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(filterGroups.map((g) => [g.label, true])),
@@ -299,24 +308,7 @@ const FilterSidebar = () => {
     setLiked(false);
   };
 
-  // Closed: floating toggle button only (no rail)
-  if (!open) {
-    return (
-      <button
-        onClick={() => setOpen(true)}
-        aria-label="Open filters"
-        className="hidden lg:inline-flex fixed bottom-6 right-6 z-40 items-center gap-2 rounded-full bg-grey-dark-1-v2 px-4 py-2.5 text-sm font-semibold text-white shadow-xl border border-white/10 hover:bg-grey-dark-2-v2 transition-colors"
-      >
-        <SlidersHorizontal className="h-4 w-4" />
-        Filters
-        {totalSelected > 0 && (
-          <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary-v2 px-1.5 text-[11px] font-bold text-primary-v2-foreground">
-            {totalSelected}
-          </span>
-        )}
-      </button>
-    );
-  }
+  if (!open) return null;
 
   return (
     <aside className="hidden lg:flex w-80 shrink-0 flex-col border-l border-white/5 bg-background-v2">
