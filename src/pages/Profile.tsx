@@ -194,7 +194,7 @@ export const activityBadges = [
   { name: "Fanfic Lord", description: "Write and publish your first story", imageUrl: actFanfic, completed: true, actionLabel: "Write Story" },
 ];
 
-const shopBadges = [
+export const shopBadges = [
   { name: "Waifu Collector", description: "You don't need real girls when you have pixels", imageUrl: shopWaifu, price: 500, owned: false },
   { name: "Touch Grass Never", description: "Grass is temporary. AI babes are forever", imageUrl: shopTouchgrass, price: 800, owned: false },
   { name: "AI Over Real", description: "Why deal with drama when AI gets you?", imageUrl: shopAiover, price: 1200, owned: false },
