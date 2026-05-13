@@ -16,7 +16,13 @@ export const badgesTabs: { value: BadgesTab; label: string }[] = [
   { value: "shop", label: "Shop" },
 ];
 
-const BadgesPanel = ({ value }: { value: BadgesTab }) => {
+interface BadgesPanelProps {
+  value: BadgesTab;
+  activeBadge?: EquippedBadge | null;
+  onActiveBadgeChange?: (b: EquippedBadge | null) => void;
+}
+
+const BadgesPanel = ({ value, activeBadge: activeBadgeProp, onActiveBadgeChange }: BadgesPanelProps) => {
   const [previewTier, setPreviewTier] = useState<BadgeTier>("legend");
   const [selectedActivity, setSelectedActivity] = useState<typeof activityBadges[0] | null>(null);
   const [completedActivities, setCompletedActivities] = useState<Set<string>>(
@@ -25,7 +31,12 @@ const BadgesPanel = ({ value }: { value: BadgesTab }) => {
   const [claimedActivities, setClaimedActivities] = useState<Set<string>>(new Set());
   const [selectedShop, setSelectedShop] = useState<typeof shopBadges[0] | null>(null);
   const [ownedShop, setOwnedShop] = useState<Set<string>>(new Set());
-  const [activeBadge, setActiveBadge] = useState<EquippedBadge | null>(null);
+  const [activeBadgeLocal, setActiveBadgeLocal] = useState<EquippedBadge | null>(null);
+  const activeBadge = activeBadgeProp !== undefined ? activeBadgeProp : activeBadgeLocal;
+  const setActiveBadge = (b: EquippedBadge | null) => {
+    if (onActiveBadgeChange) onActiveBadgeChange(b);
+    else setActiveBadgeLocal(b);
+  };
 
   const equippedBadges = activeBadge ? [activeBadge] : [];
 
