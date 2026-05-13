@@ -18,6 +18,10 @@ import storyIsland from "../assets/story-island.jpg";
 import storyNeon from "../assets/story-neon.jpg";
 import storyVelvet from "../assets/story-velvet.jpg";
 import storyCrimson from "../assets/story-crimson.jpg";
+import storyRooftop from "../assets/story-rooftop.jpg";
+import storyCabin from "../assets/story-cabin.jpg";
+import storyYacht from "../assets/story-yacht.jpg";
+import storyTokyo from "../assets/story-tokyo.jpg";
 import {
   CreatorsView,
   type SortBy as CreatorsSortBy,
@@ -117,6 +121,10 @@ const exploreStories = [
   { title: "Neon Nights", description: "Synthwave-soaked rendezvous in a city that never sleeps.", src: storyNeon, episodeCount: 2, totalScenes: 9, avgRating: 4.4, ratingCount: 96 },
   { title: "Velvet Hours", description: "Slow-burn elegance behind closed velvet curtains.", src: storyVelvet, episodeCount: 1, totalScenes: 5, avgRating: 4.7, ratingCount: 142 },
   { title: "Crimson Affair", description: "An untamed romance written in scarlet ink.", src: storyCrimson, episodeCount: 3, totalScenes: 11, avgRating: 4.6, ratingCount: 203 },
+  { title: "Rooftop Confessions", description: "Two strangers, one skyline, and a secret neither of them can keep.", src: storyRooftop, episodeCount: 2, totalScenes: 7, avgRating: 4.5, ratingCount: 174 },
+  { title: "Cabin in the Pines", description: "A snowed-in weekend turns a quiet retreat into something far more intimate.", src: storyCabin, episodeCount: 1, totalScenes: 5, avgRating: 4.7, ratingCount: 89 },
+  { title: "Yacht Week", description: "Sun, salt, and a slow-burning attraction across seven days at sea.", src: storyYacht, episodeCount: 5, totalScenes: 22, avgRating: 4.8, ratingCount: 356 },
+  { title: "Tokyo After Dark", description: "Neon-lit alleys, late trains, and a chance meeting that changes everything.", src: storyTokyo, episodeCount: 3, totalScenes: 14, avgRating: 4.6, ratingCount: 241 },
 ];
 
 const exploreEvents = [
