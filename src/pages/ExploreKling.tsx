@@ -40,25 +40,14 @@ const tabs = ["Recommended", "Follows", "Events"] as const;
 const sortOptions = ["Trending", "Newest", "Most Liked"] as const;
 const timeOptions = ["All time", "Year", "Month", "Week", "Today"] as const;
 
-// ---- Masonry feed (mock images with varied aspect ratios) ----
-const aspects: Array<{ cls: string; w: number; h: number }> = [
-  { cls: "aspect-[3/4]", w: 600, h: 800 },
-  { cls: "aspect-[4/5]", w: 600, h: 750 },
-  { cls: "aspect-[2/3]", w: 600, h: 900 },
-  { cls: "aspect-[1/1]", w: 600, h: 600 },
-  { cls: "aspect-[9/16]", w: 540, h: 960 },
-  { cls: "aspect-[4/3]", w: 800, h: 600 },
-];
-const feed = [...exploreVideoFeed, ...exploreVideoFeed].map((v, i) => {
-  const a = aspects[i % aspects.length];
-  return {
-    ...v,
-    id: `${v.id}-${i}`,
-    aspect: a.cls,
-    poster: `https://picsum.photos/seed/explore-${i}/${a.w}/${a.h}`,
-    likes: ((v.likes as number) ?? 0) + i * 3,
-  };
-});
+// ---- Masonry feed (mock images, fixed 13:19 aspect) ----
+const feed = [...exploreVideoFeed, ...exploreVideoFeed].map((v, i) => ({
+  ...v,
+  id: `${v.id}-${i}`,
+  aspect: "aspect-[13/19]",
+  poster: `https://picsum.photos/seed/explore-${i}/520/760`,
+  likes: ((v.likes as number) ?? 0) + i * 3,
+}));
 
 const ExploreKling = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
