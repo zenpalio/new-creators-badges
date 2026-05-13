@@ -20,10 +20,23 @@ interface BadgesPanelProps {
   value: BadgesTab;
   activeBadge?: EquippedBadge | null;
   onActiveBadgeChange?: (b: EquippedBadge | null) => void;
+  previewTier?: BadgeTier;
+  onPreviewTierChange?: (t: BadgeTier) => void;
 }
 
-const BadgesPanel = ({ value, activeBadge: activeBadgeProp, onActiveBadgeChange }: BadgesPanelProps) => {
-  const [previewTier, setPreviewTier] = useState<BadgeTier>("legend");
+const BadgesPanel = ({
+  value,
+  activeBadge: activeBadgeProp,
+  onActiveBadgeChange,
+  previewTier: previewTierProp,
+  onPreviewTierChange,
+}: BadgesPanelProps) => {
+  const [previewTierLocal, setPreviewTierLocal] = useState<BadgeTier>("legend");
+  const previewTier = previewTierProp ?? previewTierLocal;
+  const setPreviewTier = (t: BadgeTier) => {
+    if (onPreviewTierChange) onPreviewTierChange(t);
+    else setPreviewTierLocal(t);
+  };
   const [selectedActivity, setSelectedActivity] = useState<typeof activityBadges[0] | null>(null);
   const [completedActivities, setCompletedActivities] = useState<Set<string>>(
     new Set(activityBadges.filter((b) => b.completed).map((b) => b.name))
