@@ -1,6 +1,13 @@
 import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { Bell, Menu, Search, Upload, ArrowRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown, ChevronDown, Heart, SlidersHorizontal, X, Check, Plus, Clock, Flame } from "lucide-react";
 import SideNav from "../components/SideNav";
+import NotificationsSidebar, {
+  type Notification,
+  type NotificationRowLinkProps,
+  type NotificationsSidebarLabels,
+  type NotificationsSidebarStatusItem,
+} from "../components/NotificationsSidebar";
 import StoryContentCard, { type StoryContentCardLabels } from "../components/explore/StoryContentCard";
 import { useHeaderScrollTracking } from "../components/ExploreView";
 import ExploreCreateToolCard from "../components/explore/ExploreCreateToolCard";
@@ -134,9 +141,48 @@ const exploreEvents = [
   { title: "Kreate Contest #51: Fashion Spotlight Challenge", subtitle: "Redefining Fashion with Kling AI!", deadline: "21 days and 22 hours before deadline", prize: "Credits", heat: 1368, image: "https://picsum.photos/seed/event-4/800/500" },
 ];
 
+// Notifications (mirrors logic from /)
+const ExploreNotificationLink = ({ href, children, ...rest }: NotificationRowLinkProps) => (
+  <Link to={href} {...rest}>
+    {children}
+  </Link>
+);
+
+const mockNotifications: Notification[] = [
+  { id: "n1", actor: "energetic_lion_0991", initials: "EN", action: "liked video of", target: "Mia", unread: true, href: "#" },
+  { id: "n2", actor: "calm_beaver_6740", initials: "CA", action: "liked video of", target: "Ellie – The Reclusive Stepsister", unread: true },
+  { id: "n3", actor: "amiable_leopard_8696", initials: "AM", action: "liked", target: "Nyx", unread: true },
+  { id: "n4", actor: "cheerful_ibis_4482", initials: "CH", action: "liked video of", target: "Ella" },
+  { id: "n5", actor: "charming_capybara_7956", initials: "CH", action: "liked", target: "Hikari" },
+  { id: "n6", actor: "Sandwiches", initials: "SA", action: "liked video of", target: "Elipses..." },
+  { id: "n7", actor: "blessed_gecko_6782", initials: "BL", action: "liked video of", target: "Lucy" },
+  { id: "n8", actor: "appealing_camel_9047", initials: "AP", action: "started following you", href: "https://discord.gg/lovable-dev", hrefTarget: "_blank" as const },
+];
+
+const exploreNotificationsSidebarLabels: NotificationsSidebarLabels = {
+  titleNotifications: "Notifications",
+  titleWhatsNew: "What's new",
+  markAllRead: "Mark all as read",
+  tabNotifications: "Notifications",
+  tabWhatsNew: "What's new?",
+  discordCta: "Join our Discord",
+  discordHref: "https://discord.gg/lovable-dev",
+};
+
+const exploreNotificationsSidebarStatusItems: NotificationsSidebarStatusItem[] = [
+  { id: "all-operational", type: "success", message: "All systems operational" },
+];
+
 const ExploreKling = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>(() =>
+    mockNotifications.map((n) => ({ ...n }))
+  );
+  const notificationUnreadCount = notifications.filter((n) => n.unread).length;
+  const markAllNotificationsRead = () =>
+    setNotifications((prev) => prev.map((n) => ({ ...n, unread: false })));
   const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Community");
   const [activeContent, setActiveContent] = useState<(typeof contentTabs)[number]>("Babes");
   const [activeSort, setActiveSort] = useState<(typeof sortOptions)[number]>("Trending");
@@ -159,6 +205,22 @@ const ExploreKling = () => {
   return (
     <>
       <SideNav open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <NotificationsSidebar
+        open={notificationsOpen}
+        onClose={() => setNotificationsOpen(false)}
+        onReopen={() => setNotificationsOpen(true)}
+        notifications={notifications}
+        announcements={[]}
+        labels={exploreNotificationsSidebarLabels}
+        systemStatusItems={exploreNotificationsSidebarStatusItems}
+        notificationLinkComponent={ExploreNotificationLink}
+        onMarkAllRead={markAllNotificationsRead}
+        onNotificationClick={(n) =>
+          setNotifications((prev) =>
+            prev.map((x) => (x.id === n.id ? { ...x, unread: false } : x))
+          )
+        }
+      />
       <div className="relative flex h-svh w-full overflow-hidden bg-background-v2 font-onest text-foreground-v2">
         <main ref={mainRef} className="relative flex w-full flex-1 flex-col overflow-y-auto overflow-x-hidden">
           {/* Top header */}
@@ -178,10 +240,16 @@ const ExploreKling = () => {
             </div>
             <div className="pointer-events-auto flex items-center gap-1">
               <button
+                onClick={() => setNotificationsOpen(true)}
                 aria-label="Notifications"
-                className="flex h-9 w-9 items-center justify-center text-foreground-v2/90 hover:opacity-70"
+                className="relative flex h-9 w-9 items-center justify-center text-foreground-v2/90 hover:opacity-70"
               >
                 <Bell className="h-5 w-5" strokeWidth={1.5} />
+                {notificationUnreadCount > 0 && (
+                  <span className="absolute right-1 top-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-primary-v2 px-1 text-[10px] font-semibold text-white">
+                    {notificationUnreadCount}
+                  </span>
+                )}
               </button>
             </div>
           </header>
