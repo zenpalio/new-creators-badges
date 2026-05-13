@@ -86,6 +86,25 @@ const BadgesHero = () => {
               </div>
             ))}
           </div>
+
+          {/* Secondary meta stats */}
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-2 text-[12px] text-muted-v2-foreground">
+            {[
+              { value: "14,412", label: "interactions" },
+              { value: "86", label: "videos" },
+              { value: "37", label: "images" },
+              { value: "44", label: "following" },
+              { value: "24", label: "followers" },
+            ].map((m, i, arr) => (
+              <div key={m.label} className="flex items-center gap-1.5">
+                <span className="font-semibold text-foreground-v2">{m.value}</span>
+                <span>{m.label}</span>
+                {i < arr.length - 1 && (
+                  <span className="ml-3 hidden sm:inline h-1 w-1 rounded-full bg-muted-v2-foreground/40" />
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
