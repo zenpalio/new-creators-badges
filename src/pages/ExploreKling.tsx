@@ -12,6 +12,7 @@ import StoryContentCard, { type StoryContentCardLabels } from "../components/exp
 import { useHeaderScrollTracking } from "../components/ExploreView";
 import ExploreCreateToolCard from "../components/explore/ExploreCreateToolCard";
 import ExploreVideoCard from "../components/explore/ExploreVideoCard";
+import FloatingToolsFAB, { type FloatingToolsFabItem } from "../components/explore/FloatingToolsFAB";
 import LikeButton from "../components/explore/LikeButton";
 import { exploreVideoFeed } from "../data/exploreVideoFeed";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/ui/dropdown-menu";
