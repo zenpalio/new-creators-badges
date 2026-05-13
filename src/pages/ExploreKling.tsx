@@ -318,7 +318,7 @@ const ExploreKling = () => {
 
 
             {/* Content type tabs */}
-            {activeTab !== "Creators" && (
+            {activeTab !== "Creators" && activeTab !== "Events" && (
               <div className="flex items-center gap-5 border-b border-white/5 -mt-2">
                 {contentTabs.map((t) => (
                   <button
