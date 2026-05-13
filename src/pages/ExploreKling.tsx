@@ -570,11 +570,14 @@ const HeroBanners = () => {
         </div>
       </div>
 
-      {/* Desktop: grid */}
-      <div className="hidden xl:grid grid-cols-2 gap-3">
-        {heroBanners.map((b) => (
-          <HeroBannerCard key={b.title} banner={b} large={false} />
-        ))}
+      {/* Desktop: 65/35 split — featured big banner left, secondary stacked right */}
+      <div className="hidden xl:grid xl:grid-cols-[65%_35%] gap-3">
+        {heroBanners[0] && <HeroBannerCard banner={heroBanners[0]} large={false} />}
+        <div className="flex flex-col gap-3">
+          {heroBanners.slice(1).map((b) => (
+            <HeroBannerCard key={b.title} banner={b} large={false} />
+          ))}
+        </div>
       </div>
     </section>
   );
