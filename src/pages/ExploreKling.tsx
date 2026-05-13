@@ -219,7 +219,7 @@ const ExploreKling = () => {
           </div>
         </main>
         {/* Right filter sidebar */}
-        <FilterSidebar />
+        <FilterSidebar open={filtersOpen} onOpenChange={setFiltersOpen} />
       </div>
     </>
   );
