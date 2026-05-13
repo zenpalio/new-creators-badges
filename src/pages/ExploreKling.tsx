@@ -406,6 +406,13 @@ const ExploreKling = () => {
                       />
                     </>
                   )}
+                  {activeTab === "Follows" && (
+                    <FilterDropdown
+                      value={followsSort}
+                      options={["Newest to oldest", "Oldest to newest"]}
+                      onChange={(v) => setFollowsSort(v as "Newest to oldest" | "Oldest to newest")}
+                    />
+                  )}
                   <button
                     onClick={() => setFiltersOpen(true)}
                     className="shrink-0 whitespace-nowrap inline-flex items-center gap-2 rounded-full bg-grey-dark-1-v2 px-4 py-2 text-sm font-medium text-white hover:bg-grey-dark-2-v2 transition-colors"
