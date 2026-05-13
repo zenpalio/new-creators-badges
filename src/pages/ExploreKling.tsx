@@ -9,6 +9,9 @@ import { exploreVideoFeed } from "../data/exploreVideoFeed";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/ui/dropdown-menu";
 import sceneBuilderBg from "../assets/scene-builder-bg.jpg";
 import premiumBg from "../assets/premium-bg.jpg";
+import { CreatorsView } from "../components/CreatorsView";
+import { mockCreators, creatorsPageLabels } from "./Creators";
+import { useNavigate } from "react-router-dom";
 
 // ---- Hero banners (left big, right secondary) ----
 const heroBanners = [
@@ -61,6 +64,7 @@ const feed = [...exploreVideoFeed, ...exploreVideoFeed].map((v, i) => ({
 }));
 
 const ExploreKling = () => {
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Recommended");
   const [activeContent, setActiveContent] = useState<(typeof contentTabs)[number]>("Babes");
@@ -219,22 +223,33 @@ const ExploreKling = () => {
               ))}
             </div>
 
-            {/* Masonry feed */}
-            <section className="columns-2 gap-1.5 md:columns-3 lg:columns-4 xl:columns-5 [&>*]:mb-1.5 [&>*]:break-inside-avoid">
-              {feed.map((v) => (
-                <div key={v.id} className="w-full">
-                  <ExploreVideoCardFull
-                    id={v.id}
-                    poster={v.poster}
-                    video={v.video}
-                    likes={v.likes as number}
-                    aspect={v.aspect}
-                    liked={!!likedMap[v.id]}
-                    onLike={() => toggleLiked(v.id)}
-                  />
-                </div>
-              ))}
-            </section>
+            {/* Feed */}
+            {activeContent === "Creators" ? (
+              <div className="-mx-4 md:-mx-8 lg:-mx-12">
+                <CreatorsView
+                  creators={mockCreators}
+                  labels={creatorsPageLabels}
+                  onBack={() => navigate(-1)}
+                  onMenu={() => setSidebarOpen(true)}
+                />
+              </div>
+            ) : (
+              <section className="columns-2 gap-1.5 md:columns-3 lg:columns-4 xl:columns-5 [&>*]:mb-1.5 [&>*]:break-inside-avoid">
+                {feed.map((v) => (
+                  <div key={v.id} className="w-full">
+                    <ExploreVideoCardFull
+                      id={v.id}
+                      poster={v.poster}
+                      video={v.video}
+                      likes={v.likes as number}
+                      aspect={v.aspect}
+                      liked={!!likedMap[v.id]}
+                      onLike={() => toggleLiked(v.id)}
+                    />
+                  </div>
+                ))}
+              </section>
+            )}
           </div>
         </main>
         {/* Right filter sidebar */}
