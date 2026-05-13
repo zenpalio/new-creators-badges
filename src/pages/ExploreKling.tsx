@@ -255,7 +255,7 @@ const ExploreKling = () => {
 
             {/* Tabs + Search + Publish */}
             <section className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1 rounded-full bg-grey-dark-1-v2 p-1">
                   {tabs.map((t) => (
                     <button
@@ -271,38 +271,54 @@ const ExploreKling = () => {
                     </button>
                   ))}
                 </div>
-                <div className="hidden md:block h-6 w-px bg-white/10" />
-                <div className="relative hidden md:block">
-                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-light-4-v2" />
-                  <input
-                    placeholder="Search"
-                    className="h-9 w-64 rounded-full border border-white/5 bg-grey-dark-1-v2 pl-9 pr-3 text-sm text-white placeholder:text-grey-light-4-v2 outline-none focus:border-primary-v2/50"
-                  />
+                {activeTab === "Community" && (
+                  <>
+                    <div className="hidden md:block h-6 w-px bg-white/10" />
+                    <div className="relative hidden md:block">
+                      <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-light-4-v2" />
+                      <input
+                        placeholder="Search"
+                        className="h-9 w-64 rounded-full border border-white/5 bg-grey-dark-1-v2 pl-9 pr-3 text-sm text-white placeholder:text-grey-light-4-v2 outline-none focus:border-primary-v2/50"
+                      />
+                    </div>
+                  </>
+                )}
+                {activeTab === "Follows" && (
+                  <span className="text-sm text-grey-light-3-v2">
+                    <span className="font-semibold text-white">128</span> following
+                  </span>
+                )}
+              </div>
+              {(activeTab === "Community" || activeTab === "Follows") && (
+                <div className="flex items-center gap-2">
+                  {activeTab === "Community" && (
+                    <>
+                      <FilterDropdown
+                        value={activeSort}
+                        options={sortOptions as unknown as string[]}
+                        onChange={(v) => setActiveSort(v as typeof activeSort)}
+                      />
+                      <FilterDropdown
+                        value={activeTime}
+                        options={timeOptions as unknown as string[]}
+                        onChange={(v) => setActiveTime(v as typeof activeTime)}
+                      />
+                    </>
+                  )}
+                  <button
+                    onClick={() => setFiltersOpen(true)}
+                    className="inline-flex items-center gap-2 rounded-full bg-grey-dark-1-v2 px-4 py-2 text-sm font-medium text-white hover:bg-grey-dark-2-v2 transition-colors"
+                  >
+                    <SlidersHorizontal className="h-4 w-4" />
+                    Filters
+                  </button>
                 </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <FilterDropdown
-                  value={activeSort}
-                  options={sortOptions as unknown as string[]}
-                  onChange={(v) => setActiveSort(v as typeof activeSort)}
-                />
-                <FilterDropdown
-                  value={activeTime}
-                  options={timeOptions as unknown as string[]}
-                  onChange={(v) => setActiveTime(v as typeof activeTime)}
-                />
-                <button
-                  onClick={() => setFiltersOpen(true)}
-                  className="inline-flex items-center gap-2 rounded-full bg-grey-dark-1-v2 px-4 py-2 text-sm font-medium text-white hover:bg-grey-dark-2-v2 transition-colors"
-                >
-                  <SlidersHorizontal className="h-4 w-4" />
-                  Filters
-                </button>
-              </div>
+              )}
             </section>
 
+
             {/* Content type tabs */}
-            {activeTab !== "Creators" && (
+            {activeTab !== "Creators" && activeTab !== "Events" && (
               <div className="flex items-center gap-5 border-b border-white/5 -mt-2">
                 {contentTabs.map((t) => (
                   <button
