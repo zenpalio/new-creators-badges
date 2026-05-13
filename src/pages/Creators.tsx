@@ -8,7 +8,7 @@ import {
   type CreatorsViewCreator,
   type CreatorsViewLabels,
 } from "../components/CreatorsView";
-import CreateFloatingButton from "../components/CreateFloatingButton";
+
 import creator1 from "../assets/creator1_new.jpg";
 import creator2 from "../assets/creators/creator2.jpg";
 import creator3 from "../assets/creators/creator3.jpg";
@@ -93,7 +93,7 @@ const Creators = () => {
         onBack={() => navigate(-1)}
         onMenu={() => setNavOpen(true)}
       />
-      <CreateFloatingButton />
+      
     </>
   );
 };
