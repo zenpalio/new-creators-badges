@@ -26,9 +26,10 @@ interface BadgeCategoryProps {
   aura?: number;
   activeTier?: BadgeTier;
   onUseBadge?: (tier: BadgeTier) => void;
+  layout?: "scroll" | "grid";
 }
 
-const BadgeCategory = ({ title, subtitle, badges: initialBadges, progress, imageSet = "aura", tooltip, aura, activeTier, onUseBadge }: BadgeCategoryProps) => {
+const BadgeCategory = ({ title, subtitle, badges: initialBadges, progress, imageSet = "aura", tooltip, aura, activeTier, onUseBadge, layout = "scroll" }: BadgeCategoryProps) => {
   const [selectedBadge, setSelectedBadge] = useState<Badge | null>(null);
   const [claimedTiers, setClaimedTiers] = useState<Set<BadgeTier>>(new Set());
   const [unlockedTiers, setUnlockedTiers] = useState<Set<BadgeTier>>(new Set());
