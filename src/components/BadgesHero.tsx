@@ -93,8 +93,7 @@ const BadgesHero = () => {
               { value: "14,412", label: "Interactions" },
               { value: "86", label: "Videos" },
               { value: "37", label: "Images" },
-              { value: "44", label: "Following" },
-              { value: "24", label: "Followers" },
+            
             ].map((m) => (
               <div
                 key={m.label}
