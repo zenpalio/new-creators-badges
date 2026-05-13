@@ -43,6 +43,7 @@ import { mockCreators, creatorsPageLabels } from "./Creators";
 import BadgesHero from "../components/BadgesHero";
 import BadgesPanel, { badgesTabs, type BadgesTab } from "../components/BadgesPanel";
 import { type EquippedBadge } from "../components/ProfileBadgeShowcase";
+import { type BadgeTier } from "../components/BadgeCard";
 import { useNavigate } from "react-router-dom";
 
 // ---- Hero banners (left big, right secondary) ----
