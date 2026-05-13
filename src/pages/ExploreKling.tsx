@@ -79,6 +79,11 @@ const feed = [...exploreVideoFeed, ...exploreVideoFeed].map((v, i) => ({
   likes: ((v.likes as number) ?? 0) + i * 3,
 }));
 
+const followingTags = [
+  "@luna_eclipse", "@nyx_shadow", "@zara_nova", "@kai_storm", "@mira_blaze",
+  "@ivy_frost", "@axel_drift", "@suki_dream",
+];
+
 const ExploreKling = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -91,6 +96,12 @@ const ExploreKling = () => {
   const { headerHidden } = useHeaderScrollTracking(mainRef);
 
   const [filtersOpen, setFiltersOpen] = useState(false);
+
+  // Creators tab controls (lifted out of CreatorsView)
+  const [creatorsSearch, setCreatorsSearch] = useState("");
+  const [creatorsSort, setCreatorsSort] = useState<CreatorsSortBy>("likes");
+  const [creatorsTime, setCreatorsTime] = useState<CreatorsFilterBy>("all");
+  const [creatorsCreation, setCreatorsCreation] = useState<CreatorsCreationType>("all");
 
   const toggleLiked = (id: string) =>
     setLikedMap((m) => ({ ...m, [id]: !m[id] }));
