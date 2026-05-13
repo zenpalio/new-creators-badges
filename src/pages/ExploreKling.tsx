@@ -712,7 +712,7 @@ const FilterDropdown = ({
   onChange: (v: string) => void;
 }) => (
   <DropdownMenu>
-    <DropdownMenuTrigger className="inline-flex items-center gap-2 rounded-full bg-grey-dark-1-v2 px-4 py-2 text-sm font-medium text-white hover:bg-grey-dark-2-v2 focus:outline-none focus:ring-2 focus:ring-primary-v2/40 transition-colors data-[state=open]:bg-grey-dark-2-v2">
+    <DropdownMenuTrigger className="shrink-0 whitespace-nowrap inline-flex items-center gap-2 rounded-full bg-grey-dark-1-v2 px-4 py-2 text-sm font-medium text-white hover:bg-grey-dark-2-v2 focus:outline-none focus:ring-2 focus:ring-primary-v2/40 transition-colors data-[state=open]:bg-grey-dark-2-v2">
       {value}
       <ChevronDown className="h-3.5 w-3.5 text-grey-light-3-v2" />
     </DropdownMenuTrigger>
