@@ -188,6 +188,7 @@ const Gallery = () => {
   const [activeTab, setActiveTab] = useState<(typeof tabs)[number]>("Creations");
   
   const [activeContent, setActiveContent] = useState<(typeof contentTabs)[number]>("Babes");
+  const [badgesSubTab, setBadgesSubTab] = useState<BadgesTab>("aura");
   const [activeSort, setActiveSort] = useState<(typeof sortOptions)[number]>("Trending");
   const [activeTime, setActiveTime] = useState<(typeof timeOptions)[number]>("Newest");
   const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
