@@ -299,23 +299,22 @@ const FilterSidebar = () => {
     setLiked(false);
   };
 
-  // Collapsed rail (desktop)
+  // Closed: floating toggle button only (no rail)
   if (!open) {
     return (
-      <aside className="hidden lg:flex w-14 shrink-0 flex-col items-center border-l border-white/5 bg-background-v2 py-4">
-        <button
-          onClick={() => setOpen(true)}
-          aria-label="Open filters"
-          className="relative flex h-10 w-10 items-center justify-center rounded-full bg-grey-dark-1-v2 text-white hover:bg-grey-dark-2-v2 transition-colors"
-        >
-          <SlidersHorizontal className="h-4 w-4" />
-          {totalSelected > 0 && (
-            <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary-v2 px-1 text-[10px] font-bold text-primary-v2-foreground">
-              {totalSelected}
-            </span>
-          )}
-        </button>
-      </aside>
+      <button
+        onClick={() => setOpen(true)}
+        aria-label="Open filters"
+        className="hidden lg:inline-flex fixed bottom-6 right-6 z-40 items-center gap-2 rounded-full bg-grey-dark-1-v2 px-4 py-2.5 text-sm font-semibold text-white shadow-xl border border-white/10 hover:bg-grey-dark-2-v2 transition-colors"
+      >
+        <SlidersHorizontal className="h-4 w-4" />
+        Filters
+        {totalSelected > 0 && (
+          <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary-v2 px-1.5 text-[11px] font-bold text-primary-v2-foreground">
+            {totalSelected}
+          </span>
+        )}
+      </button>
     );
   }
 
