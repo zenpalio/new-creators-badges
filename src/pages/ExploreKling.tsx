@@ -305,44 +305,46 @@ const ExploreKling = () => {
                 )}
               </div>
 
-              {/* Mobile-only search bar (full width) */}
-              {(activeTab === "Community" || activeTab === "Creators") && (
-                <div className="relative xl:hidden w-full sm:max-w-xs">
-                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-light-4-v2" />
-                  <input
-                    value={activeTab === "Creators" ? creatorsSearch : undefined}
-                    onChange={
-                      activeTab === "Creators"
-                        ? (e) => setCreatorsSearch(e.target.value)
-                        : undefined
-                    }
-                    placeholder="Search"
-                    className="h-9 w-full rounded-full border border-white/5 bg-grey-dark-1-v2 pl-9 pr-3 text-sm text-white placeholder:text-grey-light-4-v2 outline-none focus:border-primary-v2/50"
-                  />
-                </div>
-              )}
-              {activeTab === "Community" && (
-                <div className="flex items-center gap-2 -mx-4 px-4 md:mx-0 md:px-0 overflow-x-auto scrollbar-hide flex-nowrap min-w-0 md:justify-end">
-                  <FilterDropdown
-                    value={activeSort}
-                    options={sortOptions as unknown as string[]}
-                    onChange={(v) => setActiveSort(v as typeof activeSort)}
-                  />
-                  <FilterDropdown
-                    value={activeTime}
-                    options={timeOptions as unknown as string[]}
-                    onChange={(v) => setActiveTime(v as typeof activeTime)}
-                  />
-                  <button
-                    onClick={() => setFiltersOpen(true)}
-                    aria-label="Filters"
-                    className="shrink-0 whitespace-nowrap inline-flex items-center gap-2 rounded-full bg-grey-dark-1-v2 px-3 min-[1000px]:px-4 py-2 text-sm font-medium text-white hover:bg-grey-dark-2-v2 transition-colors"
-                  >
-                    <SlidersHorizontal className="h-4 w-4" />
-                    <span className="hidden min-[1000px]:inline">Filters</span>
-                  </button>
-                </div>
-              )}
+              {/* Search + filters row (combined below xl) */}
+              <div className="flex items-center gap-2 flex-wrap xl:flex-nowrap xl:contents">
+                {(activeTab === "Community" || activeTab === "Creators") && (
+                  <div className="relative xl:hidden flex-1 min-w-[180px] max-w-xs">
+                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-grey-light-4-v2" />
+                    <input
+                      value={activeTab === "Creators" ? creatorsSearch : undefined}
+                      onChange={
+                        activeTab === "Creators"
+                          ? (e) => setCreatorsSearch(e.target.value)
+                          : undefined
+                      }
+                      placeholder="Search"
+                      className="h-9 w-full rounded-full border border-white/5 bg-grey-dark-1-v2 pl-9 pr-3 text-sm text-white placeholder:text-grey-light-4-v2 outline-none focus:border-primary-v2/50"
+                    />
+                  </div>
+                )}
+                {activeTab === "Community" && (
+                  <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide flex-nowrap min-w-0 ml-auto xl:ml-0 xl:justify-end">
+                    <FilterDropdown
+                      value={activeSort}
+                      options={sortOptions as unknown as string[]}
+                      onChange={(v) => setActiveSort(v as typeof activeSort)}
+                    />
+                    <FilterDropdown
+                      value={activeTime}
+                      options={timeOptions as unknown as string[]}
+                      onChange={(v) => setActiveTime(v as typeof activeTime)}
+                    />
+                    <button
+                      onClick={() => setFiltersOpen(true)}
+                      aria-label="Filters"
+                      className="shrink-0 whitespace-nowrap inline-flex items-center gap-2 rounded-full bg-grey-dark-1-v2 px-3 min-[1000px]:px-4 py-2 text-sm font-medium text-white hover:bg-grey-dark-2-v2 transition-colors"
+                    >
+                      <SlidersHorizontal className="h-4 w-4" />
+                      <span className="hidden min-[1000px]:inline">Filters</span>
+                    </button>
+                  </div>
+                )}
+              </div>
               {activeTab === "Creators" && (
                 <div className="flex items-center gap-2 -mx-4 px-4 md:mx-0 md:px-0 overflow-x-auto scrollbar-hide flex-nowrap min-w-0 md:justify-end">
                   <FilterDropdown
