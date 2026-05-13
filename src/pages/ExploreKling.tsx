@@ -136,10 +136,10 @@ const exploreStories = [
 ];
 
 const exploreEvents = [
-  { title: "Kreate Contest #52: Stadium Broadcast Challenge", subtitle: "Recreate the big screen live moments with Kling AI!", deadline: "13 days and 22 hours before deadline", prize: "Credits", heat: 3564, image: "https://picsum.photos/seed/event-1/800/500" },
-  { title: "KlingAI NEXTGEN 2026 University Creator Challenge", subtitle: "Your creation lights up the future", deadline: "28 days and 7 hours before deadline", prize: "Prize Pool $10,000", heat: 5332, image: "https://picsum.photos/seed/event-2/800/500" },
-  { title: "Holiday Sparks #9: Frames of Her Love", subtitle: "Reimagine your cherished memories with Kling AI!", deadline: "24 days and 22 hours before deadline", prize: "Credits", heat: 586, image: "https://picsum.photos/seed/event-3/800/500" },
-  { title: "Kreate Contest #51: Fashion Spotlight Challenge", subtitle: "Redefining Fashion with Kling AI!", deadline: "21 days and 22 hours before deadline", prize: "Credits", heat: 1368, image: "https://picsum.photos/seed/event-4/800/500" },
+  { id: "stadium-broadcast", title: "Kreate Contest #52: Stadium Broadcast Challenge", subtitle: "Recreate the big screen live moments with Kling AI!", deadline: "13 days and 22 hours before deadline", prize: "Credits", heat: 3564, image: "https://picsum.photos/seed/event-1/800/500" },
+  { id: "nextgen-2026", title: "KlingAI NEXTGEN 2026 University Creator Challenge", subtitle: "Your creation lights up the future", deadline: "28 days and 7 hours before deadline", prize: "Prize Pool $10,000", heat: 5332, image: "https://picsum.photos/seed/event-2/800/500" },
+  { id: "frames-of-her-love", title: "Holiday Sparks #9: Frames of Her Love", subtitle: "Reimagine your cherished memories with Kling AI!", deadline: "24 days and 22 hours before deadline", prize: "Credits", heat: 586, image: "https://picsum.photos/seed/event-3/800/500" },
+  { id: "fashion-spotlight", title: "Kreate Contest #51: Fashion Spotlight Challenge", subtitle: "Redefining Fashion with Kling AI!", deadline: "21 days and 22 hours before deadline", prize: "Credits", heat: 1368, image: "https://picsum.photos/seed/event-4/800/500" },
 ];
 
 // Notifications (mirrors logic from /)
@@ -851,6 +851,7 @@ const CreatorPillDropdown = ({
 };
 
 const EventCard = ({
+  id,
   title,
   subtitle,
   deadline,
@@ -858,6 +859,7 @@ const EventCard = ({
   heat,
   image,
 }: {
+  id: string;
   title: string;
   subtitle: string;
   deadline: string;
@@ -866,7 +868,7 @@ const EventCard = ({
   image: string;
 }) => (
   <a
-    href="#"
+    href={`/explore/event/${id}`}
     className="group flex flex-col sm:flex-row overflow-hidden rounded-2xl border border-white/5 bg-grey-dark-1-v2 hover:border-primary-v2/30 transition-colors"
   >
     <div className="relative w-full sm:w-[40%] sm:max-w-[260px] shrink-0 aspect-[16/10] sm:aspect-auto overflow-hidden bg-black">
