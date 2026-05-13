@@ -77,7 +77,7 @@ const BadgesHero = () => {
                     {stat.label}
                   </span>
                 </div>
-                <span className="text-foreground-v2 font-bold text-base sm:text-2xl leading-tight tabular-nums">
+                <span className="text-foreground-v2 font-bold text-lg sm:text-2xl leading-tight tabular-nums whitespace-nowrap">
                   {stat.count}
                 </span>
                 <span className="text-[9px] sm:text-[10px] text-muted-v2-foreground/60 font-medium truncate max-w-full">
