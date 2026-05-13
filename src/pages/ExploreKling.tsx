@@ -530,19 +530,23 @@ const ExploreKling = () => {
                 ))}
               </section>
             ) : (
-              <section className="columns-2 gap-1.5 md:columns-3 lg:columns-4 xl:columns-5 [&>*]:mb-1.5 [&>*]:break-inside-avoid">
+              <section className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
                 {feed.map((v) => (
-                  <div key={v.id} className="w-full">
-                    <ExploreVideoCardFull
-                      id={v.id}
-                      poster={v.poster}
-                      video={v.video}
-                      likes={v.likes as number}
-                      aspect={v.aspect}
-                      liked={!!likedMap[v.id]}
-                      onLike={() => toggleLiked(v.id)}
-                    />
-                  </div>
+                  <ExploreVideoCard
+                    key={v.id}
+                    poster={v.poster}
+                    video={v.video}
+                    imageAlt={`Preview ${v.id}`}
+                    likeButton={
+                      <LikeButton
+                        variant="video"
+                        liked={!!likedMap[v.id]}
+                        onClick={() => toggleLiked(v.id)}
+                      >
+                        <span>{v.likes as number}</span>
+                      </LikeButton>
+                    }
+                  />
                 ))}
               </section>
             )}
