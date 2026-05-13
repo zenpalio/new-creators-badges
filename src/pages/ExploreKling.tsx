@@ -58,8 +58,9 @@ const ExploreKling = () => {
   const mainRef = useRef<HTMLElement>(null);
   const { headerHidden } = useHeaderScrollTracking(mainRef);
 
-  const toggleLiked = (id: string) =>
-    setLikedMap((m) => ({ ...m, [id]: !m[id] }));
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
+  const toggleLiked_unused = null;
 
   return (
     <>
