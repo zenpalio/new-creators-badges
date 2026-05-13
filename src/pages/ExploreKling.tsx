@@ -10,6 +10,14 @@ import { exploreVideoFeed } from "../data/exploreVideoFeed";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/ui/dropdown-menu";
 import sceneBuilderBg from "../assets/scene-builder-bg.jpg";
 import premiumBg from "../assets/premium-bg.jpg";
+import storySummer from "../assets/story-summer.jpg";
+import storyDark from "../assets/story-dark.jpg";
+import storyCampus from "../assets/story-campus.jpg";
+import storyMidnight from "../assets/story-midnight.jpg";
+import storyIsland from "../assets/story-island.jpg";
+import storyNeon from "../assets/story-neon.jpg";
+import storyVelvet from "../assets/story-velvet.jpg";
+import storyCrimson from "../assets/story-crimson.jpg";
 import {
   CreatorsView,
   type SortBy as CreatorsSortBy,
