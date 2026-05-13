@@ -13,6 +13,7 @@ import { useHeaderScrollTracking } from "../components/ExploreView";
 import ExploreCreateToolCard from "../components/explore/ExploreCreateToolCard";
 import ExploreVideoCard from "../components/explore/ExploreVideoCard";
 import FloatingToolsFAB, { type FloatingToolsFabItem } from "../components/explore/FloatingToolsFAB";
+import { ExploreStartCreatingSection } from "../components/explore/ExploreSections";
 import LikeButton from "../components/explore/LikeButton";
 import { exploreVideoFeed } from "../data/exploreVideoFeed";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/ui/dropdown-menu";
@@ -258,7 +259,7 @@ const Gallery = () => {
 
           <div className="relative z-10 flex w-full flex-col gap-6 px-4 pb-16 pt-14 md:px-8 lg:px-12">
             {/* Hero banners row */}
-            <HeroBanners />
+            <ExploreStartCreatingSection title="Start creating" tools={tools} />
 
 
             {/* Tabs + Search + Publish */}
