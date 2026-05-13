@@ -256,10 +256,9 @@ const EventDetail = () => {
                 {submissions.map((v) => (
                   <ExploreVideoCard
                     key={v.id}
-                    id={v.id}
                     poster={v.poster}
                     video={v.video}
-                    likes={v.likes as number}
+                    imageAlt={`Submission ${v.id}`}
                   />
                 ))}
               </div>
