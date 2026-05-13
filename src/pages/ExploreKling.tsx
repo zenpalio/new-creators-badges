@@ -47,7 +47,7 @@ const heroBanners = [
     eyebrow: "Featured tool",
     title: "Story Creator",
     version: "v1.0",
-    description: "Craft epic anime adventures, fantasy worlds and episodic sagas — chapter by chapter.",
+    description: "Write epic stories, chapter by chapter.",
     cta: "Start writing",
     bg: storyCreatorBg,
     overlay: "from-black/90 via-black/55 to-black/10",
