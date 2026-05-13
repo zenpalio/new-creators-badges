@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Bell, Menu, Search, Upload, ArrowRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown } from "lucide-react";
+import { Bell, Menu, Search, Upload, ArrowRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown, ChevronDown, Heart } from "lucide-react";
 import SideNav from "../components/SideNav";
 import { useHeaderScrollTracking } from "../components/ExploreView";
 import ExploreCreateToolCard from "../components/explore/ExploreCreateToolCard";
@@ -228,6 +228,8 @@ const ExploreKling = () => {
             </section>
           </div>
         </main>
+        {/* Right filter sidebar */}
+        <FilterSidebar />
       </div>
     </>
   );
@@ -274,5 +276,74 @@ const ExploreVideoCardFull = ({
     </div>
   </a>
 );
+
+// ---- Right-side filter sidebar ----
+const filterGroups: Array<{ label: string; value?: string; type: "check" | "chip"; options: string[] }> = [
+  { label: "Gender", value: "All", type: "check", options: ["Female", "Futa", "Transgender"] },
+  { label: "Style", value: "All", type: "check", options: ["Realistic", "Anime"] },
+  { label: "Age", value: "All", type: "check", options: ["20s", "Milf"] },
+  { label: "Body type", value: "All", type: "check", options: ["Slim", "Thick"] },
+  { label: "Ethnicity", value: "All", type: "chip", options: ["Asian", "Black", "Caucasian", "Indian", "Arab", "Latina", "Fantasy", "Furry"] },
+  { label: "Tags", value: "All", type: "chip", options: ["Full Nelson", "Solo", "Straddling", "Cowgirl", "Rimjob", "Facials", "Fingering", "Futa", "Facesitting", "Doggy Style", "Sex", "Tattoos", "Deepthroat", "Tentacles", "Footjob", "BDSM", "SFW", "Penis", "Titfuck", "Buttplug", "Ahegao", "Missionary", "Blowjob", "Hairy", "Anal", "Bukkake", "Feet"] },
+  { label: "Model", value: "All", type: "chip", options: ["Anime3d", "Artea", "Aphrodite", "Truelook", "Dreammix", "Cartoon", "Darkfantasy", "Furry", "Fantasy", "Anthro", "Velvetheat"] },
+];
+
+const FilterSidebar = () => {
+  const [liked, setLiked] = useState(false);
+  return (
+    <aside className="hidden lg:block w-72 shrink-0 border-l border-white/5 bg-background-v2 overflow-y-auto">
+      <div className="px-5 py-5 flex flex-col gap-5">
+        <div className="flex items-center justify-between">
+          <h3 className="text-base font-bold text-white">Filter</h3>
+        </div>
+        <button
+          onClick={() => setLiked((v) => !v)}
+          className="flex items-center gap-3 text-sm text-white"
+        >
+          <span className={`relative h-5 w-9 rounded-full transition-colors ${liked ? "bg-primary-v2" : "bg-grey-dark-2-v2"}`}>
+            <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white transition-all ${liked ? "left-[18px]" : "left-0.5"}`} />
+          </span>
+          <span className="flex items-center gap-1.5 text-grey-light-3-v2">
+            Liked only <Heart className="h-3.5 w-3.5 fill-red-500 text-red-500" />
+          </span>
+        </button>
+
+        {filterGroups.map((g) => (
+          <details key={g.label} open className="group border-t border-white/5 pt-4">
+            <summary className="flex cursor-pointer list-none items-center justify-between text-sm text-grey-light-3-v2">
+              <span>
+                {g.label}: <span className="text-white">{g.value}</span>
+              </span>
+              <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
+            </summary>
+            <div className="mt-3">
+              {g.type === "check" ? (
+                <div className="flex flex-col gap-2.5">
+                  {g.options.map((o) => (
+                    <label key={o} className="flex items-center gap-2.5 text-sm text-white cursor-pointer">
+                      <input type="checkbox" className="h-4 w-4 rounded border-white/20 bg-grey-dark-1-v2 accent-primary-v2" />
+                      {o}
+                    </label>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-wrap gap-1.5">
+                  {g.options.map((o) => (
+                    <button
+                      key={o}
+                      className="rounded-full bg-grey-dark-1-v2 px-3 py-1 text-xs text-white hover:bg-grey-dark-2-v2"
+                    >
+                      {o}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </details>
+        ))}
+      </div>
+    </aside>
+  );
+};
 
 export default ExploreKling;
