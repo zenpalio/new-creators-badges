@@ -47,7 +47,7 @@ const tools = [
 
 // ---- Tabs ----
 const tabs = ["Recommended", "Follows", "Events"] as const;
-const contentTabs = ["Babes", "Images", "Videos", "Stories"] as const;
+const contentTabs = ["Babes", "Images", "Videos", "Stories", "Creators"] as const;
 const sortOptions = ["Trending", "Newest", "Most Liked"] as const;
 const timeOptions = ["All time", "Year", "Month", "Week", "Today"] as const;
 
