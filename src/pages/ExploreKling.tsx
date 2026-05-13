@@ -255,77 +255,7 @@ const ExploreKling = () => {
 
           <div className="relative z-10 flex w-full flex-col gap-6 px-4 pb-16 pt-14 md:px-8 lg:px-12">
             {/* Hero banners row */}
-            <section className="grid grid-cols-1 gap-3 lg:grid-cols-3">
-              {heroBanners.map((b, i) => {
-                const BadgeIcon = b.badgeIcon;
-                return (
-                  <a
-                    key={b.title}
-                    href="#"
-                    style={{ ['--accent' as any]: b.accentHsl }}
-                    className={`group relative overflow-hidden rounded-2xl border border-white/5 bg-black transition-colors hover:border-white/15 ${
-                      i === 0 ? "lg:col-span-2 min-h-[220px]" : "min-h-[220px]"
-                    }`}
-                  >
-                    {/* Background image */}
-                    <img
-                      src={b.bg}
-                      alt=""
-                      loading="lazy"
-                      className="absolute inset-0 h-full w-full object-cover"
-                    />
-
-                    {/* Soft dark gradient for legibility */}
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-black/70 via-black/20 to-transparent" />
-
-                    {/* Subtle accent glow */}
-                    <div
-                      className="pointer-events-none absolute -bottom-24 -left-16 h-64 w-64 rounded-full blur-3xl opacity-40"
-                      style={{ background: `hsl(var(--accent) / 0.5)` }}
-                    />
-
-                    {/* Tiny tech tag (top-right) */}
-                    {b.code && (
-                      <div className="pointer-events-none absolute right-4 top-4 flex items-center gap-1.5 font-mono text-[10px] tracking-widest text-white/55">
-                        <span
-                          className="h-1.5 w-1.5 rounded-full"
-                          style={{ background: `hsl(var(--accent))`, boxShadow: `0 0 8px hsl(var(--accent))` }}
-                        />
-                        {b.code}
-                      </div>
-                    )}
-
-                    {/* Content — glass panel */}
-                    <div className="relative flex h-full items-end p-4 md:p-5">
-                      <div className="w-full rounded-xl border border-white/10 bg-black/35 p-4 backdrop-blur-md md:p-5">
-                        <div className="flex items-center gap-2">
-                          <span
-                            className="inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-white/90"
-                            style={{
-                              background: `hsl(var(--accent) / 0.14)`,
-                              borderColor: `hsl(var(--accent) / 0.4)`,
-                            }}
-                          >
-                            <BadgeIcon className="h-3 w-3" style={{ color: `hsl(var(--accent))` }} />
-                            {b.eyebrow}
-                          </span>
-                        </div>
-                        <h2 className="mt-2 text-2xl font-semibold leading-tight text-white md:text-3xl">
-                          {b.title}
-                        </h2>
-                        <p className="mt-1.5 max-w-md text-[13px] leading-relaxed text-white/70">
-                          {b.description}
-                        </p>
-                        <div className={`mt-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${b.ctaClass}`}>
-                          {b.cta}
-                          <ArrowRight className="h-4 w-4" />
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                );
-              })}
-            </section>
+            <HeroBanners />
 
 
             {/* Tabs + Search + Publish */}
