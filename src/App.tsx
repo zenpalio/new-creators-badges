@@ -6,6 +6,7 @@ import { TooltipProvider } from "./components/ui/tooltip";
 import Profile from "./pages/Profile.tsx";
 import Creators from "./pages/Creators.tsx";
 import Explore from "./pages/Explore.tsx";
+import ExploreKling from "./pages/ExploreKling.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -18,6 +19,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Explore />} />
+          <Route path="/explore" element={<ExploreKling />} />
           <Route path="/badges" element={<Profile />} />
           <Route path="/creators" element={<Creators />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
