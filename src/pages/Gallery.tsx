@@ -495,6 +495,7 @@ const Gallery = () => {
                   );
                 })}
               </section>
+              </>
             ) : (
               <section className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
                 {feed.map((v) => {
