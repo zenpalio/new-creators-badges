@@ -43,7 +43,8 @@ const VerificationSignupDialog = ({ open, onClose }: Props) => {
 
           <p className="mt-4 text-sm text-muted-foreground">
             Sign up and complete a quick age verification with our trusted
-            partner to access all content.
+            third-party partner. We never store or see your ID — verification
+            is handled entirely by them.
           </p>
 
           <ol className="mt-5 space-y-2">
