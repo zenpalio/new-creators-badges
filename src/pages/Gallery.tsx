@@ -1215,21 +1215,83 @@ const CTA_ICONS: Record<CtaVariant, LucideIcon> = {
   video: Film,
 };
 
+const CtaSkeleton = ({ variant }: { variant: CtaVariant }) => {
+  switch (variant) {
+    case "story":
+      // Open book: two pages with text lines
+      return (
+        <div className="absolute inset-0 flex gap-1 p-2.5">
+          <div className="flex-1 space-y-1.5 rounded-md bg-white/[0.04] p-2 ring-1 ring-white/10">
+            <div className="h-1 w-full rounded-full bg-white/15" />
+            <div className="h-1 w-5/6 rounded-full bg-white/10" />
+            <div className="h-1 w-4/6 rounded-full bg-white/10" />
+            <div className="h-1 w-3/6 rounded-full bg-white/10" />
+          </div>
+          <div className="flex-1 space-y-1.5 rounded-md bg-white/[0.04] p-2 ring-1 ring-white/10">
+            <div className="h-1 w-full rounded-full bg-white/15" />
+            <div className="h-1 w-5/6 rounded-full bg-white/10" />
+            <div className="h-1 w-4/6 rounded-full bg-white/10" />
+            <div className="h-1 w-2/6 rounded-full bg-white/10" />
+          </div>
+        </div>
+      );
+    case "babe":
+      // Profile card: avatar + name + meta
+      return (
+        <div className="absolute inset-0 flex items-center gap-2.5 rounded-xl bg-white/[0.03] p-3 ring-1 ring-white/10">
+          <div className="h-10 w-10 shrink-0 rounded-full bg-white/15" />
+          <div className="flex-1 space-y-1.5">
+            <div className="h-1.5 w-3/4 rounded-full bg-white/15" />
+            <div className="h-1 w-1/2 rounded-full bg-white/10" />
+            <div className="mt-1 flex gap-1">
+              <div className="h-2 w-6 rounded-full bg-white/10" />
+              <div className="h-2 w-8 rounded-full bg-white/10" />
+            </div>
+          </div>
+        </div>
+      );
+    case "image":
+      // Image frame: horizon + sun + mountains
+      return (
+        <div className="absolute inset-0 overflow-hidden rounded-xl bg-white/[0.03] ring-1 ring-white/10">
+          <div className="absolute right-3 top-2.5 h-2.5 w-2.5 rounded-full bg-white/25" />
+          <svg viewBox="0 0 144 96" className="absolute inset-0 h-full w-full" preserveAspectRatio="none">
+            <path d="M0 78 L40 50 L70 70 L95 45 L125 65 L144 55 L144 96 L0 96 Z" fill="rgba(255,255,255,0.10)" />
+            <path d="M0 86 L30 70 L60 82 L90 68 L120 80 L144 72 L144 96 L0 96 Z" fill="rgba(255,255,255,0.06)" />
+          </svg>
+        </div>
+      );
+    case "video":
+      // Video frame: play triangle + timeline scrubber
+      return (
+        <div className="absolute inset-0 rounded-xl bg-white/[0.03] ring-1 ring-white/10">
+          <div className="absolute inset-x-0 top-0 flex h-[68%] items-center justify-center">
+            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15">
+              <div className="ml-0.5 h-0 w-0 border-y-[5px] border-l-[7px] border-y-transparent border-l-white/70" />
+            </div>
+          </div>
+          <div className="absolute inset-x-3 bottom-2.5 space-y-1.5">
+            <div className="h-1 w-full rounded-full bg-white/10">
+              <div className="h-1 w-1/3 rounded-full bg-white/40" />
+            </div>
+            <div className="flex justify-between">
+              <div className="h-1 w-4 rounded-full bg-white/10" />
+              <div className="h-1 w-4 rounded-full bg-white/10" />
+            </div>
+          </div>
+        </div>
+      );
+  }
+};
+
 const CtaIllustration = ({ variant }: { variant: CtaVariant }) => {
   const Icon = CTA_ICONS[variant];
   const v = CTA_VARIANTS[variant];
   return (
     <div className="pointer-events-none relative h-24 w-36 transition-transform duration-500 ease-out group-hover:-translate-y-0.5">
-      {/* Skeleton card */}
-      <div className="absolute inset-0 rounded-xl bg-white/[0.03] ring-1 ring-white/10">
-        <div className="space-y-2 p-3">
-          <div className="h-1.5 w-2/3 rounded-full bg-white/10" />
-          <div className="h-1.5 w-1/2 rounded-full bg-white/[0.07]" />
-          <div className="h-1.5 w-3/5 rounded-full bg-white/[0.07]" />
-        </div>
-      </div>
+      <CtaSkeleton variant={variant} />
       {/* Small accent icon chip */}
-      <div className={`absolute -right-1 -top-1 flex h-7 w-7 items-center justify-center rounded-full bg-white/[0.06] ring-1 ${v.ring} backdrop-blur-sm transition-transform duration-500 ease-out group-hover:rotate-6`}>
+      <div className={`absolute -right-1 -top-1 flex h-7 w-7 items-center justify-center rounded-full bg-[hsl(0_0%_5%)] ring-1 ${v.ring} backdrop-blur-sm transition-transform duration-500 ease-out group-hover:rotate-6`}>
         <Icon className={`h-3.5 w-3.5 ${v.accent}`} strokeWidth={1.8} />
       </div>
     </div>
