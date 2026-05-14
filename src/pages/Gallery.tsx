@@ -1236,12 +1236,6 @@ const CtaSkeleton = ({ variant }: { variant: CtaVariant }) => {
                 <path d="M0 22 L12 14 L20 19 L28 11 L40 18 L40 28 L0 28 Z" fill="rgba(255,255,255,0.18)" />
               </svg>
             </div>
-            {/* Video */}
-            <div className="relative h-7 flex-1 rounded-md bg-white/[0.06] ring-1 ring-white/10">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="ml-0.5 h-0 w-0 border-y-[3px] border-l-[5px] border-y-transparent border-l-white/70" />
-              </div>
-            </div>
             {/* Audio waveform */}
             <div className="flex h-7 flex-1 items-center justify-center gap-[2px] rounded-md bg-white/[0.06] px-1.5 ring-1 ring-white/10">
               {[3, 5, 2, 6, 4, 7, 3, 5].map((h, i) => (
