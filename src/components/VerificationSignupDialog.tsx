@@ -73,44 +73,8 @@ const openCheckerFallback = (ageverif: any) => {
       : "en";
   const page = options.page ? `/${options.page}` : "";
   const checkerUrl = `${CHECKER_ORIGIN}/${language}${page}?${params.toString()}`;
-  const popup = window.open(
-    checkerUrl,
-    "_blank",
-    options.target === "popup" ? "width=400,height=700" : undefined
-  );
 
-  if (!popup) return false;
-
-  const cleanup = () => {
-    window.removeEventListener("message", onMessage);
-    window.clearTimeout(timeoutId);
-  };
-
-  const onMessage = (event: MessageEvent) => {
-    if (event.origin !== CHECKER_ORIGIN || typeof event.data !== "object") return;
-
-    const data = event.data as { type?: string; verificationToken?: string };
-    if (data.type === "verified" && data.verificationToken) {
-      if (options.cookie) localStorage.setItem(options.cookie, data.verificationToken);
-      document.documentElement.classList.add("ageverif-verified");
-      window.dispatchEvent(
-        new CustomEvent("ageverif:success", {
-          detail: { verificationToken: data.verificationToken },
-        })
-      );
-      popup.close();
-      cleanup();
-    }
-
-    if (data.type === "close") {
-      window.dispatchEvent(new CustomEvent("ageverif:close"));
-      cleanup();
-    }
-  };
-
-  const timeoutId = window.setTimeout(cleanup, 10 * 60 * 1000);
-  window.addEventListener("message", onMessage);
-  popup.focus();
+  window.location.assign(checkerUrl);
   return true;
 };
 
