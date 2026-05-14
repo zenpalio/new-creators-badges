@@ -27,6 +27,18 @@
   <meta name="twitter:title" content="Lovable App">
   <meta property="og:description" content="Lovable Generated Project">
   <meta name="twitter:description" content="Lovable Generated Project">
+
+  <!-- AgeVerif Checker (advanced integration: manual start) -->
+  <script>
+    window.ageverifSuccess = function () {
+      try { document.documentElement.classList.add('ageverif-verified'); } catch (e) {}
+      try { window.dispatchEvent(new CustomEvent('ageverif:success')); } catch (e) {}
+    };
+    window.ageverifClose = function () {
+      try { window.dispatchEvent(new CustomEvent('ageverif:close')); } catch (e) {}
+    };
+  </script>
+  <script src="https://www.ageverif.com/checker.js?key=HpPWpAgqkZ1JGHwIChRA3bK6npHdBo8gOOxtDpUc&nostart&onsuccess=ageverifSuccess&onclose=ageverifClose" async defer></script>
 </head>
 
   <body>
