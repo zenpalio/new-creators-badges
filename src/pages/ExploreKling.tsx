@@ -115,6 +115,14 @@ const tools = [
   { title: "Create Template Babe", subtitle: "Start from a preset", Icon: User, href: "/explore/create-template" },
 ];
 
+// Map each content tab to its matching create-tool card
+const contentCreateTool = {
+  Babes: { title: "Create Custom Babe", subtitle: "Design your dream character", Icon: Sparkles, href: "/explore/create-babe" },
+  Images: { title: "Image Generator", subtitle: "Render any moment", Icon: ImageIcon, href: "/explore/image-generator" },
+  Videos: { title: "Video Generator", subtitle: "Bring scenes to life", Icon: Film, href: "/explore/video-generator" },
+  Stories: { title: "Story Creator", subtitle: "Write episodic adventures", Icon: BookOpen, href: "/explore/story-creator" },
+} as const;
+
 // ---- Tabs ----
 const tabs = ["Community", "Creators", "Events"] as const;
 const contentTabs = ["Babes", "Images", "Videos", "Stories"] as const;
