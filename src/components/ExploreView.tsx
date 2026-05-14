@@ -25,6 +25,8 @@ export interface ExploreViewProps {
     message: string;
     statusLabels?: SystemStatusIndicatorProps["statusLabels"];
   };
+  /** Optional override for header right-side actions */
+  headerActions?: ReactNode;
   children: ReactNode;
   className?: string;
 }
@@ -149,6 +151,7 @@ export function ExploreView({
   menuAriaLabel = "Open menu",
   notificationsAriaLabel = "Notifications",
   systemStatus,
+  headerActions,
   children,
   className,
 }: ExploreViewProps) {
@@ -171,12 +174,16 @@ export function ExploreView({
           <div className="pointer-events-auto flex items-center gap-3">
             <ExploreMenuButton onClick={onMenu} ariaLabel={menuAriaLabel} />
           </div>
-          <ExploreHeaderActions
-            onNotifications={onNotifications}
-            notificationCount={notificationCount}
-            notificationsAriaLabel={notificationsAriaLabel}
-            systemStatus={systemStatus}
-          />
+          {headerActions ? (
+            <div className="pointer-events-auto flex items-center gap-2">{headerActions}</div>
+          ) : (
+            <ExploreHeaderActions
+              onNotifications={onNotifications}
+              notificationCount={notificationCount}
+              notificationsAriaLabel={notificationsAriaLabel}
+              systemStatus={systemStatus}
+            />
+          )}
         </header>
 
         {/* Cinematic hero (full-bleed) */}
