@@ -1,20 +1,20 @@
-import { IdCard, ScanFace, CheckCircle2 } from "lucide-react";
+import { MousePointerClick, ScanFace, CheckCircle2 } from "lucide-react";
 
 const steps = [
   {
-    icon: IdCard,
-    title: "Upload your ID",
-    desc: "Government-issued photo ID (passport, driver's license, or national ID).",
+    icon: MousePointerClick,
+    title: "Click verify",
+    desc: "You'll be redirected to our trusted verification partner.",
   },
   {
     icon: ScanFace,
-    title: "Take a quick selfie",
-    desc: "Our partner matches your face to your ID in seconds — fully encrypted.",
+    title: "Finish verification",
+    desc: "Complete the quick check on the partner's secure site.",
   },
   {
     icon: CheckCircle2,
     title: "Get verified",
-    desc: "Most accounts are approved within 1 minute. You'll unlock full access right away.",
+    desc: "You'll be redirected back to MyBabes and can start exploring right away.",
   },
 ];
 
