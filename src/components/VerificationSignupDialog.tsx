@@ -32,12 +32,12 @@ const VerificationSignupDialog = ({ open, onClose }: Props) => {
 
       <div className="relative w-full max-w-md rounded-2xl border border-white/10 bg-neutral-800/95 shadow-2xl">
         <div className="p-6 sm:p-7">
-          <div className="flex items-start gap-3">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-600 text-white text-xs font-bold">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-7 items-center justify-center rounded-md border border-white/15 bg-white/5 px-2 text-[11px] font-bold tracking-wide text-white/90">
               18+
-            </div>
-            <h2 className="flex-1 pt-1 text-base font-bold uppercase tracking-wide text-foreground">
-              Age verification required
+            </span>
+            <h2 className="flex-1 text-lg font-semibold tracking-tight text-foreground">
+              Age verification
             </h2>
           </div>
 
