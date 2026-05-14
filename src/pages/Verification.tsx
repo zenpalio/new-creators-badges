@@ -925,6 +925,7 @@ const Verification = () => {
 
   const handleContentClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLElement;
+    if (target.closest(".sfw")) return;
     if (target.closest("img, video, picture, [data-media]")) {
       e.preventDefault();
       e.stopPropagation();
