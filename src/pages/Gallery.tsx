@@ -1201,46 +1201,39 @@ const CreateMediaCard = ({
     className="group relative block w-full overflow-hidden rounded-2xl"
   >
     <div className={`relative w-full ${aspectClass}`}>
-      {/* Full-bleed dark vintage gradient field */}
+      {/* Saturated multi-color base */}
       <div
         className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.04]"
         style={{
           background:
-            "radial-gradient(130% 95% at 50% 115%, hsl(28 75% 38%) 0%, hsl(15 60% 28%) 28%, hsl(345 45% 22%) 55%, hsl(280 35% 15%) 78%, hsl(230 30% 8%) 100%)",
+            "radial-gradient(60% 50% at 25% 25%, hsl(280 90% 55%) 0%, transparent 70%), radial-gradient(55% 45% at 80% 30%, hsl(200 95% 55%) 0%, transparent 70%), radial-gradient(70% 60% at 70% 90%, hsl(20 95% 55%) 0%, transparent 70%), radial-gradient(60% 50% at 15% 85%, hsl(330 90% 55%) 0%, transparent 70%), linear-gradient(135deg, hsl(260 60% 18%), hsl(220 50% 12%))",
         }}
       />
-      {/* Heavier grain for vintage film feel */}
+      {/* Smudged glass smear streaks */}
       <div
-        className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-70"
+        className="pointer-events-none absolute inset-0 opacity-60 blur-md"
+        style={{
+          background:
+            "repeating-linear-gradient(115deg, rgba(255,255,255,0.08) 0px, rgba(255,255,255,0.08) 6px, transparent 6px, transparent 22px), repeating-linear-gradient(70deg, rgba(0,0,0,0.18) 0px, rgba(0,0,0,0.18) 4px, transparent 4px, transparent 18px)",
+        }}
+      />
+      {/* Frosted glass blur layer */}
+      <div className="pointer-events-none absolute inset-0 backdrop-blur-[6px]" />
+      {/* Dirty fingerprint / dust grain */}
+      <div
+        className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-80"
         style={{
           backgroundImage:
-            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.9'/></svg>\")",
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1.4 -0.2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
         }}
       />
-      {/* Warm sepia wash */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_70%,hsl(25_50%_25%/0.25),transparent_70%)] mix-blend-multiply" />
-      {/* Vintage vignette */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.55)_100%)]" />
-      {/* CRT scanlines */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-40 mix-blend-overlay"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(to bottom, rgba(0,0,0,0.55) 0px, rgba(0,0,0,0.55) 1px, transparent 1px, transparent 3px)",
-        }}
-      />
-      {/* RGB pixel mask */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-25 mix-blend-screen"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(to right, rgba(255,0,80,0.6) 0px, rgba(255,0,80,0.6) 1px, rgba(0,255,140,0.6) 1px, rgba(0,255,140,0.6) 2px, rgba(60,120,255,0.6) 2px, rgba(60,120,255,0.6) 3px)",
-        }}
-      />
-      {/* Faint chromatic flicker glow */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_55%,rgba(0,0,0,0.35)_100%)]" />
-      {/* Subtle top darken for text legibility */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/30" />
+      {/* Soft smudge highlights */}
+      <div className="pointer-events-none absolute -left-10 top-6 h-32 w-48 rotate-[18deg] rounded-full bg-white/15 blur-2xl" />
+      <div className="pointer-events-none absolute -right-8 bottom-10 h-28 w-40 -rotate-12 rounded-full bg-white/10 blur-2xl" />
+      {/* Vignette */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(0,0,0,0.55)_100%)]" />
+      {/* Top darken for legibility */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/25" />
 
       {/* Centered label */}
       <div className="relative flex h-full items-center justify-center p-4 text-center">
