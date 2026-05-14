@@ -1197,14 +1197,34 @@ const CreateMediaCard = ({
 }) => (
   <Link
     to={to}
-    className="group relative block w-full overflow-hidden rounded-2xl border border-dashed border-primary-v2/40 bg-primary-v2/5 transition-colors hover:border-primary-v2 hover:bg-primary-v2/10"
+    aria-label={label}
+    className="group relative block w-full overflow-hidden rounded-2xl bg-grey-dark-1-v2"
   >
     <div className={`relative w-full ${aspectClass}`}>
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 text-center">
-        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-v2 text-primary-v2-foreground transition-transform group-hover:scale-110">
-          <Plus className="h-5 w-5" />
+      {/* Vibrant gradient base */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(213_100%_55%/0.55),transparent_55%),radial-gradient(circle_at_75%_85%,hsl(292_91%_60%/0.45),transparent_60%),linear-gradient(135deg,hsl(213_100%_18%),hsl(240_30%_10%))]" />
+
+      {/* Animated conic glow */}
+      <div className="pointer-events-none absolute -inset-1 opacity-60 blur-2xl transition-opacity duration-500 group-hover:opacity-100">
+        <div className="h-full w-full animate-[spin_8s_linear_infinite] bg-[conic-gradient(from_0deg,hsl(213_100%_50%/0.5),transparent_40%,hsl(292_91%_60%/0.5),transparent_80%)]" />
+      </div>
+
+      {/* Sparkle dots */}
+      <Sparkles className="absolute right-3 top-3 h-4 w-4 text-white/60 transition-transform duration-500 group-hover:scale-125 group-hover:text-white" />
+
+      {/* Inner border glow */}
+      <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10 transition-colors group-hover:ring-primary-v2/60" />
+
+      {/* Center content */}
+      <div className="relative flex h-full flex-col items-center justify-center gap-3 p-4 text-center">
+        <span className="relative flex h-14 w-14 items-center justify-center rounded-full bg-primary-v2 text-primary-v2-foreground shadow-[0_8px_24px_-4px_hsl(213_100%_50%/0.6)] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-90">
+          <Plus className="h-6 w-6" strokeWidth={2.5} />
+          <span className="absolute inset-0 rounded-full ring-2 ring-primary-v2/40 transition-all duration-500 group-hover:ring-8 group-hover:ring-primary-v2/0" />
         </span>
-        <span className="text-sm font-semibold text-white">{label}</span>
+        <div className="flex flex-col gap-0.5">
+          <span className="text-sm font-bold leading-tight text-white">{label}</span>
+          <span className="text-[11px] font-medium text-white/60">Tap to start</span>
+        </div>
       </div>
     </div>
   </Link>
