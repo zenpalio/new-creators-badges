@@ -415,7 +415,7 @@ const Gallery = () => {
             )}
 
             {/* Character filter (Images / Videos / Stories) */}
-            {activeTab === "Creations" && activeContent !== "Babes" && (
+            {activeTab === "Creations" && (activeContent === "Images" || activeContent === "Videos") && (
               <CharacterFilter
                 characters={mockCharacters}
                 value={selectedCharacter}
