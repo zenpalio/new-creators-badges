@@ -27,6 +27,7 @@ import actSilver from "../assets/badges/activity-silver.png";
 import actGoldChamp from "../assets/badges/activity-gold-champ.png";
 import actInfluencer from "../assets/badges/activity-influencer.png";
 import actAmbassador from "../assets/badges/activity-ambassador.png";
+import actTop30 from "../assets/badges/activity-top30.png";
 
 import shopWaifu from "../assets/badges/shop-waifu.png";
 import shopTouchgrass from "../assets/badges/shop-touchgrass.png";
