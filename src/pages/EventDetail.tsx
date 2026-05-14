@@ -103,7 +103,7 @@ const EventDetail = () => {
 
           <div className="mx-auto w-full max-w-6xl px-4 pb-24 md:px-8 lg:px-12">
             {/* Header */}
-            <header className="mt-4 flex flex-col gap-4 md:-mt-16">
+            <header className="mt-4 flex flex-col gap-4 lg:-mt-16">
               <div className="flex items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-primary-v2/30 bg-primary-v2/10 px-2.5 py-0.5 font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-primary-v2">
                   <Sparkles className="h-3 w-3" />
