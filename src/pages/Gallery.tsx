@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
-import { Bell, Menu, Search, Upload, ArrowRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown, ChevronDown, Heart, SlidersHorizontal, X, Check, Plus, Clock, Flame, Users, Pencil, Trash2 } from "lucide-react";
+import { Bell, Menu, Search, Upload, ArrowRight, ArrowUpRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown, ChevronDown, Heart, SlidersHorizontal, X, Check, Plus, Clock, Flame, Users, Pencil, Trash2 } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popover";
 import SideNav from "../components/SideNav";
 import NotificationsSidebar, {
@@ -1201,41 +1201,39 @@ const CreateMediaCard = ({
     className="group relative block w-full overflow-hidden rounded-2xl bg-grey-dark-1-v2"
   >
     <div className={`relative w-full ${aspectClass}`}>
-      {/* Abstract gradient field */}
-      <div className="absolute inset-0 bg-[linear-gradient(160deg,hsl(240_30%_8%)_0%,hsl(220_40%_12%)_55%,hsl(213_60%_18%)_100%)]" />
+      {/* Subtle dark backdrop */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,hsl(240_20%_14%),hsl(240_25%_7%))]" />
 
-      {/* Floating soft blobs */}
-      <div className="pointer-events-none absolute -left-10 -top-10 h-40 w-40 rounded-full bg-primary-v2/30 blur-3xl transition-transform duration-700 group-hover:translate-x-4 group-hover:translate-y-2" />
-      <div className="pointer-events-none absolute -bottom-12 -right-8 h-44 w-44 rounded-full bg-fuchsia-500/20 blur-3xl transition-transform duration-700 group-hover:-translate-x-3 group-hover:-translate-y-2" />
-
-      {/* Thin diagonal line accent */}
-      <svg
-        className="absolute inset-0 h-full w-full opacity-30 transition-opacity duration-500 group-hover:opacity-60"
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-        aria-hidden
-      >
-        <line x1="0" y1="78" x2="100" y2="22" stroke="hsl(213 100% 60%)" strokeWidth="0.4" strokeDasharray="2 3" />
-        <circle cx="22" cy="65" r="0.9" fill="hsl(292 91% 70%)" />
-        <circle cx="74" cy="34" r="0.7" fill="hsl(213 100% 70%)" />
-      </svg>
-
-      {/* Inner border */}
-      <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/5 transition-colors group-hover:ring-white/20" />
-
-      {/* Label bottom-left */}
-      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-4">
-        <div className="flex flex-col gap-0.5">
-          <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/50">
-            New
-          </span>
-          <span className="text-base font-bold leading-tight text-white">
-            {label}
-          </span>
+      {/* Pastel gradient orb */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative aspect-square w-[68%]">
+          <div
+            className="absolute inset-0 rounded-full transition-transform duration-700 ease-out group-hover:scale-105"
+            style={{
+              background:
+                "radial-gradient(circle at 35% 30%, hsl(280 80% 78%) 0%, hsl(330 90% 72%) 30%, hsl(15 95% 68%) 65%, hsl(35 95% 70%) 100%)",
+              filter: "blur(0.4px)",
+              boxShadow:
+                "0 20px 60px -10px hsl(330 80% 50% / 0.45), inset -10px -20px 40px hsl(15 80% 55% / 0.4), inset 10px 15px 30px hsl(280 70% 80% / 0.5)",
+            }}
+          />
+          {/* Grain overlay */}
+          <div
+            className="absolute inset-0 rounded-full mix-blend-overlay opacity-40"
+            style={{
+              backgroundImage:
+                "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.7'/></svg>\")",
+            }}
+          />
         </div>
-        <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white backdrop-blur-md transition-all duration-300 group-hover:border-primary-v2 group-hover:bg-primary-v2 group-hover:text-primary-v2-foreground">
-          <ArrowRight className="h-4 w-4" />
+      </div>
+
+      {/* Label */}
+      <div className="absolute inset-x-0 bottom-4 flex items-center justify-center gap-1 px-3">
+        <span className="text-sm font-medium text-white/85 transition-colors group-hover:text-white">
+          {label}
         </span>
+        <ArrowUpRight className="h-3.5 w-3.5 text-white/60 transition-all duration-300 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
       </div>
     </div>
   </Link>
