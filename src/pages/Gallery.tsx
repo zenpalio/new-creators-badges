@@ -1186,6 +1186,26 @@ const CharacterChip = ({
 );
 
 // ---- First-card CTA used inside media grids ----
+const CTA_GRADIENTS: Record<string, string> = {
+  story:
+    "radial-gradient(80% 60% at 50% 0%, hsl(210 75% 60%) 0%, transparent 70%), radial-gradient(55% 45% at 15% 70%, hsl(25 55% 55%) 0%, transparent 70%), radial-gradient(60% 50% at 85% 80%, hsl(28 70% 60%) 0%, transparent 70%), linear-gradient(180deg, hsl(210 70% 55%), hsl(25 50% 55%))",
+  babe:
+    "radial-gradient(80% 60% at 50% 0%, hsl(320 75% 60%) 0%, transparent 70%), radial-gradient(55% 45% at 15% 75%, hsl(280 60% 50%) 0%, transparent 70%), radial-gradient(60% 50% at 85% 80%, hsl(340 70% 60%) 0%, transparent 70%), linear-gradient(180deg, hsl(320 70% 55%), hsl(270 55% 45%))",
+  image:
+    "radial-gradient(80% 60% at 50% 0%, hsl(170 70% 55%) 0%, transparent 70%), radial-gradient(55% 45% at 15% 75%, hsl(140 55% 50%) 0%, transparent 70%), radial-gradient(60% 50% at 85% 80%, hsl(85 65% 55%) 0%, transparent 70%), linear-gradient(180deg, hsl(170 65% 50%), hsl(95 55% 50%))",
+  video:
+    "radial-gradient(80% 60% at 50% 0%, hsl(255 70% 60%) 0%, transparent 70%), radial-gradient(55% 45% at 15% 75%, hsl(220 60% 50%) 0%, transparent 70%), radial-gradient(60% 50% at 85% 80%, hsl(330 70% 60%) 0%, transparent 70%), linear-gradient(180deg, hsl(255 65% 55%), hsl(330 60% 55%))",
+};
+
+const pickCtaGradient = (to: string, label: string) => {
+  const k = `${to} ${label}`.toLowerCase();
+  if (k.includes("story")) return CTA_GRADIENTS.story;
+  if (k.includes("babe")) return CTA_GRADIENTS.babe;
+  if (k.includes("video")) return CTA_GRADIENTS.video;
+  if (k.includes("image")) return CTA_GRADIENTS.image;
+  return CTA_GRADIENTS.story;
+};
+
 const CreateMediaCard = ({
   to,
   label,
@@ -1201,15 +1221,10 @@ const CreateMediaCard = ({
     className="group relative block w-full overflow-hidden rounded-2xl transition-transform duration-500 ease-out hover:-translate-y-1 hover:scale-[1.02]"
   >
     <div className={`relative w-full ${aspectClass}`}>
-      {/* Soft sky-to-warm gradient base */}
       <div
         className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-        style={{
-          background:
-            "radial-gradient(80% 60% at 50% 0%, hsl(210 75% 60%) 0%, transparent 70%), radial-gradient(55% 45% at 15% 70%, hsl(25 55% 55%) 0%, transparent 70%), radial-gradient(60% 50% at 85% 80%, hsl(28 70% 60%) 0%, transparent 70%), radial-gradient(50% 40% at 50% 95%, hsl(220 30% 35%) 0%, transparent 70%), linear-gradient(180deg, hsl(210 70% 55%), hsl(25 50% 55%))",
-        }}
+        style={{ background: pickCtaGradient(to, label) }}
       />
-      {/* Fine film grain */}
       <div
         className="pointer-events-none absolute inset-0 opacity-60 mix-blend-overlay"
         style={{
@@ -1218,7 +1233,6 @@ const CreateMediaCard = ({
         }}
       />
 
-      {/* Centered label */}
       <div className="relative flex h-full items-center justify-center p-4 text-center">
         <span className="text-base font-medium leading-snug text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)] sm:text-lg">
           {label}
