@@ -393,32 +393,36 @@ const ExploreKling = () => {
                       )
                     }
                   />
-                  <FilterDropdown
-                    value={
-                      ({ all: "All Creations", characters: "Characters", images: "Images", videos: "Videos", stories: "Stories" } as const)[creatorsCreation]
-                    }
-                    options={["All Creations", "Characters", "Images", "Videos", "Stories"]}
-                    onChange={(v) =>
-                      setCreatorsCreation(
-                        ({ "All Creations": "all", Characters: "characters", Images: "images", Videos: "videos", Stories: "stories" } as const)[
-                          v as "All Creations" | "Characters" | "Images" | "Videos" | "Stories"
-                        ],
-                      )
-                    }
-                  />
-                  <FilterDropdown
-                    value={
-                      ({ all: "All time", year: "Year", month: "Month", week: "Week" } as const)[creatorsTime]
-                    }
-                    options={["All time", "Year", "Month", "Week"]}
-                    onChange={(v) =>
-                      setCreatorsTime(
-                        ({ "All time": "all", Year: "year", Month: "month", Week: "week" } as const)[
-                          v as "All time" | "Year" | "Month" | "Week"
-                        ],
-                      )
-                    }
-                  />
+                  {creatorsSort === "likes" && (
+                    <>
+                      <FilterDropdown
+                        value={
+                          ({ all: "All Creations", characters: "Characters", images: "Images", videos: "Videos", stories: "Stories" } as const)[creatorsCreation]
+                        }
+                        options={["All Creations", "Characters", "Images", "Videos", "Stories"]}
+                        onChange={(v) =>
+                          setCreatorsCreation(
+                            ({ "All Creations": "all", Characters: "characters", Images: "images", Videos: "videos", Stories: "stories" } as const)[
+                              v as "All Creations" | "Characters" | "Images" | "Videos" | "Stories"
+                            ],
+                          )
+                        }
+                      />
+                      <FilterDropdown
+                        value={
+                          ({ all: "All time", year: "Year", month: "Month", week: "Week" } as const)[creatorsTime]
+                        }
+                        options={["All time", "Year", "Month", "Week"]}
+                        onChange={(v) =>
+                          setCreatorsTime(
+                            ({ "All time": "all", Year: "year", Month: "month", Week: "week" } as const)[
+                              v as "All time" | "Year" | "Month" | "Week"
+                            ],
+                          )
+                        }
+                      />
+                    </>
+                  )}
                 </div>
               )}
             </section>
