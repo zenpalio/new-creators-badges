@@ -51,7 +51,7 @@ const VerificationSignupDialog = ({ open, onClose }: Props) => {
             {steps.map((s, i) => (
               <li
                 key={s.title}
-                className="flex gap-3 rounded-xl border border-border/60 bg-background/40 p-3"
+                className="flex gap-3 rounded-xl border border-white/15 bg-background/40 p-3"
               >
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
                   <s.icon className="h-4 w-4" />
