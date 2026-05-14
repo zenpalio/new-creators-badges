@@ -210,6 +210,7 @@ const Gallery = () => {
   const { headerHidden } = useHeaderScrollTracking(mainRef);
 
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null);
 
   // Creators tab controls (lifted out of CreatorsView)
   const [creatorsSearch, setCreatorsSearch] = useState("");
