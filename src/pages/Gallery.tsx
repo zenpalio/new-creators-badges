@@ -1188,13 +1188,13 @@ const CharacterChip = ({
 // ---- First-card CTA used inside media grids ----
 const CTA_GRADIENTS: Record<string, string> = {
   story:
-    "radial-gradient(80% 60% at 50% 0%, hsl(210 75% 60%) 0%, transparent 70%), radial-gradient(55% 45% at 15% 70%, hsl(25 55% 55%) 0%, transparent 70%), radial-gradient(60% 50% at 85% 80%, hsl(28 70% 60%) 0%, transparent 70%), linear-gradient(180deg, hsl(210 70% 55%), hsl(25 50% 55%))",
+    "radial-gradient(70% 55% at 30% 25%, hsl(0 0% 18%) 0%, transparent 70%), radial-gradient(60% 50% at 80% 80%, hsl(0 0% 12%) 0%, transparent 70%), linear-gradient(160deg, hsl(0 0% 10%), hsl(0 0% 4%))",
   babe:
-    "radial-gradient(80% 60% at 50% 0%, hsl(320 75% 60%) 0%, transparent 70%), radial-gradient(55% 45% at 15% 75%, hsl(280 60% 50%) 0%, transparent 70%), radial-gradient(60% 50% at 85% 80%, hsl(340 70% 60%) 0%, transparent 70%), linear-gradient(180deg, hsl(320 70% 55%), hsl(270 55% 45%))",
+    "radial-gradient(70% 55% at 30% 25%, hsl(0 0% 20%) 0%, transparent 70%), radial-gradient(60% 50% at 80% 80%, hsl(0 0% 10%) 0%, transparent 70%), linear-gradient(160deg, hsl(0 0% 8%), hsl(0 0% 3%))",
   image:
-    "radial-gradient(80% 60% at 50% 0%, hsl(170 70% 55%) 0%, transparent 70%), radial-gradient(55% 45% at 15% 75%, hsl(140 55% 50%) 0%, transparent 70%), radial-gradient(60% 50% at 85% 80%, hsl(85 65% 55%) 0%, transparent 70%), linear-gradient(180deg, hsl(170 65% 50%), hsl(95 55% 50%))",
+    "radial-gradient(70% 55% at 30% 25%, hsl(0 0% 16%) 0%, transparent 70%), radial-gradient(60% 50% at 80% 80%, hsl(0 0% 8%) 0%, transparent 70%), linear-gradient(160deg, hsl(0 0% 9%), hsl(0 0% 3%))",
   video:
-    "radial-gradient(80% 60% at 50% 0%, hsl(255 70% 60%) 0%, transparent 70%), radial-gradient(55% 45% at 15% 75%, hsl(220 60% 50%) 0%, transparent 70%), radial-gradient(60% 50% at 85% 80%, hsl(330 70% 60%) 0%, transparent 70%), linear-gradient(180deg, hsl(255 65% 55%), hsl(330 60% 55%))",
+    "radial-gradient(70% 55% at 30% 25%, hsl(0 0% 22%) 0%, transparent 70%), radial-gradient(60% 50% at 80% 80%, hsl(0 0% 11%) 0%, transparent 70%), linear-gradient(160deg, hsl(0 0% 10%), hsl(0 0% 4%))",
 };
 
 const pickCtaGradient = (to: string, label: string) => {
