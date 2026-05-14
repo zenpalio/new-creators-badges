@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { Bell, Menu, Search, Upload, ArrowRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown, ChevronDown, Heart, SlidersHorizontal, X, Check, Plus, Clock, Flame, Users, Pencil, Trash2 } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popover";
 import SideNav from "../components/SideNav";
 import NotificationsSidebar, {
   type Notification,
@@ -113,6 +114,17 @@ const feed = [...exploreVideoFeed, ...exploreVideoFeed].map((v, i) => ({
 
 // (followingTags removed — Following filter moved to right panel)
 
+// ---- Mock characters (scalable: search popover handles long lists) ----
+const mockCharacters = [
+  "Mia", "Ellie", "Nyx", "Ella", "Hikari", "Lucy", "Luna", "Zara", "Ivy", "Suki",
+  "Phoenix", "Aurora", "Violet", "Ember", "Mira", "Kai", "Axel", "Orion", "Ronin",
+  "Sasha", "Yuki", "Cleo", "Nova", "Selene", "Raven", "Skye", "Juno", "Echo",
+].map((name, i) => ({
+  id: name.toLowerCase(),
+  name,
+  avatar: `https://i.pravatar.cc/80?img=${(i % 70) + 1}`,
+}));
+
 const storyCardLabels: StoryContentCardLabels = {
   storyBadge: "Story",
   viewStory: "View story",
@@ -198,6 +210,7 @@ const Gallery = () => {
   const { headerHidden } = useHeaderScrollTracking(mainRef);
 
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null);
 
   // Creators tab controls (lifted out of CreatorsView)
   const [creatorsSearch, setCreatorsSearch] = useState("");
@@ -398,6 +411,15 @@ const Gallery = () => {
                   </button>
                 ))}
               </div>
+            )}
+
+            {/* Character filter (Images / Videos / Stories) */}
+            {activeTab === "Creations" && activeContent !== "Babes" && (
+              <CharacterFilter
+                characters={mockCharacters}
+                value={selectedCharacter}
+                onChange={setSelectedCharacter}
+              />
             )}
 
             {/* Feed */}
@@ -987,6 +1009,132 @@ const EventCard = ({
       </div>
     </div>
   </a>
+);
+
+// ---- Character filter (scalable: scrollable chip rail + search popover) ----
+const CharacterFilter = ({
+  characters,
+  value,
+  onChange,
+}: {
+  characters: { id: string; name: string; avatar: string }[];
+  value: string | null;
+  onChange: (v: string | null) => void;
+}) => {
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const filtered = query
+    ? characters.filter((c) => c.name.toLowerCase().includes(query.toLowerCase()))
+    : characters;
+  const selected = characters.find((c) => c.id === value);
+
+  return (
+    <div className="flex items-center gap-2 -mx-4 px-4 sm:mx-0 sm:px-0">
+      <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide flex-nowrap min-w-0">
+        <button
+          type="button"
+          onClick={() => onChange(null)}
+          className={`shrink-0 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
+            value === null
+              ? "bg-primary-v2 text-primary-v2-foreground"
+              : "bg-grey-dark-1-v2 text-grey-light-2-v2 hover:bg-grey-dark-2-v2 hover:text-white"
+          }`}
+          aria-pressed={value === null}
+        >
+          <Users className="h-3.5 w-3.5" />
+          All characters
+        </button>
+        {selected && !characters.slice(0, 8).some((c) => c.id === selected.id) && (
+          <CharacterChip character={selected} active onClick={() => onChange(null)} />
+        )}
+        {characters.slice(0, 8).map((c) => (
+          <CharacterChip
+            key={c.id}
+            character={c}
+            active={value === c.id}
+            onClick={() => onChange(value === c.id ? null : c.id)}
+          />
+        ))}
+      </div>
+      <Popover open={searchOpen} onOpenChange={setSearchOpen}>
+        <PopoverTrigger asChild>
+          <button
+            type="button"
+            aria-label="Search characters"
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-grey-dark-1-v2 px-3 py-1.5 text-xs font-medium text-grey-light-2-v2 hover:bg-grey-dark-2-v2 hover:text-white transition-colors"
+          >
+            <Search className="h-3.5 w-3.5" />
+            All ({characters.length})
+          </button>
+        </PopoverTrigger>
+        <PopoverContent
+          align="end"
+          className="w-72 border-white/5 bg-grey-dark-1-v2 p-2"
+        >
+          <div className="relative mb-2">
+            <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-grey-light-4-v2" />
+            <input
+              autoFocus
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search characters"
+              className="h-8 w-full rounded-md border border-white/5 bg-background-v2 pl-8 pr-2 text-sm text-white placeholder:text-grey-light-4-v2 outline-none focus:border-primary-v2/50"
+            />
+          </div>
+          <div className="max-h-64 overflow-y-auto scrollbar-themed pr-1">
+            {filtered.length === 0 && (
+              <p className="py-4 text-center text-xs text-grey-light-4-v2">No matches</p>
+            )}
+            {filtered.map((c) => {
+              const active = value === c.id;
+              return (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => {
+                    onChange(active ? null : c.id);
+                    setSearchOpen(false);
+                    setQuery("");
+                  }}
+                  className={`flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 text-left text-sm transition-colors ${
+                    active ? "bg-primary-v2/15 text-white" : "text-grey-light-2-v2 hover:bg-white/5 hover:text-white"
+                  }`}
+                >
+                  <img src={c.avatar} alt="" className="h-7 w-7 rounded-full object-cover" />
+                  <span className="flex-1 truncate">{c.name}</span>
+                  {active && <Check className="h-3.5 w-3.5 text-primary-v2" />}
+                </button>
+              );
+            })}
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+};
+
+const CharacterChip = ({
+  character,
+  active,
+  onClick,
+}: {
+  character: { id: string; name: string; avatar: string };
+  active: boolean;
+  onClick: () => void;
+}) => (
+  <button
+    type="button"
+    onClick={onClick}
+    aria-pressed={active}
+    className={`shrink-0 inline-flex items-center gap-2 rounded-full py-1 pl-1 pr-3 text-xs font-medium transition-colors ${
+      active
+        ? "bg-primary-v2 text-primary-v2-foreground"
+        : "bg-grey-dark-1-v2 text-grey-light-2-v2 hover:bg-grey-dark-2-v2 hover:text-white"
+    }`}
+  >
+    <img src={character.avatar} alt="" className="h-6 w-6 rounded-full object-cover" />
+    {character.name}
+  </button>
 );
 
 export default Gallery;
