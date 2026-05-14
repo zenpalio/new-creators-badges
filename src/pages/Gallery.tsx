@@ -1198,42 +1198,33 @@ const CreateMediaCard = ({
   <Link
     to={to}
     aria-label={label}
-    className="group relative block w-full overflow-hidden rounded-2xl bg-grey-dark-1-v2"
+    className="group relative block w-full overflow-hidden rounded-2xl"
   >
     <div className={`relative w-full ${aspectClass}`}>
-      {/* Subtle dark backdrop */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,hsl(240_20%_14%),hsl(240_25%_7%))]" />
+      {/* Full-bleed grainy gradient field */}
+      <div
+        className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+        style={{
+          background:
+            "radial-gradient(120% 90% at 50% 110%, hsl(28 95% 62%) 0%, hsl(345 85% 65%) 35%, hsl(280 55% 55%) 70%, hsl(230 45% 38%) 100%)",
+        }}
+      />
+      {/* Grain overlay */}
+      <div
+        className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-40"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.8'/></svg>\")",
+        }}
+      />
+      {/* Soft top vignette for text legibility */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-transparent" />
 
-      {/* Pastel gradient orb */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="relative aspect-square w-[68%]">
-          <div
-            className="absolute inset-0 rounded-full transition-transform duration-700 ease-out group-hover:scale-105"
-            style={{
-              background:
-                "radial-gradient(circle at 35% 30%, hsl(280 80% 78%) 0%, hsl(330 90% 72%) 30%, hsl(15 95% 68%) 65%, hsl(35 95% 70%) 100%)",
-              filter: "blur(0.4px)",
-              boxShadow:
-                "0 20px 60px -10px hsl(330 80% 50% / 0.45), inset -10px -20px 40px hsl(15 80% 55% / 0.4), inset 10px 15px 30px hsl(280 70% 80% / 0.5)",
-            }}
-          />
-          {/* Grain overlay */}
-          <div
-            className="absolute inset-0 rounded-full mix-blend-overlay opacity-40"
-            style={{
-              backgroundImage:
-                "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.7'/></svg>\")",
-            }}
-          />
-        </div>
-      </div>
-
-      {/* Label */}
-      <div className="absolute inset-x-0 bottom-4 flex items-center justify-center gap-1 px-3">
-        <span className="text-sm font-medium text-white/85 transition-colors group-hover:text-white">
+      {/* Centered label */}
+      <div className="relative flex h-full items-center justify-center p-4 text-center">
+        <span className="text-base font-medium leading-snug text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)] sm:text-lg">
           {label}
         </span>
-        <ArrowUpRight className="h-3.5 w-3.5 text-white/60 transition-all duration-300 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
       </div>
     </div>
   </Link>
