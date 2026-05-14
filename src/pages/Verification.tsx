@@ -1280,7 +1280,6 @@ const Verification = () => {
       <VerificationSignupDialog open={verifyOpen} onClose={() => setVerifyOpen(false)} />
       <style>{`.verification-blur img, .verification-blur video, .verification-blur picture { filter: blur(14px); transition: filter .2s; cursor: pointer; }`}</style>
     </>
-    </>
   );
 };
 
