@@ -105,7 +105,7 @@ export const CtaIllustration = ({ variant }: { variant: CtaVariant }) => {
   const Icon = CTA_ICONS[variant];
   const v = CTA_VARIANTS[variant];
   return (
-    <div className="pointer-events-none scale-[0.65] sm:scale-100 transition-transform duration-500 ease-out group-hover:-translate-y-0.5">
+    <div className="pointer-events-none scale-[0.65] lg:scale-100 transition-transform duration-500 ease-out group-hover:-translate-y-0.5">
       <div className="relative h-24 w-36">
         <CtaSkeleton variant={variant} />
         <div className={`absolute -right-1 -top-1 flex h-7 w-7 items-center justify-center rounded-full bg-[hsl(0_0%_5%)] ring-1 ${v.ring} backdrop-blur-sm transition-transform duration-500 ease-out group-hover:rotate-6`}>
