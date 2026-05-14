@@ -76,7 +76,10 @@ const VerificationSignupDialog = ({ open, onClose }: Props) => {
               if (av && typeof av.start === "function") {
                 av.start();
               } else {
-                console.warn("AgeVerif not loaded yet");
+                console.warn(
+                  "[AgeVerif] window.ageverif is undefined — script likely blocked. " +
+                  "Live key only works on the configured domain. Use the Public Test Key for previews."
+                );
               }
             }}
             className="mt-6 inline-flex h-11 w-full items-center justify-center rounded-full bg-white px-5 text-sm font-semibold text-black shadow-lg ring-1 ring-white/20 transition-colors hover:bg-white/90"
