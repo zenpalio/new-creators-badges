@@ -1126,6 +1126,15 @@ const Verification = () => {
         onNotifications={() => setNotificationsOpen(true)}
         notificationCount={notificationUnreadCount}
         systemStatus={exploreSystemStatus}
+        headerActions={
+          <button
+            type="button"
+            onClick={() => setVerifyOpen(true)}
+            className="inline-flex h-9 items-center justify-center rounded-full bg-primary px-4 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            Sign in
+          </button>
+        }
       >
         <PostsSection
           title="Your babes are waiting"
