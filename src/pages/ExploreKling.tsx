@@ -115,6 +115,14 @@ const tools = [
   { title: "Create Template Babe", subtitle: "Start from a preset", Icon: User, href: "/explore/create-template" },
 ];
 
+// Map each content tab to its matching create-tool card
+const contentCreateTool = {
+  Babes: { title: "Create Custom Babe", subtitle: "Design your dream character", Icon: Sparkles, href: "/explore/create-babe" },
+  Images: { title: "Image Generator", subtitle: "Render any moment", Icon: ImageIcon, href: "/explore/image-generator" },
+  Videos: { title: "Video Generator", subtitle: "Bring scenes to life", Icon: Film, href: "/explore/video-generator" },
+  Stories: { title: "Story Creator", subtitle: "Write episodic adventures", Icon: BookOpen, href: "/explore/story-creator" },
+} as const;
+
 // ---- Tabs ----
 const tabs = ["Community", "Creators", "Events"] as const;
 const contentTabs = ["Babes", "Images", "Videos", "Stories"] as const;
@@ -463,12 +471,18 @@ const ExploreKling = () => {
               </section>
             ) : activeContent === "Stories" ? (
               <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 [&>*]:w-full [&>*]:max-w-none">
+                <div className="h-full min-h-[200px]">
+                  <ExploreCreateToolCard {...contentCreateTool[activeContent]} />
+                </div>
                 {exploreStories.map((s) => (
                   <StoryContentCard key={s.title} {...s} labels={storyCardLabels} />
                 ))}
               </section>
             ) : (
               <section className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
+                <div className="aspect-[13/19]">
+                  <ExploreCreateToolCard {...contentCreateTool[activeContent]} />
+                </div>
                 {feed.map((v) => (
                   <ExploreVideoCard
                     key={v.id}
