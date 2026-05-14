@@ -463,12 +463,18 @@ const ExploreKling = () => {
               </section>
             ) : activeContent === "Stories" ? (
               <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 [&>*]:w-full [&>*]:max-w-none">
+                <div className="h-full min-h-[200px]">
+                  <ExploreCreateToolCard {...contentCreateTool[activeContent]} />
+                </div>
                 {exploreStories.map((s) => (
                   <StoryContentCard key={s.title} {...s} labels={storyCardLabels} />
                 ))}
               </section>
             ) : (
               <section className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
+                <div className="aspect-[13/19]">
+                  <ExploreCreateToolCard {...contentCreateTool[activeContent]} />
+                </div>
                 {feed.map((v) => (
                   <ExploreVideoCard
                     key={v.id}
