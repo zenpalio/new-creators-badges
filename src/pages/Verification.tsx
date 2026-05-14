@@ -918,7 +918,7 @@ const exploreSystemStatus: {
   },
 };
 
-const Explore = () => {
+const Verification = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>(() =>
@@ -1269,4 +1269,4 @@ const Explore = () => {
   );
 };
 
-export default Explore;
+export default Verification;
