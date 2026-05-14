@@ -1201,24 +1201,28 @@ const CreateMediaCard = ({
     className="group relative block w-full overflow-hidden rounded-2xl"
   >
     <div className={`relative w-full ${aspectClass}`}>
-      {/* Full-bleed grainy gradient field */}
+      {/* Full-bleed dark vintage gradient field */}
       <div
         className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.04]"
         style={{
           background:
-            "radial-gradient(120% 90% at 50% 110%, hsl(28 95% 62%) 0%, hsl(345 85% 65%) 35%, hsl(280 55% 55%) 70%, hsl(230 45% 38%) 100%)",
+            "radial-gradient(130% 95% at 50% 115%, hsl(28 75% 38%) 0%, hsl(15 60% 28%) 28%, hsl(345 45% 22%) 55%, hsl(280 35% 15%) 78%, hsl(230 30% 8%) 100%)",
         }}
       />
-      {/* Grain overlay */}
+      {/* Heavier grain for vintage film feel */}
       <div
-        className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-40"
+        className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-70"
         style={{
           backgroundImage:
-            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.8'/></svg>\")",
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.9'/></svg>\")",
         }}
       />
-      {/* Soft top vignette for text legibility */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-transparent" />
+      {/* Warm sepia wash */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_70%,hsl(25_50%_25%/0.25),transparent_70%)] mix-blend-multiply" />
+      {/* Vintage vignette */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.55)_100%)]" />
+      {/* Subtle top darken for text legibility */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/30" />
 
       {/* Centered label */}
       <div className="relative flex h-full items-center justify-center p-4 text-center">
