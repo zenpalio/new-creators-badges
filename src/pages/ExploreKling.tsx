@@ -11,6 +11,7 @@ import NotificationsSidebar, {
 import StoryContentCard, { type StoryContentCardLabels } from "../components/explore/StoryContentCard";
 import { useHeaderScrollTracking } from "../components/ExploreView";
 import ExploreCreateToolCard from "../components/explore/ExploreCreateToolCard";
+import CreateMediaCard from "../components/CreateMediaCard";
 import ExploreVideoCard from "../components/explore/ExploreVideoCard";
 import FloatingToolsFAB, { type FloatingToolsFabItem } from "../components/explore/FloatingToolsFAB";
 import LikeButton from "../components/explore/LikeButton";
