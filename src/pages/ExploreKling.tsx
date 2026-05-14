@@ -11,6 +11,7 @@ import NotificationsSidebar, {
 import StoryContentCard, { type StoryContentCardLabels } from "../components/explore/StoryContentCard";
 import { useHeaderScrollTracking } from "../components/ExploreView";
 import ExploreCreateToolCard from "../components/explore/ExploreCreateToolCard";
+import CreateMediaCard from "../components/CreateMediaCard";
 import ExploreVideoCard from "../components/explore/ExploreVideoCard";
 import FloatingToolsFAB, { type FloatingToolsFabItem } from "../components/explore/FloatingToolsFAB";
 import LikeButton from "../components/explore/LikeButton";
@@ -115,12 +116,12 @@ const tools = [
   { title: "Create Template Babe", subtitle: "Start from a preset", Icon: User, href: "/explore/create-template" },
 ];
 
-// Map each content tab to its matching create-tool card
+// Map each content tab to its matching CreateMediaCard config
 const contentCreateTool = {
-  Babes: { title: "Create Custom Babe", subtitle: "Design your dream character", Icon: Sparkles, href: "/explore/create-babe" },
-  Images: { title: "Image Generator", subtitle: "Render any moment", Icon: ImageIcon, href: "/explore/image-generator" },
-  Videos: { title: "Video Generator", subtitle: "Bring scenes to life", Icon: Film, href: "/explore/video-generator" },
-  Stories: { title: "Story Creator", subtitle: "Write episodic adventures", Icon: BookOpen, href: "/explore/story-creator" },
+  Babes: { to: "/explore/create-babe", label: "Create babe" },
+  Images: { to: "/explore/image-generator", label: "Create image" },
+  Videos: { to: "/explore/video-generator", label: "Create video" },
+  Stories: { to: "/explore/story-creator", label: "Create story" },
 } as const;
 
 // ---- Tabs ----
@@ -471,8 +472,8 @@ const ExploreKling = () => {
               </section>
             ) : activeContent === "Stories" ? (
               <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 [&>*]:w-full [&>*]:max-w-none">
-                <div className="h-full min-h-[200px]">
-                  <ExploreCreateToolCard {...contentCreateTool[activeContent]} />
+                <div className="aspect-[5/3]">
+                  <CreateMediaCard {...contentCreateTool[activeContent]} aspectClass="h-full" />
                 </div>
                 {exploreStories.map((s) => (
                   <StoryContentCard key={s.title} {...s} labels={storyCardLabels} />
@@ -481,7 +482,7 @@ const ExploreKling = () => {
             ) : (
               <section className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
                 <div className="aspect-[13/19]">
-                  <ExploreCreateToolCard {...contentCreateTool[activeContent]} />
+                  <CreateMediaCard {...contentCreateTool[activeContent]} aspectClass="h-full" />
                 </div>
                 {feed.map((v) => (
                   <ExploreVideoCard
