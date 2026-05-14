@@ -27,6 +27,7 @@ import AnnouncementDialog from "../components/AnnouncementDialog";
 import { ExploreView } from "../components/ExploreView";
 import LikeButton from "../components/explore/LikeButton";
 import FloatingToolsFAB, { type FloatingToolsFabItem } from "../components/explore/FloatingToolsFAB";
+import VerificationSignupDialog from "../components/VerificationSignupDialog";
 import {
   PostsSection,
   ExploreCreatorsSection,
@@ -1265,6 +1266,7 @@ const Verification = () => {
         <ExploreFooterSection footer={footerLinks} />
       </ExploreView>
       <FloatingToolsFAB items={floatingToolsItems} />
+      <VerificationSignupDialog />
     </>
   );
 };
