@@ -925,6 +925,7 @@ const Verification = () => {
 
   const handleContentClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLElement;
+    if (target.closest(".sfw")) return;
     if (target.closest("img, video, picture, [data-media]")) {
       e.preventDefault();
       e.stopPropagation();
@@ -1133,7 +1134,7 @@ const Verification = () => {
           posts={yourBabes}
           loading={sectionRailsLoading}
         />
-        <ExplorePromoSection promo={giftPromo} />
+        <div className="sfw"><ExplorePromoSection promo={giftPromo} /></div>
         <ExploreStoriesSection
           title="Featured stories"
           actionLabel="See all"
@@ -1153,15 +1154,15 @@ const Verification = () => {
           renderLikeButton={renderVideoLikeButton}
           loading={sectionRailsLoading}
         />
-        <ExplorePromoSection promo={premiumPromo} />
-        <ExploreCreatorsSection
+        <div className="sfw"><ExplorePromoSection promo={premiumPromo} /></div>
+        <div className="sfw"><ExploreCreatorsSection
           title="Top creators"
           actionLabel="See all"
           posts={topCreators}
           className="mt-2"
           tierLabels={exploreTierLabels}
-        />
-        <ExploreWhatsNewSection
+        /></div>
+        <div className="sfw"><ExploreWhatsNewSection
           title="What's new"
           actionLabel="See all"
           readMoreLabel={exploreReadMoreLabel}
@@ -1185,7 +1186,7 @@ const Verification = () => {
               outro: n.announcement.outro,
             });
           }}
-        />
+        /></div>
         <PostsSection
           title="Your following"
           actionLabel="See all"
@@ -1196,7 +1197,7 @@ const Verification = () => {
           renderLikeButton={renderBabeLikeButton}
           loading={sectionRailsLoading}
         />
-        <ExplorePromoSection promo={tokensPromo} />
+        <div className="sfw"><ExplorePromoSection promo={tokensPromo} /></div>
         <PostsSection
           title="Check out this week trending babes"
           actionLabel="See all"
@@ -1216,14 +1217,14 @@ const Verification = () => {
           renderLikeButton={renderStoryLikeButton}
           loading={sectionRailsLoading}
         />
-        <ExplorePromoSection promo={featurePromo} />
-        <ExploreCreatorsSection
+        <div className="sfw"><ExplorePromoSection promo={featurePromo} /></div>
+        <div className="sfw"><ExploreCreatorsSection
           title="Rising creators this week"
           actionLabel="See all"
           posts={risingCreators}
           className="mt-2"
           tierLabels={exploreTierLabels}
-        />
+        /></div>
         <PostsSection
           title="Recommended for you"
           actionLabel="See all"
@@ -1231,7 +1232,7 @@ const Verification = () => {
           className="mt-2"
           loading={sectionRailsLoading}
         />
-        <ExplorePromoSection promo={giftPromo2} />
+        <div className="sfw"><ExplorePromoSection promo={giftPromo2} /></div>
         <ExploreStoriesSection
           title="Continue your stories"
           actionLabel="See all"
@@ -1250,7 +1251,7 @@ const Verification = () => {
           renderLikeButton={renderVideoLikeButton}
           loading={sectionRailsLoading}
         />
-        <ExplorePromoSection promo={premiumPromo2} />
+        <div className="sfw"><ExplorePromoSection promo={premiumPromo2} /></div>
         <PostsSection
           title="New releases"
           actionLabel="See all"
@@ -1270,17 +1271,20 @@ const Verification = () => {
           renderLikeButton={renderBabeLikeButton}
           loading={sectionRailsLoading}
         />
-        <ExploreStartCreatingSection
+        <div className="sfw"><ExploreStartCreatingSection
           title="Start creating"
           tools={createTools}
           className="mt-4"
-        />
-        <ExploreFooterSection footer={footerLinks} />
+        /></div>
+        <div className="sfw"><ExploreFooterSection footer={footerLinks} /></div>
       </ExploreView>
       </div>
       <FloatingToolsFAB items={floatingToolsItems} />
       <VerificationSignupDialog open={verifyOpen} onClose={() => setVerifyOpen(false)} />
-      <style>{`.verification-blur img, .verification-blur video, .verification-blur picture { filter: blur(14px); transition: filter .2s; cursor: pointer; }`}</style>
+      <style>{`
+        .verification-blur img, .verification-blur video, .verification-blur picture { filter: blur(14px); transition: filter .2s; cursor: pointer; }
+        .verification-blur .sfw img, .verification-blur .sfw video, .verification-blur .sfw picture { filter: none; cursor: auto; }
+      `}</style>
     </>
   );
 };
