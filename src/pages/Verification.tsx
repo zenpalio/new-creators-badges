@@ -1142,7 +1142,6 @@ const Verification = () => {
           posts={yourBabes}
           loading={sectionRailsLoading}
         /></div>
-        <div className="sfw"><ExplorePromoSection promo={giftPromo} /></div>
         <ExploreStoriesSection
           title="Featured stories"
           actionLabel="See all"
@@ -1162,7 +1161,6 @@ const Verification = () => {
           renderLikeButton={renderVideoLikeButton}
           loading={sectionRailsLoading}
         />
-        <div className="sfw"><ExplorePromoSection promo={premiumPromo} /></div>
         <div className="sfw"><ExploreCreatorsSection
           title="Top creators"
           actionLabel="See all"
@@ -1205,7 +1203,6 @@ const Verification = () => {
           renderLikeButton={renderBabeLikeButton}
           loading={sectionRailsLoading}
         />
-        <div className="sfw"><ExplorePromoSection promo={tokensPromo} /></div>
         <PostsSection
           title="Check out this week trending babes"
           actionLabel="See all"
@@ -1225,7 +1222,6 @@ const Verification = () => {
           renderLikeButton={renderStoryLikeButton}
           loading={sectionRailsLoading}
         />
-        <div className="sfw"><ExplorePromoSection promo={featurePromo} /></div>
         <div className="sfw"><ExploreCreatorsSection
           title="Rising creators this week"
           actionLabel="See all"
@@ -1240,7 +1236,6 @@ const Verification = () => {
           className="mt-2"
           loading={sectionRailsLoading}
         />
-        <div className="sfw"><ExplorePromoSection promo={giftPromo2} /></div>
         <ExploreStoriesSection
           title="Continue your stories"
           actionLabel="See all"
@@ -1259,7 +1254,6 @@ const Verification = () => {
           renderLikeButton={renderVideoLikeButton}
           loading={sectionRailsLoading}
         />
-        <div className="sfw"><ExplorePromoSection promo={premiumPromo2} /></div>
         <PostsSection
           title="New releases"
           actionLabel="See all"
