@@ -27,6 +27,7 @@ import actSilver from "../assets/badges/activity-silver.png";
 import actGoldChamp from "../assets/badges/activity-gold-champ.png";
 import actInfluencer from "../assets/badges/activity-influencer.png";
 import actAmbassador from "../assets/badges/activity-ambassador.png";
+import actTop30 from "../assets/badges/activity-top30.png";
 
 import shopWaifu from "../assets/badges/shop-waifu.png";
 import shopTouchgrass from "../assets/badges/shop-touchgrass.png";
@@ -203,6 +204,7 @@ export const activityBadges = [
   { name: "Regular", description: "Login more than 10 times", imageUrl: actRegular, completed: false, actionLabel: "Keep Logging In" },
   { name: "Dedicated", description: "Login more than 50 times", imageUrl: actDedicated, completed: false, actionLabel: "Keep Logging In" },
   { name: "Diehard", description: "Login more than 100 times", imageUrl: actDiehard, completed: false, actionLabel: "Keep Logging In" },
+  { name: "Top 30", description: "Reach top 30 in any monthly ranking category", imageUrl: actTop30, completed: false, actionLabel: "View Rankings", actionUrl: "/creators" },
   { name: "Bronze Climber", description: "Reach top 3 in any monthly ranking category", imageUrl: actBronze, completed: false, actionLabel: "View Rankings", actionUrl: "/creators" },
   { name: "Silver Contender", description: "Reach top 2 in any monthly ranking category", imageUrl: actSilver, completed: false, actionLabel: "View Rankings", actionUrl: "/creators" },
   { name: "Gold Champion", description: "Reach #1 in any monthly ranking category", imageUrl: actGoldChamp, completed: false, actionLabel: "View Rankings", actionUrl: "/creators" },
