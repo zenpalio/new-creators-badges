@@ -1131,7 +1131,7 @@ const Verification = () => {
           )
         }
       />
-      <div className="verification-blur" onClickCapture={handleContentClick}>
+      <div className={verified ? "" : "verification-blur"} onClickCapture={verified ? undefined : handleContentClick}>
       <ExploreView
         heroSlides={heroSlides}
         heroLabels={exploreHeroLabels}
