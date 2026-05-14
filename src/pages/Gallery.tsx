@@ -1199,36 +1199,108 @@ const pickCtaVariant = (to: string, label: string): CtaVariant => {
 
 const CTA_VARIANTS: Record<
   CtaVariant,
-  { Icon: typeof BookOpen; accent: string; ring: string; glow: string; tag: string }
+  { accent: string; ring: string; glow: string; tag: string }
 > = {
-  story: {
-    Icon: BookOpen,
-    accent: "text-amber-300/90",
-    ring: "ring-amber-300/15",
-    glow: "bg-amber-400/10",
-    tag: "Story",
-  },
-  babe: {
-    Icon: Heart,
-    accent: "text-rose-300/90",
-    ring: "ring-rose-300/15",
-    glow: "bg-rose-400/10",
-    tag: "Babe",
-  },
-  image: {
-    Icon: ImageIcon,
-    accent: "text-emerald-300/90",
-    ring: "ring-emerald-300/15",
-    glow: "bg-emerald-400/10",
-    tag: "Image",
-  },
-  video: {
-    Icon: Film,
-    accent: "text-sky-300/90",
-    ring: "ring-sky-300/15",
-    glow: "bg-sky-400/10",
-    tag: "Video",
-  },
+  story: { accent: "text-amber-300/90", ring: "ring-amber-300/15", glow: "bg-amber-400/10", tag: "Story" },
+  babe:  { accent: "text-rose-300/90",  ring: "ring-rose-300/15",  glow: "bg-rose-400/10",  tag: "Babe"  },
+  image: { accent: "text-emerald-300/90", ring: "ring-emerald-300/15", glow: "bg-emerald-400/10", tag: "Image" },
+  video: { accent: "text-sky-300/90",   ring: "ring-sky-300/15",   glow: "bg-sky-400/10",   tag: "Video" },
+};
+
+// ---- Per-variant illustration (clean, layered, lightly tilted) ----
+const Chip = ({
+  className,
+  rotate,
+  children,
+  shape = "rounded-2xl",
+}: {
+  className: string;
+  rotate: string;
+  children: React.ReactNode;
+  shape?: string;
+}) => (
+  <div
+    className={`absolute flex items-center justify-center ${shape} ${className} ${rotate} shadow-[0_10px_24px_rgba(0,0,0,0.35)] ring-1 ring-white/15 transition-transform duration-500 ease-out`}
+  >
+    {children}
+  </div>
+);
+
+const Backdrop = () => (
+  // Faint outlined card/bubble behind the chips
+  <svg
+    viewBox="0 0 120 80"
+    className="absolute left-1/2 top-1/2 h-24 w-36 -translate-x-1/2 -translate-y-1/2 text-white/15"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.25"
+  >
+    <rect x="6" y="6" width="108" height="56" rx="10" />
+    <line x1="18" y1="22" x2="78" y2="22" />
+    <line x1="18" y1="32" x2="60" y2="32" />
+    <line x1="18" y1="42" x2="50" y2="42" />
+    <path d="M30 62 L42 74 L54 62" strokeLinejoin="round" />
+  </svg>
+);
+
+const CtaIllustration = ({ variant }: { variant: CtaVariant }) => {
+  return (
+    <div className="pointer-events-none relative h-28 w-40 transition-transform duration-500 ease-out group-hover:-translate-y-1 group-hover:rotate-[1deg]">
+      <Backdrop />
+      {variant === "story" && (
+        <>
+          <Chip className="left-1 top-3 h-12 w-12 bg-amber-400" rotate="-rotate-[10deg]">
+            <BookOpen className="h-6 w-6 text-amber-950" strokeWidth={2.2} />
+          </Chip>
+          <Chip className="right-2 top-1 h-10 w-10 bg-sky-400" rotate="rotate-[14deg]" shape="rounded-full">
+            <Sparkles className="h-5 w-5 text-sky-950" strokeWidth={2.2} />
+          </Chip>
+          <Chip className="bottom-1 right-6 h-8 w-16 bg-white/95" rotate="rotate-[-6deg]" shape="rounded-full">
+            <span className="text-[10px] font-semibold tracking-wide text-neutral-800">CHAPTER 1</span>
+          </Chip>
+        </>
+      )}
+      {variant === "babe" && (
+        <>
+          <Chip className="left-2 top-2 h-12 w-12 bg-rose-400" rotate="-rotate-[12deg]" shape="rounded-full">
+            <Heart className="h-6 w-6 text-rose-950" strokeWidth={2.4} fill="currentColor" />
+          </Chip>
+          <Chip className="right-1 top-4 h-11 w-11 bg-violet-400" rotate="rotate-[10deg]">
+            <User className="h-5 w-5 text-violet-950" strokeWidth={2.4} />
+          </Chip>
+          <Chip className="bottom-1 left-10 h-7 w-20 bg-white/95" rotate="rotate-[-4deg]" shape="rounded-full">
+            <span className="text-[10px] font-semibold tracking-wide text-neutral-800">@new_babe</span>
+          </Chip>
+        </>
+      )}
+      {variant === "image" && (
+        <>
+          <Chip className="left-1 top-4 h-12 w-12 bg-emerald-400" rotate="-rotate-[8deg]" shape="rounded-full">
+            <ImageIcon className="h-6 w-6 text-emerald-950" strokeWidth={2.2} />
+          </Chip>
+          <Chip className="right-2 top-1 h-10 w-10 bg-lime-300" rotate="rotate-[12deg]">
+            <Wand2 className="h-5 w-5 text-lime-950" strokeWidth={2.2} />
+          </Chip>
+          <Chip className="bottom-2 right-4 h-8 w-8 bg-fuchsia-400" rotate="rotate-[6deg]">
+            <Palette className="h-4 w-4 text-fuchsia-950" strokeWidth={2.4} />
+          </Chip>
+        </>
+      )}
+      {variant === "video" && (
+        <>
+          <Chip className="left-2 top-3 h-12 w-12 bg-sky-400" rotate="-rotate-[10deg]">
+            <Film className="h-6 w-6 text-sky-950" strokeWidth={2.2} />
+          </Chip>
+          <Chip className="right-1 top-1 h-11 w-11 bg-indigo-400" rotate="rotate-[12deg]" shape="rounded-full">
+            <Play className="h-5 w-5 text-indigo-950" strokeWidth={2.6} fill="currentColor" />
+          </Chip>
+          <Chip className="bottom-1 left-8 h-7 w-7 bg-fuchsia-400" rotate="rotate-[-8deg]" shape="rounded-full">
+            <Mic className="h-3.5 w-3.5 text-fuchsia-950" strokeWidth={2.4} />
+          </Chip>
+        </>
+      )}
+    </div>
+  );
 };
 
 const CreateMediaCard = ({
@@ -1241,7 +1313,7 @@ const CreateMediaCard = ({
   aspectClass: string;
 }) => {
   const variant = pickCtaVariant(to, label);
-  const { Icon, accent, ring, glow, tag } = CTA_VARIANTS[variant];
+  const { accent, ring, glow, tag } = CTA_VARIANTS[variant];
   return (
     <Link
       to={to}
@@ -1251,7 +1323,7 @@ const CreateMediaCard = ({
       <div className={`relative w-full ${aspectClass}`}>
         {/* Soft accent glow */}
         <div
-          className={`pointer-events-none absolute -bottom-16 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full ${glow} blur-3xl transition-opacity duration-500 group-hover:opacity-150`}
+          className={`pointer-events-none absolute -bottom-16 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full ${glow} blur-3xl`}
         />
         {/* Top-left tag */}
         <div className="absolute left-3 top-3 z-10 flex items-center gap-1.5">
@@ -1261,21 +1333,16 @@ const CreateMediaCard = ({
           </span>
         </div>
 
-        {/* Watermark glyph */}
+        {/* Centered illustration */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <Icon
-            className={`h-24 w-24 ${accent} opacity-30 transition-transform duration-700 ease-out group-hover:scale-110 group-hover:opacity-50`}
-            strokeWidth={1}
-          />
+          <CtaIllustration variant={variant} />
         </div>
 
         {/* Bottom label */}
         <div className="absolute inset-x-0 bottom-0 p-4">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-white sm:text-base">
-              {label}
-            </span>
-            <span className={`flex h-7 w-7 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/10 transition-all duration-500 group-hover:bg-white/10 group-hover:ring-white/20`}>
+            <span className="text-sm font-medium text-white sm:text-base">{label}</span>
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/10 transition-all duration-500 group-hover:bg-white/10 group-hover:ring-white/20">
               <ArrowUpRight className="h-3.5 w-3.5 text-white" strokeWidth={2} />
             </span>
           </div>
