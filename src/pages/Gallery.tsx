@@ -1198,42 +1198,25 @@ const CreateMediaCard = ({
   <Link
     to={to}
     aria-label={label}
-    className="group relative block w-full overflow-hidden rounded-2xl"
+    className="group relative block w-full overflow-hidden rounded-2xl transition-transform duration-500 ease-out hover:-translate-y-1 hover:scale-[1.02]"
   >
     <div className={`relative w-full ${aspectClass}`}>
-      {/* Saturated multi-color base */}
+      {/* Soft sky-to-warm gradient base */}
       <div
-        className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+        className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.03]"
         style={{
           background:
-            "radial-gradient(60% 50% at 25% 25%, hsl(280 90% 55%) 0%, transparent 70%), radial-gradient(55% 45% at 80% 30%, hsl(200 95% 55%) 0%, transparent 70%), radial-gradient(70% 60% at 70% 90%, hsl(20 95% 55%) 0%, transparent 70%), radial-gradient(60% 50% at 15% 85%, hsl(330 90% 55%) 0%, transparent 70%), linear-gradient(135deg, hsl(260 60% 18%), hsl(220 50% 12%))",
+            "radial-gradient(80% 60% at 50% 0%, hsl(210 75% 60%) 0%, transparent 70%), radial-gradient(55% 45% at 15% 70%, hsl(25 55% 55%) 0%, transparent 70%), radial-gradient(60% 50% at 85% 80%, hsl(28 70% 60%) 0%, transparent 70%), radial-gradient(50% 40% at 50% 95%, hsl(220 30% 35%) 0%, transparent 70%), linear-gradient(180deg, hsl(210 70% 55%), hsl(25 50% 55%))",
         }}
       />
-      {/* Smudged glass smear streaks */}
+      {/* Fine film grain */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-60 blur-md"
-        style={{
-          background:
-            "repeating-linear-gradient(115deg, rgba(255,255,255,0.08) 0px, rgba(255,255,255,0.08) 6px, transparent 6px, transparent 22px), repeating-linear-gradient(70deg, rgba(0,0,0,0.18) 0px, rgba(0,0,0,0.18) 4px, transparent 4px, transparent 18px)",
-        }}
-      />
-      {/* Frosted glass blur layer */}
-      <div className="pointer-events-none absolute inset-0 backdrop-blur-[6px]" />
-      {/* Dirty fingerprint / dust grain */}
-      <div
-        className="pointer-events-none absolute inset-0 mix-blend-overlay opacity-80"
+        className="pointer-events-none absolute inset-0 opacity-60 mix-blend-overlay"
         style={{
           backgroundImage:
-            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1.4 -0.2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
         }}
       />
-      {/* Soft smudge highlights */}
-      <div className="pointer-events-none absolute -left-10 top-6 h-32 w-48 rotate-[18deg] rounded-full bg-white/15 blur-2xl" />
-      <div className="pointer-events-none absolute -right-8 bottom-10 h-28 w-40 -rotate-12 rounded-full bg-white/10 blur-2xl" />
-      {/* Vignette */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(0,0,0,0.55)_100%)]" />
-      {/* Top darken for legibility */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/25" />
 
       {/* Centered label */}
       <div className="relative flex h-full items-center justify-center p-4 text-center">
