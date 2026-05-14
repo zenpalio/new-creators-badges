@@ -192,6 +192,14 @@ export const activityBadges = [
   { name: "Pic Spammer", description: "Generate and share 10 images with the community", imageUrl: actPicspammer, completed: false, actionLabel: "Start Sharing" },
   { name: "Movie Maker", description: "Create and publish your first AI video", imageUrl: actMoviemaker, completed: false, actionLabel: "Create Video" },
   { name: "Fanfic Lord", description: "Write and publish your first story", imageUrl: actFanfic, completed: true, actionLabel: "Write Story" },
+  { name: "Regular", description: "Login more than 10 times", imageUrl: actHypeman, completed: false, actionLabel: "Keep Logging In" },
+  { name: "Dedicated", description: "Login more than 50 times", imageUrl: actSquad, completed: false, actionLabel: "Keep Logging In" },
+  { name: "Diehard", description: "Login more than 100 times", imageUrl: actMoviemaker, completed: false, actionLabel: "Keep Logging In" },
+  { name: "Bronze Climber", description: "Reach top 3 in any monthly ranking category", imageUrl: actFirstdate, completed: false, actionLabel: "View Rankings", actionUrl: "/creators" },
+  { name: "Silver Contender", description: "Reach top 2 in any monthly ranking category", imageUrl: actPicspammer, completed: false, actionLabel: "View Rankings", actionUrl: "/creators" },
+  { name: "Gold Champion", description: "Reach #1 in any monthly ranking category", imageUrl: actFanfic, completed: false, actionLabel: "View Rankings", actionUrl: "/creators" },
+  { name: "Influencer", description: "Get 1000 followers on the platform", imageUrl: actSquad, completed: false, actionLabel: "Grow Audience" },
+  { name: "Brand Ambassador", description: "Mention mybabes.ai on any social platform (send proof on Discord)", imageUrl: actHypeman, completed: false, actionLabel: "Submit Proof", actionUrl: "https://discord.gg" },
 ];
 
 export const shopBadges = [
