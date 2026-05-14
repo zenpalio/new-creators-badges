@@ -1320,13 +1320,7 @@ const CreateMediaCard = ({
         <div
           className={`pointer-events-none absolute -bottom-16 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full ${glow} blur-3xl`}
         />
-        {/* Top-left tag */}
-        <div className="absolute left-3 top-3 z-10 flex items-center gap-1.5">
-          <Plus className={`h-3.5 w-3.5 ${accent}`} strokeWidth={2.5} />
-          <span className={`text-[10px] font-medium uppercase tracking-[0.18em] ${accent}`}>
-            New {tag}
-          </span>
-        </div>
+
 
         {/* Centered illustration */}
         <div className="absolute inset-0 flex items-center justify-center">
