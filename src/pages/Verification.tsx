@@ -1286,6 +1286,7 @@ const Verification = () => {
       <style>{`
         .verification-blur img, .verification-blur video, .verification-blur picture { filter: blur(14px); transition: filter .2s; cursor: pointer; }
         .verification-blur .sfw img, .verification-blur .sfw video, .verification-blur .sfw picture { filter: none; cursor: auto; }
+        .verification-blur .sfw img.hero-bg-blur { filter: blur(40px) saturate(1.25) !important; }
       `}</style>
     </>
   );

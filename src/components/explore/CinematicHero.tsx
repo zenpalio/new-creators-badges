@@ -312,7 +312,7 @@ const CinematicHero = ({
                     src={src0}
                     alt=""
                     aria-hidden
-                    className="absolute inset-0 h-full w-full scale-125 object-cover blur-3xl saturate-125 opacity-60"
+                    className="absolute inset-0 h-full w-full hero-bg-blur scale-125 object-cover blur-3xl saturate-125 opacity-60"
                   />
                   <div
                     className="absolute inset-0"
@@ -436,7 +436,7 @@ const CinematicHero = ({
                     src={s.imageUrl}
                     alt=""
                     aria-hidden
-                    className="absolute inset-0 h-full w-full scale-125 object-cover blur-3xl saturate-150 opacity-70"
+                    className="absolute inset-0 h-full w-full hero-bg-blur scale-125 object-cover blur-3xl saturate-150 opacity-70"
                   />
                   <div
                     className="absolute inset-0"
@@ -738,7 +738,7 @@ const CinematicHero = ({
                     src={m.type === "image" ? m.url : (m.poster ?? s.imageUrl)}
                     alt=""
                     aria-hidden
-                    className="absolute inset-0 h-full w-full scale-125 object-cover blur-3xl saturate-150 opacity-70"
+                    className="absolute inset-0 h-full w-full hero-bg-blur scale-125 object-cover blur-3xl saturate-150 opacity-70"
                   />
                   {/* Sharp full-bleed banner image — anchored right on desktop, full on mobile */}
                   {m.type === "image" ? (
@@ -774,7 +774,7 @@ const CinematicHero = ({
                   src={m.type === "image" ? m.url : (m.poster ?? s.imageUrl)}
                   alt=""
                   aria-hidden
-                  className="absolute inset-0 h-full w-full scale-125 object-cover blur-3xl saturate-150"
+                  className="absolute inset-0 h-full w-full hero-bg-blur scale-125 object-cover blur-3xl saturate-150"
                 />
 
                 {/* Sharp portrait panel(s), anchored right (desktop). */}
