@@ -1206,6 +1206,56 @@ const pickCtaGradient = (to: string, label: string) => {
   return CTA_GRADIENTS.story;
 };
 
+type CtaVariant = "story" | "babe" | "image" | "video";
+
+const pickCtaVariant = (to: string, label: string): CtaVariant => {
+  const k = `${to} ${label}`.toLowerCase();
+  if (k.includes("story")) return "story";
+  if (k.includes("babe")) return "babe";
+  if (k.includes("video")) return "video";
+  if (k.includes("image")) return "image";
+  return "story";
+};
+
+const CtaIllustration = ({ variant }: { variant: CtaVariant }) => {
+  const cfg: Record<
+    CtaVariant,
+    { a: { bg: string; Icon: typeof BookOpen }; b: { bg: string; Icon: typeof BookOpen } }
+  > = {
+    story: {
+      a: { bg: "bg-amber-400", Icon: BookOpen },
+      b: { bg: "bg-sky-500", Icon: Sparkles },
+    },
+    babe: {
+      a: { bg: "bg-pink-500", Icon: Heart },
+      b: { bg: "bg-violet-500", Icon: User },
+    },
+    image: {
+      a: { bg: "bg-emerald-500", Icon: ImageIcon },
+      b: { bg: "bg-lime-400", Icon: Wand2 },
+    },
+    video: {
+      a: { bg: "bg-indigo-500", Icon: Film },
+      b: { bg: "bg-fuchsia-500", Icon: Sparkles },
+    },
+  };
+  const { a, b } = cfg[variant];
+  return (
+    <div className="pointer-events-none relative h-16 w-20 transition-transform duration-500 ease-out group-hover:-translate-y-0.5">
+      <div
+        className={`absolute left-0 top-2 flex h-12 w-12 -rotate-[10deg] items-center justify-center rounded-2xl ${a.bg} shadow-[0_8px_20px_rgba(0,0,0,0.35)] ring-1 ring-white/30`}
+      >
+        <a.Icon className="h-6 w-6 text-white" strokeWidth={2.2} />
+      </div>
+      <div
+        className={`absolute right-0 top-0 flex h-11 w-11 rotate-[12deg] items-center justify-center rounded-full ${b.bg} shadow-[0_8px_20px_rgba(0,0,0,0.35)] ring-1 ring-white/30`}
+      >
+        <b.Icon className="h-5 w-5 text-white" strokeWidth={2.2} />
+      </div>
+    </div>
+  );
+};
+
 const CreateMediaCard = ({
   to,
   label,
@@ -1214,32 +1264,36 @@ const CreateMediaCard = ({
   to: string;
   label: string;
   aspectClass: string;
-}) => (
-  <Link
-    to={to}
-    aria-label={label}
-    className="group relative block w-full overflow-hidden rounded-2xl transition-transform duration-500 ease-out hover:-translate-y-1 hover:scale-[1.02]"
-  >
-    <div className={`relative w-full ${aspectClass}`}>
-      <div
-        className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-        style={{ background: pickCtaGradient(to, label) }}
-      />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-60 mix-blend-overlay"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
-        }}
-      />
+}) => {
+  const variant = pickCtaVariant(to, label);
+  return (
+    <Link
+      to={to}
+      aria-label={label}
+      className="group relative block w-full overflow-hidden rounded-2xl transition-transform duration-500 ease-out hover:-translate-y-1 hover:scale-[1.02]"
+    >
+      <div className={`relative w-full ${aspectClass}`}>
+        <div
+          className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+          style={{ background: pickCtaGradient(to, label) }}
+        />
+        <div
+          className="pointer-events-none absolute inset-0 opacity-60 mix-blend-overlay"
+          style={{
+            backgroundImage:
+              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
+          }}
+        />
 
-      <div className="relative flex h-full items-center justify-center p-4 text-center">
-        <span className="text-base font-medium leading-snug text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)] sm:text-lg">
-          {label}
-        </span>
+        <div className="relative flex h-full flex-col items-center justify-center gap-3 p-4 text-center">
+          <CtaIllustration variant={variant} />
+          <span className="text-base font-medium leading-snug text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)] sm:text-lg">
+            {label}
+          </span>
+        </div>
       </div>
-    </div>
-  </Link>
-);
+    </Link>
+  );
+};
 
 export default Gallery;
