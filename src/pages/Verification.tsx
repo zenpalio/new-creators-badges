@@ -1280,7 +1280,10 @@ const Verification = () => {
       </div>
       <FloatingToolsFAB items={floatingToolsItems} />
       <VerificationSignupDialog open={verifyOpen} onClose={() => setVerifyOpen(false)} />
-      <style>{`.verification-blur img, .verification-blur video, .verification-blur picture { filter: blur(14px); transition: filter .2s; cursor: pointer; }`}</style>
+      <style>{`
+        .verification-blur img, .verification-blur video, .verification-blur picture { filter: blur(14px); transition: filter .2s; cursor: pointer; }
+        .verification-blur .sfw img, .verification-blur .sfw video, .verification-blur .sfw picture { filter: none; cursor: auto; }
+      `}</style>
     </>
   );
 };
