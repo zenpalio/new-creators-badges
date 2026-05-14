@@ -187,13 +187,11 @@ export function ExploreView({
         </header>
 
         {/* Cinematic hero (full-bleed) */}
-        <div className="sfw">
-          <CinematicHero
-            slides={heroSlides}
-            labels={heroLabels}
-            renderLikeButton={renderHeroLikeButton}
-          />
-        </div>
+        <CinematicHero
+          slides={heroSlides}
+          labels={heroLabels}
+          renderLikeButton={renderHeroLikeButton}
+        />
 
         {/* Edge-to-edge content rows */}
         <div className="relative z-10 flex w-full flex-col gap-6 px-4 pb-16 pt-6 md:px-8 lg:px-12">
