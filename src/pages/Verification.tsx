@@ -1116,6 +1116,7 @@ const Verification = () => {
           )
         }
       />
+      <div className="verification-blur" onClickCapture={handleContentClick}>
       <ExploreView
         heroSlides={heroSlides}
         heroLabels={exploreHeroLabels}
@@ -1276,6 +1277,7 @@ const Verification = () => {
         />
         <ExploreFooterSection footer={footerLinks} />
       </ExploreView>
+      </div>
       <FloatingToolsFAB items={floatingToolsItems} />
       <VerificationSignupDialog open={verifyOpen} onClose={() => setVerifyOpen(false)} />
       <style>{`.verification-blur img, .verification-blur video, .verification-blur picture { filter: blur(14px); transition: filter .2s; cursor: pointer; }`}</style>
