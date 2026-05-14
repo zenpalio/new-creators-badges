@@ -1218,23 +1218,40 @@ const CTA_ICONS: Record<CtaVariant, LucideIcon> = {
 const CtaSkeleton = ({ variant }: { variant: CtaVariant }) => {
   switch (variant) {
     case "story":
-      // Open book: two pages with text lines
+      // Multi-media story: text lines + image, video, audio tiles
       return (
-        <div className="absolute inset-0 flex gap-1 p-2.5">
-          <div className="flex-1 space-y-1.5 rounded-md bg-white/[0.04] p-2 ring-1 ring-white/10">
-            <div className="h-1 w-full rounded-full bg-white/15" />
-            <div className="h-1 w-5/6 rounded-full bg-white/10" />
+        <div className="absolute inset-0 rounded-xl bg-white/[0.03] p-2.5 ring-1 ring-white/10">
+          {/* Text lines */}
+          <div className="space-y-1.5">
+            <div className="h-1 w-5/6 rounded-full bg-white/15" />
             <div className="h-1 w-4/6 rounded-full bg-white/10" />
             <div className="h-1 w-3/6 rounded-full bg-white/10" />
           </div>
-          <div className="flex-1 space-y-1.5 rounded-md bg-white/[0.04] p-2 ring-1 ring-white/10">
-            <div className="h-1 w-full rounded-full bg-white/15" />
-            <div className="h-1 w-5/6 rounded-full bg-white/10" />
-            <div className="h-1 w-4/6 rounded-full bg-white/10" />
-            <div className="h-1 w-2/6 rounded-full bg-white/10" />
+          {/* Media row: image / video / audio */}
+          <div className="mt-2 flex gap-1.5">
+            {/* Image */}
+            <div className="relative h-7 flex-1 overflow-hidden rounded-md bg-white/[0.06] ring-1 ring-white/10">
+              <div className="absolute right-1 top-0.5 h-1 w-1 rounded-full bg-white/40" />
+              <svg viewBox="0 0 40 28" className="absolute inset-0 h-full w-full" preserveAspectRatio="none">
+                <path d="M0 22 L12 14 L20 19 L28 11 L40 18 L40 28 L0 28 Z" fill="rgba(255,255,255,0.18)" />
+              </svg>
+            </div>
+            {/* Video */}
+            <div className="relative h-7 flex-1 rounded-md bg-white/[0.06] ring-1 ring-white/10">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="ml-0.5 h-0 w-0 border-y-[3px] border-l-[5px] border-y-transparent border-l-white/70" />
+              </div>
+            </div>
+            {/* Audio waveform */}
+            <div className="flex h-7 flex-1 items-center justify-center gap-[2px] rounded-md bg-white/[0.06] px-1.5 ring-1 ring-white/10">
+              {[3, 5, 2, 6, 4, 7, 3, 5].map((h, i) => (
+                <div key={i} className="w-[2px] rounded-full bg-white/40" style={{ height: `${h * 2}px` }} />
+              ))}
+            </div>
           </div>
         </div>
       );
+
     case "babe":
       // Profile card: avatar + name + meta
       return (
