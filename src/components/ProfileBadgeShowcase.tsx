@@ -157,6 +157,66 @@ const badgeEffects: Record<string, {
     animation: "float",
     particleEmoji: "📝",
   },
+  "Regular": {
+    className: "badge-effect-regular",
+    glowColor: "hsl(213 100% 55%)",
+    animation: "pulse-glow",
+    particleEmoji: "📅",
+  },
+  "Dedicated": {
+    className: "badge-effect-dedicated",
+    glowColor: "hsl(280 80% 60%)",
+    animation: "flicker",
+    particleEmoji: "🔥",
+  },
+  "Diehard": {
+    className: "badge-effect-diehard",
+    glowColor: "hsl(0 85% 55%)",
+    animation: "fire",
+    particleEmoji: "⚡",
+  },
+  "Top 30": {
+    className: "badge-effect-top30",
+    glowColor: "hsl(180 70% 50%)",
+    animation: "sparkle",
+    particleEmoji: "🎖️",
+  },
+  "Bronze Climber": {
+    className: "badge-effect-bronze",
+    glowColor: "hsl(25 75% 50%)",
+    animation: "bounce-subtle",
+    particleEmoji: "🥉",
+  },
+  "Silver Contender": {
+    className: "badge-effect-silver",
+    glowColor: "hsl(0 0% 75%)",
+    animation: "pulse-glow",
+    particleEmoji: "🥈",
+  },
+  "Gold Champion": {
+    className: "badge-effect-gold-champ",
+    glowColor: "hsl(45 100% 55%)",
+    animation: "rotate-slow",
+    particleEmoji: "🏆",
+  },
+  "Rising Star": {
+    className: "badge-effect-rising-star",
+    glowColor: "hsl(200 100% 60%)",
+    animation: "sparkle",
+    particleEmoji: "⭐",
+  },
+  "Influencer": {
+    className: "badge-effect-influencer",
+    glowColor: "hsl(330 85% 60%)",
+    animation: "heartbeat",
+    particleEmoji: "📣",
+  },
+  "Brand Ambassador": {
+    className: "badge-effect-ambassador",
+    glowColor: "hsl(170 80% 50%)",
+    animation: "pulse-glow",
+    particleEmoji: "📢",
+  },
 };
 
 export const getBadgeEffect = (name: string) => badgeEffects[name] || {
