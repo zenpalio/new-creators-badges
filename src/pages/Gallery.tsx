@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
-import { Bell, Menu, Search, Upload, ArrowRight, ArrowUpRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown, ChevronDown, Heart, SlidersHorizontal, X, Check, Plus, Clock, Flame, Users, Pencil, Trash2, MessageCircle, Play, Mic, Palette, Camera } from "lucide-react";
+import { Bell, Menu, Search, Upload, ArrowRight, ArrowUpRight, Sparkles, Image as ImageIcon, Film, User, Wand2, BookOpen, Crown, ChevronDown, Heart, SlidersHorizontal, X, Check, Plus, Clock, Flame, Users, Pencil, Trash2, MessageCircle, Play, Mic, Palette, Camera, type LucideIcon } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popover";
 import SideNav from "../components/SideNav";
 import NotificationsSidebar, {
