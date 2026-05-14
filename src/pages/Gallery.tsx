@@ -381,28 +381,10 @@ const Gallery = () => {
                     )}
                   </button>
                 ))}
-                {(() => {
-                  const createMap: Record<typeof activeContent, { label: string; href: string }> = {
-                    Babes: { label: "Create babe", href: "/explore/create-babe" },
-                    Images: { label: "Create image", href: "/explore/image-generator" },
-                    Videos: { label: "Create video", href: "/explore/video-generator" },
-                    Stories: { label: "Create story", href: "/explore/story-creator" },
-                  };
-                  const cta = createMap[activeContent];
-                  return (
-                    <Link
-                      to={cta.href}
-                      className="ml-auto mb-2 inline-flex h-9 items-center gap-1.5 rounded-full bg-primary-v2 px-3.5 text-sm font-semibold text-primary-v2-foreground transition-colors hover:bg-primary-v2/90"
-                    >
-                      <Plus className="h-4 w-4" />
-                      {cta.label}
-                    </Link>
-                  );
-                })()}
                 <button
                   onClick={() => (editMode ? exitEditMode() : setEditMode(true))}
                   aria-label={editMode ? "Exit edit mode" : "Edit / select to delete"}
-                  className={`mb-2 flex h-9 w-9 items-center justify-center rounded-full transition-colors ${
+                  className={`ml-auto mb-2 flex h-9 w-9 items-center justify-center rounded-full transition-colors ${
                     editMode
                       ? "bg-primary-v2 text-primary-v2-foreground"
                       : "bg-grey-dark-1-v2 text-white hover:bg-grey-dark-2-v2"
