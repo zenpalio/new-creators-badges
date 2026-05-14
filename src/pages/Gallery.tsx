@@ -1221,6 +1221,24 @@ const CreateMediaCard = ({
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_70%,hsl(25_50%_25%/0.25),transparent_70%)] mix-blend-multiply" />
       {/* Vintage vignette */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.55)_100%)]" />
+      {/* CRT scanlines */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-40 mix-blend-overlay"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(to bottom, rgba(0,0,0,0.55) 0px, rgba(0,0,0,0.55) 1px, transparent 1px, transparent 3px)",
+        }}
+      />
+      {/* RGB pixel mask */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-25 mix-blend-screen"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(to right, rgba(255,0,80,0.6) 0px, rgba(255,0,80,0.6) 1px, rgba(0,255,140,0.6) 1px, rgba(0,255,140,0.6) 2px, rgba(60,120,255,0.6) 2px, rgba(60,120,255,0.6) 3px)",
+        }}
+      />
+      {/* Faint chromatic flicker glow */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_55%,rgba(0,0,0,0.35)_100%)]" />
       {/* Subtle top darken for text legibility */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/30" />
 
