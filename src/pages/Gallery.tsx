@@ -413,6 +413,15 @@ const Gallery = () => {
               </div>
             )}
 
+            {/* Character filter (Images / Videos / Stories) */}
+            {activeTab === "Creations" && activeContent !== "Babes" && (
+              <CharacterFilter
+                characters={mockCharacters}
+                value={selectedCharacter}
+                onChange={setSelectedCharacter}
+              />
+            )}
+
             {/* Feed */}
             {activeTab === "Badges" ? (
               <div className="flex flex-col gap-2">
