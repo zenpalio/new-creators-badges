@@ -423,6 +423,8 @@ const ExploreKling = () => {
                       />
                     </>
                   )}
+                </div>
+              )}
             </section>
 
 
