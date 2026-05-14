@@ -521,6 +521,21 @@ const Gallery = () => {
               </>
             ) : (
               <section className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
+                {(() => {
+                  const map: Record<string, { href: string; label: string }> = {
+                    Babes: { href: "/explore/create-babe", label: "Create babe" },
+                    Images: { href: "/explore/image-generator", label: "Create image" },
+                    Videos: { href: "/explore/video-generator", label: "Create video" },
+                  };
+                  const cfg = map[activeContent] ?? map.Images;
+                  return (
+                    <CreateMediaCard
+                      to={cfg.href}
+                      label={cfg.label}
+                      aspectClass="aspect-[13/19]"
+                    />
+                  );
+                })()}
                 {feed.map((v) => {
                   const isSelected = selectedIds.has(v.id);
                   return (
