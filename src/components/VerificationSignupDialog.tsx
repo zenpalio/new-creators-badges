@@ -25,7 +25,7 @@ const VerificationSignupDialog = () => {
       <div className="absolute inset-0 bg-background/70 backdrop-blur-md" />
 
       {/* Dialog */}
-      <div className="relative w-full max-w-md rounded-2xl border border-border bg-[hsl(222_47%_8%)] shadow-2xl">
+      <div className="relative w-full max-w-md rounded-2xl border border-white/10 bg-neutral-800/70 backdrop-blur-sm shadow-2xl">
         <div className="p-6 sm:p-7">
           <div className="flex flex-col items-center text-center">
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 ring-1 ring-primary/30">
