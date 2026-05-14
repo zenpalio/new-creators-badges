@@ -1142,7 +1142,7 @@ const Verification = () => {
           posts={yourBabes}
           loading={sectionRailsLoading}
         /></div>
-        <ExploreStoriesSection
+        <div className="sfw"><ExploreStoriesSection
           title="Featured stories"
           actionLabel="See all"
           posts={featuredStories}
@@ -1150,7 +1150,7 @@ const Verification = () => {
           storyCardLabels={exploreStoryCardLabels}
           renderLikeButton={renderStoryLikeButton}
           loading={sectionRailsLoading}
-        />
+        /></div>
         <ExploreVideosSection
           title="Top trending videos"
           actionLabel="See all"
