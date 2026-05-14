@@ -480,6 +480,11 @@ const Gallery = () => {
                 })}
               </div>
               <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 [&_a]:!w-full [&_a]:!max-w-none [&>*]:w-full [&>*]:max-w-none">
+                <CreateMediaCard
+                  to="/explore/story-creator"
+                  label="Create story"
+                  aspectClass="aspect-[5/3]"
+                />
                 {exploreStories.map((s) => {
                   const sid = `story-${s.title}`;
                   const isSelected = selectedIds.has(sid);
@@ -516,6 +521,21 @@ const Gallery = () => {
               </>
             ) : (
               <section className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
+                {(() => {
+                  const map: Record<string, { href: string; label: string }> = {
+                    Babes: { href: "/explore/create-babe", label: "Create babe" },
+                    Images: { href: "/explore/image-generator", label: "Create image" },
+                    Videos: { href: "/explore/video-generator", label: "Create video" },
+                  };
+                  const cfg = map[activeContent] ?? map.Images;
+                  return (
+                    <CreateMediaCard
+                      to={cfg.href}
+                      label={cfg.label}
+                      aspectClass="aspect-[13/19]"
+                    />
+                  );
+                })()}
                 {feed.map((v) => {
                   const isSelected = selectedIds.has(v.id);
                   return (
@@ -1181,6 +1201,31 @@ const CharacterChip = ({
     <img src={character.avatar} alt="" className="h-6 w-6 rounded-full object-cover" />
     {character.name}
   </button>
+);
+
+// ---- First-card CTA used inside media grids ----
+const CreateMediaCard = ({
+  to,
+  label,
+  aspectClass,
+}: {
+  to: string;
+  label: string;
+  aspectClass: string;
+}) => (
+  <Link
+    to={to}
+    className="group relative block w-full overflow-hidden rounded-2xl border border-dashed border-primary-v2/40 bg-primary-v2/5 transition-colors hover:border-primary-v2 hover:bg-primary-v2/10"
+  >
+    <div className={`relative w-full ${aspectClass}`}>
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 text-center">
+        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-v2 text-primary-v2-foreground transition-transform group-hover:scale-110">
+          <Plus className="h-5 w-5" />
+        </span>
+        <span className="text-sm font-semibold text-white">{label}</span>
+      </div>
+    </div>
+  </Link>
 );
 
 export default Gallery;
