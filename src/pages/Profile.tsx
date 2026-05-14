@@ -28,6 +28,7 @@ import actGoldChamp from "../assets/badges/activity-gold-champ.png";
 import actInfluencer from "../assets/badges/activity-influencer.png";
 import actAmbassador from "../assets/badges/activity-ambassador.png";
 import actTop30 from "../assets/badges/activity-top30.png";
+import actRisingStar from "../assets/badges/activity-rising-star.png";
 
 import shopWaifu from "../assets/badges/shop-waifu.png";
 import shopTouchgrass from "../assets/badges/shop-touchgrass.png";
@@ -208,6 +209,7 @@ export const activityBadges = [
   { name: "Bronze Climber", description: "Reach top 3 in any monthly ranking category", imageUrl: actBronze, completed: false, actionLabel: "View Rankings", actionUrl: "/creators" },
   { name: "Silver Contender", description: "Reach top 2 in any monthly ranking category", imageUrl: actSilver, completed: false, actionLabel: "View Rankings", actionUrl: "/creators" },
   { name: "Gold Champion", description: "Reach #1 in any monthly ranking category", imageUrl: actGoldChamp, completed: false, actionLabel: "View Rankings", actionUrl: "/creators" },
+  { name: "Rising Star", description: "Get 100 followers on the platform", imageUrl: actRisingStar, completed: false, actionLabel: "Grow Audience" },
   { name: "Influencer", description: "Get 1000 followers on the platform", imageUrl: actInfluencer, completed: false, actionLabel: "Grow Audience" },
   { name: "Brand Ambassador", description: "Mention mybabes.ai on any social platform (send proof on Discord)", imageUrl: actAmbassador, completed: false, actionLabel: "Submit Proof", actionUrl: "https://discord.gg" },
 ];
