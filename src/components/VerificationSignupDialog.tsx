@@ -19,13 +19,20 @@ const steps = [
   },
 ];
 
-const VerificationSignupDialog = () => {
+type Props = { open: boolean; onClose: () => void };
+
+const VerificationSignupDialog = ({ open, onClose }: Props) => {
   const [step, setStep] = useState<1 | 2>(1);
+
+  if (!open) return null;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-6">
       {/* Blurred backdrop */}
-      <div className="absolute inset-0 bg-background/70 backdrop-blur-md" />
+      <div
+        className="absolute inset-0 bg-background/70 backdrop-blur-md"
+        onClick={onClose}
+      />
 
       {/* Dialog */}
       <div className="relative w-full max-w-md rounded-2xl border border-white/10 bg-neutral-800/95 shadow-2xl">
