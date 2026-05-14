@@ -1135,13 +1135,13 @@ const Verification = () => {
           </button>
         }
       >
-        <PostsSection
+        <div className="sfw"><PostsSection
           title="Your babes are waiting"
           actionLabel="See all"
           categories={babeCategories}
           posts={yourBabes}
           loading={sectionRailsLoading}
-        />
+        /></div>
         <div className="sfw"><ExplorePromoSection promo={giftPromo} /></div>
         <ExploreStoriesSection
           title="Featured stories"
