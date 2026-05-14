@@ -114,6 +114,17 @@ const feed = [...exploreVideoFeed, ...exploreVideoFeed].map((v, i) => ({
 
 // (followingTags removed — Following filter moved to right panel)
 
+// ---- Mock characters (scalable: search popover handles long lists) ----
+const mockCharacters = [
+  "Mia", "Ellie", "Nyx", "Ella", "Hikari", "Lucy", "Luna", "Zara", "Ivy", "Suki",
+  "Phoenix", "Aurora", "Violet", "Ember", "Mira", "Kai", "Axel", "Orion", "Ronin",
+  "Sasha", "Yuki", "Cleo", "Nova", "Selene", "Raven", "Skye", "Juno", "Echo",
+].map((name, i) => ({
+  id: name.toLowerCase(),
+  name,
+  avatar: `https://i.pravatar.cc/80?img=${(i % 70) + 1}`,
+}));
+
 const storyCardLabels: StoryContentCardLabels = {
   storyBadge: "Story",
   viewStory: "View story",
