@@ -1203,4 +1203,29 @@ const CharacterChip = ({
   </button>
 );
 
+// ---- First-card CTA used inside media grids ----
+const CreateMediaCard = ({
+  to,
+  label,
+  aspectClass,
+}: {
+  to: string;
+  label: string;
+  aspectClass: string;
+}) => (
+  <Link
+    to={to}
+    className="group relative block w-full overflow-hidden rounded-2xl border border-dashed border-primary-v2/40 bg-primary-v2/5 transition-colors hover:border-primary-v2 hover:bg-primary-v2/10"
+  >
+    <div className={`relative w-full ${aspectClass}`}>
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 text-center">
+        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-v2 text-primary-v2-foreground transition-transform group-hover:scale-110">
+          <Plus className="h-5 w-5" />
+        </span>
+        <span className="text-sm font-semibold text-white">{label}</span>
+      </div>
+    </div>
+  </Link>
+);
+
 export default Gallery;
