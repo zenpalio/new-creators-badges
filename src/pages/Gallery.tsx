@@ -1042,7 +1042,7 @@ const CharacterFilter = ({
           aria-pressed={value === null}
         >
           <Users className="h-3.5 w-3.5" />
-          All characters
+          All babes
         </button>
         {selected && !characters.slice(0, 8).some((c) => c.id === selected.id) && (
           <CharacterChip character={selected} active onClick={() => onChange(null)} />
