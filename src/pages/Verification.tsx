@@ -922,6 +922,21 @@ const exploreSystemStatus: {
 const Verification = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [verifyOpen, setVerifyOpen] = useState(false);
+  const [verified, setVerified] = useState<boolean>(
+    () => typeof window !== "undefined" && (
+      document.documentElement.classList.contains("ageverif-verified") ||
+      Boolean((window as any).ageverif?.verified)
+    )
+  );
+
+  useEffect(() => {
+    const onSuccess = () => {
+      setVerified(true);
+      setVerifyOpen(false);
+    };
+    window.addEventListener("ageverif:success", onSuccess);
+    return () => window.removeEventListener("ageverif:success", onSuccess);
+  }, []);
 
   const handleContentClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLElement;
