@@ -926,8 +926,7 @@ const Verification = () => {
   const handleContentClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLElement;
     if (target.closest(".sfw")) return;
-    // Ignore clicks on section headers / "See all" links / category chips
-    if (target.closest("h2, h3, a, [role='tab'], [data-no-verify]")) return;
+    if (target.closest("[data-no-verify]")) return;
     e.preventDefault();
     e.stopPropagation();
     setVerifyOpen(true);
