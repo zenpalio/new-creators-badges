@@ -435,6 +435,32 @@ const Gallery = () => {
                 />
               </div>
             ) : activeContent === "Stories" ? (
+              <>
+              <div className="flex items-center gap-2 -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto scrollbar-hide flex-nowrap">
+                {([
+                  { value: "all", label: "All stories" },
+                  { value: "mine", label: "My stories" },
+                  { value: "unlocked", label: "Unlocked" },
+                  { value: "watching", label: "Watching" },
+                ] as const).map((opt) => {
+                  const active = storyFilter === opt.value;
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => setStoryFilter(opt.value)}
+                      aria-pressed={active}
+                      className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
+                        active
+                          ? "bg-primary-v2 text-primary-v2-foreground"
+                          : "bg-grey-dark-1-v2 text-grey-light-2-v2 hover:bg-grey-dark-2-v2 hover:text-white"
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  );
+                })}
+              </div>
               <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 [&_a]:!w-full [&_a]:!max-w-none [&>*]:w-full [&>*]:max-w-none">
                 {exploreStories.map((s) => {
                   const sid = `story-${s.title}`;
