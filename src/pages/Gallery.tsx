@@ -438,7 +438,7 @@ const Gallery = () => {
               <>
               <div className="flex items-center gap-2 -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto scrollbar-hide flex-nowrap">
                 {([
-                  { value: "all", label: "All stories" },
+                  
                   { value: "mine", label: "My stories" },
                   { value: "unlocked", label: "Unlocked" },
                   { value: "watching", label: "Watching" },
