@@ -20,6 +20,64 @@ const steps = [
 
 type Props = { open: boolean; onClose: () => void };
 
+type AgeVerifOptions = {
+  challenges?: string[] | string;
+  closable?: boolean;
+  cookie?: string;
+  domain?: string;
+  language?: string;
+  page?: string;
+  sessionToken?: string;
+  target?: "popup" | "tab";
+};
+
+const CHECKER_ORIGIN = "https://checker.ageverif.com";
+
+const getAgeVerifOptions = (ageverif: any): AgeVerifOptions | undefined => {
+  try {
+    return ageverif?.options as AgeVerifOptions | undefined;
+  } catch {
+    return undefined;
+  }
+};
+
+const isConfiguredDomain = (options?: AgeVerifOptions) => {
+  if (!options?.domain || typeof window === "undefined") return true;
+  const domainParts = options.domain.split(".").length;
+  const currentBaseDomain = window.location.hostname
+    .split(".")
+    .slice(-domainParts)
+    .join(".");
+
+  return currentBaseDomain === options.domain;
+};
+
+const openCheckerFallback = (ageverif: any) => {
+  const options = getAgeVerifOptions(ageverif);
+  if (!options?.sessionToken) return false;
+
+  const params = new URLSearchParams({ sessionToken: options.sessionToken });
+  if (options.challenges) {
+    params.set(
+      "challenges",
+      Array.isArray(options.challenges)
+        ? options.challenges.join(",")
+        : options.challenges
+    );
+  }
+  if (options.closable) params.set("closable", "1");
+
+  const language =
+    typeof ageverif?.language === "string" && ageverif.language !== "auto"
+      ? ageverif.language
+      : "en";
+  const page = options.page ? `/${options.page}` : "";
+  const checkerUrl = `${CHECKER_ORIGIN}/${language}${page}?${params.toString()}`;
+
+  window.location.assign(checkerUrl);
+  return true;
+};
+
 const VerificationSignupDialog = ({ open, onClose }: Props) => {
   if (!open) return null;
 
@@ -73,9 +131,23 @@ const VerificationSignupDialog = ({ open, onClose }: Props) => {
             type="button"
             onClick={() => {
               const av = (window as any).ageverif;
-              if (av && typeof av.start === "function") {
-                av.start();
-              } else {
+              const options = getAgeVerifOptions(av);
+
+              if (av && typeof av.start === "function" && isConfiguredDomain(options)) {
+                av.start({ target: "tab" }).catch((error: unknown) => {
+                  console.warn("[AgeVerif] start() failed, using direct checker fallback.", error);
+                  openCheckerFallback(av);
+                });
+                onClose();
+                return;
+              }
+
+              if (openCheckerFallback(av)) {
+                onClose();
+                return;
+              }
+
+              {
                 console.warn(
                   "[AgeVerif] window.ageverif is undefined — script likely blocked. " +
                   "Live key only works on the configured domain. Use the Public Test Key for previews."
