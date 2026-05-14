@@ -1186,26 +1186,6 @@ const CharacterChip = ({
 );
 
 // ---- First-card CTA used inside media grids ----
-const CTA_GRADIENTS: Record<string, string> = {
-  story:
-    "radial-gradient(70% 55% at 30% 25%, hsl(0 0% 18%) 0%, transparent 70%), radial-gradient(60% 50% at 80% 80%, hsl(0 0% 12%) 0%, transparent 70%), linear-gradient(160deg, hsl(0 0% 10%), hsl(0 0% 4%))",
-  babe:
-    "radial-gradient(70% 55% at 30% 25%, hsl(0 0% 20%) 0%, transparent 70%), radial-gradient(60% 50% at 80% 80%, hsl(0 0% 10%) 0%, transparent 70%), linear-gradient(160deg, hsl(0 0% 8%), hsl(0 0% 3%))",
-  image:
-    "radial-gradient(70% 55% at 30% 25%, hsl(0 0% 16%) 0%, transparent 70%), radial-gradient(60% 50% at 80% 80%, hsl(0 0% 8%) 0%, transparent 70%), linear-gradient(160deg, hsl(0 0% 9%), hsl(0 0% 3%))",
-  video:
-    "radial-gradient(70% 55% at 30% 25%, hsl(0 0% 22%) 0%, transparent 70%), radial-gradient(60% 50% at 80% 80%, hsl(0 0% 11%) 0%, transparent 70%), linear-gradient(160deg, hsl(0 0% 10%), hsl(0 0% 4%))",
-};
-
-const pickCtaGradient = (to: string, label: string) => {
-  const k = `${to} ${label}`.toLowerCase();
-  if (k.includes("story")) return CTA_GRADIENTS.story;
-  if (k.includes("babe")) return CTA_GRADIENTS.babe;
-  if (k.includes("video")) return CTA_GRADIENTS.video;
-  if (k.includes("image")) return CTA_GRADIENTS.image;
-  return CTA_GRADIENTS.story;
-};
-
 type CtaVariant = "story" | "babe" | "image" | "video";
 
 const pickCtaVariant = (to: string, label: string): CtaVariant => {
@@ -1217,43 +1197,38 @@ const pickCtaVariant = (to: string, label: string): CtaVariant => {
   return "story";
 };
 
-const CtaIllustration = ({ variant }: { variant: CtaVariant }) => {
-  const cfg: Record<
-    CtaVariant,
-    { a: { bg: string; Icon: typeof BookOpen }; b: { bg: string; Icon: typeof BookOpen } }
-  > = {
-    story: {
-      a: { bg: "bg-amber-400", Icon: BookOpen },
-      b: { bg: "bg-sky-500", Icon: Sparkles },
-    },
-    babe: {
-      a: { bg: "bg-pink-500", Icon: Heart },
-      b: { bg: "bg-violet-500", Icon: User },
-    },
-    image: {
-      a: { bg: "bg-emerald-500", Icon: ImageIcon },
-      b: { bg: "bg-lime-400", Icon: Wand2 },
-    },
-    video: {
-      a: { bg: "bg-indigo-500", Icon: Film },
-      b: { bg: "bg-fuchsia-500", Icon: Sparkles },
-    },
-  };
-  const { a, b } = cfg[variant];
-  return (
-    <div className="pointer-events-none relative h-16 w-20 transition-transform duration-500 ease-out group-hover:-translate-y-0.5">
-      <div
-        className={`absolute left-0 top-2 flex h-12 w-12 -rotate-[10deg] items-center justify-center rounded-2xl ${a.bg} shadow-[0_8px_20px_rgba(0,0,0,0.35)] ring-1 ring-white/30`}
-      >
-        <a.Icon className="h-6 w-6 text-white" strokeWidth={2.2} />
-      </div>
-      <div
-        className={`absolute right-0 top-0 flex h-11 w-11 rotate-[12deg] items-center justify-center rounded-full ${b.bg} shadow-[0_8px_20px_rgba(0,0,0,0.35)] ring-1 ring-white/30`}
-      >
-        <b.Icon className="h-5 w-5 text-white" strokeWidth={2.2} />
-      </div>
-    </div>
-  );
+const CTA_VARIANTS: Record<
+  CtaVariant,
+  { Icon: typeof BookOpen; accent: string; ring: string; glow: string; tag: string }
+> = {
+  story: {
+    Icon: BookOpen,
+    accent: "text-amber-300/90",
+    ring: "ring-amber-300/15",
+    glow: "bg-amber-400/10",
+    tag: "Story",
+  },
+  babe: {
+    Icon: Heart,
+    accent: "text-rose-300/90",
+    ring: "ring-rose-300/15",
+    glow: "bg-rose-400/10",
+    tag: "Babe",
+  },
+  image: {
+    Icon: ImageIcon,
+    accent: "text-emerald-300/90",
+    ring: "ring-emerald-300/15",
+    glow: "bg-emerald-400/10",
+    tag: "Image",
+  },
+  video: {
+    Icon: Film,
+    accent: "text-sky-300/90",
+    ring: "ring-sky-300/15",
+    glow: "bg-sky-400/10",
+    tag: "Video",
+  },
 };
 
 const CreateMediaCard = ({
@@ -1266,30 +1241,44 @@ const CreateMediaCard = ({
   aspectClass: string;
 }) => {
   const variant = pickCtaVariant(to, label);
+  const { Icon, accent, ring, glow, tag } = CTA_VARIANTS[variant];
   return (
     <Link
       to={to}
       aria-label={label}
-      className="group relative block w-full overflow-hidden rounded-2xl transition-transform duration-500 ease-out hover:-translate-y-1 hover:scale-[1.02]"
+      className={`group relative block w-full overflow-hidden rounded-2xl bg-[hsl(0_0%_5%)] ring-1 ${ring} transition-all duration-500 ease-out hover:-translate-y-1 hover:ring-white/20`}
     >
       <div className={`relative w-full ${aspectClass}`}>
+        {/* Soft accent glow */}
         <div
-          className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-          style={{ background: pickCtaGradient(to, label) }}
+          className={`pointer-events-none absolute -bottom-16 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full ${glow} blur-3xl transition-opacity duration-500 group-hover:opacity-150`}
         />
-        <div
-          className="pointer-events-none absolute inset-0 opacity-60 mix-blend-overlay"
-          style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
-          }}
-        />
-
-        <div className="relative flex h-full flex-col items-center justify-center gap-3 p-4 text-center">
-          <CtaIllustration variant={variant} />
-          <span className="text-base font-medium leading-snug text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)] sm:text-lg">
-            {label}
+        {/* Top-left tag */}
+        <div className="absolute left-3 top-3 z-10 flex items-center gap-1.5">
+          <Plus className={`h-3.5 w-3.5 ${accent}`} strokeWidth={2.5} />
+          <span className={`text-[10px] font-medium uppercase tracking-[0.18em] ${accent}`}>
+            New {tag}
           </span>
+        </div>
+
+        {/* Watermark glyph */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <Icon
+            className={`h-24 w-24 ${accent} opacity-30 transition-transform duration-700 ease-out group-hover:scale-110 group-hover:opacity-50`}
+            strokeWidth={1}
+          />
+        </div>
+
+        {/* Bottom label */}
+        <div className="absolute inset-x-0 bottom-0 p-4">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-medium text-white sm:text-base">
+              {label}
+            </span>
+            <span className={`flex h-7 w-7 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/10 transition-all duration-500 group-hover:bg-white/10 group-hover:ring-white/20`}>
+              <ArrowUpRight className="h-3.5 w-3.5 text-white" strokeWidth={2} />
+            </span>
+          </div>
         </div>
       </div>
     </Link>
