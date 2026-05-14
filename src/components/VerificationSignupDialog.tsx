@@ -75,14 +75,6 @@ const VerificationSignupDialog = ({ open, onClose }: Props) => {
           >
             Sign up & verify
           </button>
-          <button
-            type="button"
-            onClick={onClose}
-            className="mt-2 inline-flex h-10 w-full items-center justify-center rounded-full text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            I already have an account
-          </button>
-
           <p className="mt-4 text-center text-[11px] leading-relaxed text-muted-foreground">
             Verification is handled by an independent third-party provider. We
             never store your ID or biometric data.
