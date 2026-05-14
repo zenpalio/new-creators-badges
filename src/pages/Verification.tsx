@@ -921,6 +921,17 @@ const exploreSystemStatus: {
 
 const Verification = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [verifyOpen, setVerifyOpen] = useState(false);
+
+  const handleContentClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement;
+    if (target.closest("img, video, picture, [data-media]")) {
+      e.preventDefault();
+      e.stopPropagation();
+      setVerifyOpen(true);
+    }
+  };
+
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>(() =>
     mockNotifications.map((n) => ({ ...n }))
@@ -1105,6 +1116,7 @@ const Verification = () => {
           )
         }
       />
+      <div className="verification-blur" onClickCapture={handleContentClick}>
       <ExploreView
         heroSlides={heroSlides}
         heroLabels={exploreHeroLabels}
@@ -1265,8 +1277,10 @@ const Verification = () => {
         />
         <ExploreFooterSection footer={footerLinks} />
       </ExploreView>
+      </div>
       <FloatingToolsFAB items={floatingToolsItems} />
-      <VerificationSignupDialog />
+      <VerificationSignupDialog open={verifyOpen} onClose={() => setVerifyOpen(false)} />
+      <style>{`.verification-blur img, .verification-blur video, .verification-blur picture { filter: blur(14px); transition: filter .2s; cursor: pointer; }`}</style>
     </>
   );
 };
