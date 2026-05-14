@@ -71,7 +71,7 @@ const VerificationSignupDialog = ({ open, onClose }: Props) => {
 
           <button
             type="button"
-            className="mt-6 inline-flex h-11 w-full items-center justify-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+            className="mt-6 inline-flex h-11 w-full items-center justify-center rounded-full bg-white px-5 text-sm font-semibold text-black shadow-lg ring-1 ring-white/20 transition-colors hover:bg-white/90"
           >
             Sign up & verify
           </button>
