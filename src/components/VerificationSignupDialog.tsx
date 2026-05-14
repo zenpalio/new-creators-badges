@@ -71,6 +71,14 @@ const VerificationSignupDialog = ({ open, onClose }: Props) => {
 
           <button
             type="button"
+            onClick={() => {
+              const av = (window as any).ageverif;
+              if (av && typeof av.start === "function") {
+                av.start();
+              } else {
+                console.warn("AgeVerif not loaded yet");
+              }
+            }}
             className="mt-6 inline-flex h-11 w-full items-center justify-center rounded-full bg-white px-5 text-sm font-semibold text-black shadow-lg ring-1 ring-white/20 transition-colors hover:bg-white/90"
           >
             Sign up & verify
