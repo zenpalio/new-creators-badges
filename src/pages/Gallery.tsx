@@ -1201,30 +1201,41 @@ const CreateMediaCard = ({
     className="group relative block w-full overflow-hidden rounded-2xl bg-grey-dark-1-v2"
   >
     <div className={`relative w-full ${aspectClass}`}>
-      {/* Vibrant gradient base */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(213_100%_55%/0.55),transparent_55%),radial-gradient(circle_at_75%_85%,hsl(292_91%_60%/0.45),transparent_60%),linear-gradient(135deg,hsl(213_100%_18%),hsl(240_30%_10%))]" />
+      {/* Abstract gradient field */}
+      <div className="absolute inset-0 bg-[linear-gradient(160deg,hsl(240_30%_8%)_0%,hsl(220_40%_12%)_55%,hsl(213_60%_18%)_100%)]" />
 
-      {/* Animated conic glow */}
-      <div className="pointer-events-none absolute -inset-1 opacity-60 blur-2xl transition-opacity duration-500 group-hover:opacity-100">
-        <div className="h-full w-full animate-[spin_8s_linear_infinite] bg-[conic-gradient(from_0deg,hsl(213_100%_50%/0.5),transparent_40%,hsl(292_91%_60%/0.5),transparent_80%)]" />
-      </div>
+      {/* Floating soft blobs */}
+      <div className="pointer-events-none absolute -left-10 -top-10 h-40 w-40 rounded-full bg-primary-v2/30 blur-3xl transition-transform duration-700 group-hover:translate-x-4 group-hover:translate-y-2" />
+      <div className="pointer-events-none absolute -bottom-12 -right-8 h-44 w-44 rounded-full bg-fuchsia-500/20 blur-3xl transition-transform duration-700 group-hover:-translate-x-3 group-hover:-translate-y-2" />
 
-      {/* Sparkle dots */}
-      <Sparkles className="absolute right-3 top-3 h-4 w-4 text-white/60 transition-transform duration-500 group-hover:scale-125 group-hover:text-white" />
+      {/* Thin diagonal line accent */}
+      <svg
+        className="absolute inset-0 h-full w-full opacity-30 transition-opacity duration-500 group-hover:opacity-60"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+        aria-hidden
+      >
+        <line x1="0" y1="78" x2="100" y2="22" stroke="hsl(213 100% 60%)" strokeWidth="0.4" strokeDasharray="2 3" />
+        <circle cx="22" cy="65" r="0.9" fill="hsl(292 91% 70%)" />
+        <circle cx="74" cy="34" r="0.7" fill="hsl(213 100% 70%)" />
+      </svg>
 
-      {/* Inner border glow */}
-      <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10 transition-colors group-hover:ring-primary-v2/60" />
+      {/* Inner border */}
+      <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/5 transition-colors group-hover:ring-white/20" />
 
-      {/* Center content */}
-      <div className="relative flex h-full flex-col items-center justify-center gap-3 p-4 text-center">
-        <span className="relative flex h-14 w-14 items-center justify-center rounded-full bg-primary-v2 text-primary-v2-foreground shadow-[0_8px_24px_-4px_hsl(213_100%_50%/0.6)] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-90">
-          <Plus className="h-6 w-6" strokeWidth={2.5} />
-          <span className="absolute inset-0 rounded-full ring-2 ring-primary-v2/40 transition-all duration-500 group-hover:ring-8 group-hover:ring-primary-v2/0" />
-        </span>
+      {/* Label bottom-left */}
+      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-4">
         <div className="flex flex-col gap-0.5">
-          <span className="text-sm font-bold leading-tight text-white">{label}</span>
-          <span className="text-[11px] font-medium text-white/60">Tap to start</span>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/50">
+            New
+          </span>
+          <span className="text-base font-bold leading-tight text-white">
+            {label}
+          </span>
         </div>
+        <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white backdrop-blur-md transition-all duration-300 group-hover:border-primary-v2 group-hover:bg-primary-v2 group-hover:text-primary-v2-foreground">
+          <ArrowRight className="h-4 w-4" />
+        </span>
       </div>
     </div>
   </Link>
