@@ -57,14 +57,14 @@ const CtaSkeleton = ({ variant }: { variant: CtaVariant }) => {
       );
     case "babe":
       return (
-        <div className="absolute inset-0 flex items-center gap-2.5 rounded-xl bg-white/[0.03] p-3 ring-1 ring-white/10">
+        <div className="absolute inset-0 flex items-center gap-2.5 overflow-hidden rounded-xl bg-white/[0.03] p-3 ring-1 ring-white/10">
           <div className="h-10 w-10 shrink-0 rounded-full bg-white/15" />
-          <div className="flex-1 space-y-1.5">
+          <div className="min-w-0 flex-1 space-y-1.5">
             <div className="h-1.5 w-3/4 rounded-full bg-white/15" />
             <div className="h-1 w-1/2 rounded-full bg-white/10" />
             <div className="mt-1 flex gap-1">
-              <div className="h-2 w-6 rounded-full bg-white/10" />
-              <div className="h-2 w-8 rounded-full bg-white/10" />
+              <div className="h-2 w-5 rounded-full bg-white/10" />
+              <div className="h-2 w-7 rounded-full bg-white/10" />
             </div>
           </div>
         </div>
