@@ -211,6 +211,7 @@ const Gallery = () => {
 
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null);
+  const [storyFilter, setStoryFilter] = useState<"all" | "mine" | "unlocked" | "watching">("all");
 
   // Creators tab controls (lifted out of CreatorsView)
   const [creatorsSearch, setCreatorsSearch] = useState("");
