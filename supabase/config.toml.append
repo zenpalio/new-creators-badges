@@ -1,0 +1,2 @@
+[functions.yoti-callback]
+verify_jwt = false
