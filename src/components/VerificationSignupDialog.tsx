@@ -19,7 +19,7 @@ const steps = [
 ];
 
 const YOTI_SCENARIO_ID = "00e0cb82-338b-4143-9c8f-49e723036a89";
-const YOTI_SHARE_URL = `https://api.yoti.com/share/${YOTI_SCENARIO_ID}`;
+const YOTI_SHARE_URL = `https://www.yoti.com/connect/${YOTI_SCENARIO_ID}`;
 
 type Props = { open: boolean; onClose: () => void };
 
