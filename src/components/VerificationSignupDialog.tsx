@@ -20,11 +20,13 @@ const steps = [
 
 type Props = { open: boolean; onClose: () => void };
 
+type AgeVerificationWindow = Window & { ageverif?: { verified: boolean } };
+
 const VerificationSignupDialog = ({ open, onClose }: Props) => {
   if (!open) return null;
 
   const handleMockYotiVerify = () => {
-    (window as any).ageverif = { verified: true };
+    (window as AgeVerificationWindow).ageverif = { verified: true };
     document.documentElement.classList.add("ageverif-verified");
     window.dispatchEvent(new Event("ageverif:success"));
     onClose();
