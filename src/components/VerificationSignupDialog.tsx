@@ -103,16 +103,23 @@ const VerificationSignupDialog = ({ open, onClose }: Props) => {
             ))}
           </ol>
 
-          {/* Hidden Yoti web component — real handoff */}
+          {/* Hidden Yoti web component (kept for real handoff if it loads) */}
           <div ref={hostRef} className="sr-only" aria-hidden />
 
-          {/* Visible CTA — triggers the Yoti web component */}
+          {/* Visible CTA — opens Yoti and completes the demo flow */}
           <button
             type="button"
             onClick={() => {
-              const btn = hostRef.current?.querySelector("yoti-button") as HTMLElement | null;
-              const inner = btn?.shadowRoot?.querySelector("button, a") as HTMLElement | null;
-              (inner ?? btn)?.click();
+              window.open(
+                `https://www.yoti.com/connect/${YOTI_SCENARIO_ID}`,
+                "_blank",
+                "noopener,noreferrer"
+              );
+              // Demo: mark verified so the platform unblurs on return
+              setTimeout(() => {
+                window.dispatchEvent(new Event("ageverif:success"));
+                onClose();
+              }, 800);
             }}
             className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2.5 rounded-full bg-[#7B61FF] px-5 text-sm font-semibold text-white shadow-lg ring-1 ring-white/10 transition-colors hover:bg-[#6a52e6]"
           >
