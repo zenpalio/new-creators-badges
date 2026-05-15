@@ -925,7 +925,8 @@ const Verification = () => {
   const [verified, setVerified] = useState<boolean>(
     () => typeof window !== "undefined" && (
       document.documentElement.classList.contains("ageverif-verified") ||
-      Boolean((window as any).ageverif?.verified)
+      Boolean((window as any).ageverif?.verified) ||
+      localStorage.getItem("ageverif:verified") === "1"
     )
   );
 
@@ -933,8 +934,20 @@ const Verification = () => {
     const onSuccess = () => {
       setVerified(true);
       setVerifyOpen(false);
+      try { localStorage.setItem("ageverif:verified", "1"); } catch {}
     };
     window.addEventListener("ageverif:success", onSuccess);
+
+    // Yoti callback redirect: ?yoti_verified=1 → mark verified, clean URL
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("yoti_verified") === "1") {
+      onSuccess();
+      params.delete("yoti_verified");
+      const qs = params.toString();
+      window.history.replaceState({}, "", window.location.pathname + (qs ? `?${qs}` : ""));
+    } else if (params.get("yoti_error")) {
+      console.warn("Yoti verification failed:", params.get("yoti_error"), params.get("msg"));
+    }
     return () => window.removeEventListener("ageverif:success", onSuccess);
   }, []);
 
