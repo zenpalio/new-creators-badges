@@ -28,6 +28,7 @@ import { ExploreView } from "../components/ExploreView";
 import LikeButton from "../components/explore/LikeButton";
 import FloatingToolsFAB, { type FloatingToolsFabItem } from "../components/explore/FloatingToolsFAB";
 import VerificationSignupDialog from "../components/VerificationSignupDialog";
+import YotiVerifyBar from "../components/YotiVerifyBar";
 import {
   PostsSection,
   ExploreCreatorsSection,
