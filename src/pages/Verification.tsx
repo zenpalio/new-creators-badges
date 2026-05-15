@@ -923,19 +923,15 @@ const exploreSystemStatus: {
 const Verification = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [verifyOpen, setVerifyOpen] = useState(false);
-  const [verified, setVerified] = useState<boolean>(
-    () => typeof window !== "undefined" && (
-      document.documentElement.classList.contains("ageverif-verified") ||
-      Boolean((window as any).ageverif?.verified) ||
-      localStorage.getItem("ageverif:verified") === "1"
-    )
-  );
+  const [verified, setVerified] = useState<boolean>(false);
 
   useEffect(() => {
+    // Clear any stale verified flag from previous sessions
+    try { localStorage.removeItem("ageverif:verified"); } catch {}
+
     const onSuccess = () => {
       setVerified(true);
       setVerifyOpen(false);
-      try { localStorage.setItem("ageverif:verified", "1"); } catch {}
     };
     window.addEventListener("ageverif:success", onSuccess);
 
