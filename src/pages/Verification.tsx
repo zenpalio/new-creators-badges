@@ -28,6 +28,7 @@ import { ExploreView } from "../components/ExploreView";
 import LikeButton from "../components/explore/LikeButton";
 import FloatingToolsFAB, { type FloatingToolsFabItem } from "../components/explore/FloatingToolsFAB";
 import VerificationSignupDialog from "../components/VerificationSignupDialog";
+import YotiVerifyBar from "../components/YotiVerifyBar";
 import {
   PostsSection,
   ExploreCreatorsSection,
@@ -1311,6 +1312,7 @@ const Verification = () => {
       </div>
       <FloatingToolsFAB items={floatingToolsItems} />
       <VerificationSignupDialog open={verifyOpen} onClose={() => setVerifyOpen(false)} />
+      <YotiVerifyBar visible={!verified} />
       <style>{`
         .verification-blur img, .verification-blur video, .verification-blur picture { filter: blur(14px); transition: filter .2s; cursor: pointer; }
         .verification-blur .sfw img, .verification-blur .sfw video, .verification-blur .sfw picture { filter: none; cursor: auto; }
