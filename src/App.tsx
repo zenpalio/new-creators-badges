@@ -10,6 +10,7 @@ import ExploreKling from "./pages/ExploreKling.tsx";
 import Verification from "./pages/Verification.tsx";
 import Gallery from "./pages/Gallery.tsx";
 import EventDetail from "./pages/EventDetail.tsx";
+import YotiVerificationDemo from "./pages/YotiVerificationDemo.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/badges" element={<Profile />} />
           <Route path="/creators" element={<Creators />} />
           <Route path="/verification" element={<Verification />} />
+          <Route path="/yoti-verification" element={<YotiVerificationDemo />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
