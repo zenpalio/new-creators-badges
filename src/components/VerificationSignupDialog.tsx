@@ -1,84 +1,39 @@
-import { MousePointerClick, ScanFace, CheckCircle2 } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { MousePointerClick, ScanFace, CheckCircle2, ShieldCheck } from "lucide-react";
 
 const steps = [
   {
     icon: MousePointerClick,
-    title: "Click verify",
-    desc: "You'll be redirected to our trusted verification partner.",
+    title: "Click verify with Yoti",
+    desc: "You'll be handed off to Yoti, our independent identity partner.",
   },
   {
     icon: ScanFace,
-    title: "Finish verification",
-    desc: "Complete the quick check on the partner's secure site.",
+    title: "Scan your ID & selfie",
+    desc: "Yoti checks a government ID and a quick liveness selfie. Takes ~1 minute.",
   },
   {
     icon: CheckCircle2,
     title: "Get verified",
-    desc: "You'll be redirected back to MyBabes and can start exploring right away.",
+    desc: "You're returned to MyBabes age-verified — no ID stored on our side.",
   },
 ];
 
+const YOTI_SCENARIO_ID = "00e0cb82-338b-4143-9c8f-49e723036a89";
+
 type Props = { open: boolean; onClose: () => void };
 
-type AgeVerifOptions = {
-  challenges?: string[] | string;
-  closable?: boolean;
-  cookie?: string;
-  domain?: string;
-  language?: string;
-  page?: string;
-  sessionToken?: string;
-  target?: "popup" | "tab";
-};
-
-const CHECKER_ORIGIN = "https://checker.ageverif.com";
-
-const getAgeVerifOptions = (ageverif: any): AgeVerifOptions | undefined => {
-  try {
-    return ageverif?.options as AgeVerifOptions | undefined;
-  } catch {
-    return undefined;
-  }
-};
-
-const isConfiguredDomain = (options?: AgeVerifOptions) => {
-  if (!options?.domain || typeof window === "undefined") return true;
-  const domainParts = options.domain.split(".").length;
-  const currentBaseDomain = window.location.hostname
-    .split(".")
-    .slice(-domainParts)
-    .join(".");
-
-  return currentBaseDomain === options.domain;
-};
-
-const openCheckerFallback = (ageverif: any) => {
-  const options = getAgeVerifOptions(ageverif);
-  if (!options?.sessionToken) return false;
-
-  const params = new URLSearchParams({ sessionToken: options.sessionToken });
-  if (options.challenges) {
-    params.set(
-      "challenges",
-      Array.isArray(options.challenges)
-        ? options.challenges.join(",")
-        : options.challenges
-    );
-  }
-  if (options.closable) params.set("closable", "1");
-
-  const language =
-    typeof ageverif?.language === "string" && ageverif.language !== "auto"
-      ? ageverif.language
-      : "en";
-  const page = options.page ? `/${options.page}` : "";
-  const checkerUrl = `${CHECKER_ORIGIN}/${language}${page}?${params.toString()}`;
-
-  window.location.assign(checkerUrl);
-  return true;
-};
-
 const VerificationSignupDialog = ({ open, onClose }: Props) => {
+  const buttonHostRef = useRef<HTMLDivElement>(null);
+
+  // Re-mount the <yoti-button> each time the dialog opens so Yoti's client
+  // script picks it up. (The script scans the DOM on load.)
+  useEffect(() => {
+    if (!open || !buttonHostRef.current) return;
+    const host = buttonHostRef.current;
+    host.innerHTML = `<yoti-button scenario-id="${YOTI_SCENARIO_ID}" button-text="Verify with Yoti" theme="dark"></yoti-button>`;
+  }, [open]);
+
   if (!open) return null;
 
   return (
@@ -100,9 +55,10 @@ const VerificationSignupDialog = ({ open, onClose }: Props) => {
           </div>
 
           <p className="mt-4 text-sm text-muted-foreground">
-            Sign up and complete a quick age verification with our trusted
-            third-party partner. We never store or see your ID — verification
-            is handled entirely by them.
+            We use{" "}
+            <span className="font-medium text-foreground">Yoti</span> — a
+            trusted, independent identity provider — to confirm you're 18+.
+            MyBabes never sees or stores your ID.
           </p>
 
           <ol className="mt-5 space-y-2">
@@ -127,41 +83,13 @@ const VerificationSignupDialog = ({ open, onClose }: Props) => {
             ))}
           </ol>
 
-          <button
-            type="button"
-            onClick={() => {
-              const av = (window as any).ageverif;
-              const options = getAgeVerifOptions(av);
+          {/* Yoti share button mounts here (rendered by Yoti's client script). */}
+          <div ref={buttonHostRef} className="mt-6 flex justify-center [&_yoti-button]:w-full" />
 
-              if (av && typeof av.start === "function" && isConfiguredDomain(options)) {
-                av.start({ target: "tab" }).catch((error: unknown) => {
-                  console.warn("[AgeVerif] start() failed, using direct checker fallback.", error);
-                  openCheckerFallback(av);
-                });
-                onClose();
-                return;
-              }
-
-              if (openCheckerFallback(av)) {
-                onClose();
-                return;
-              }
-
-              {
-                console.warn(
-                  "[AgeVerif] window.ageverif is undefined — script likely blocked. " +
-                  "Live key only works on the configured domain. Use the Public Test Key for previews."
-                );
-              }
-            }}
-            className="mt-6 inline-flex h-11 w-full items-center justify-center rounded-full bg-white px-5 text-sm font-semibold text-black shadow-lg ring-1 ring-white/20 transition-colors hover:bg-white/90"
-          >
-            Sign up & verify
-          </button>
-          <p className="mt-4 text-center text-[11px] leading-relaxed text-muted-foreground">
-            Verification is handled by an independent third-party provider. We
-            never store your ID or biometric data.
-          </p>
+          <div className="mt-4 flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground">
+            <ShieldCheck className="h-3.5 w-3.5" />
+            <span>Verification handled by Yoti. We never store your ID or biometric data.</span>
+          </div>
         </div>
       </div>
     </div>
