@@ -919,13 +919,15 @@ const exploreSystemStatus: {
   },
 };
 
+type AgeVerificationWindow = Window & { ageverif?: { verified: boolean } };
+
 const Verification = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [verifyOpen, setVerifyOpen] = useState(false);
   const [verified, setVerified] = useState<boolean>(
     () => typeof window !== "undefined" && (
       document.documentElement.classList.contains("ageverif-verified") ||
-      Boolean((window as any).ageverif?.verified)
+      Boolean((window as AgeVerificationWindow).ageverif?.verified)
     )
   );
 
