@@ -103,7 +103,24 @@ const VerificationSignupDialog = ({ open, onClose }: Props) => {
             ))}
           </ol>
 
-          <div ref={hostRef} className="mt-6 flex justify-center" />
+          {/* Hidden Yoti web component — real handoff */}
+          <div ref={hostRef} className="sr-only" aria-hidden />
+
+          {/* Visible CTA — triggers the Yoti web component */}
+          <button
+            type="button"
+            onClick={() => {
+              const btn = hostRef.current?.querySelector("yoti-button") as HTMLElement | null;
+              const inner = btn?.shadowRoot?.querySelector("button, a") as HTMLElement | null;
+              (inner ?? btn)?.click();
+            }}
+            className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2.5 rounded-full bg-[#7B61FF] px-5 text-sm font-semibold text-white shadow-lg ring-1 ring-white/10 transition-colors hover:bg-[#6a52e6]"
+          >
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden>
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.2 7.3l-4.5 7.2c-.2.3-.5.5-.9.5s-.7-.2-.9-.5L7.8 13c-.3-.5-.2-1.1.3-1.4.5-.3 1.1-.2 1.4.3l1.3 2.1 3.7-5.9c.3-.5.9-.6 1.4-.3.4.3.5.9.3 1.5z" />
+            </svg>
+            Continue to Yoti
+          </button>
 
           <div className="mt-4 flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground">
             <ShieldCheck className="h-3.5 w-3.5" />
