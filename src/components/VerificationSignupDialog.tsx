@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import { MousePointerClick, ScanFace, CheckCircle2, ShieldCheck } from "lucide-react";
 
 const steps = [
@@ -20,20 +19,11 @@ const steps = [
 ];
 
 const YOTI_SCENARIO_ID = "00e0cb82-338b-4143-9c8f-49e723036a89";
+const YOTI_SHARE_URL = `https://api.yoti.com/share/${YOTI_SCENARIO_ID}`;
 
 type Props = { open: boolean; onClose: () => void };
 
 const VerificationSignupDialog = ({ open, onClose }: Props) => {
-  const buttonHostRef = useRef<HTMLDivElement>(null);
-
-  // Re-mount the <yoti-button> each time the dialog opens so Yoti's client
-  // script picks it up. (The script scans the DOM on load.)
-  useEffect(() => {
-    if (!open || !buttonHostRef.current) return;
-    const host = buttonHostRef.current;
-    host.innerHTML = `<yoti-button scenario-id="${YOTI_SCENARIO_ID}" button-text="Verify with Yoti" theme="dark"></yoti-button>`;
-  }, [open]);
-
   if (!open) return null;
 
   return (
