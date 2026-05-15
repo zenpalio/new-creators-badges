@@ -110,16 +110,10 @@ const VerificationSignupDialog = ({ open, onClose }: Props) => {
           <button
             type="button"
             onClick={() => {
-              window.open(
-                `https://www.yoti.com/connect/${YOTI_SCENARIO_ID}`,
-                "_blank",
-                "noopener,noreferrer"
+              const returnTo = `${window.location.pathname}${window.location.search}`;
+              window.location.assign(
+                `/yoti-verification?returnTo=${encodeURIComponent(returnTo)}`
               );
-              // Demo: mark verified so the platform unblurs on return
-              setTimeout(() => {
-                window.dispatchEvent(new Event("ageverif:success"));
-                onClose();
-              }, 800);
             }}
             className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2.5 rounded-full bg-[#7B61FF] px-5 text-sm font-semibold text-white shadow-lg ring-1 ring-white/10 transition-colors hover:bg-[#6a52e6]"
           >
