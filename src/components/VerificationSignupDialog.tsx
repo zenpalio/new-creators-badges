@@ -85,7 +85,7 @@ const VerificationSignupDialog = ({ open, onClose }: Props) => {
                 `/yoti-verification?returnTo=${encodeURIComponent(returnTo)}`
               );
             }}
-            className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2.5 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-lg ring-1 ring-white/10 transition-colors hover:bg-primary/90"
+            className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2.5 rounded-full bg-primary-v2 px-5 text-sm font-semibold text-primary-v2-foreground shadow-lg ring-1 ring-white/10 transition-colors hover:bg-primary-v2/90"
           >
             Start verification
           </button>
