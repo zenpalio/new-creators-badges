@@ -1,40 +1,8 @@
-import { useEffect, useRef } from "react";
 import { ShieldCheck } from "lucide-react";
 
-const YOTI_SCENARIO_ID = "00e0cb82-338b-4143-9c8f-49e723036a89";
+type Props = { visible: boolean; onVerify: () => void };
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      "yoti-button": React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLElement> & {
-          scenarioid?: string;
-          clientsdkid?: string;
-          label?: string;
-          align?: string;
-        },
-        HTMLElement
-      >;
-    }
-  }
-}
-
-type Props = { visible: boolean };
-
-const YotiVerifyBar = ({ visible }: Props) => {
-  const hostRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!visible || !hostRef.current) return;
-    hostRef.current.innerHTML = "";
-    const el = document.createElement("yoti-button");
-    el.setAttribute("scenarioid", YOTI_SCENARIO_ID);
-    el.setAttribute("clientsdkid", YOTI_SCENARIO_ID);
-    el.setAttribute("label", "Verify with Yoti");
-    el.setAttribute("align", "center");
-    hostRef.current.appendChild(el);
-  }, [visible]);
-
+const YotiVerifyBar = ({ visible, onVerify }: Props) => {
   if (!visible) return null;
 
   return (
@@ -48,10 +16,16 @@ const YotiVerifyBar = ({ visible }: Props) => {
             Confirm you're 18+
           </p>
           <p className="mt-0.5 flex items-center gap-1 text-[11px] text-muted-foreground">
-            <ShieldCheck className="h-3 w-3" /> Verified by Yoti
+            <ShieldCheck className="h-3 w-3" /> Quick age verification required
           </p>
         </div>
-        <div ref={hostRef} className="shrink-0" />
+        <button
+          type="button"
+          onClick={onVerify}
+          className="shrink-0 inline-flex h-9 items-center justify-center rounded-full bg-primary px-4 text-xs font-semibold text-primary-foreground shadow-md transition-colors hover:bg-primary/90"
+        >
+          Verify
+        </button>
       </div>
     </div>
   );
