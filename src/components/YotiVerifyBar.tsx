@@ -22,7 +22,7 @@ const YotiVerifyBar = ({ visible, onVerify }: Props) => {
         <button
           type="button"
           onClick={onVerify}
-          className="shrink-0 inline-flex h-9 items-center justify-center rounded-full bg-primary px-4 text-xs font-semibold text-primary-foreground shadow-md transition-colors hover:bg-primary/90"
+          className="shrink-0 inline-flex h-9 items-center justify-center rounded-full bg-primary-v2 px-4 text-xs font-semibold text-primary-v2-foreground shadow-md transition-colors hover:bg-primary-v2/90"
         >
           Verify
         </button>
