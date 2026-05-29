@@ -373,6 +373,116 @@ function drawFallback(
   ctx.fill();
 }
 
+// ─── AI Over Real: Glitchy chromatic ring + orbiting binary digits ───
+interface Bit {
+  angle: number;
+  speed: number;
+  radius: number;
+  char: string;
+  flickerPhase: number;
+  flipPhase: number;
+  size: number;
+}
+
+const makeBits = (count: number): Bit[] =>
+  Array.from({ length: count }, () => ({
+    angle: Math.random() * Math.PI * 2,
+    speed: 0.25 + Math.random() * 0.45,
+    radius: 0.78 + Math.random() * 0.28, // fraction of baseRadius
+    char: Math.random() < 0.5 ? "0" : "1",
+    flickerPhase: Math.random() * Math.PI * 2,
+    flipPhase: Math.random() * 6,
+    size: 7 + Math.random() * 4,
+  }));
+
+function drawAiOverReal(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  baseRadius: number,
+  time: number,
+  bits: Bit[],
+) {
+  // Subtle cyan/magenta halo
+  const breathe = 0.5 + 0.5 * Math.sin(time * 2);
+  const haloR = baseRadius + (10 + breathe * 6) * DPR;
+  const halo = ctx.createRadialGradient(cx, cy, baseRadius - 1, cx, cy, haloR);
+  halo.addColorStop(0, `hsla(185, 100%, 60%, ${0.14 + breathe * 0.08})`);
+  halo.addColorStop(0.55, `hsla(305, 100%, 60%, ${0.08 + breathe * 0.05})`);
+  halo.addColorStop(1, `hsla(260, 100%, 55%, 0)`);
+  ctx.beginPath();
+  ctx.arc(cx, cy, haloR, 0, Math.PI * 2);
+  ctx.arc(cx, cy, baseRadius - 1, 0, Math.PI * 2, true);
+  ctx.fillStyle = halo;
+  ctx.fill();
+
+  // Chromatic aberration ring: cyan + magenta + white core, offset
+  const ringW = 2.2 * DPR;
+  const offset = (1.2 + Math.sin(time * 7) * 0.8) * DPR;
+  ctx.globalCompositeOperation = "lighter";
+  // cyan
+  ctx.beginPath();
+  ctx.arc(cx + offset, cy, baseRadius, 0, Math.PI * 2);
+  ctx.strokeStyle = `hsla(185, 100%, 60%, 0.85)`;
+  ctx.lineWidth = ringW;
+  ctx.stroke();
+  // magenta
+  ctx.beginPath();
+  ctx.arc(cx - offset, cy, baseRadius, 0, Math.PI * 2);
+  ctx.strokeStyle = `hsla(305, 100%, 62%, 0.85)`;
+  ctx.lineWidth = ringW;
+  ctx.stroke();
+  // white core
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius, 0, Math.PI * 2);
+  ctx.strokeStyle = `hsla(0, 0%, 100%, 0.55)`;
+  ctx.lineWidth = ringW * 0.6;
+  ctx.stroke();
+  ctx.globalCompositeOperation = "source-over";
+
+  // Glitch arcs: short bright slices that jump around the ring
+  const slices = 3;
+  for (let i = 0; i < slices; i++) {
+    const seed = Math.floor(time * 3 + i * 17);
+    const r1 = Math.sin(seed * 12.9898) * 43758.5453;
+    const r2 = Math.sin(seed * 78.233) * 12345.678;
+    const a0 = (r1 - Math.floor(r1)) * Math.PI * 2;
+    const arcLen = 0.15 + (r2 - Math.floor(r2)) * 0.35;
+    const flash = 0.5 + 0.5 * Math.sin(time * 30 + i);
+    ctx.beginPath();
+    ctx.arc(cx, cy, baseRadius, a0, a0 + arcLen);
+    ctx.strokeStyle = i % 2 === 0
+      ? `hsla(185, 100%, 70%, ${0.4 + flash * 0.5})`
+      : `hsla(305, 100%, 70%, ${0.4 + flash * 0.5})`;
+    ctx.lineWidth = (3 + flash * 1.5) * DPR;
+    ctx.stroke();
+  }
+
+  // Orbiting binary digits
+  ctx.font = `bold ${10 * DPR}px ui-monospace, "SF Mono", Menlo, monospace`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  for (const b of bits) {
+    b.angle += b.speed * 0.015;
+    b.flipPhase += 0.05;
+    if (b.flipPhase > 6) {
+      b.flipPhase = 0;
+      b.char = Math.random() < 0.5 ? "0" : "1";
+    }
+    const r = baseRadius * b.radius;
+    const x = cx + Math.cos(b.angle) * r;
+    const y = cy + Math.sin(b.angle) * r;
+    const flicker = 0.5 + 0.5 * Math.sin(time * 6 + b.flickerPhase);
+    const alpha = 0.35 + flicker * 0.6;
+    const isCyan = (Math.floor(b.flickerPhase * 10) & 1) === 0;
+    ctx.fillStyle = isCyan
+      ? `hsla(185, 100%, 65%, ${alpha})`
+      : `hsla(305, 100%, 70%, ${alpha})`;
+    ctx.font = `bold ${b.size * DPR}px ui-monospace, monospace`;
+    ctx.fillText(b.char, x, y);
+  }
+}
+
 interface ShopBadgeRingCanvasProps {
   badgeName: string;
   glowColor: string;
@@ -384,6 +494,7 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
   const sparklesRef = useRef<Sparkle[]>([]);
   const bladesRef = useRef<Blade[]>([]);
   const leavesRef = useRef<Leaf[]>([]);
+  const bitsRef = useRef<Bit[]>([]);
   const rafRef = useRef<number>(0);
   const sizeRef = useRef({ w: 0, h: 0 });
 
@@ -432,6 +543,11 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         drawTouchGrass(ctx, cx, cy, baseRadius, time, bladesRef.current, leavesRef.current);
         break;
       }
+      case "AI Over Real": {
+        if (bitsRef.current.length === 0) bitsRef.current = makeBits(22);
+        drawAiOverReal(ctx, cx, cy, baseRadius, time, bitsRef.current);
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
@@ -444,6 +560,7 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
     sparklesRef.current = [];
     bladesRef.current = [];
     leavesRef.current = [];
+    bitsRef.current = [];
     sizeRef.current = { w: 0, h: 0 };
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
