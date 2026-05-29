@@ -483,6 +483,143 @@ function drawAiOverReal(
   }
 }
 
+// ─── 3am Texter: Moonlit ring + floating chat bubbles + typing dots ───
+interface Bubble {
+  angle: number;
+  speed: number;
+  radius: number; // fraction of baseRadius
+  life: number;
+  maxLife: number;
+  w: number;
+  h: number;
+  side: 1 | -1; // tail direction
+  hueShift: number;
+  typingPhase: number;
+}
+
+const makeBubbles = (count: number): Bubble[] =>
+  Array.from({ length: count }, (_, i) => ({
+    angle: (i / count) * Math.PI * 2 + Math.random() * 0.6,
+    speed: 0.08 + Math.random() * 0.12,
+    radius: 0.95 + Math.random() * 0.2,
+    life: Math.random() * 180,
+    maxLife: 180 + Math.random() * 120,
+    w: 18 + Math.random() * 10,
+    h: 11 + Math.random() * 4,
+    side: Math.random() < 0.5 ? 1 : -1,
+    hueShift: -10 + Math.random() * 30,
+    typingPhase: Math.random() * Math.PI * 2,
+  }));
+
+function drawBubble(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  side: 1 | -1,
+  fill: string,
+  stroke: string,
+  time: number,
+  typingPhase: number,
+) {
+  const r = h * 0.45;
+  ctx.beginPath();
+  ctx.moveTo(x - w / 2 + r, y - h / 2);
+  ctx.lineTo(x + w / 2 - r, y - h / 2);
+  ctx.quadraticCurveTo(x + w / 2, y - h / 2, x + w / 2, y - h / 2 + r);
+  ctx.lineTo(x + w / 2, y + h / 2 - r);
+  ctx.quadraticCurveTo(x + w / 2, y + h / 2, x + w / 2 - r, y + h / 2);
+  // tail
+  const tx = x + side * (w * 0.25);
+  ctx.lineTo(tx + side * r * 0.6, y + h / 2);
+  ctx.lineTo(tx, y + h / 2 + r * 0.9);
+  ctx.lineTo(tx - side * r * 0.4, y + h / 2);
+  ctx.lineTo(x - w / 2 + r, y + h / 2);
+  ctx.quadraticCurveTo(x - w / 2, y + h / 2, x - w / 2, y + h / 2 - r);
+  ctx.lineTo(x - w / 2, y - h / 2 + r);
+  ctx.quadraticCurveTo(x - w / 2, y - h / 2, x - w / 2 + r, y - h / 2);
+  ctx.closePath();
+  ctx.fillStyle = fill;
+  ctx.fill();
+  ctx.strokeStyle = stroke;
+  ctx.lineWidth = 1 * DPR;
+  ctx.stroke();
+
+  // typing dots
+  const dotR = h * 0.13;
+  const spacing = h * 0.32;
+  for (let i = 0; i < 3; i++) {
+    const bounce = Math.sin(time * 6 + typingPhase + i * 0.7);
+    const dy = bounce > 0 ? -bounce * h * 0.12 : 0;
+    ctx.beginPath();
+    ctx.arc(x + (i - 1) * spacing, y + dy, dotR, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(220, 30%, 95%, ${0.6 + Math.max(0, bounce) * 0.4})`;
+    ctx.fill();
+  }
+}
+
+function drawThreeAmTexter(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  baseRadius: number,
+  time: number,
+  bubbles: Bubble[],
+) {
+  // Cold moonlit halo
+  const breathe = 0.5 + 0.5 * Math.sin(time * 1.1);
+  const haloR = baseRadius + (12 + breathe * 6) * DPR;
+  const halo = ctx.createRadialGradient(cx, cy, baseRadius - 1, cx, cy, haloR);
+  halo.addColorStop(0, `hsla(220, 80%, 65%, ${0.16 + breathe * 0.08})`);
+  halo.addColorStop(0.55, `hsla(245, 70%, 55%, ${0.08 + breathe * 0.04})`);
+  halo.addColorStop(1, `hsla(250, 60%, 40%, 0)`);
+  ctx.beginPath();
+  ctx.arc(cx, cy, haloR, 0, Math.PI * 2);
+  ctx.arc(cx, cy, baseRadius - 1, 0, Math.PI * 2, true);
+  ctx.fillStyle = halo;
+  ctx.fill();
+
+  // Soft blue ring with slow shimmer (sleepy/dim)
+  const steps = 64;
+  for (let i = 0; i < steps; i++) {
+    const a0 = (i / steps) * Math.PI * 2;
+    const a1 = ((i + 1.4) / steps) * Math.PI * 2;
+    const wave = 0.5 + 0.5 * Math.sin(time * 0.9 + a0 * 1.5);
+    ctx.beginPath();
+    ctx.arc(cx, cy, baseRadius, a0, a1);
+    ctx.strokeStyle = `hsla(${218 + wave * 12}, 75%, ${55 + wave * 12}%, ${0.4 + wave * 0.35})`;
+    ctx.lineWidth = (1.8 + wave * 0.7) * DPR;
+    ctx.stroke();
+  }
+
+  // Floating chat bubbles drifting around the ring
+  for (const b of bubbles) {
+    b.angle += b.speed * 0.01;
+    b.life += 1;
+    if (b.life > b.maxLife) {
+      b.life = 0;
+      b.angle = Math.random() * Math.PI * 2;
+      b.side = Math.random() < 0.5 ? 1 : -1;
+      b.hueShift = -10 + Math.random() * 30;
+    }
+    const t = b.life / b.maxLife;
+    const fade = Math.sin(t * Math.PI); // fade in/out
+    const orbit = baseRadius * b.radius + Math.sin(time * 1.3 + b.angle * 3) * 2 * DPR;
+    const x = cx + Math.cos(b.angle) * orbit;
+    const y = cy + Math.sin(b.angle) * orbit;
+    const w = b.w * DPR;
+    const h = b.h * DPR;
+    const hue = 220 + b.hueShift;
+    const fill = `hsla(${hue}, 75%, 60%, ${0.55 * fade})`;
+    const stroke = `hsla(${hue}, 90%, 80%, ${0.85 * fade})`;
+    ctx.save();
+    ctx.globalAlpha = fade;
+    drawBubble(ctx, x, y, w, h, b.side, fill, stroke, time, b.typingPhase);
+    ctx.restore();
+  }
+}
+
 interface ShopBadgeRingCanvasProps {
   badgeName: string;
   glowColor: string;
