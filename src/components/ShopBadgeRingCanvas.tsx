@@ -26,9 +26,9 @@ interface Sparkle {
 const makeHearts = (count: number, baseRadius: number): Heart[] =>
   Array.from({ length: count }, () => ({
     angle: Math.random() * Math.PI * 2,
-    radius: baseRadius + 2 + Math.random() * 4,
+    radius: baseRadius - 2 + Math.random() * 4,
     speed: 0.1 + Math.random() * 0.2,
-    drift: 0.15 + Math.random() * 0.25,
+    drift: 0.04 + Math.random() * 0.08,
     size: 3 + Math.random() * 3.5,
     life: Math.random() * 120,
     maxLife: 110 + Math.random() * 70,
@@ -148,7 +148,7 @@ function drawWaifu(
     if (h.life > h.maxLife) {
       h.life = 0;
       h.angle = Math.random() * Math.PI * 2;
-      h.radius = baseRadius + 2 + Math.random() * 4;
+      h.radius = baseRadius - 2 + Math.random() * 4;
       h.size = 3 + Math.random() * 3.5;
       h.hueShift = -10 + Math.random() * 25;
     }
