@@ -3,6 +3,7 @@ import { Settings, Info, Globe, Users, Heart, Menu } from "lucide-react";
 import SideNav from "../components/SideNav";
 import AuraIcon from "../components/AuraIcon";
 import TierRingCanvas from "../components/TierRingCanvas";
+import ShopBadgeRingCanvas from "../components/ShopBadgeRingCanvas";
 import BadgeCategory from "../components/BadgeCategory";
 import ActivityBadgeCard from "../components/ActivityBadgeCard";
 import ActivityBadgePopup from "../components/ActivityBadgePopup";
@@ -287,24 +288,12 @@ const Profile = () => {
         <div className="relative flex flex-col items-center mb-6">
           <div className="relative mb-3 w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40" style={{ overflow: 'visible', margin: '12px auto' }}>
             {/* Show tier ring OR shop badge border ring — never both */}
-            {activeBadge ? (() => {
-              const effect = getBadgeEffect(activeBadge.name);
-              return (
-                <>
-                  {/* Outer glow ring (behind everything) */}
-                  <div
-                    className="absolute rounded-full pointer-events-none"
-                    style={{
-                      inset: "-4px",
-                      border: `3px solid ${effect.glowColor}`,
-                      boxShadow: `0 0 15px ${effect.glowColor.replace(")", " / 0.5)")}, 0 0 30px ${effect.glowColor.replace(")", " / 0.25)")}, inset 0 0 15px ${effect.glowColor.replace(")", " / 0.1)")}`,
-                      animation: "badge-border-pulse 2.5s ease-in-out infinite",
-                      zIndex: 2,
-                    }}
-                  />
-                </>
-              );
-            })() : (
+            {activeBadge ? (
+              <ShopBadgeRingCanvas
+                badgeName={activeBadge.name}
+                glowColor={getBadgeEffect(activeBadge.name).glowColor}
+              />
+            ) : (
               <TierRingCanvas tier={previewTier} />
             )}
 
