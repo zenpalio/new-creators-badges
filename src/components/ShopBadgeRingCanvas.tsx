@@ -2527,6 +2527,22 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         );
         break;
       }
+      case "No Life": {
+        if (glitchSlicesRef.current.length === 0)
+          glitchSlicesRef.current = makeGlitchSlices(5);
+        if (driftEmojisRef.current.length === 0)
+          driftEmojisRef.current = makeDriftEmojis(4);
+        drawNoLife(
+          ctx,
+          cx,
+          cy,
+          baseRadius,
+          time,
+          glitchSlicesRef.current,
+          driftEmojisRef.current,
+        );
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
