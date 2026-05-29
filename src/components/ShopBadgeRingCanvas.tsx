@@ -1429,6 +1429,270 @@ function drawRizzler(
   }
 }
 
+// ─── Horny Royalty: Royal purple aura + gold sigils + crimson horn-flames ───
+interface Sigil {
+  angle: number;
+  speed: number;
+  radius: number;
+  size: number;
+  bobPhase: number;
+  spin: number;
+  spinSpeed: number;
+}
+
+interface HornFlame {
+  angle: number;
+  radius: number;
+  speed: number;
+  rise: number;
+  life: number;
+  maxLife: number;
+  size: number;
+  flickerPhase: number;
+  side: 1 | -1;
+}
+
+interface Jewel {
+  angle: number;
+  radius: number;
+  speed: number;
+  size: number;
+  twinkle: number;
+  hue: number;
+}
+
+const makeSigils = (count: number): Sigil[] =>
+  Array.from({ length: count }, (_, i) => ({
+    angle: (i / count) * Math.PI * 2,
+    speed: 0.18,
+    radius: 1.0,
+    size: 5.5 + Math.random() * 1.2,
+    bobPhase: Math.random() * Math.PI * 2,
+    spin: Math.random() * Math.PI * 2,
+    spinSpeed: (Math.random() - 0.5) * 0.04,
+  }));
+
+const makeHornFlames = (count: number): HornFlame[] =>
+  Array.from({ length: count }, () => ({
+    angle: Math.random() * Math.PI * 2,
+    radius: 0.95 + Math.random() * 0.1,
+    speed: 0.05 + Math.random() * 0.1,
+    rise: 0.002 + Math.random() * 0.004,
+    life: Math.random() * 120,
+    maxLife: 90 + Math.random() * 80,
+    size: 4 + Math.random() * 3,
+    flickerPhase: Math.random() * Math.PI * 2,
+    side: Math.random() < 0.5 ? 1 : -1,
+  }));
+
+const makeJewels = (count: number): Jewel[] =>
+  Array.from({ length: count }, (_, i) => ({
+    angle: (i / count) * Math.PI * 2 + Math.random() * 0.3,
+    radius: 1.12 + Math.random() * 0.1,
+    speed: 0.08 + Math.random() * 0.06,
+    size: 2.2 + Math.random() * 1.4,
+    twinkle: Math.random() * Math.PI * 2,
+    hue: 280 + Math.random() * 25,
+  }));
+
+function drawFleurDeLis(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  alpha: number,
+  rot: number,
+) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  const s = size * DPR;
+  const grad = ctx.createLinearGradient(0, -s, 0, s);
+  grad.addColorStop(0, `hsla(55, 100%, 80%, ${alpha})`);
+  grad.addColorStop(0.5, `hsla(45, 100%, 60%, ${alpha})`);
+  grad.addColorStop(1, `hsla(38, 90%, 42%, ${alpha})`);
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.moveTo(0, -s);
+  ctx.bezierCurveTo(s * 0.35, -s * 0.5, s * 0.25, s * 0.2, 0, s * 0.4);
+  ctx.bezierCurveTo(-s * 0.25, s * 0.2, -s * 0.35, -s * 0.5, 0, -s);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(-s * 0.15, -s * 0.2);
+  ctx.bezierCurveTo(-s, -s * 0.4, -s * 1.1, s * 0.3, -s * 0.2, s * 0.45);
+  ctx.bezierCurveTo(-s * 0.4, s * 0.1, -s * 0.5, -s * 0.1, -s * 0.15, -s * 0.2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(s * 0.15, -s * 0.2);
+  ctx.bezierCurveTo(s, -s * 0.4, s * 1.1, s * 0.3, s * 0.2, s * 0.45);
+  ctx.bezierCurveTo(s * 0.4, s * 0.1, s * 0.5, -s * 0.1, s * 0.15, -s * 0.2);
+  ctx.fill();
+  ctx.fillStyle = `hsla(40, 100%, 55%, ${alpha})`;
+  ctx.fillRect(-s * 0.55, s * 0.42, s * 1.1, s * 0.16);
+  ctx.strokeStyle = `hsla(50, 100%, 90%, ${alpha * 0.9})`;
+  ctx.lineWidth = 0.5 * DPR;
+  ctx.strokeRect(-s * 0.55, s * 0.42, s * 1.1, s * 0.16);
+  ctx.restore();
+}
+
+function drawHornFlame(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  alpha: number,
+  flicker: number,
+  rot: number,
+) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  const s = size * DPR * (0.9 + flicker * 0.25);
+  const glow = ctx.createRadialGradient(0, 0, 0, 0, 0, s * 2.2);
+  glow.addColorStop(0, `hsla(15, 100%, 65%, ${alpha * 0.7})`);
+  glow.addColorStop(0.5, `hsla(0, 90%, 50%, ${alpha * 0.35})`);
+  glow.addColorStop(1, `hsla(350, 80%, 35%, 0)`);
+  ctx.fillStyle = glow;
+  ctx.beginPath();
+  ctx.arc(0, 0, s * 2.2, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(0, s);
+  ctx.bezierCurveTo(s * 0.9, s * 0.4, s * 0.5, -s * 0.6, 0, -s * 1.4);
+  ctx.bezierCurveTo(-s * 0.5, -s * 0.6, -s * 0.9, s * 0.4, 0, s);
+  ctx.closePath();
+  const grad = ctx.createLinearGradient(0, s, 0, -s * 1.4);
+  grad.addColorStop(0, `hsla(355, 100%, 35%, ${alpha})`);
+  grad.addColorStop(0.55, `hsla(10, 100%, 55%, ${alpha})`);
+  grad.addColorStop(1, `hsla(35, 100%, 75%, ${alpha})`);
+  ctx.fillStyle = grad;
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawHornyRoyalty(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  baseRadius: number,
+  time: number,
+  sigils: Sigil[],
+  flames: HornFlame[],
+  jewels: Jewel[],
+) {
+  const breath = 0.5 + Math.sin(time * 1.6) * 0.5;
+  const auraGrad = ctx.createRadialGradient(cx, cy, baseRadius * 0.7, cx, cy, baseRadius * 1.9);
+  auraGrad.addColorStop(0, `hsla(285, 90%, 55%, ${0.32 + breath * 0.16})`);
+  auraGrad.addColorStop(0.5, `hsla(275, 85%, 35%, ${0.18 + breath * 0.1})`);
+  auraGrad.addColorStop(1, `hsla(265, 80%, 20%, 0)`);
+  ctx.fillStyle = auraGrad;
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius * 1.9, 0, Math.PI * 2);
+  ctx.fill();
+
+  const rim = ctx.createRadialGradient(cx, cy, baseRadius * 0.92, cx, cy, baseRadius * 1.18);
+  rim.addColorStop(0, `hsla(45, 100%, 65%, 0)`);
+  rim.addColorStop(0.5, `hsla(45, 100%, 65%, ${0.5 + breath * 0.25})`);
+  rim.addColorStop(1, `hsla(38, 100%, 45%, 0)`);
+  ctx.fillStyle = rim;
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius * 1.18, 0, Math.PI * 2);
+  ctx.fill();
+
+  const steps = 140;
+  ctx.beginPath();
+  for (let i = 0; i <= steps; i++) {
+    const a = (i / steps) * Math.PI * 2;
+    const wave = Math.sin(a * 4 - time * 1.2) * 1.4 * DPR;
+    const r = baseRadius + wave;
+    const x = cx + Math.cos(a) * r;
+    const y = cy + Math.sin(a) * r;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.strokeStyle = `hsla(285, 100%, 60%, 0.85)`;
+  ctx.lineWidth = 2.4 * DPR;
+  ctx.shadowColor = `hsla(285, 100%, 65%, 0.9)`;
+  ctx.shadowBlur = 14 * DPR;
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  const sweepStart = time * 1.1;
+  const sweepLen = Math.PI * 0.55;
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius, sweepStart, sweepStart + sweepLen);
+  ctx.strokeStyle = `hsla(48, 100%, 72%, 0.95)`;
+  ctx.lineWidth = 3.2 * DPR;
+  ctx.shadowColor = `hsla(45, 100%, 70%, 1)`;
+  ctx.shadowBlur = 18 * DPR;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius, sweepStart + Math.PI, sweepStart + Math.PI + sweepLen * 0.7);
+  ctx.strokeStyle = `hsla(52, 100%, 78%, 0.8)`;
+  ctx.lineWidth = 2.4 * DPR;
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  jewels.forEach((j) => {
+    j.angle += j.speed * 0.016;
+    const tw = 0.55 + (Math.sin(time * 3 + j.twinkle) * 0.5 + 0.5) * 0.45;
+    const x = cx + Math.cos(j.angle) * baseRadius * j.radius;
+    const y = cy + Math.sin(j.angle) * baseRadius * j.radius;
+    const s = j.size * DPR;
+    const g = ctx.createRadialGradient(x, y, 0, x, y, s * 3);
+    g.addColorStop(0, `hsla(${j.hue}, 100%, 88%, ${tw})`);
+    g.addColorStop(0.4, `hsla(${j.hue}, 100%, 60%, ${tw * 0.7})`);
+    g.addColorStop(1, `hsla(${j.hue}, 100%, 40%, 0)`);
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(x, y, s * 3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(x, y, s * 0.6, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(${j.hue}, 100%, 95%, ${tw})`;
+    ctx.fill();
+  });
+
+  ctx.globalCompositeOperation = "lighter";
+  flames.forEach((f) => {
+    f.life += 1;
+    f.angle += f.speed * 0.016 * f.side;
+    f.radius += f.rise;
+    if (f.life > f.maxLife || f.radius > 1.5) {
+      f.life = 0;
+      f.angle = Math.random() * Math.PI * 2;
+      f.radius = 0.95 + Math.random() * 0.05;
+      f.flickerPhase = Math.random() * Math.PI * 2;
+    }
+    const t = f.life / f.maxLife;
+    const alpha = Math.sin(t * Math.PI) * 0.85;
+    const flicker = 0.5 + Math.sin(time * 10 + f.flickerPhase) * 0.5;
+    const x = cx + Math.cos(f.angle) * baseRadius * f.radius;
+    const y = cy + Math.sin(f.angle) * baseRadius * f.radius;
+    const rot = f.angle + Math.PI / 2;
+    drawHornFlame(ctx, x, y, f.size, alpha, flicker, rot);
+  });
+  ctx.globalCompositeOperation = "source-over";
+
+  sigils.forEach((sg) => {
+    sg.angle += sg.speed * 0.016;
+    sg.spin += sg.spinSpeed;
+    const bob = Math.sin(time * 2 + sg.bobPhase) * 3 * DPR;
+    const x = cx + Math.cos(sg.angle) * (baseRadius * sg.radius);
+    const y = cy + Math.sin(sg.angle) * (baseRadius * sg.radius) + bob;
+    const rot = sg.angle + Math.PI / 2 + Math.sin(sg.spin) * 0.15;
+    const halo = ctx.createRadialGradient(x, y, 0, x, y, sg.size * DPR * 2.2);
+    halo.addColorStop(0, `hsla(48, 100%, 75%, 0.7)`);
+    halo.addColorStop(1, `hsla(40, 100%, 50%, 0)`);
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(x, y, sg.size * DPR * 2.2, 0, Math.PI * 2);
+    ctx.fill();
+    drawFleurDeLis(ctx, x, y, sg.size, 0.95, rot);
+  });
+}
+
 interface ShopBadgeRingCanvasProps {
   badgeName: string;
   glowColor: string;
@@ -1451,6 +1715,9 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
   const pulsesRef = useRef<Pulse[]>([]);
   const orbitHeartsRef = useRef<OrbitHeart[]>([]);
   const boltsRef = useRef<{ bolts: Bolt[]; nextStrike: number }>({ bolts: [], nextStrike: 0 });
+  const sigilsRef = useRef<Sigil[]>([]);
+  const hornFlamesRef = useRef<HornFlame[]>([]);
+  const jewelsRef = useRef<Jewel[]>([]);
   const rafRef = useRef<number>(0);
   const sizeRef = useRef({ w: 0, h: 0 });
 
@@ -1540,6 +1807,22 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         );
         break;
       }
+      case "Horny Royalty": {
+        if (sigilsRef.current.length === 0) sigilsRef.current = makeSigils(5);
+        if (hornFlamesRef.current.length === 0) hornFlamesRef.current = makeHornFlames(18);
+        if (jewelsRef.current.length === 0) jewelsRef.current = makeJewels(10);
+        drawHornyRoyalty(
+          ctx,
+          cx,
+          cy,
+          baseRadius,
+          time,
+          sigilsRef.current,
+          hornFlamesRef.current,
+          jewelsRef.current,
+        );
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
@@ -1563,6 +1846,9 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
     pulsesRef.current = [];
     orbitHeartsRef.current = [];
     boltsRef.current = { bolts: [], nextStrike: 0 };
+    sigilsRef.current = [];
+    hornFlamesRef.current = [];
+    jewelsRef.current = [];
     sizeRef.current = { w: 0, h: 0 };
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);

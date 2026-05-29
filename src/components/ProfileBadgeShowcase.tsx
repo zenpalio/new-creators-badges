@@ -56,7 +56,7 @@ const badgeEffects: Record<string, {
   },
   "Horny Royalty": {
     className: "badge-effect-horny",
-    glowColor: "hsl(300 80% 50%)",
+    glowColor: "hsl(285 100% 55%)",
     animation: "pulse-glow",
     particleEmoji: "👑",
   },
