@@ -1807,6 +1807,22 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         );
         break;
       }
+      case "Horny Royalty": {
+        if (sigilsRef.current.length === 0) sigilsRef.current = makeSigils(5);
+        if (hornFlamesRef.current.length === 0) hornFlamesRef.current = makeHornFlames(18);
+        if (jewelsRef.current.length === 0) jewelsRef.current = makeJewels(10);
+        drawHornyRoyalty(
+          ctx,
+          cx,
+          cy,
+          baseRadius,
+          time,
+          sigilsRef.current,
+          hornFlamesRef.current,
+          jewelsRef.current,
+        );
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
