@@ -1847,6 +1847,8 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         if (sigilsRef.current.length === 0) sigilsRef.current = makeSigils(4);
         if (hornFlamesRef.current.length === 0) hornFlamesRef.current = makeHornFlames(0);
         if (jewelsRef.current.length === 0) jewelsRef.current = makeJewels(6);
+        if (naughtyEmojisRef.current.length === 0)
+          naughtyEmojisRef.current = makeNaughtyEmojis(10);
         drawHornyRoyalty(
           ctx,
           cx,
@@ -1856,6 +1858,7 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
           sigilsRef.current,
           hornFlamesRef.current,
           jewelsRef.current,
+          naughtyEmojisRef.current,
         );
         break;
       }
