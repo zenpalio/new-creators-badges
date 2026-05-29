@@ -1320,6 +1320,12 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         drawHaremKing(ctx, cx, cy, baseRadius, time, crownsRef.current, petalsRef.current);
         break;
       }
+      case "Rizzler": {
+        if (embersRef.current.length === 0) embersRef.current = makeEmbers(22);
+        if (flaresRef.current.length === 0) flaresRef.current = makeFlares(7, baseRadius);
+        drawRizzler(ctx, cx, cy, baseRadius, time, embersRef.current, flaresRef.current);
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
@@ -1338,6 +1344,8 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
     starsRef.current = [];
     crownsRef.current = [];
     petalsRef.current = [];
+    embersRef.current = [];
+    flaresRef.current = [];
     sizeRef.current = { w: 0, h: 0 };
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
