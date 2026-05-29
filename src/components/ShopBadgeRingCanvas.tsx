@@ -543,6 +543,11 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         drawTouchGrass(ctx, cx, cy, baseRadius, time, bladesRef.current, leavesRef.current);
         break;
       }
+      case "AI Over Real": {
+        if (bitsRef.current.length === 0) bitsRef.current = makeBits(22);
+        drawAiOverReal(ctx, cx, cy, baseRadius, time, bitsRef.current);
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
@@ -555,6 +560,7 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
     sparklesRef.current = [];
     bladesRef.current = [];
     leavesRef.current = [];
+    bitsRef.current = [];
     sizeRef.current = { w: 0, h: 0 };
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
