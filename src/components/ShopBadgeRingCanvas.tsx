@@ -2598,6 +2598,9 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
   const chadEmojisRef = useRef<ChadEmoji[]>([]);
   const glitchSlicesRef = useRef<GlitchSlice[]>([]);
   const driftEmojisRef = useRef<DriftEmoji[]>([]);
+  const dripsRef = useRef<Drip[]>([]);
+  const mistRef = useRef<MistPuff[]>([]);
+  const simpEmojisRef = useRef<SimpEmoji[]>([]);
   const rafRef = useRef<number>(0);
   const sizeRef = useRef({ w: 0, h: 0 });
 
