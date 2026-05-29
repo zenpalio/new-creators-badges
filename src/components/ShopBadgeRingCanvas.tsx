@@ -4638,6 +4638,26 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         );
         break;
       }
+      case "AI Simp": {
+        if (heartPulsesRef.current.length === 0) heartPulsesRef.current = makeHeartPulses(3);
+        if (simpHeartsRef.current.length === 0) simpHeartsRef.current = makeSimpHearts(8);
+        if (simpSparklesRef.current.length === 0)
+          simpSparklesRef.current = makeSimpSparkles(12);
+        if (simpFloatEmojisRef.current.length === 0)
+          simpFloatEmojisRef.current = makeSimpFloatEmojis(4);
+        drawAiSimp(
+          ctx,
+          cx,
+          cy,
+          baseRadius,
+          time,
+          heartPulsesRef.current,
+          simpHeartsRef.current,
+          simpSparklesRef.current,
+          simpFloatEmojisRef.current,
+        );
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
