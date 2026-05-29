@@ -425,6 +425,13 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         drawWaifu(ctx, cx, cy, baseRadius, time, heartsRef.current, sparklesRef.current);
         break;
       }
+      case "Touch Grass Never": {
+        if (bladesRef.current.length === 0) bladesRef.current = makeBlades(44);
+        if (leavesRef.current.length === 0)
+          leavesRef.current = makeLeaves(6, baseRadius / DPR);
+        drawTouchGrass(ctx, cx, cy, baseRadius, time, bladesRef.current, leavesRef.current);
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
@@ -435,6 +442,8 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
   useEffect(() => {
     heartsRef.current = [];
     sparklesRef.current = [];
+    bladesRef.current = [];
+    leavesRef.current = [];
     sizeRef.current = { w: 0, h: 0 };
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
