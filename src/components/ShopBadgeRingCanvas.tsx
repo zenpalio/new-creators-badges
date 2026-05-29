@@ -3653,6 +3653,363 @@ function drawAiGhosted(
 }
 
 
+// ─── Prompt Diddy: Gold bling aura + spinning $ medallions + cash shower + spotlight sweep ───
+interface BlingMedallion {
+  angle: number;        // angle around ring
+  radius: number;       // factor of baseRadius
+  spin: number;
+  vSpin: number;
+  size: number;
+  life: number;
+  maxLife: number;
+  vAngle: number;
+}
+
+interface CashBill {
+  x: number;            // normalized -1..1 (relative to baseRadius)
+  y: number;
+  vy: number;
+  vx: number;
+  rot: number;
+  vRot: number;
+  size: number;         // width factor
+  life: number;
+  maxLife: number;
+}
+
+interface GoldSparkle {
+  angle: number;        // radial position around ring
+  radius: number;
+  size: number;
+  life: number;
+  maxLife: number;
+}
+
+interface DiddyEmoji {
+  emoji: string;
+  angle: number;
+  speed: number;
+  size: number;
+  bobPhase: number;
+}
+
+const DIDDY_GLYPHS = ["💰", "💎", "🎤", "🍾"];
+
+const makeBlingMedallions = (count: number): BlingMedallion[] =>
+  Array.from({ length: count }, () => ({
+    angle: Math.random() * Math.PI * 2,
+    radius: 1.06 + Math.random() * 0.18,
+    spin: Math.random() * Math.PI * 2,
+    vSpin: (Math.random() < 0.5 ? -1 : 1) * (0.04 + Math.random() * 0.05),
+    size: 5 + Math.random() * 2.5,
+    life: Math.random() * 140,
+    maxLife: 130 + Math.random() * 90,
+    vAngle: (Math.random() - 0.5) * 0.006,
+  }));
+
+const makeCashBills = (count: number): CashBill[] =>
+  Array.from({ length: count }, () => ({
+    x: (Math.random() - 0.5) * 2.2,
+    y: -1.25 - Math.random() * 0.6,
+    vy: 0.008 + Math.random() * 0.01,
+    vx: (Math.random() - 0.5) * 0.006,
+    rot: Math.random() * Math.PI * 2,
+    vRot: (Math.random() - 0.5) * 0.08,
+    size: 5 + Math.random() * 3,
+    life: 0,
+    maxLife: 180 + Math.random() * 80,
+  }));
+
+const makeGoldSparkles = (count: number): GoldSparkle[] =>
+  Array.from({ length: count }, () => ({
+    angle: Math.random() * Math.PI * 2,
+    radius: 0.98 + Math.random() * 0.28,
+    size: 1.5 + Math.random() * 2,
+    life: Math.random() * 50,
+    maxLife: 35 + Math.random() * 35,
+  }));
+
+const makeDiddyEmojis = (count: number): DiddyEmoji[] =>
+  Array.from({ length: count }, (_, i) => ({
+    emoji: DIDDY_GLYPHS[i % DIDDY_GLYPHS.length],
+    angle: (i / count) * Math.PI * 2,
+    speed: 0.07 + Math.random() * 0.04,
+    size: 12 + Math.random() * 2,
+    bobPhase: Math.random() * Math.PI * 2,
+  }));
+
+// Draws a gold coin medallion stamped with $ glyph
+function drawMedallion(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  spin: number,
+  alpha: number,
+) {
+  ctx.save();
+  ctx.translate(x, y);
+  // Spin perceived as horizontal squash
+  const squash = Math.abs(Math.cos(spin));
+  ctx.scale(Math.max(0.15, squash), 1);
+  // Coin body — radial gold gradient
+  const coin = ctx.createRadialGradient(-size * 0.3, -size * 0.3, 0, 0, 0, size);
+  coin.addColorStop(0, `hsla(55, 100%, 88%, ${alpha})`);
+  coin.addColorStop(0.5, `hsla(45, 100%, 60%, ${alpha})`);
+  coin.addColorStop(1, `hsla(38, 95%, 35%, ${alpha})`);
+  ctx.fillStyle = coin;
+  ctx.beginPath();
+  ctx.arc(0, 0, size, 0, Math.PI * 2);
+  ctx.fill();
+  // Rim
+  ctx.strokeStyle = `hsla(38, 100%, 30%, ${alpha * 0.95})`;
+  ctx.lineWidth = Math.max(0.6, size * 0.1);
+  ctx.beginPath();
+  ctx.arc(0, 0, size * 0.92, 0, Math.PI * 2);
+  ctx.stroke();
+  // $ glyph
+  ctx.fillStyle = `hsla(35, 100%, 22%, ${alpha})`;
+  ctx.font = `bold ${size * 1.2}px "Helvetica Neue", Arial, sans-serif`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText("$", 0, size * 0.06);
+  ctx.restore();
+}
+
+// Draws a tumbling dollar bill rectangle
+function drawCashBill(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  rot: number,
+  alpha: number,
+) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  const w = size * 2.1;
+  const h = size * 1.1;
+  // Bill background — money green
+  const grad = ctx.createLinearGradient(-w / 2, 0, w / 2, 0);
+  grad.addColorStop(0, `hsla(130, 35%, 35%, ${alpha})`);
+  grad.addColorStop(0.5, `hsla(135, 45%, 55%, ${alpha})`);
+  grad.addColorStop(1, `hsla(130, 35%, 35%, ${alpha})`);
+  ctx.fillStyle = grad;
+  ctx.fillRect(-w / 2, -h / 2, w, h);
+  // Border
+  ctx.strokeStyle = `hsla(135, 55%, 25%, ${alpha * 0.9})`;
+  ctx.lineWidth = Math.max(0.4, size * 0.08);
+  ctx.strokeRect(-w / 2, -h / 2, w, h);
+  // Center medallion
+  ctx.fillStyle = `hsla(130, 35%, 25%, ${alpha * 0.85})`;
+  ctx.beginPath();
+  ctx.ellipse(0, 0, w * 0.18, h * 0.32, 0, 0, Math.PI * 2);
+  ctx.fill();
+  // $ on center
+  ctx.fillStyle = `hsla(50, 100%, 75%, ${alpha})`;
+  ctx.font = `bold ${h * 0.55}px "Helvetica Neue", Arial, sans-serif`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText("$", 0, h * 0.04);
+  ctx.restore();
+}
+
+function drawPromptDiddy(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  baseRadius: number,
+  time: number,
+  medallions: BlingMedallion[],
+  bills: CashBill[],
+  sparkles: GoldSparkle[],
+  emojis: DiddyEmoji[],
+) {
+  const auraMax = baseRadius * 1.3;
+
+  // 1. Contained luxury gold aura
+  const breath = 0.5 + Math.sin(time * 1.8) * 0.5;
+  const aura = ctx.createRadialGradient(cx, cy, baseRadius * 0.88, cx, cy, auraMax);
+  aura.addColorStop(0, `hsla(50, 100%, 70%, 0)`);
+  aura.addColorStop(0.5, `hsla(45, 100%, 55%, ${0.22 + breath * 0.1})`);
+  aura.addColorStop(0.8, `hsla(38, 95%, 40%, ${0.12 + breath * 0.05})`);
+  aura.addColorStop(1, `hsla(32, 80%, 25%, 0)`);
+  ctx.fillStyle = aura;
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.fill();
+
+  // 2. Rotating spotlight sweep beam (clipped to ring zone)
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.arc(cx, cy, baseRadius * 0.98, 0, Math.PI * 2, true);
+  ctx.clip();
+  const sweepA = time * 0.9;
+  const sweepSpan = Math.PI * 0.18;
+  for (let i = 0; i < 2; i++) {
+    const a0 = sweepA + i * Math.PI;
+    const x1 = cx + Math.cos(a0) * baseRadius * 1.02;
+    const y1 = cy + Math.sin(a0) * baseRadius * 1.02;
+    const x2 = cx + Math.cos(a0) * auraMax;
+    const y2 = cy + Math.sin(a0) * auraMax;
+    const g = ctx.createLinearGradient(x1, y1, x2, y2);
+    g.addColorStop(0, `hsla(55, 100%, 92%, 0.6)`);
+    g.addColorStop(1, `hsla(45, 100%, 60%, 0)`);
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(cx, cy, auraMax, a0 - sweepSpan, a0 + sweepSpan);
+    ctx.lineTo(cx, cy);
+    ctx.closePath();
+    ctx.fill();
+  }
+  ctx.restore();
+
+  // 3. Cash bills shower — falling diagonally with rotation (clipped)
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.clip();
+  bills.forEach((b) => {
+    b.life += 1;
+    b.y += b.vy;
+    b.x += b.vx;
+    b.rot += b.vRot;
+    if (b.life >= b.maxLife || b.y > 1.3) {
+      b.x = (Math.random() - 0.5) * 2.2;
+      b.y = -1.3 - Math.random() * 0.4;
+      b.vy = 0.008 + Math.random() * 0.01;
+      b.vx = (Math.random() - 0.5) * 0.006;
+      b.rot = Math.random() * Math.PI * 2;
+      b.vRot = (Math.random() - 0.5) * 0.08;
+      b.size = 5 + Math.random() * 3;
+      b.life = 0;
+      b.maxLife = 180 + Math.random() * 80;
+    }
+    const t = b.life / b.maxLife;
+    const fade = t < 0.1 ? t / 0.1 : t > 0.85 ? (1 - t) / 0.15 : 1;
+    const x = cx + b.x * baseRadius;
+    const y = cy + b.y * baseRadius;
+    drawCashBill(ctx, x, y, b.size * DPR, b.rot, 0.9 * fade);
+  });
+  ctx.restore();
+
+  // 4. Double-stroke gold ring with sweeping bright shine
+  ctx.save();
+  ctx.strokeStyle = `hsla(38, 100%, 38%, 0.95)`;
+  ctx.lineWidth = 3 * DPR;
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.strokeStyle = `hsla(50, 100%, 78%, 0.95)`;
+  ctx.lineWidth = 1.2 * DPR;
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius - 1.6 * DPR, 0, Math.PI * 2);
+  ctx.stroke();
+  const shineStart = time * 1.6;
+  ctx.strokeStyle = `hsla(55, 100%, 95%, 0.98)`;
+  ctx.lineWidth = 2.4 * DPR;
+  ctx.lineCap = "round";
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius, shineStart, shineStart + Math.PI * 0.32);
+  ctx.stroke();
+  ctx.restore();
+
+  // 5. Bling sparkles (small cross stars across the ring zone)
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.clip();
+  sparkles.forEach((s) => {
+    s.life += 1;
+    if (s.life >= s.maxLife) {
+      s.angle = Math.random() * Math.PI * 2;
+      s.radius = 0.98 + Math.random() * 0.28;
+      s.size = 1.5 + Math.random() * 2;
+      s.life = 0;
+      s.maxLife = 35 + Math.random() * 35;
+    }
+    const t = s.life / s.maxLife;
+    const pop = Math.sin(t * Math.PI);
+    const x = cx + Math.cos(s.angle) * baseRadius * s.radius;
+    const y = cy + Math.sin(s.angle) * baseRadius * s.radius;
+    const r = s.size * DPR * (0.6 + pop * 0.9);
+    ctx.strokeStyle = `hsla(55, 100%, 92%, ${0.95 * pop})`;
+    ctx.lineWidth = 1.2 * DPR;
+    ctx.lineCap = "round";
+    ctx.shadowColor = `hsla(50, 100%, 70%, ${0.9 * pop})`;
+    ctx.shadowBlur = r * 2.5;
+    ctx.beginPath();
+    ctx.moveTo(x - r, y);
+    ctx.lineTo(x + r, y);
+    ctx.moveTo(x, y - r);
+    ctx.lineTo(x, y + r);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  });
+  ctx.restore();
+
+  // 6. Spinning $ medallions floating around the ring
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.arc(cx, cy, baseRadius * 0.92, 0, Math.PI * 2, true);
+  ctx.clip();
+  medallions.forEach((m) => {
+    m.life += 1;
+    m.angle += m.vAngle;
+    m.spin += m.vSpin;
+    if (m.life >= m.maxLife) {
+      m.angle = Math.random() * Math.PI * 2;
+      m.radius = 1.06 + Math.random() * 0.18;
+      m.size = 5 + Math.random() * 2.5;
+      m.life = 0;
+      m.maxLife = 130 + Math.random() * 90;
+      m.vSpin = (Math.random() < 0.5 ? -1 : 1) * (0.04 + Math.random() * 0.05);
+    }
+    const t = m.life / m.maxLife;
+    const fade = t < 0.18 ? t / 0.18 : t > 0.78 ? (1 - t) / 0.22 : 1;
+    const x = cx + Math.cos(m.angle) * baseRadius * m.radius;
+    const y = cy + Math.sin(m.angle) * baseRadius * m.radius;
+    // Soft halo
+    const halo = ctx.createRadialGradient(x, y, 0, x, y, m.size * DPR * 2);
+    halo.addColorStop(0, `hsla(50, 100%, 75%, ${0.45 * fade})`);
+    halo.addColorStop(1, `hsla(40, 100%, 50%, 0)`);
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(x, y, m.size * DPR * 2, 0, Math.PI * 2);
+    ctx.fill();
+    drawMedallion(ctx, x, y, m.size * DPR, m.spin, 0.95 * fade);
+  });
+  ctx.restore();
+
+  // 7. Orbiting bling emojis
+  ctx.save();
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  emojis.forEach((e) => {
+    e.angle += e.speed * 0.016;
+    const bob = Math.sin(time * 1.8 + e.bobPhase) * 2 * DPR;
+    const x = cx + Math.cos(e.angle) * baseRadius;
+    const y = cy + Math.sin(e.angle) * baseRadius + bob;
+    const halo = ctx.createRadialGradient(x, y, 0, x, y, e.size * DPR * 1.4);
+    halo.addColorStop(0, `hsla(50, 100%, 75%, 0.6)`);
+    halo.addColorStop(1, `hsla(40, 100%, 50%, 0)`);
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(x, y, e.size * DPR * 1.4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.font = `${e.size * DPR}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+    ctx.shadowColor = "hsla(45, 100%, 60%, 0.8)";
+    ctx.shadowBlur = 5 * DPR;
+    ctx.fillText(e.emoji, x, y);
+    ctx.shadowBlur = 0;
+  });
+  ctx.restore();
+}
+
+
 interface ShopBadgeRingCanvasProps {
   badgeName: string;
   glowColor: string;
@@ -3702,6 +4059,10 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
   const ectoMistRef = useRef<EctoMist[]>([]);
   const phaseBlipsRef = useRef<PhaseBlip[]>([]);
   const ghostEmojisRef = useRef<GhostEmoji[]>([]);
+  const blingMedallionsRef = useRef<BlingMedallion[]>([]);
+  const cashBillsRef = useRef<CashBill[]>([]);
+  const goldSparklesRef = useRef<GoldSparkle[]>([]);
+  const diddyEmojisRef = useRef<DiddyEmoji[]>([]);
   const rafRef = useRef<number>(0);
   const sizeRef = useRef({ w: 0, h: 0 });
 
@@ -3953,6 +4314,27 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         );
         break;
       }
+      case "Prompt Diddy": {
+        if (blingMedallionsRef.current.length === 0)
+          blingMedallionsRef.current = makeBlingMedallions(7);
+        if (cashBillsRef.current.length === 0) cashBillsRef.current = makeCashBills(10);
+        if (goldSparklesRef.current.length === 0)
+          goldSparklesRef.current = makeGoldSparkles(12);
+        if (diddyEmojisRef.current.length === 0)
+          diddyEmojisRef.current = makeDiddyEmojis(4);
+        drawPromptDiddy(
+          ctx,
+          cx,
+          cy,
+          baseRadius,
+          time,
+          blingMedallionsRef.current,
+          cashBillsRef.current,
+          goldSparklesRef.current,
+          diddyEmojisRef.current,
+        );
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
@@ -4003,6 +4385,10 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
     ectoMistRef.current = [];
     phaseBlipsRef.current = [];
     ghostEmojisRef.current = [];
+    blingMedallionsRef.current = [];
+    cashBillsRef.current = [];
+    goldSparklesRef.current = [];
+    diddyEmojisRef.current = [];
     sizeRef.current = { w: 0, h: 0 };
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
