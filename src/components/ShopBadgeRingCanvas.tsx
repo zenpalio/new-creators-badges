@@ -2294,6 +2294,22 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         );
         break;
       }
+      case "Giga Chad": {
+        if (powerPulsesRef.current.length === 0)
+          powerPulsesRef.current = makePowerPulses(2);
+        if (chadEmojisRef.current.length === 0)
+          chadEmojisRef.current = makeChadEmojis(3);
+        drawGigaChad(
+          ctx,
+          cx,
+          cy,
+          baseRadius,
+          time,
+          powerPulsesRef.current,
+          chadEmojisRef.current,
+        );
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
