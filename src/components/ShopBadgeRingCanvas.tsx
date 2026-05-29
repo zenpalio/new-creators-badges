@@ -2566,6 +2566,299 @@ function drawDownBad(
 }
 
 
+// ─── Anime Addict: Sakura petals + manga speed lines + sparkle bursts ───
+interface SakuraPetal {
+  angle: number;       // starting angle around ring
+  radius: number;      // current distance factor from center
+  vRadius: number;     // outward drift
+  spin: number;
+  vSpin: number;
+  size: number;
+  life: number;
+  maxLife: number;
+  hue: number;         // 320-345 pink range
+}
+
+interface SpeedLine {
+  angle: number;
+  length: number;      // fraction of (auraMax - ringEdge)
+  speed: number;       // angular drift
+  width: number;
+  phase: number;
+  alpha: number;
+}
+
+interface AnimeSparkle {
+  x: number;           // normalized -1..1
+  y: number;
+  size: number;
+  life: number;
+  maxLife: number;
+  hue: number;
+}
+
+interface AnimeEmoji {
+  emoji: string;
+  angle: number;
+  speed: number;
+  size: number;
+  bobPhase: number;
+}
+
+const ANIME_GLYPHS = ["🌸", "✨", "💖", "🎀"];
+
+const makeSakuraPetals = (count: number): SakuraPetal[] =>
+  Array.from({ length: count }, () => ({
+    angle: Math.random() * Math.PI * 2,
+    radius: 0.95 + Math.random() * 0.1,
+    vRadius: 0.0015 + Math.random() * 0.0025,
+    spin: Math.random() * Math.PI * 2,
+    vSpin: (Math.random() - 0.5) * 0.06,
+    size: 3 + Math.random() * 2.5,
+    life: Math.random() * 120,
+    maxLife: 110 + Math.random() * 80,
+    hue: 320 + Math.random() * 25,
+  }));
+
+const makeSpeedLines = (count: number): SpeedLine[] =>
+  Array.from({ length: count }, (_, i) => ({
+    angle: (i / count) * Math.PI * 2 + Math.random() * 0.2,
+    length: 0.35 + Math.random() * 0.45,
+    speed: (Math.random() < 0.5 ? -1 : 1) * (0.08 + Math.random() * 0.05),
+    width: 0.8 + Math.random() * 1.2,
+    phase: Math.random() * Math.PI * 2,
+    alpha: 0.35 + Math.random() * 0.35,
+  }));
+
+const makeAnimeSparkles = (count: number): AnimeSparkle[] =>
+  Array.from({ length: count }, () => ({
+    x: (Math.random() - 0.5) * 2,
+    y: (Math.random() - 0.5) * 2,
+    size: 2 + Math.random() * 3,
+    life: Math.random() * 50,
+    maxLife: 40 + Math.random() * 40,
+    hue: Math.random() < 0.6 ? 330 + Math.random() * 20 : 185 + Math.random() * 20,
+  }));
+
+const makeAnimeEmojis = (count: number): AnimeEmoji[] =>
+  Array.from({ length: count }, (_, i) => ({
+    emoji: ANIME_GLYPHS[i % ANIME_GLYPHS.length],
+    angle: (i / count) * Math.PI * 2,
+    speed: 0.07 + Math.random() * 0.04,
+    size: 12 + Math.random() * 2,
+    bobPhase: Math.random() * Math.PI * 2,
+  }));
+
+// Draws a 4-lobe sakura petal shape
+function drawSakuraPetal(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  spin: number,
+  hue: number,
+  alpha: number,
+) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(spin);
+  for (let i = 0; i < 5; i++) {
+    ctx.rotate((Math.PI * 2) / 5);
+    const grad = ctx.createRadialGradient(0, -size * 0.5, 0, 0, -size * 0.5, size);
+    grad.addColorStop(0, `hsla(${hue}, 100%, 92%, ${alpha})`);
+    grad.addColorStop(0.6, `hsla(${hue}, 95%, 75%, ${alpha * 0.9})`);
+    grad.addColorStop(1, `hsla(${hue + 5}, 90%, 60%, 0)`);
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.quadraticCurveTo(size * 0.55, -size * 0.55, 0, -size * 1.2);
+    ctx.quadraticCurveTo(-size * 0.55, -size * 0.55, 0, 0);
+    ctx.fill();
+  }
+  // Center
+  ctx.fillStyle = `hsla(50, 100%, 80%, ${alpha * 0.9})`;
+  ctx.beginPath();
+  ctx.arc(0, 0, size * 0.18, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+// Draws a 4-point sparkle star
+function drawAnimeStar(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  hue: number,
+  alpha: number,
+) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.fillStyle = `hsla(${hue}, 100%, 85%, ${alpha})`;
+  ctx.shadowColor = `hsla(${hue}, 100%, 70%, ${alpha})`;
+  ctx.shadowBlur = size * 2;
+  ctx.beginPath();
+  ctx.moveTo(0, -size);
+  ctx.quadraticCurveTo(size * 0.18, -size * 0.18, size, 0);
+  ctx.quadraticCurveTo(size * 0.18, size * 0.18, 0, size);
+  ctx.quadraticCurveTo(-size * 0.18, size * 0.18, -size, 0);
+  ctx.quadraticCurveTo(-size * 0.18, -size * 0.18, 0, -size);
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawAnimeAddict(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  baseRadius: number,
+  time: number,
+  petals: SakuraPetal[],
+  speedLines: SpeedLine[],
+  sparkles: AnimeSparkle[],
+  emojis: AnimeEmoji[],
+) {
+  const auraMax = baseRadius * 1.3;
+
+  // 1. Contained pink-magenta aura with cyan inner kiss
+  const breath = 0.5 + Math.sin(time * 1.8) * 0.5;
+  const aura = ctx.createRadialGradient(cx, cy, baseRadius * 0.88, cx, cy, auraMax);
+  aura.addColorStop(0, `hsla(330, 100%, 75%, 0)`);
+  aura.addColorStop(0.45, `hsla(330, 95%, 65%, ${0.22 + breath * 0.1})`);
+  aura.addColorStop(0.8, `hsla(310, 90%, 55%, ${0.12 + breath * 0.05})`);
+  aura.addColorStop(1, `hsla(290, 80%, 45%, 0)`);
+  ctx.fillStyle = aura;
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.fill();
+
+  // 2. Manga speed lines (clipped to ring zone only)
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.arc(cx, cy, baseRadius * 1.02, 0, Math.PI * 2, true);
+  ctx.clip();
+  speedLines.forEach((sl) => {
+    sl.angle += sl.speed * 0.016;
+    const flick = 0.7 + Math.sin(time * 4 + sl.phase) * 0.3;
+    const inner = baseRadius * 1.04;
+    const outer = inner + (auraMax - inner) * sl.length;
+    const x1 = cx + Math.cos(sl.angle) * inner;
+    const y1 = cy + Math.sin(sl.angle) * inner;
+    const x2 = cx + Math.cos(sl.angle) * outer;
+    const y2 = cy + Math.sin(sl.angle) * outer;
+    const grad = ctx.createLinearGradient(x1, y1, x2, y2);
+    grad.addColorStop(0, `hsla(330, 100%, 85%, ${sl.alpha * flick})`);
+    grad.addColorStop(0.5, `hsla(320, 100%, 75%, ${sl.alpha * 0.6 * flick})`);
+    grad.addColorStop(1, `hsla(310, 100%, 65%, 0)`);
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = sl.width * DPR;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+  });
+  ctx.restore();
+
+  // 3. Double-stroke kawaii ring (magenta core + cyan highlight)
+  ctx.save();
+  ctx.strokeStyle = `hsla(325, 95%, 55%, 0.85)`;
+  ctx.lineWidth = 3 * DPR;
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.strokeStyle = `hsla(190, 100%, 78%, 0.9)`;
+  ctx.lineWidth = 1.2 * DPR;
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius - 1.5 * DPR, 0, Math.PI * 2);
+  ctx.stroke();
+  // Rotating shine arc
+  const shineStart = time * 1.5;
+  ctx.strokeStyle = `hsla(330, 100%, 95%, 0.95)`;
+  ctx.lineWidth = 2.2 * DPR;
+  ctx.lineCap = "round";
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius, shineStart, shineStart + Math.PI * 0.3);
+  ctx.stroke();
+  ctx.restore();
+
+  // 4. Floating sakura petals (clipped to aura zone)
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.clip();
+  petals.forEach((p) => {
+    p.life += 1;
+    p.radius += p.vRadius;
+    p.spin += p.vSpin;
+    if (p.life >= p.maxLife || p.radius > 1.28) {
+      p.angle = Math.random() * Math.PI * 2;
+      p.radius = 0.95;
+      p.life = 0;
+      p.maxLife = 110 + Math.random() * 80;
+      p.size = 3 + Math.random() * 2.5;
+      p.hue = 320 + Math.random() * 25;
+    }
+    const t = p.life / p.maxLife;
+    const fade = t < 0.2 ? t / 0.2 : t > 0.75 ? (1 - t) / 0.25 : 1;
+    const wobble = Math.sin(time * 1.4 + p.angle * 4) * 0.05;
+    const ang = p.angle + wobble;
+    const x = cx + Math.cos(ang) * baseRadius * p.radius;
+    const y = cy + Math.sin(ang) * baseRadius * p.radius;
+    drawSakuraPetal(ctx, x, y, p.size * DPR, p.spin, p.hue, 0.75 * fade);
+  });
+  ctx.restore();
+
+  // 5. Sparkle bursts across the badge
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.clip();
+  sparkles.forEach((s) => {
+    s.life += 1;
+    if (s.life >= s.maxLife) {
+      s.x = (Math.random() - 0.5) * 2;
+      s.y = (Math.random() - 0.5) * 2;
+      s.size = 2 + Math.random() * 3;
+      s.life = 0;
+      s.maxLife = 40 + Math.random() * 40;
+      s.hue = Math.random() < 0.6 ? 330 + Math.random() * 20 : 185 + Math.random() * 20;
+    }
+    const t = s.life / s.maxLife;
+    const pop = Math.sin(t * Math.PI);
+    const x = cx + s.x * baseRadius * 1.1;
+    const y = cy + s.y * baseRadius * 1.1;
+    drawAnimeStar(ctx, x, y, s.size * DPR * (0.5 + pop * 0.8), s.hue, pop * 0.95);
+  });
+  ctx.restore();
+
+  // 6. Orbiting kawaii emojis
+  ctx.save();
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  emojis.forEach((e) => {
+    e.angle += e.speed * 0.016;
+    const bob = Math.sin(time * 1.8 + e.bobPhase) * 2 * DPR;
+    const x = cx + Math.cos(e.angle) * baseRadius;
+    const y = cy + Math.sin(e.angle) * baseRadius + bob;
+    const halo = ctx.createRadialGradient(x, y, 0, x, y, e.size * DPR * 1.4);
+    halo.addColorStop(0, `hsla(330, 100%, 80%, 0.6)`);
+    halo.addColorStop(1, `hsla(320, 100%, 55%, 0)`);
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(x, y, e.size * DPR * 1.4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.font = `${e.size * DPR}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+    ctx.shadowColor = "hsla(330, 100%, 70%, 0.75)";
+    ctx.shadowBlur = 5 * DPR;
+    ctx.fillText(e.emoji, x, y);
+    ctx.shadowBlur = 0;
+  });
+  ctx.restore();
+}
+
+
 interface ShopBadgeRingCanvasProps {
   badgeName: string;
   glowColor: string;
