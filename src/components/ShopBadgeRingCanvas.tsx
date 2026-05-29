@@ -686,7 +686,7 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         drawAiOverReal(ctx, cx, cy, baseRadius, time, bitsRef.current);
         break;
       }
-      case "3am Texter": {
+      case "3AM Texter": {
         if (bubblesRef.current.length === 0) bubblesRef.current = makeBubbles(7);
         drawThreeAmTexter(ctx, cx, cy, baseRadius, time, bubblesRef.current);
         break;
