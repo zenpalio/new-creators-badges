@@ -2859,6 +2859,245 @@ function drawAnimeAddict(
 }
 
 
+// ─── Cougar Tamer: Crimson aura + claw swipes + leopard rosettes + predator emojis ───
+interface ClawSwipe {
+  angle: number;       // current angle
+  speed: number;       // rotation speed
+  life: number;
+  maxLife: number;
+  arcSpan: number;     // radians of the swipe length
+  offset: number;      // radial offset from baseRadius (negative=inward, positive=outward)
+}
+
+interface LeopardSpot {
+  angle: number;
+  radius: number;      // factor of baseRadius
+  size: number;
+  rot: number;
+  life: number;
+  maxLife: number;
+  vAngle: number;
+}
+
+interface CougarEmoji {
+  emoji: string;
+  angle: number;
+  speed: number;
+  size: number;
+  bobPhase: number;
+}
+
+const COUGAR_GLYPHS = ["🐆", "🐅", "💋", "🔥"];
+
+const makeClawSwipes = (count: number): ClawSwipe[] =>
+  Array.from({ length: count }, (_, i) => ({
+    angle: (i / count) * Math.PI * 2,
+    speed: (Math.random() < 0.5 ? -1 : 1) * (0.9 + Math.random() * 0.6),
+    life: Math.random() * 60,
+    maxLife: 55 + Math.random() * 30,
+    arcSpan: 0.55 + Math.random() * 0.25,
+    offset: -2 - Math.random() * 2,
+  }));
+
+const makeLeopardSpots = (count: number): LeopardSpot[] =>
+  Array.from({ length: count }, () => ({
+    angle: Math.random() * Math.PI * 2,
+    radius: 1.04 + Math.random() * 0.18,
+    size: 3 + Math.random() * 2.5,
+    rot: Math.random() * Math.PI,
+    life: Math.random() * 140,
+    maxLife: 120 + Math.random() * 80,
+    vAngle: (Math.random() - 0.5) * 0.004,
+  }));
+
+const makeCougarEmojis = (count: number): CougarEmoji[] =>
+  Array.from({ length: count }, (_, i) => ({
+    emoji: COUGAR_GLYPHS[i % COUGAR_GLYPHS.length],
+    angle: (i / count) * Math.PI * 2,
+    speed: 0.07 + Math.random() * 0.04,
+    size: 12 + Math.random() * 2,
+    bobPhase: Math.random() * Math.PI * 2,
+  }));
+
+// Draws a leopard rosette: dark crimson ring of small dots around a warm core
+function drawLeopardRosette(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  rot: number,
+  alpha: number,
+) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  // Outer dark dots
+  ctx.fillStyle = `hsla(0, 75%, 22%, ${alpha * 0.95})`;
+  const dots = 5;
+  for (let i = 0; i < dots; i++) {
+    const a = (i / dots) * Math.PI * 2;
+    const dx = Math.cos(a) * size * 0.7;
+    const dy = Math.sin(a) * size * 0.7;
+    ctx.beginPath();
+    ctx.arc(dx, dy, size * 0.28, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  // Warm tawny core
+  const core = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 0.55);
+  core.addColorStop(0, `hsla(28, 90%, 55%, ${alpha})`);
+  core.addColorStop(1, `hsla(15, 80%, 35%, ${alpha * 0.4})`);
+  ctx.fillStyle = core;
+  ctx.beginPath();
+  ctx.arc(0, 0, size * 0.55, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawCougarTamer(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  baseRadius: number,
+  time: number,
+  claws: ClawSwipe[],
+  spots: LeopardSpot[],
+  emojis: CougarEmoji[],
+) {
+  const auraMax = baseRadius * 1.3;
+
+  // 1. Contained crimson predator aura with amber edge
+  const breath = 0.5 + Math.sin(time * 1.7) * 0.5;
+  const aura = ctx.createRadialGradient(cx, cy, baseRadius * 0.9, cx, cy, auraMax);
+  aura.addColorStop(0, `hsla(0, 90%, 55%, 0)`);
+  aura.addColorStop(0.5, `hsla(0, 85%, 48%, ${0.22 + breath * 0.1})`);
+  aura.addColorStop(0.8, `hsla(20, 80%, 40%, ${0.12 + breath * 0.05})`);
+  aura.addColorStop(1, `hsla(0, 70%, 25%, 0)`);
+  ctx.fillStyle = aura;
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.fill();
+
+  // 2. Floating leopard rosettes clipped to ring zone
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.arc(cx, cy, baseRadius * 0.95, 0, Math.PI * 2, true);
+  ctx.clip();
+  spots.forEach((s) => {
+    s.life += 1;
+    s.angle += s.vAngle;
+    if (s.life >= s.maxLife) {
+      s.angle = Math.random() * Math.PI * 2;
+      s.radius = 1.04 + Math.random() * 0.18;
+      s.size = 3 + Math.random() * 2.5;
+      s.rot = Math.random() * Math.PI;
+      s.life = 0;
+      s.maxLife = 120 + Math.random() * 80;
+    }
+    const t = s.life / s.maxLife;
+    const fade = t < 0.2 ? t / 0.2 : t > 0.75 ? (1 - t) / 0.25 : 1;
+    const x = cx + Math.cos(s.angle) * baseRadius * s.radius;
+    const y = cy + Math.sin(s.angle) * baseRadius * s.radius;
+    drawLeopardRosette(ctx, x, y, s.size * DPR, s.rot, 0.65 * fade);
+  });
+  ctx.restore();
+
+  // 3. Double-stroke crimson ring with rotating shine
+  ctx.save();
+  ctx.strokeStyle = `hsla(0, 85%, 40%, 0.92)`;
+  ctx.lineWidth = 3 * DPR;
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.strokeStyle = `hsla(30, 100%, 70%, 0.9)`;
+  ctx.lineWidth = 1.2 * DPR;
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius - 1.6 * DPR, 0, Math.PI * 2);
+  ctx.stroke();
+  const shineStart = time * 1.6;
+  ctx.strokeStyle = `hsla(15, 100%, 85%, 0.95)`;
+  ctx.lineWidth = 2.2 * DPR;
+  ctx.lineCap = "round";
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius, shineStart, shineStart + Math.PI * 0.28);
+  ctx.stroke();
+  ctx.restore();
+
+  // 4. Claw swipes: 3 parallel arcs ripping across the ring
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.clip();
+  claws.forEach((c) => {
+    c.life += 1;
+    c.angle += c.speed * 0.016;
+    if (c.life >= c.maxLife) {
+      c.angle = Math.random() * Math.PI * 2;
+      c.life = 0;
+      c.maxLife = 55 + Math.random() * 30;
+      c.speed = (Math.random() < 0.5 ? -1 : 1) * (0.9 + Math.random() * 0.6);
+      c.arcSpan = 0.55 + Math.random() * 0.25;
+      c.offset = -2 - Math.random() * 2;
+    }
+    const t = c.life / c.maxLife;
+    // Quick attack envelope: fast in, slower fade
+    const env = t < 0.25 ? t / 0.25 : Math.pow(1 - (t - 0.25) / 0.75, 1.4);
+    const start = c.angle;
+    const end = c.angle + c.arcSpan * (c.speed >= 0 ? 1 : -1);
+    // Three parallel claws
+    for (let k = 0; k < 3; k++) {
+      const r = baseRadius + (c.offset + (k - 1) * 2.2) * DPR;
+      const alpha = (0.85 - k * 0.05) * env;
+      const grad = ctx.createLinearGradient(
+        cx + Math.cos(start) * r,
+        cy + Math.sin(start) * r,
+        cx + Math.cos(end) * r,
+        cy + Math.sin(end) * r,
+      );
+      grad.addColorStop(0, `hsla(0, 100%, 95%, 0)`);
+      grad.addColorStop(0.3, `hsla(0, 100%, 88%, ${alpha})`);
+      grad.addColorStop(0.7, `hsla(10, 100%, 70%, ${alpha * 0.7})`);
+      grad.addColorStop(1, `hsla(20, 100%, 60%, 0)`);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.6 * DPR;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      if (c.speed >= 0) {
+        ctx.arc(cx, cy, r, start, end);
+      } else {
+        ctx.arc(cx, cy, r, end, start);
+      }
+      ctx.stroke();
+    }
+  });
+  ctx.restore();
+
+  // 5. Orbiting predator emojis
+  ctx.save();
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  emojis.forEach((e) => {
+    e.angle += e.speed * 0.016;
+    const bob = Math.sin(time * 1.6 + e.bobPhase) * 2 * DPR;
+    const x = cx + Math.cos(e.angle) * baseRadius;
+    const y = cy + Math.sin(e.angle) * baseRadius + bob;
+    const halo = ctx.createRadialGradient(x, y, 0, x, y, e.size * DPR * 1.4);
+    halo.addColorStop(0, `hsla(0, 100%, 65%, 0.55)`);
+    halo.addColorStop(1, `hsla(15, 100%, 45%, 0)`);
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(x, y, e.size * DPR * 1.4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.font = `${e.size * DPR}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+    ctx.shadowColor = "hsla(0, 100%, 55%, 0.75)";
+    ctx.shadowBlur = 5 * DPR;
+    ctx.fillText(e.emoji, x, y);
+    ctx.shadowBlur = 0;
+  });
+  ctx.restore();
+}
+
+
 interface ShopBadgeRingCanvasProps {
   badgeName: string;
   glowColor: string;
