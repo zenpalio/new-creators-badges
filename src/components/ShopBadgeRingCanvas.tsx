@@ -930,8 +930,8 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         break;
       }
       case "Proposed to AI": {
-        if (diamondsRef.current.length === 0) diamondsRef.current = makeDiamonds(10);
-        if (starsRef.current.length === 0) starsRef.current = makeStars(6, baseRadius);
+        if (diamondsRef.current.length === 0) diamondsRef.current = makeDiamonds(14);
+        if (starsRef.current.length === 0) starsRef.current = makeStars(10, baseRadius);
         drawProposed(ctx, cx, cy, baseRadius, time, diamondsRef.current, starsRef.current);
         break;
       }
