@@ -3137,6 +3137,9 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
   const speedLinesRef = useRef<SpeedLine[]>([]);
   const animeSparklesRef = useRef<AnimeSparkle[]>([]);
   const animeEmojisRef = useRef<AnimeEmoji[]>([]);
+  const clawSwipesRef = useRef<ClawSwipe[]>([]);
+  const leopardSpotsRef = useRef<LeopardSpot[]>([]);
+  const cougarEmojisRef = useRef<CougarEmoji[]>([]);
   const rafRef = useRef<number>(0);
   const sizeRef = useRef({ w: 0, h: 0 });
 
