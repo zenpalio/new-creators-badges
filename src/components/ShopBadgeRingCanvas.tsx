@@ -3372,6 +3372,287 @@ function drawMommyIssues(
 }
 
 
+// ─── AI Ghosted: Spectral cyan aura + phasing ghost wisps + ectoplasm mist + glitch ring ───
+interface GhostWisp {
+  angle: number;       // angle around ring
+  radius: number;      // factor of baseRadius
+  vAngle: number;
+  size: number;
+  life: number;
+  maxLife: number;
+  tailPhase: number;
+}
+
+interface EctoMist {
+  angle: number;
+  radius: number;
+  rise: number;        // radial drift
+  drift: number;       // angular drift
+  life: number;
+  maxLife: number;
+  size: number;
+}
+
+interface PhaseBlip {
+  angle: number;       // arc center
+  span: number;        // arc span
+  life: number;
+  maxLife: number;
+}
+
+interface GhostEmoji {
+  emoji: string;
+  angle: number;
+  speed: number;
+  size: number;
+  bobPhase: number;
+  phaseSpeed: number;  // for flickering alpha
+}
+
+const GHOST_GLYPHS = ["👻", "💀", "🌀", "📵"];
+
+const makeGhostWisps = (count: number): GhostWisp[] =>
+  Array.from({ length: count }, () => ({
+    angle: Math.random() * Math.PI * 2,
+    radius: 1.0 + Math.random() * 0.22,
+    vAngle: (Math.random() - 0.5) * 0.012,
+    size: 4 + Math.random() * 2.5,
+    life: Math.random() * 140,
+    maxLife: 120 + Math.random() * 90,
+    tailPhase: Math.random() * Math.PI * 2,
+  }));
+
+const makeEctoMist = (count: number): EctoMist[] =>
+  Array.from({ length: count }, () => ({
+    angle: Math.random() * Math.PI * 2,
+    radius: 0.95 + Math.random() * 0.08,
+    rise: 0.0012 + Math.random() * 0.0018,
+    drift: (Math.random() - 0.5) * 0.01,
+    life: Math.random() * 180,
+    maxLife: 140 + Math.random() * 110,
+    size: 7 + Math.random() * 6,
+  }));
+
+const makePhaseBlips = (count: number): PhaseBlip[] =>
+  Array.from({ length: count }, () => ({
+    angle: Math.random() * Math.PI * 2,
+    span: 0.25 + Math.random() * 0.35,
+    life: Math.random() * 40,
+    maxLife: 30 + Math.random() * 30,
+  }));
+
+const makeGhostEmojis = (count: number): GhostEmoji[] =>
+  Array.from({ length: count }, (_, i) => ({
+    emoji: GHOST_GLYPHS[i % GHOST_GLYPHS.length],
+    angle: (i / count) * Math.PI * 2,
+    speed: 0.06 + Math.random() * 0.04,
+    size: 12 + Math.random() * 2,
+    bobPhase: Math.random() * Math.PI * 2,
+    phaseSpeed: 1.4 + Math.random() * 1.2,
+  }));
+
+// Draws a classic ghost silhouette (rounded head + scalloped tail)
+function drawGhost(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  tailPhase: number,
+  alpha: number,
+) {
+  ctx.save();
+  ctx.translate(x, y);
+  // Body gradient: bright cyan core to transparent
+  const grad = ctx.createLinearGradient(0, -size, 0, size);
+  grad.addColorStop(0, `hsla(190, 100%, 88%, ${alpha})`);
+  grad.addColorStop(0.6, `hsla(190, 100%, 65%, ${alpha * 0.9})`);
+  grad.addColorStop(1, `hsla(195, 100%, 50%, ${alpha * 0.4})`);
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  // Rounded dome head
+  ctx.arc(0, -size * 0.1, size * 0.85, Math.PI, 0, false);
+  // Scalloped tail with phase wobble
+  const lobes = 4;
+  const tailY = size * 0.95;
+  ctx.lineTo(size * 0.85, tailY * 0.3);
+  for (let i = 0; i < lobes; i++) {
+    const t = i / lobes;
+    const nx = size * 0.85 - (i + 0.5) * (size * 1.7 / lobes);
+    const wobble = Math.sin(tailPhase + t * Math.PI * 2) * size * 0.08;
+    ctx.quadraticCurveTo(
+      nx + size * 0.2,
+      tailY + size * 0.25 + wobble,
+      nx,
+      tailY * 0.55 + wobble,
+    );
+  }
+  ctx.lineTo(-size * 0.85, tailY * 0.3);
+  ctx.closePath();
+  ctx.fill();
+  // Hollow eyes
+  ctx.fillStyle = `hsla(220, 60%, 12%, ${alpha * 0.8})`;
+  ctx.beginPath();
+  ctx.ellipse(-size * 0.28, -size * 0.15, size * 0.13, size * 0.18, 0, 0, Math.PI * 2);
+  ctx.ellipse(size * 0.28, -size * 0.15, size * 0.13, size * 0.18, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawAiGhosted(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  baseRadius: number,
+  time: number,
+  wisps: GhostWisp[],
+  mist: EctoMist[],
+  blips: PhaseBlip[],
+  emojis: GhostEmoji[],
+) {
+  const auraMax = baseRadius * 1.3;
+
+  // 1. Contained spectral cyan aura with cool void edge
+  const breath = 0.5 + Math.sin(time * 1.5) * 0.5;
+  const flicker = 0.85 + Math.sin(time * 9) * 0.08 + Math.sin(time * 17) * 0.07;
+  const aura = ctx.createRadialGradient(cx, cy, baseRadius * 0.9, cx, cy, auraMax);
+  aura.addColorStop(0, `hsla(190, 100%, 65%, 0)`);
+  aura.addColorStop(0.5, `hsla(190, 100%, 55%, ${(0.2 + breath * 0.1) * flicker})`);
+  aura.addColorStop(0.8, `hsla(210, 90%, 45%, ${(0.1 + breath * 0.05) * flicker})`);
+  aura.addColorStop(1, `hsla(220, 80%, 25%, 0)`);
+  ctx.fillStyle = aura;
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.fill();
+
+  // 2. Rising ectoplasm mist (clipped to ring zone)
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.clip();
+  mist.forEach((m) => {
+    m.life += 1;
+    m.radius += m.rise;
+    m.angle += m.drift;
+    if (m.life >= m.maxLife || m.radius > 1.28) {
+      m.angle = Math.random() * Math.PI * 2;
+      m.radius = 0.95 + Math.random() * 0.06;
+      m.rise = 0.0012 + Math.random() * 0.0018;
+      m.drift = (Math.random() - 0.5) * 0.01;
+      m.life = 0;
+      m.maxLife = 140 + Math.random() * 110;
+      m.size = 7 + Math.random() * 6;
+    }
+    const t = m.life / m.maxLife;
+    const fade = t < 0.25 ? t / 0.25 : (1 - t) * 1.0;
+    const x = cx + Math.cos(m.angle) * baseRadius * m.radius;
+    const y = cy + Math.sin(m.angle) * baseRadius * m.radius;
+    const g = ctx.createRadialGradient(x, y, 0, x, y, m.size * DPR);
+    g.addColorStop(0, `hsla(190, 100%, 80%, ${0.35 * fade})`);
+    g.addColorStop(1, `hsla(200, 100%, 60%, 0)`);
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(x, y, m.size * DPR, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  ctx.restore();
+
+  // 3. Glitchy ghost-fade ring: base ring + flickering phase blips
+  ctx.save();
+  // Base spectral ring with flickering alpha
+  ctx.strokeStyle = `hsla(190, 100%, 55%, ${0.7 * flicker})`;
+  ctx.lineWidth = 3 * DPR;
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.strokeStyle = `hsla(190, 100%, 88%, ${0.85 * flicker})`;
+  ctx.lineWidth = 1.2 * DPR;
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius - 1.6 * DPR, 0, Math.PI * 2);
+  ctx.stroke();
+  // Phase blips: bright arc segments that pop and fade
+  blips.forEach((b) => {
+    b.life += 1;
+    if (b.life >= b.maxLife) {
+      b.angle = Math.random() * Math.PI * 2;
+      b.span = 0.25 + Math.random() * 0.35;
+      b.life = 0;
+      b.maxLife = 30 + Math.random() * 30;
+    }
+    const t = b.life / b.maxLife;
+    const env = Math.sin(t * Math.PI);
+    ctx.strokeStyle = `hsla(185, 100%, 95%, ${0.95 * env})`;
+    ctx.lineWidth = 2.4 * DPR;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.arc(cx, cy, baseRadius, b.angle - b.span / 2, b.angle + b.span / 2);
+    ctx.stroke();
+  });
+  ctx.restore();
+
+  // 4. Phasing ghost wisps drifting around the ring (with trailing fade)
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.clip();
+  wisps.forEach((w) => {
+    w.life += 1;
+    w.angle += w.vAngle;
+    w.tailPhase += 0.08;
+    if (w.life >= w.maxLife) {
+      w.angle = Math.random() * Math.PI * 2;
+      w.radius = 1.0 + Math.random() * 0.22;
+      w.size = 4 + Math.random() * 2.5;
+      w.life = 0;
+      w.maxLife = 120 + Math.random() * 90;
+      w.vAngle = (Math.random() - 0.5) * 0.012;
+    }
+    const t = w.life / w.maxLife;
+    // Phase in/out envelope
+    const fade = t < 0.2 ? t / 0.2 : t > 0.7 ? (1 - t) / 0.3 : 1;
+    const flick = 0.65 + Math.sin(time * 6 + w.tailPhase) * 0.35;
+    const x = cx + Math.cos(w.angle) * baseRadius * w.radius;
+    const y = cy + Math.sin(w.angle) * baseRadius * w.radius;
+    // Halo
+    const halo = ctx.createRadialGradient(x, y, 0, x, y, w.size * DPR * 2.2);
+    halo.addColorStop(0, `hsla(190, 100%, 75%, ${0.4 * fade * flick})`);
+    halo.addColorStop(1, `hsla(200, 100%, 50%, 0)`);
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(x, y, w.size * DPR * 2.2, 0, Math.PI * 2);
+    ctx.fill();
+    drawGhost(ctx, x, y, w.size * DPR, w.tailPhase, 0.85 * fade * flick);
+  });
+  ctx.restore();
+
+  // 5. Orbiting ghosted emojis with phasing alpha
+  ctx.save();
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  emojis.forEach((e) => {
+    e.angle += e.speed * 0.016;
+    const bob = Math.sin(time * 1.5 + e.bobPhase) * 2 * DPR;
+    const phase = 0.55 + (0.45 * (1 + Math.sin(time * e.phaseSpeed + e.bobPhase))) / 2;
+    const x = cx + Math.cos(e.angle) * baseRadius;
+    const y = cy + Math.sin(e.angle) * baseRadius + bob;
+    const halo = ctx.createRadialGradient(x, y, 0, x, y, e.size * DPR * 1.4);
+    halo.addColorStop(0, `hsla(190, 100%, 75%, ${0.55 * phase})`);
+    halo.addColorStop(1, `hsla(200, 100%, 50%, 0)`);
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(x, y, e.size * DPR * 1.4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = phase;
+    ctx.font = `${e.size * DPR}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+    ctx.shadowColor = "hsla(190, 100%, 65%, 0.75)";
+    ctx.shadowBlur = 5 * DPR;
+    ctx.fillText(e.emoji, x, y);
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1;
+  });
+  ctx.restore();
+}
+
+
 interface ShopBadgeRingCanvasProps {
   badgeName: string;
   glowColor: string;
