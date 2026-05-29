@@ -1163,7 +1163,7 @@ function drawRizzler(
   // Soft inner highlight (warm cream)
   ctx.beginPath();
   ctx.arc(cx, cy, baseRadius - 2 * DPR, 0, Math.PI * 2);
-  ctx.strokeStyle = `hsla(35, 100%, 85%, 0.32)`;
+  ctx.strokeStyle = `hsla(320, 100%, 90%, 0.32)`;
   ctx.lineWidth = 0.8 * DPR;
   ctx.stroke();
 
