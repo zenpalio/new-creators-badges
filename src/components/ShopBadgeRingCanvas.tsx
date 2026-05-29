@@ -1694,6 +1694,37 @@ function drawHornyRoyalty(
     ctx.fill();
     drawFleurDeLis(ctx, x, y, sg.size, 0.95, rot);
   });
+  // Naughty emojis rising & orbiting around ring
+  ctx.save();
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  emojis.forEach((e) => {
+    e.life += 1;
+    e.angle += e.speed * 0.016;
+    e.radius += e.rise;
+    e.spin += e.spinSpeed;
+    if (e.life > e.maxLife || e.radius > 1.5) {
+      e.life = 0;
+      e.angle = Math.random() * Math.PI * 2;
+      e.radius = 0.95 + Math.random() * 0.05;
+      e.emoji = NAUGHTY_GLYPHS[Math.floor(Math.random() * NAUGHTY_GLYPHS.length)];
+    }
+    const t = e.life / e.maxLife;
+    const alpha = Math.sin(t * Math.PI) * 0.95;
+    const x = cx + Math.cos(e.angle) * baseRadius * e.radius;
+    const y = cy + Math.sin(e.angle) * baseRadius * e.radius;
+    const wobble = Math.sin(time * 3 + e.spin) * 0.12;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(wobble);
+    ctx.globalAlpha = alpha;
+    ctx.font = `${e.size * DPR}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+    ctx.shadowColor = "hsla(285, 100%, 60%, 0.6)";
+    ctx.shadowBlur = 6 * DPR;
+    ctx.fillText(e.emoji, 0, 0);
+    ctx.restore();
+  });
+  ctx.restore();
   // Suppress unused flames param (kept for signature stability)
   void flames;
 }
