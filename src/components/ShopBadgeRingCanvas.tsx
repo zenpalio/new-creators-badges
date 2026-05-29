@@ -1581,116 +1581,91 @@ function drawHornyRoyalty(
   flames: HornFlame[],
   jewels: Jewel[],
 ) {
-  const breath = 0.5 + Math.sin(time * 1.6) * 0.5;
-  const auraGrad = ctx.createRadialGradient(cx, cy, baseRadius * 0.7, cx, cy, baseRadius * 1.9);
-  auraGrad.addColorStop(0, `hsla(285, 90%, 55%, ${0.32 + breath * 0.16})`);
-  auraGrad.addColorStop(0.5, `hsla(275, 85%, 35%, ${0.18 + breath * 0.1})`);
-  auraGrad.addColorStop(1, `hsla(265, 80%, 20%, 0)`);
+  // Soft purple breathing aura
+  const breath = 0.5 + Math.sin(time * 1.2) * 0.5;
+  const auraGrad = ctx.createRadialGradient(cx, cy, baseRadius * 0.8, cx, cy, baseRadius * 1.7);
+  auraGrad.addColorStop(0, `hsla(285, 85%, 50%, ${0.22 + breath * 0.1})`);
+  auraGrad.addColorStop(0.6, `hsla(275, 80%, 30%, ${0.1 + breath * 0.05})`);
+  auraGrad.addColorStop(1, `hsla(265, 70%, 18%, 0)`);
   ctx.fillStyle = auraGrad;
   ctx.beginPath();
-  ctx.arc(cx, cy, baseRadius * 1.9, 0, Math.PI * 2);
+  ctx.arc(cx, cy, baseRadius * 1.7, 0, Math.PI * 2);
   ctx.fill();
 
-  const rim = ctx.createRadialGradient(cx, cy, baseRadius * 0.92, cx, cy, baseRadius * 1.18);
-  rim.addColorStop(0, `hsla(45, 100%, 65%, 0)`);
-  rim.addColorStop(0.5, `hsla(45, 100%, 65%, ${0.5 + breath * 0.25})`);
+  // Subtle gold rim hint
+  const rim = ctx.createRadialGradient(cx, cy, baseRadius * 0.95, cx, cy, baseRadius * 1.12);
+  rim.addColorStop(0, `hsla(45, 100%, 60%, 0)`);
+  rim.addColorStop(0.5, `hsla(45, 100%, 65%, ${0.25 + breath * 0.12})`);
   rim.addColorStop(1, `hsla(38, 100%, 45%, 0)`);
   ctx.fillStyle = rim;
   ctx.beginPath();
-  ctx.arc(cx, cy, baseRadius * 1.18, 0, Math.PI * 2);
+  ctx.arc(cx, cy, baseRadius * 1.12, 0, Math.PI * 2);
   ctx.fill();
 
-  const steps = 140;
+  // Clean purple ring with very gentle wave
   ctx.beginPath();
+  const steps = 120;
   for (let i = 0; i <= steps; i++) {
     const a = (i / steps) * Math.PI * 2;
-    const wave = Math.sin(a * 4 - time * 1.2) * 1.4 * DPR;
+    const wave = Math.sin(a * 3 - time * 0.9) * 0.6 * DPR;
     const r = baseRadius + wave;
     const x = cx + Math.cos(a) * r;
     const y = cy + Math.sin(a) * r;
     if (i === 0) ctx.moveTo(x, y);
     else ctx.lineTo(x, y);
   }
-  ctx.strokeStyle = `hsla(285, 100%, 60%, 0.85)`;
-  ctx.lineWidth = 2.4 * DPR;
-  ctx.shadowColor = `hsla(285, 100%, 65%, 0.9)`;
-  ctx.shadowBlur = 14 * DPR;
+  ctx.strokeStyle = `hsla(285, 95%, 60%, 0.85)`;
+  ctx.lineWidth = 2 * DPR;
+  ctx.shadowColor = `hsla(285, 100%, 60%, 0.8)`;
+  ctx.shadowBlur = 10 * DPR;
   ctx.stroke();
   ctx.shadowBlur = 0;
 
-  const sweepStart = time * 1.1;
-  const sweepLen = Math.PI * 0.55;
+  // Single elegant gold sweep arc rotating slowly
+  const sweepStart = time * 0.7;
+  const sweepLen = Math.PI * 0.5;
   ctx.beginPath();
   ctx.arc(cx, cy, baseRadius, sweepStart, sweepStart + sweepLen);
-  ctx.strokeStyle = `hsla(48, 100%, 72%, 0.95)`;
-  ctx.lineWidth = 3.2 * DPR;
-  ctx.shadowColor = `hsla(45, 100%, 70%, 1)`;
-  ctx.shadowBlur = 18 * DPR;
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.arc(cx, cy, baseRadius, sweepStart + Math.PI, sweepStart + Math.PI + sweepLen * 0.7);
-  ctx.strokeStyle = `hsla(52, 100%, 78%, 0.8)`;
+  ctx.strokeStyle = `hsla(48, 100%, 72%, 0.9)`;
   ctx.lineWidth = 2.4 * DPR;
+  ctx.shadowColor = `hsla(45, 100%, 70%, 0.9)`;
+  ctx.shadowBlur = 12 * DPR;
   ctx.stroke();
   ctx.shadowBlur = 0;
 
+  // A few small purple twinkles on ring
   jewels.forEach((j) => {
-    j.angle += j.speed * 0.016;
-    const tw = 0.55 + (Math.sin(time * 3 + j.twinkle) * 0.5 + 0.5) * 0.45;
-    const x = cx + Math.cos(j.angle) * baseRadius * j.radius;
-    const y = cy + Math.sin(j.angle) * baseRadius * j.radius;
-    const s = j.size * DPR;
-    const g = ctx.createRadialGradient(x, y, 0, x, y, s * 3);
-    g.addColorStop(0, `hsla(${j.hue}, 100%, 88%, ${tw})`);
-    g.addColorStop(0.4, `hsla(${j.hue}, 100%, 60%, ${tw * 0.7})`);
-    g.addColorStop(1, `hsla(${j.hue}, 100%, 40%, 0)`);
+    j.angle += j.speed * 0.012;
+    const tw = 0.4 + (Math.sin(time * 2 + j.twinkle) * 0.5 + 0.5) * 0.5;
+    const x = cx + Math.cos(j.angle) * baseRadius;
+    const y = cy + Math.sin(j.angle) * baseRadius;
+    const s = j.size * DPR * 0.8;
+    const g = ctx.createRadialGradient(x, y, 0, x, y, s * 2.5);
+    g.addColorStop(0, `hsla(${j.hue}, 100%, 90%, ${tw})`);
+    g.addColorStop(1, `hsla(${j.hue}, 100%, 55%, 0)`);
     ctx.fillStyle = g;
     ctx.beginPath();
-    ctx.arc(x, y, s * 3, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(x, y, s * 0.6, 0, Math.PI * 2);
-    ctx.fillStyle = `hsla(${j.hue}, 100%, 95%, ${tw})`;
+    ctx.arc(x, y, s * 2.5, 0, Math.PI * 2);
     ctx.fill();
   });
 
-  ctx.globalCompositeOperation = "lighter";
-  flames.forEach((f) => {
-    f.life += 1;
-    f.angle += f.speed * 0.016 * f.side;
-    f.radius += f.rise;
-    if (f.life > f.maxLife || f.radius > 1.5) {
-      f.life = 0;
-      f.angle = Math.random() * Math.PI * 2;
-      f.radius = 0.95 + Math.random() * 0.05;
-      f.flickerPhase = Math.random() * Math.PI * 2;
-    }
-    const t = f.life / f.maxLife;
-    const alpha = Math.sin(t * Math.PI) * 0.85;
-    const flicker = 0.5 + Math.sin(time * 10 + f.flickerPhase) * 0.5;
-    const x = cx + Math.cos(f.angle) * baseRadius * f.radius;
-    const y = cy + Math.sin(f.angle) * baseRadius * f.radius;
-    const rot = f.angle + Math.PI / 2;
-    drawHornFlame(ctx, x, y, f.size, alpha, flicker, rot);
-  });
-  ctx.globalCompositeOperation = "source-over";
-
+  // 4 calm gold fleur-de-lis sigils on the ring
   sigils.forEach((sg) => {
-    sg.angle += sg.speed * 0.016;
-    sg.spin += sg.spinSpeed;
-    const bob = Math.sin(time * 2 + sg.bobPhase) * 3 * DPR;
-    const x = cx + Math.cos(sg.angle) * (baseRadius * sg.radius);
-    const y = cy + Math.sin(sg.angle) * (baseRadius * sg.radius) + bob;
-    const rot = sg.angle + Math.PI / 2 + Math.sin(sg.spin) * 0.15;
-    const halo = ctx.createRadialGradient(x, y, 0, x, y, sg.size * DPR * 2.2);
-    halo.addColorStop(0, `hsla(48, 100%, 75%, 0.7)`);
+    sg.angle += sg.speed * 0.008;
+    const x = cx + Math.cos(sg.angle) * baseRadius;
+    const y = cy + Math.sin(sg.angle) * baseRadius;
+    const rot = sg.angle + Math.PI / 2;
+    const halo = ctx.createRadialGradient(x, y, 0, x, y, sg.size * DPR * 1.8);
+    halo.addColorStop(0, `hsla(48, 100%, 70%, 0.55)`);
     halo.addColorStop(1, `hsla(40, 100%, 50%, 0)`);
     ctx.fillStyle = halo;
     ctx.beginPath();
-    ctx.arc(x, y, sg.size * DPR * 2.2, 0, Math.PI * 2);
+    ctx.arc(x, y, sg.size * DPR * 1.8, 0, Math.PI * 2);
     ctx.fill();
     drawFleurDeLis(ctx, x, y, sg.size, 0.95, rot);
   });
+  // Suppress unused flames param (kept for signature stability)
+  void flames;
 }
 
 interface ShopBadgeRingCanvasProps {
@@ -1808,9 +1783,9 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         break;
       }
       case "Horny Royalty": {
-        if (sigilsRef.current.length === 0) sigilsRef.current = makeSigils(5);
-        if (hornFlamesRef.current.length === 0) hornFlamesRef.current = makeHornFlames(18);
-        if (jewelsRef.current.length === 0) jewelsRef.current = makeJewels(10);
+        if (sigilsRef.current.length === 0) sigilsRef.current = makeSigils(4);
+        if (hornFlamesRef.current.length === 0) hornFlamesRef.current = makeHornFlames(0);
+        if (jewelsRef.current.length === 0) jewelsRef.current = makeJewels(6);
         drawHornyRoyalty(
           ctx,
           cx,
