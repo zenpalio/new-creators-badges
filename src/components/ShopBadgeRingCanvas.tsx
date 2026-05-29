@@ -1150,7 +1150,7 @@ function drawRizzler(
     let d = Math.abs(((a0 - sweep + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
     const sweepBoost = Math.max(0, 1 - d / 0.55);
     const hueShift = 0.5 + 0.5 * Math.sin(a0 * 2 + time * 0.7);
-    const hue = 12 + hueShift * 22; // 12 (red-orange) -> 34 (warm orange)
+    const hue = 285 + hueShift * 40; // 285 (purple) -> 325 (hot pink)
     const lightness = 55 + hueShift * 10 + sweepBoost * 28;
     const alpha = 0.78 + sweepBoost * 0.22;
     ctx.beginPath();
