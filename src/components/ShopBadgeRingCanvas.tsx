@@ -4314,6 +4314,27 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         );
         break;
       }
+      case "Prompt Diddy": {
+        if (blingMedallionsRef.current.length === 0)
+          blingMedallionsRef.current = makeBlingMedallions(7);
+        if (cashBillsRef.current.length === 0) cashBillsRef.current = makeCashBills(10);
+        if (goldSparklesRef.current.length === 0)
+          goldSparklesRef.current = makeGoldSparkles(12);
+        if (diddyEmojisRef.current.length === 0)
+          diddyEmojisRef.current = makeDiddyEmojis(4);
+        drawPromptDiddy(
+          ctx,
+          cx,
+          cy,
+          baseRadius,
+          time,
+          blingMedallionsRef.current,
+          cashBillsRef.current,
+          goldSparklesRef.current,
+          diddyEmojisRef.current,
+        );
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
