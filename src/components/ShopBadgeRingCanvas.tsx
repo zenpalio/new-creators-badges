@@ -924,24 +924,24 @@ function drawCrown(
   ctx.lineTo(s, s * 0.5);
   ctx.closePath();
   const grad = ctx.createLinearGradient(0, -s, 0, s);
-  grad.addColorStop(0, `hsla(50, 100%, 75%, ${alpha})`);
-  grad.addColorStop(0.5, `hsla(42, 100%, 60%, ${alpha})`);
-  grad.addColorStop(1, `hsla(35, 90%, 45%, ${alpha})`);
+  grad.addColorStop(0, `hsla(200, 100%, 85%, ${alpha})`);
+  grad.addColorStop(0.5, `hsla(205, 100%, 65%, ${alpha})`);
+  grad.addColorStop(1, `hsla(213, 100%, 50%, ${alpha})`);
   ctx.fillStyle = grad;
   ctx.fill();
-  ctx.strokeStyle = `hsla(45, 100%, 85%, ${alpha})`;
+  ctx.strokeStyle = `hsla(195, 100%, 92%, ${alpha})`;
   ctx.lineWidth = 0.8 * DPR;
   ctx.stroke();
-  // Center jewel
+  // Center jewel (bright cyan-white)
   ctx.beginPath();
   ctx.arc(0, s * 0.15, s * 0.18, 0, Math.PI * 2);
-  ctx.fillStyle = `hsla(330, 90%, 65%, ${alpha})`;
+  ctx.fillStyle = `hsla(190, 100%, 80%, ${alpha})`;
   ctx.fill();
   // Side jewels
   ctx.beginPath();
   ctx.arc(-s * 0.55, -s * 0.15, s * 0.1, 0, Math.PI * 2);
   ctx.arc(s * 0.55, -s * 0.15, s * 0.1, 0, Math.PI * 2);
-  ctx.fillStyle = `hsla(280, 80%, 70%, ${alpha})`;
+  ctx.fillStyle = `hsla(210, 100%, 85%, ${alpha})`;
   ctx.fill();
   ctx.restore();
 }
