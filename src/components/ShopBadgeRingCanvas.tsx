@@ -1729,6 +1729,257 @@ function drawHornyRoyalty(
   void flames;
 }
 
+// ─── F*cking Legend: Rising flame tongues + bottom-up fire field + sparks ───
+interface Flame {
+  // Position is parameterized along the ring perimeter (0..1)
+  t: number;            // ring parameter (0=top, 0.5=bottom)
+  spawnT: number;       // original ring spot, used for jitter
+  life: number;
+  maxLife: number;
+  width: number;        // base width of tongue
+  height: number;       // peak height in px
+  swayPhase: number;
+  hueShift: number;
+}
+
+interface Spark {
+  x: number;            // px relative to ring origin
+  y: number;
+  vx: number;
+  vy: number;
+  life: number;
+  maxLife: number;
+  size: number;
+  hueShift: number;
+}
+
+const makeFlame = (baseRadius: number): Flame => {
+  // Bias spawn toward the bottom half (t around 0.5)
+  const bias = Math.random() < 0.7;
+  const t = bias
+    ? 0.25 + Math.random() * 0.5            // bottom arc
+    : Math.random();                         // anywhere
+  return {
+    t,
+    spawnT: t,
+    life: 0,
+    maxLife: 50 + Math.random() * 60,
+    width: (6 + Math.random() * 6) * DPR,
+    height: (baseRadius * (0.18 + Math.random() * 0.22)),
+    swayPhase: Math.random() * Math.PI * 2,
+    hueShift: -10 + Math.random() * 30,
+  };
+};
+
+const makeSpark = (cx: number, cy: number, baseRadius: number): Spark => {
+  const a = Math.PI * (0.15 + Math.random() * 0.7); // bottom arc angles
+  const r = baseRadius * (0.95 + Math.random() * 0.1);
+  return {
+    x: Math.cos(Math.PI / 2 + (Math.random() - 0.5) * Math.PI) * r,
+    y: Math.sin(Math.PI / 2 + (Math.random() - 0.5) * Math.PI) * r,
+    vx: (Math.random() - 0.5) * 1.4 * DPR,
+    vy: -(1.2 + Math.random() * 2.2) * DPR,
+    life: 0,
+    maxLife: 40 + Math.random() * 50,
+    size: (0.8 + Math.random() * 1.4) * DPR,
+    hueShift: -5 + Math.random() * 35,
+    // a kept implicit; sparks emanate roughly from bottom
+    // (a is unused, intentionally just for spec clarity)
+    ...({ _a: a } as object),
+  } as Spark;
+};
+
+function drawFlameTongue(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  outwardX: number,
+  outwardY: number,
+  width: number,
+  height: number,
+  alpha: number,
+  hueShift: number,
+  sway: number,
+) {
+  // tip is height units along outward vector, with sway perpendicular
+  const perpX = -outwardY;
+  const perpY = outwardX;
+  const tipX = x + outwardX * height + perpX * sway;
+  const tipY = y + outwardY * height + perpY * sway;
+  const leftX = x + perpX * width;
+  const leftY = y + perpY * width;
+  const rightX = x - perpX * width;
+  const rightY = y - perpY * width;
+
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+  // outer red
+  ctx.beginPath();
+  ctx.moveTo(leftX, leftY);
+  ctx.quadraticCurveTo(
+    x + outwardX * height * 0.5 + perpX * sway * 0.5,
+    y + outwardY * height * 0.5 + perpY * sway * 0.5,
+    tipX,
+    tipY,
+  );
+  ctx.quadraticCurveTo(
+    x + outwardX * height * 0.5 - perpX * sway * 0.5,
+    y + outwardY * height * 0.5 - perpY * sway * 0.5,
+    rightX,
+    rightY,
+  );
+  ctx.closePath();
+  const grad = ctx.createLinearGradient(x, y, tipX, tipY);
+  grad.addColorStop(0, `hsla(${50 + hueShift}, 100%, 75%, ${alpha * 0.95})`);
+  grad.addColorStop(0.45, `hsla(${25 + hueShift}, 100%, 55%, ${alpha * 0.85})`);
+  grad.addColorStop(1, `hsla(${5 + hueShift}, 95%, 40%, 0)`);
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // hot inner core
+  const innerW = width * 0.45;
+  ctx.beginPath();
+  ctx.moveTo(x + perpX * innerW, y + perpY * innerW);
+  ctx.quadraticCurveTo(
+    x + outwardX * height * 0.55 + perpX * sway * 0.6,
+    y + outwardY * height * 0.55 + perpY * sway * 0.6,
+    x + outwardX * height * 0.85 + perpX * sway,
+    y + outwardY * height * 0.85 + perpY * sway,
+  );
+  ctx.quadraticCurveTo(
+    x + outwardX * height * 0.55 - perpX * sway * 0.6,
+    y + outwardY * height * 0.55 - perpY * sway * 0.6,
+    x - perpX * innerW,
+    y - perpY * innerW,
+  );
+  ctx.closePath();
+  const core = ctx.createLinearGradient(x, y, tipX, tipY);
+  core.addColorStop(0, `hsla(60, 100%, 92%, ${alpha})`);
+  core.addColorStop(0.5, `hsla(45, 100%, 70%, ${alpha * 0.8})`);
+  core.addColorStop(1, `hsla(25, 100%, 55%, 0)`);
+  ctx.fillStyle = core;
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawFckingLegend(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  baseRadius: number,
+  time: number,
+  flames: Flame[],
+  sparks: Spark[],
+) {
+  // 1. Bottom-up heat glow (warm gradient pushed from below the ring)
+  const heat = ctx.createRadialGradient(
+    cx,
+    cy + baseRadius * 0.4,
+    baseRadius * 0.2,
+    cx,
+    cy + baseRadius * 0.4,
+    baseRadius * 2.0,
+  );
+  const pulse = 0.5 + Math.sin(time * 3) * 0.5;
+  heat.addColorStop(0, `hsla(25, 100%, 55%, ${0.28 + pulse * 0.1})`);
+  heat.addColorStop(0.4, `hsla(15, 100%, 45%, ${0.14 + pulse * 0.06})`);
+  heat.addColorStop(1, `hsla(0, 90%, 30%, 0)`);
+  ctx.fillStyle = heat;
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius * 2.2, 0, Math.PI * 2);
+  ctx.fill();
+
+  // 2. Smoldering fiery ring with crackling wave
+  const steps = 160;
+  ctx.beginPath();
+  for (let i = 0; i <= steps; i++) {
+    const a = (i / steps) * Math.PI * 2;
+    const crackle =
+      Math.sin(a * 9 - time * 6) * 0.8 +
+      Math.sin(a * 17 + time * 9) * 0.5;
+    const r = baseRadius + crackle * DPR;
+    const x = cx + Math.cos(a) * r;
+    const y = cy + Math.sin(a) * r;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+  ctx.strokeStyle = `hsla(25, 100%, 60%, 0.9)`;
+  ctx.lineWidth = 2.4 * DPR;
+  ctx.shadowColor = `hsla(20, 100%, 55%, 1)`;
+  ctx.shadowBlur = 16 * DPR;
+  ctx.stroke();
+  // hot inner outline
+  ctx.lineWidth = 1.2 * DPR;
+  ctx.strokeStyle = `hsla(50, 100%, 85%, 0.7)`;
+  ctx.shadowBlur = 6 * DPR;
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // 3. Rising flame tongues anchored on ring perimeter
+  flames.forEach((f) => {
+    f.life += 1;
+    if (f.life > f.maxLife) {
+      Object.assign(f, makeFlame(baseRadius));
+    }
+    const t = f.life / f.maxLife;
+    // life envelope: quick grow, slow fade
+    const env = Math.sin(Math.pow(t, 0.6) * Math.PI);
+    const alpha = env * 0.95;
+    const heightNow = f.height * (0.4 + env * 0.9);
+    const angle = f.t * Math.PI * 2 - Math.PI / 2; // 0 at top
+    const ox = Math.cos(angle);
+    const oy = Math.sin(angle);
+    const x = cx + ox * baseRadius;
+    const y = cy + oy * baseRadius;
+    const sway =
+      Math.sin(time * 4 + f.swayPhase) * heightNow * 0.18 +
+      (Math.random() - 0.5) * 0.4 * DPR;
+    drawFlameTongue(
+      ctx,
+      x,
+      y,
+      ox,
+      oy,
+      f.width * (0.6 + env * 0.6),
+      heightNow,
+      alpha,
+      f.hueShift,
+      sway,
+    );
+  });
+
+  // 4. Bright sparks rising from bottom arc
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+  sparks.forEach((s) => {
+    s.life += 1;
+    s.x += s.vx;
+    s.y += s.vy;
+    s.vy += 0.02 * DPR; // gentle gravity easing the rise
+    if (s.life > s.maxLife) {
+      Object.assign(s, makeSpark(cx, cy, baseRadius));
+    }
+    const t = s.life / s.maxLife;
+    const alpha = Math.sin(t * Math.PI) * 0.95;
+    const px = cx + s.x;
+    const py = cy + s.y;
+    const g = ctx.createRadialGradient(px, py, 0, px, py, s.size * 4);
+    g.addColorStop(0, `hsla(${55 + s.hueShift}, 100%, 92%, ${alpha})`);
+    g.addColorStop(0.4, `hsla(${30 + s.hueShift}, 100%, 60%, ${alpha * 0.7})`);
+    g.addColorStop(1, `hsla(${10 + s.hueShift}, 90%, 45%, 0)`);
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(px, py, s.size * 4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(px, py, s.size, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(55, 100%, 96%, ${alpha})`;
+    ctx.fill();
+  });
+  ctx.restore();
+}
+
 interface ShopBadgeRingCanvasProps {
   badgeName: string;
   glowColor: string;
@@ -1755,6 +2006,8 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
   const hornFlamesRef = useRef<HornFlame[]>([]);
   const jewelsRef = useRef<Jewel[]>([]);
   const naughtyEmojisRef = useRef<NaughtyEmoji[]>([]);
+  const flamesLegendRef = useRef<Flame[]>([]);
+  const sparksLegendRef = useRef<Spark[]>([]);
   const rafRef = useRef<number>(0);
   const sizeRef = useRef({ w: 0, h: 0 });
 
@@ -1863,6 +2116,24 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         );
         break;
       }
+      case "F*cking Legend": {
+        if (flamesLegendRef.current.length === 0)
+          flamesLegendRef.current = Array.from({ length: 22 }, () => makeFlame(baseRadius));
+        if (sparksLegendRef.current.length === 0)
+          sparksLegendRef.current = Array.from({ length: 28 }, () =>
+            makeSpark(cx, cy, baseRadius),
+          );
+        drawFckingLegend(
+          ctx,
+          cx,
+          cy,
+          baseRadius,
+          time,
+          flamesLegendRef.current,
+          sparksLegendRef.current,
+        );
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
@@ -1890,6 +2161,8 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
     hornFlamesRef.current = [];
     jewelsRef.current = [];
     naughtyEmojisRef.current = [];
+    flamesLegendRef.current = [];
+    sparksLegendRef.current = [];
     sizeRef.current = { w: 0, h: 0 };
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
