@@ -1474,7 +1474,7 @@ interface NaughtyEmoji {
   spinSpeed: number;
 }
 
-const NAUGHTY_GLYPHS = ["🍑", "🍆", "🥒", "💦", "😈", "💋"];
+const NAUGHTY_GLYPHS = ["🍑", "🍆", "💦", "😈", "💋"];
 
 const makeNaughtyEmojis = (count: number): NaughtyEmoji[] =>
   Array.from({ length: count }, () => ({
