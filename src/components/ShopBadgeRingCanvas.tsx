@@ -26,7 +26,7 @@ interface Sparkle {
 const makeHearts = (count: number, baseRadius: number): Heart[] =>
   Array.from({ length: count }, () => ({
     angle: Math.random() * Math.PI * 2,
-    radius: baseRadius - 5 + Math.random() * 2,
+    radius: baseRadius * 0.72 + Math.random() * 4,
     speed: 0.1 + Math.random() * 0.2,
     drift: 0,
     size: 3 + Math.random() * 3.5,
