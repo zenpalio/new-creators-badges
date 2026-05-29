@@ -898,7 +898,7 @@ const makePetals = (count: number): Petal[] =>
     spin: Math.random() * Math.PI * 2,
     spinSpeed: (Math.random() - 0.5) * 0.06,
     size: 3 + Math.random() * 2,
-    hue: 330 + Math.random() * 20, // pink/rose
+    hue: 200 + Math.random() * 18, // light blue/cyan
   }));
 
 function drawCrown(
