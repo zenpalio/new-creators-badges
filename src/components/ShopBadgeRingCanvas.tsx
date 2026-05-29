@@ -1715,6 +1715,9 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
   const pulsesRef = useRef<Pulse[]>([]);
   const orbitHeartsRef = useRef<OrbitHeart[]>([]);
   const boltsRef = useRef<{ bolts: Bolt[]; nextStrike: number }>({ bolts: [], nextStrike: 0 });
+  const sigilsRef = useRef<Sigil[]>([]);
+  const hornFlamesRef = useRef<HornFlame[]>([]);
+  const jewelsRef = useRef<Jewel[]>([]);
   const rafRef = useRef<number>(0);
   const sizeRef = useRef({ w: 0, h: 0 });
 
