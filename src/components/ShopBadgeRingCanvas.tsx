@@ -1490,6 +1490,7 @@ const makeNaughtyEmojis = (count: number): NaughtyEmoji[] =>
     spinSpeed: (Math.random() - 0.5) * 0.04,
   }));
 
+const makeSigils = (count: number): Sigil[] =>
   Array.from({ length: count }, (_, i) => ({
     angle: (i / count) * Math.PI * 2,
     speed: 0.18,
