@@ -983,19 +983,19 @@ function drawHaremKing(
 ) {
   const breathe = 0.5 + 0.5 * Math.sin(time * 1.4);
 
-  // Royal purple+gold halo
+  // Light blue halo
   const haloR = baseRadius + (18 + breathe * 8) * DPR;
   const halo = ctx.createRadialGradient(cx, cy, baseRadius - 1, cx, cy, haloR);
-  halo.addColorStop(0, `hsla(280, 90%, 60%, ${0.22 + breathe * 0.1})`);
-  halo.addColorStop(0.5, `hsla(45, 100%, 60%, ${0.14 + breathe * 0.06})`);
-  halo.addColorStop(1, `hsla(280, 70%, 40%, 0)`);
+  halo.addColorStop(0, `hsla(200, 100%, 70%, ${0.24 + breathe * 0.12})`);
+  halo.addColorStop(0.5, `hsla(213, 100%, 55%, ${0.14 + breathe * 0.06})`);
+  halo.addColorStop(1, `hsla(220, 90%, 45%, 0)`);
   ctx.beginPath();
   ctx.arc(cx, cy, haloR, 0, Math.PI * 2);
   ctx.arc(cx, cy, baseRadius - 1, 0, Math.PI * 2, true);
   ctx.fillStyle = halo;
   ctx.fill();
 
-  // Royal ring: alternating purple/gold gradient segments with shimmer
+  // Light blue shimmering ring (matches badge color)
   const steps = 96;
   const sweep = (time * 1.5) % (Math.PI * 2);
   for (let i = 0; i < steps; i++) {
@@ -1003,14 +1003,13 @@ function drawHaremKing(
     const a1 = ((i + 1.4) / steps) * Math.PI * 2;
     let d = Math.abs(((a0 - sweep + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
     const sweepBoost = Math.max(0, 1 - d / 0.5);
-    // Alternate hue between purple and gold
-    const blend = 0.5 + 0.5 * Math.sin(a0 * 4 + time * 0.6);
-    const hue = 280 - blend * 235; // 280 (purple) -> 45 (gold)
-    const lightness = 55 + sweepBoost * 30;
+    const wave = 0.5 + 0.5 * Math.sin(a0 * 4 + time * 0.6);
+    const hue = 200 + wave * 15; // cyan-blue range
+    const lightness = 60 + wave * 12 + sweepBoost * 28;
     const alpha = 0.75 + sweepBoost * 0.25;
     ctx.beginPath();
     ctx.arc(cx, cy, baseRadius, a0, a1);
-    ctx.strokeStyle = `hsla(${hue}, 90%, ${lightness}%, ${alpha})`;
+    ctx.strokeStyle = `hsla(${hue}, 100%, ${lightness}%, ${alpha})`;
     ctx.lineWidth = (2.4 + sweepBoost * 1.4) * DPR;
     ctx.stroke();
   }
@@ -1018,11 +1017,11 @@ function drawHaremKing(
   // Inner highlight
   ctx.beginPath();
   ctx.arc(cx, cy, baseRadius - 2 * DPR, 0, Math.PI * 2);
-  ctx.strokeStyle = `hsla(50, 100%, 88%, 0.35)`;
+  ctx.strokeStyle = `hsla(195, 100%, 92%, 0.4)`;
   ctx.lineWidth = 0.8 * DPR;
   ctx.stroke();
 
-  // Drifting rose petals around avatar (the harem)
+  // Drifting petals around avatar (light blue tinted)
   for (const p of petals) {
     p.angle += p.speed * 0.012;
     p.spin += p.spinSpeed;
@@ -1040,7 +1039,7 @@ function drawHaremKing(
     drawPetal(ctx, x, y, p.size, p.spin, 0.8 * fade, p.hue);
   }
 
-  // Orbiting crowns (the king's court) — rotate around the ring
+  // Orbiting crowns (the king's court)
   const baseRot = time * 0.4;
   for (let i = 0; i < crowns.length; i++) {
     const c = crowns[i];
@@ -1049,24 +1048,23 @@ function drawHaremKing(
     const r = baseRadius * c.radius + 8 * DPR + bob;
     const x = cx + Math.cos(a) * r;
     const y = cy + Math.sin(a) * r;
-    // Soft golden glow under crown
+    // Soft cyan-blue glow under crown
     const glowR = c.size * 3 * DPR;
     const g = ctx.createRadialGradient(x, y, 0, x, y, glowR);
-    g.addColorStop(0, `hsla(45, 100%, 70%, 0.55)`);
-    g.addColorStop(1, `hsla(45, 100%, 60%, 0)`);
+    g.addColorStop(0, `hsla(200, 100%, 70%, 0.6)`);
+    g.addColorStop(1, `hsla(213, 100%, 55%, 0)`);
     ctx.fillStyle = g;
     ctx.beginPath();
     ctx.arc(x, y, glowR, 0, Math.PI * 2);
     ctx.fill();
-    // Crown always upright, slight tilt with bob
     drawCrown(ctx, x, y, c.size, 0.95, Math.sin(time * 2 + c.bobPhase) * 0.15);
   }
 
-  // The KING's crown — bigger, fixed at the top, with extra glow
+  // The KING's crown — bigger, fixed at the top, with extra blue glow
   const kingY = cy - baseRadius - 12 * DPR - breathe * 2 * DPR;
   const kingGlow = ctx.createRadialGradient(cx, kingY, 0, cx, kingY, 18 * DPR);
-  kingGlow.addColorStop(0, `hsla(45, 100%, 80%, ${0.7 + breathe * 0.2})`);
-  kingGlow.addColorStop(1, `hsla(45, 100%, 60%, 0)`);
+  kingGlow.addColorStop(0, `hsla(200, 100%, 82%, ${0.75 + breathe * 0.2})`);
+  kingGlow.addColorStop(1, `hsla(213, 100%, 55%, 0)`);
   ctx.fillStyle = kingGlow;
   ctx.beginPath();
   ctx.arc(cx, kingY, 18 * DPR, 0, Math.PI * 2);
