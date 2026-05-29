@@ -1189,15 +1189,15 @@ function drawRizzler(
     const size = e.size * DPR * (0.7 + flicker * 0.5);
     // Glow
     const g = ctx.createRadialGradient(x, y, 0, x, y, size * 3);
-    g.addColorStop(0, `hsla(35, 100%, 70%, ${0.85 * fade * flicker})`);
-    g.addColorStop(0.5, `hsla(15, 100%, 55%, ${0.5 * fade * flicker})`);
-    g.addColorStop(1, `hsla(5, 90%, 45%, 0)`);
+    g.addColorStop(0, `hsla(320, 100%, 80%, ${0.85 * fade * flicker})`);
+    g.addColorStop(0.5, `hsla(300, 100%, 60%, ${0.5 * fade * flicker})`);
+    g.addColorStop(1, `hsla(280, 90%, 45%, 0)`);
     ctx.fillStyle = g;
     ctx.beginPath();
     ctx.arc(x, y, size * 3, 0, Math.PI * 2);
     ctx.fill();
     // Bright core
-    ctx.fillStyle = `hsla(45, 100%, 88%, ${fade * flicker})`;
+    ctx.fillStyle = `hsla(320, 100%, 92%, ${fade * flicker})`;
     ctx.beginPath();
     ctx.arc(x, y, size * 0.7, 0, Math.PI * 2);
     ctx.fill();
