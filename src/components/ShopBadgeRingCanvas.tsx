@@ -1609,6 +1609,7 @@ function drawHornyRoyalty(
   sigils: Sigil[],
   flames: HornFlame[],
   jewels: Jewel[],
+  emojis: NaughtyEmoji[],
 ) {
   // Subtle purple breathing aura
   const breath = 0.5 + Math.sin(time * 1.2) * 0.5;
