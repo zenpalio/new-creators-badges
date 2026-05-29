@@ -856,6 +856,224 @@ function drawProposed(
   }
 }
 
+// ─── Harem King: Royal purple+gold ring + orbiting crowns + rose petals ───
+interface Crown {
+  angle: number;
+  speed: number;
+  radius: number; // fraction of baseRadius
+  size: number;
+  bobPhase: number;
+}
+
+interface Petal {
+  angle: number;
+  speed: number;
+  radius: number; // fraction
+  drift: number;
+  life: number;
+  maxLife: number;
+  spin: number;
+  spinSpeed: number;
+  size: number;
+  hue: number;
+}
+
+const makeCrowns = (count: number): Crown[] =>
+  Array.from({ length: count }, (_, i) => ({
+    angle: (i / count) * Math.PI * 2,
+    speed: 0.15,
+    radius: 1.05,
+    size: 6 + Math.random() * 1.5,
+    bobPhase: Math.random() * Math.PI * 2,
+  }));
+
+const makePetals = (count: number): Petal[] =>
+  Array.from({ length: count }, () => ({
+    angle: Math.random() * Math.PI * 2,
+    speed: 0.1 + Math.random() * 0.2,
+    radius: 0.78 + Math.random() * 0.25,
+    drift: 0,
+    life: Math.random() * 180,
+    maxLife: 160 + Math.random() * 120,
+    spin: Math.random() * Math.PI * 2,
+    spinSpeed: (Math.random() - 0.5) * 0.06,
+    size: 3 + Math.random() * 2,
+    hue: 330 + Math.random() * 20, // pink/rose
+  }));
+
+function drawCrown(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  alpha: number,
+  rot: number,
+) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  const s = size * DPR;
+  // Crown body (3 spikes + base)
+  ctx.beginPath();
+  ctx.moveTo(-s, s * 0.5);
+  ctx.lineTo(-s, -s * 0.2);
+  ctx.lineTo(-s * 0.5, s * 0.1);
+  ctx.lineTo(0, -s * 0.7);
+  ctx.lineTo(s * 0.5, s * 0.1);
+  ctx.lineTo(s, -s * 0.2);
+  ctx.lineTo(s, s * 0.5);
+  ctx.closePath();
+  const grad = ctx.createLinearGradient(0, -s, 0, s);
+  grad.addColorStop(0, `hsla(50, 100%, 75%, ${alpha})`);
+  grad.addColorStop(0.5, `hsla(42, 100%, 60%, ${alpha})`);
+  grad.addColorStop(1, `hsla(35, 90%, 45%, ${alpha})`);
+  ctx.fillStyle = grad;
+  ctx.fill();
+  ctx.strokeStyle = `hsla(45, 100%, 85%, ${alpha})`;
+  ctx.lineWidth = 0.8 * DPR;
+  ctx.stroke();
+  // Center jewel
+  ctx.beginPath();
+  ctx.arc(0, s * 0.15, s * 0.18, 0, Math.PI * 2);
+  ctx.fillStyle = `hsla(330, 90%, 65%, ${alpha})`;
+  ctx.fill();
+  // Side jewels
+  ctx.beginPath();
+  ctx.arc(-s * 0.55, -s * 0.15, s * 0.1, 0, Math.PI * 2);
+  ctx.arc(s * 0.55, -s * 0.15, s * 0.1, 0, Math.PI * 2);
+  ctx.fillStyle = `hsla(280, 80%, 70%, ${alpha})`;
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawPetal(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  rot: number,
+  alpha: number,
+  hue: number,
+) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  const s = size * DPR;
+  ctx.beginPath();
+  ctx.moveTo(0, -s);
+  ctx.bezierCurveTo(s * 0.9, -s * 0.6, s * 0.9, s * 0.6, 0, s);
+  ctx.bezierCurveTo(-s * 0.9, s * 0.6, -s * 0.9, -s * 0.6, 0, -s);
+  ctx.closePath();
+  const grad = ctx.createLinearGradient(-s, 0, s, 0);
+  grad.addColorStop(0, `hsla(${hue}, 90%, 75%, ${alpha})`);
+  grad.addColorStop(1, `hsla(${hue - 15}, 85%, 55%, ${alpha})`);
+  ctx.fillStyle = grad;
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawHaremKing(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  baseRadius: number,
+  time: number,
+  crowns: Crown[],
+  petals: Petal[],
+) {
+  const breathe = 0.5 + 0.5 * Math.sin(time * 1.4);
+
+  // Royal purple+gold halo
+  const haloR = baseRadius + (18 + breathe * 8) * DPR;
+  const halo = ctx.createRadialGradient(cx, cy, baseRadius - 1, cx, cy, haloR);
+  halo.addColorStop(0, `hsla(280, 90%, 60%, ${0.22 + breathe * 0.1})`);
+  halo.addColorStop(0.5, `hsla(45, 100%, 60%, ${0.14 + breathe * 0.06})`);
+  halo.addColorStop(1, `hsla(280, 70%, 40%, 0)`);
+  ctx.beginPath();
+  ctx.arc(cx, cy, haloR, 0, Math.PI * 2);
+  ctx.arc(cx, cy, baseRadius - 1, 0, Math.PI * 2, true);
+  ctx.fillStyle = halo;
+  ctx.fill();
+
+  // Royal ring: alternating purple/gold gradient segments with shimmer
+  const steps = 96;
+  const sweep = (time * 1.5) % (Math.PI * 2);
+  for (let i = 0; i < steps; i++) {
+    const a0 = (i / steps) * Math.PI * 2;
+    const a1 = ((i + 1.4) / steps) * Math.PI * 2;
+    let d = Math.abs(((a0 - sweep + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
+    const sweepBoost = Math.max(0, 1 - d / 0.5);
+    // Alternate hue between purple and gold
+    const blend = 0.5 + 0.5 * Math.sin(a0 * 4 + time * 0.6);
+    const hue = 280 - blend * 235; // 280 (purple) -> 45 (gold)
+    const lightness = 55 + sweepBoost * 30;
+    const alpha = 0.75 + sweepBoost * 0.25;
+    ctx.beginPath();
+    ctx.arc(cx, cy, baseRadius, a0, a1);
+    ctx.strokeStyle = `hsla(${hue}, 90%, ${lightness}%, ${alpha})`;
+    ctx.lineWidth = (2.4 + sweepBoost * 1.4) * DPR;
+    ctx.stroke();
+  }
+
+  // Inner highlight
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius - 2 * DPR, 0, Math.PI * 2);
+  ctx.strokeStyle = `hsla(50, 100%, 88%, 0.35)`;
+  ctx.lineWidth = 0.8 * DPR;
+  ctx.stroke();
+
+  // Drifting rose petals around avatar (the harem)
+  for (const p of petals) {
+    p.angle += p.speed * 0.012;
+    p.spin += p.spinSpeed;
+    p.life += 1;
+    if (p.life > p.maxLife) {
+      p.life = 0;
+      p.radius = 0.78 + Math.random() * 0.25;
+      p.angle = Math.random() * Math.PI * 2;
+    }
+    const t = p.life / p.maxLife;
+    const fade = Math.sin(t * Math.PI);
+    const r = baseRadius * (p.radius + Math.sin(time * 1.2 + p.angle * 2) * 0.02);
+    const x = cx + Math.cos(p.angle) * r;
+    const y = cy + Math.sin(p.angle) * r;
+    drawPetal(ctx, x, y, p.size, p.spin, 0.8 * fade, p.hue);
+  }
+
+  // Orbiting crowns (the king's court) — rotate around the ring
+  const baseRot = time * 0.4;
+  for (let i = 0; i < crowns.length; i++) {
+    const c = crowns[i];
+    const a = baseRot + (i / crowns.length) * Math.PI * 2;
+    const bob = Math.sin(time * 2 + c.bobPhase) * 1.5 * DPR;
+    const r = baseRadius * c.radius + 8 * DPR + bob;
+    const x = cx + Math.cos(a) * r;
+    const y = cy + Math.sin(a) * r;
+    // Soft golden glow under crown
+    const glowR = c.size * 3 * DPR;
+    const g = ctx.createRadialGradient(x, y, 0, x, y, glowR);
+    g.addColorStop(0, `hsla(45, 100%, 70%, 0.55)`);
+    g.addColorStop(1, `hsla(45, 100%, 60%, 0)`);
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(x, y, glowR, 0, Math.PI * 2);
+    ctx.fill();
+    // Crown always upright, slight tilt with bob
+    drawCrown(ctx, x, y, c.size, 0.95, Math.sin(time * 2 + c.bobPhase) * 0.15);
+  }
+
+  // The KING's crown — bigger, fixed at the top, with extra glow
+  const kingY = cy - baseRadius - 12 * DPR - breathe * 2 * DPR;
+  const kingGlow = ctx.createRadialGradient(cx, kingY, 0, cx, kingY, 18 * DPR);
+  kingGlow.addColorStop(0, `hsla(45, 100%, 80%, ${0.7 + breathe * 0.2})`);
+  kingGlow.addColorStop(1, `hsla(45, 100%, 60%, 0)`);
+  ctx.fillStyle = kingGlow;
+  ctx.beginPath();
+  ctx.arc(cx, kingY, 18 * DPR, 0, Math.PI * 2);
+  ctx.fill();
+  drawCrown(ctx, cx, kingY, 9, 1, 0);
+}
+
 interface ShopBadgeRingCanvasProps {
   badgeName: string;
   glowColor: string;
@@ -871,6 +1089,8 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
   const bubblesRef = useRef<Bubble[]>([]);
   const diamondsRef = useRef<Diamond[]>([]);
   const starsRef = useRef<Star[]>([]);
+  const crownsRef = useRef<Crown[]>([]);
+  const petalsRef = useRef<Petal[]>([]);
   const rafRef = useRef<number>(0);
   const sizeRef = useRef({ w: 0, h: 0 });
 
@@ -935,6 +1155,12 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         drawProposed(ctx, cx, cy, baseRadius, time, diamondsRef.current, starsRef.current);
         break;
       }
+      case "Harem King": {
+        if (crownsRef.current.length === 0) crownsRef.current = makeCrowns(6);
+        if (petalsRef.current.length === 0) petalsRef.current = makePetals(14);
+        drawHaremKing(ctx, cx, cy, baseRadius, time, crownsRef.current, petalsRef.current);
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
@@ -951,6 +1177,8 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
     bubblesRef.current = [];
     diamondsRef.current = [];
     starsRef.current = [];
+    crownsRef.current = [];
+    petalsRef.current = [];
     sizeRef.current = { w: 0, h: 0 };
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
