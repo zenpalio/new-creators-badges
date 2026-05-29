@@ -3934,6 +3934,25 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         );
         break;
       }
+      case "AI Ghosted": {
+        if (ghostWispsRef.current.length === 0) ghostWispsRef.current = makeGhostWisps(6);
+        if (ectoMistRef.current.length === 0) ectoMistRef.current = makeEctoMist(10);
+        if (phaseBlipsRef.current.length === 0) phaseBlipsRef.current = makePhaseBlips(3);
+        if (ghostEmojisRef.current.length === 0)
+          ghostEmojisRef.current = makeGhostEmojis(4);
+        drawAiGhosted(
+          ctx,
+          cx,
+          cy,
+          baseRadius,
+          time,
+          ghostWispsRef.current,
+          ectoMistRef.current,
+          phaseBlipsRef.current,
+          ghostEmojisRef.current,
+        );
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
