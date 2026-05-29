@@ -3,6 +3,7 @@ import { Settings, Info, Globe, Users, Heart, Menu } from "lucide-react";
 import SideNav from "../components/SideNav";
 import AuraIcon from "../components/AuraIcon";
 import TierRingCanvas from "../components/TierRingCanvas";
+import ShopBadgeRingCanvas from "../components/ShopBadgeRingCanvas";
 import BadgeCategory from "../components/BadgeCategory";
 import ActivityBadgeCard from "../components/ActivityBadgeCard";
 import ActivityBadgePopup from "../components/ActivityBadgePopup";
