@@ -1127,9 +1127,9 @@ function drawRizzler(
   // Warm orange halo (smoky heat)
   const haloR = baseRadius + (16 + breathe * 10) * DPR;
   const halo = ctx.createRadialGradient(cx, cy, baseRadius - 1, cx, cy, haloR);
-  halo.addColorStop(0, `hsla(20, 100%, 60%, ${0.26 + breathe * 0.12})`);
-  halo.addColorStop(0.55, `hsla(10, 95%, 55%, ${0.14 + breathe * 0.06})`);
-  halo.addColorStop(1, `hsla(0, 85%, 45%, 0)`);
+  halo.addColorStop(0, `hsla(320, 100%, 65%, ${0.26 + breathe * 0.12})`);
+  halo.addColorStop(0.55, `hsla(290, 90%, 55%, ${0.14 + breathe * 0.06})`);
+  halo.addColorStop(1, `hsla(275, 85%, 45%, 0)`);
   ctx.beginPath();
   ctx.arc(cx, cy, haloR, 0, Math.PI * 2);
   ctx.arc(cx, cy, baseRadius - 1, 0, Math.PI * 2, true);
@@ -1150,7 +1150,7 @@ function drawRizzler(
     let d = Math.abs(((a0 - sweep + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
     const sweepBoost = Math.max(0, 1 - d / 0.55);
     const hueShift = 0.5 + 0.5 * Math.sin(a0 * 2 + time * 0.7);
-    const hue = 12 + hueShift * 22; // 12 (red-orange) -> 34 (warm orange)
+    const hue = 285 + hueShift * 40; // 285 (purple) -> 325 (hot pink)
     const lightness = 55 + hueShift * 10 + sweepBoost * 28;
     const alpha = 0.78 + sweepBoost * 0.22;
     ctx.beginPath();
@@ -1163,7 +1163,7 @@ function drawRizzler(
   // Soft inner highlight (warm cream)
   ctx.beginPath();
   ctx.arc(cx, cy, baseRadius - 2 * DPR, 0, Math.PI * 2);
-  ctx.strokeStyle = `hsla(35, 100%, 85%, 0.32)`;
+  ctx.strokeStyle = `hsla(320, 100%, 90%, 0.32)`;
   ctx.lineWidth = 0.8 * DPR;
   ctx.stroke();
 
@@ -1189,15 +1189,15 @@ function drawRizzler(
     const size = e.size * DPR * (0.7 + flicker * 0.5);
     // Glow
     const g = ctx.createRadialGradient(x, y, 0, x, y, size * 3);
-    g.addColorStop(0, `hsla(35, 100%, 70%, ${0.85 * fade * flicker})`);
-    g.addColorStop(0.5, `hsla(15, 100%, 55%, ${0.5 * fade * flicker})`);
-    g.addColorStop(1, `hsla(5, 90%, 45%, 0)`);
+    g.addColorStop(0, `hsla(320, 100%, 80%, ${0.85 * fade * flicker})`);
+    g.addColorStop(0.5, `hsla(300, 100%, 60%, ${0.5 * fade * flicker})`);
+    g.addColorStop(1, `hsla(280, 90%, 45%, 0)`);
     ctx.fillStyle = g;
     ctx.beginPath();
     ctx.arc(x, y, size * 3, 0, Math.PI * 2);
     ctx.fill();
     // Bright core
-    ctx.fillStyle = `hsla(45, 100%, 88%, ${fade * flicker})`;
+    ctx.fillStyle = `hsla(320, 100%, 92%, ${fade * flicker})`;
     ctx.beginPath();
     ctx.arc(x, y, size * 0.7, 0, Math.PI * 2);
     ctx.fill();
@@ -1214,7 +1214,7 @@ function drawRizzler(
     ctx.save();
     ctx.translate(x, y);
     ctx.rotate(time * 0.4 + f.phase);
-    ctx.strokeStyle = `hsla(35, 100%, 80%, ${flicker})`;
+    ctx.strokeStyle = `hsla(320, 100%, 85%, ${flicker})`;
     ctx.lineWidth = 1 * DPR;
     ctx.lineCap = "round";
     ctx.beginPath();
@@ -1225,7 +1225,7 @@ function drawRizzler(
     ctx.stroke();
     ctx.beginPath();
     ctx.arc(0, 0, 1.1 * DPR, 0, Math.PI * 2);
-    ctx.fillStyle = `hsla(40, 100%, 92%, ${flicker})`;
+    ctx.fillStyle = `hsla(320, 100%, 95%, ${flicker})`;
     ctx.fill();
     ctx.restore();
   }

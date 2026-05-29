@@ -50,7 +50,7 @@ const badgeEffects: Record<string, {
   },
   "Rizzler": {
     className: "badge-effect-rizzler",
-    glowColor: "hsl(15 90% 55%)",
+    glowColor: "hsl(320 100% 60%)",
     animation: "bounce-subtle",
     particleEmoji: "😏",
   },
