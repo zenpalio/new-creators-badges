@@ -1072,6 +1072,165 @@ function drawHaremKing(
   drawCrown(ctx, cx, kingY, 9, 1, 0);
 }
 
+// ─── Rizzler: Warm orange wavy ring + drifting embers + lens flares ───
+interface Ember {
+  angle: number;
+  radius: number; // fraction of baseRadius
+  speed: number;
+  rise: number;
+  life: number;
+  maxLife: number;
+  size: number;
+  flickerPhase: number;
+}
+
+interface Flare {
+  angle: number;
+  radius: number;
+  phase: number;
+  speed: number;
+  size: number;
+}
+
+const makeEmbers = (count: number): Ember[] =>
+  Array.from({ length: count }, () => ({
+    angle: Math.random() * Math.PI * 2,
+    radius: 0.8 + Math.random() * 0.25,
+    speed: 0.15 + Math.random() * 0.25,
+    rise: 0.02 + Math.random() * 0.04,
+    life: Math.random() * 120,
+    maxLife: 100 + Math.random() * 80,
+    size: 1.2 + Math.random() * 1.6,
+    flickerPhase: Math.random() * Math.PI * 2,
+  }));
+
+const makeFlares = (count: number, baseRadius: number): Flare[] =>
+  Array.from({ length: count }, (_, i) => ({
+    angle: (i / count) * Math.PI * 2 + Math.random() * 0.4,
+    radius: baseRadius + (Math.random() - 0.5) * 4,
+    phase: Math.random() * Math.PI * 2,
+    speed: 1.6 + Math.random() * 1.4,
+    size: 1.5 + Math.random() * 1.2,
+  }));
+
+function drawRizzler(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  baseRadius: number,
+  time: number,
+  embers: Ember[],
+  flares: Flare[],
+) {
+  const breathe = 0.5 + 0.5 * Math.sin(time * 1.6);
+
+  // Warm orange halo (smoky heat)
+  const haloR = baseRadius + (16 + breathe * 10) * DPR;
+  const halo = ctx.createRadialGradient(cx, cy, baseRadius - 1, cx, cy, haloR);
+  halo.addColorStop(0, `hsla(20, 100%, 60%, ${0.26 + breathe * 0.12})`);
+  halo.addColorStop(0.55, `hsla(10, 95%, 55%, ${0.14 + breathe * 0.06})`);
+  halo.addColorStop(1, `hsla(0, 85%, 45%, 0)`);
+  ctx.beginPath();
+  ctx.arc(cx, cy, haloR, 0, Math.PI * 2);
+  ctx.arc(cx, cy, baseRadius - 1, 0, Math.PI * 2, true);
+  ctx.fillStyle = halo;
+  ctx.fill();
+
+  // Smooth flowing wavy ring — radius modulates with a low-frequency sine
+  // for that "smooth operator" charm.
+  const steps = 120;
+  const sweep = (time * 1.2) % (Math.PI * 2);
+  ctx.lineCap = "round";
+  for (let i = 0; i < steps; i++) {
+    const a0 = (i / steps) * Math.PI * 2;
+    const a1 = ((i + 1.6) / steps) * Math.PI * 2;
+    // Slow, smooth radius wave
+    const wave = Math.sin(a0 * 3 - time * 1.4) * 1.6 * DPR;
+    const r = baseRadius + wave;
+    let d = Math.abs(((a0 - sweep + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
+    const sweepBoost = Math.max(0, 1 - d / 0.55);
+    const hueShift = 0.5 + 0.5 * Math.sin(a0 * 2 + time * 0.7);
+    const hue = 12 + hueShift * 22; // 12 (red-orange) -> 34 (warm orange)
+    const lightness = 55 + hueShift * 10 + sweepBoost * 28;
+    const alpha = 0.78 + sweepBoost * 0.22;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, a0, a1);
+    ctx.strokeStyle = `hsla(${hue}, 95%, ${lightness}%, ${alpha})`;
+    ctx.lineWidth = (2.4 + sweepBoost * 1.3) * DPR;
+    ctx.stroke();
+  }
+
+  // Soft inner highlight (warm cream)
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius - 2 * DPR, 0, Math.PI * 2);
+  ctx.strokeStyle = `hsla(35, 100%, 85%, 0.32)`;
+  ctx.lineWidth = 0.8 * DPR;
+  ctx.stroke();
+
+  // Drifting embers around the avatar, spiraling outward and upward
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+  for (const e of embers) {
+    e.angle += e.speed * 0.012;
+    e.radius += e.rise * 0.01;
+    e.life += 1;
+    if (e.life > e.maxLife || e.radius > 1.15) {
+      e.life = 0;
+      e.angle = Math.random() * Math.PI * 2;
+      e.radius = 0.78 + Math.random() * 0.08;
+      e.flickerPhase = Math.random() * Math.PI * 2;
+    }
+    const t = e.life / e.maxLife;
+    const fade = Math.sin(t * Math.PI);
+    const flicker = 0.6 + 0.4 * Math.sin(time * 8 + e.flickerPhase);
+    const r = baseRadius * e.radius;
+    const x = cx + Math.cos(e.angle) * r;
+    const y = cy + Math.sin(e.angle) * r;
+    const size = e.size * DPR * (0.7 + flicker * 0.5);
+    // Glow
+    const g = ctx.createRadialGradient(x, y, 0, x, y, size * 3);
+    g.addColorStop(0, `hsla(35, 100%, 70%, ${0.85 * fade * flicker})`);
+    g.addColorStop(0.5, `hsla(15, 100%, 55%, ${0.5 * fade * flicker})`);
+    g.addColorStop(1, `hsla(5, 90%, 45%, 0)`);
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(x, y, size * 3, 0, Math.PI * 2);
+    ctx.fill();
+    // Bright core
+    ctx.fillStyle = `hsla(45, 100%, 88%, ${fade * flicker})`;
+    ctx.beginPath();
+    ctx.arc(x, y, size * 0.7, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+
+  // Lens flares — quick warm twinkles on the ring (the "rizz" sparkle)
+  for (const f of flares) {
+    const flicker = 0.5 + 0.5 * Math.sin(time * f.speed + f.phase);
+    if (flicker < 0.2) continue;
+    const x = cx + Math.cos(f.angle) * f.radius;
+    const y = cy + Math.sin(f.angle) * f.radius;
+    const len = (f.size + flicker * 3) * DPR;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(time * 0.4 + f.phase);
+    ctx.strokeStyle = `hsla(35, 100%, 80%, ${flicker})`;
+    ctx.lineWidth = 1 * DPR;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(-len, 0);
+    ctx.lineTo(len, 0);
+    ctx.moveTo(0, -len * 0.7);
+    ctx.lineTo(0, len * 0.7);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(0, 0, 1.1 * DPR, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(40, 100%, 92%, ${flicker})`;
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
 interface ShopBadgeRingCanvasProps {
   badgeName: string;
   glowColor: string;
