@@ -1214,7 +1214,7 @@ function drawRizzler(
     ctx.save();
     ctx.translate(x, y);
     ctx.rotate(time * 0.4 + f.phase);
-    ctx.strokeStyle = `hsla(35, 100%, 80%, ${flicker})`;
+    ctx.strokeStyle = `hsla(320, 100%, 85%, ${flicker})`;
     ctx.lineWidth = 1 * DPR;
     ctx.lineCap = "round";
     ctx.beginPath();
