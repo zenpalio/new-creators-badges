@@ -155,10 +155,11 @@ function drawWaifu(
     const lifeFrac = h.life / h.maxLife;
     const fade =
       lifeFrac < 0.15 ? lifeFrac / 0.15 : lifeFrac > 0.7 ? (1 - lifeFrac) / 0.3 : 1;
-    const driftOut = lifeFrac * h.drift * 20 * DPR;
-    const wobble = Math.sin(time * 1.5 + h.angle * 3) * 2 * DPR;
-    const px = cx + Math.cos(h.angle) * (h.radius * DPR + driftOut + wobble);
-    const py = cy + Math.sin(h.angle) * (h.radius * DPR + driftOut + wobble);
+    const breath = 0.5 + 0.5 * Math.sin(time * 1.2 + h.angle * 2);
+    const orbitR = baseRadius * (0.5 + breath * 0.2);
+    const wobble = Math.sin(time * 1.5 + h.angle * 3) * 1.5 * DPR;
+    const px = cx + Math.cos(h.angle) * (orbitR + wobble);
+    const py = cy + Math.sin(h.angle) * (orbitR + wobble);
     const size = h.size * DPR * (0.8 + (1 - lifeFrac) * 0.4);
     const hue = 330 + h.hueShift;
 
