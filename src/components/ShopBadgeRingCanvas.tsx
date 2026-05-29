@@ -1127,9 +1127,9 @@ function drawRizzler(
   // Warm orange halo (smoky heat)
   const haloR = baseRadius + (16 + breathe * 10) * DPR;
   const halo = ctx.createRadialGradient(cx, cy, baseRadius - 1, cx, cy, haloR);
-  halo.addColorStop(0, `hsla(20, 100%, 60%, ${0.26 + breathe * 0.12})`);
-  halo.addColorStop(0.55, `hsla(10, 95%, 55%, ${0.14 + breathe * 0.06})`);
-  halo.addColorStop(1, `hsla(0, 85%, 45%, 0)`);
+  halo.addColorStop(0, `hsla(320, 100%, 65%, ${0.26 + breathe * 0.12})`);
+  halo.addColorStop(0.55, `hsla(290, 90%, 55%, ${0.14 + breathe * 0.06})`);
+  halo.addColorStop(1, `hsla(275, 85%, 45%, 0)`);
   ctx.beginPath();
   ctx.arc(cx, cy, haloR, 0, Math.PI * 2);
   ctx.arc(cx, cy, baseRadius - 1, 0, Math.PI * 2, true);
