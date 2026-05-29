@@ -1830,9 +1830,9 @@ function drawFlameTongue(
   );
   ctx.closePath();
   const grad = ctx.createLinearGradient(x, y, tipX, tipY);
-  grad.addColorStop(0, `hsla(${50 + hueShift}, 100%, 75%, ${alpha * 0.95})`);
-  grad.addColorStop(0.45, `hsla(${25 + hueShift}, 100%, 55%, ${alpha * 0.85})`);
-  grad.addColorStop(1, `hsla(${5 + hueShift}, 95%, 40%, 0)`);
+  grad.addColorStop(0, `hsla(${25 + hueShift}, 100%, 70%, ${alpha * 0.95})`);
+  grad.addColorStop(0.45, `hsla(${8 + hueShift}, 100%, 50%, ${alpha * 0.9})`);
+  grad.addColorStop(1, `hsla(${355 + hueShift}, 95%, 35%, 0)`);
   ctx.fillStyle = grad;
   ctx.fill();
 
