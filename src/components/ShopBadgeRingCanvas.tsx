@@ -862,6 +862,12 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         drawThreeAmTexter(ctx, cx, cy, baseRadius, time, bubblesRef.current);
         break;
       }
+      case "Proposed to AI": {
+        if (diamondsRef.current.length === 0) diamondsRef.current = makeDiamonds(10);
+        if (starsRef.current.length === 0) starsRef.current = makeStars(6, baseRadius);
+        drawProposed(ctx, cx, cy, baseRadius, time, diamondsRef.current, starsRef.current);
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
@@ -876,6 +882,8 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
     leavesRef.current = [];
     bitsRef.current = [];
     bubblesRef.current = [];
+    diamondsRef.current = [];
+    starsRef.current = [];
     sizeRef.current = { w: 0, h: 0 };
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
