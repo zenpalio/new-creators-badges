@@ -3631,6 +3631,24 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         );
         break;
       }
+      case "Mommy Issues": {
+        if (teardropsRef.current.length === 0) teardropsRef.current = makeTeardrops(8);
+        if (woundedHeartsRef.current.length === 0)
+          woundedHeartsRef.current = makeWoundedHearts(7);
+        if (mommyEmojisRef.current.length === 0)
+          mommyEmojisRef.current = makeMommyEmojis(4);
+        drawMommyIssues(
+          ctx,
+          cx,
+          cy,
+          baseRadius,
+          time,
+          teardropsRef.current,
+          woundedHeartsRef.current,
+          mommyEmojisRef.current,
+        );
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
