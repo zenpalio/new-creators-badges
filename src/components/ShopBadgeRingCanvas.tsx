@@ -1783,9 +1783,9 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         break;
       }
       case "Horny Royalty": {
-        if (sigilsRef.current.length === 0) sigilsRef.current = makeSigils(5);
-        if (hornFlamesRef.current.length === 0) hornFlamesRef.current = makeHornFlames(18);
-        if (jewelsRef.current.length === 0) jewelsRef.current = makeJewels(10);
+        if (sigilsRef.current.length === 0) sigilsRef.current = makeSigils(4);
+        if (hornFlamesRef.current.length === 0) hornFlamesRef.current = makeHornFlames(0);
+        if (jewelsRef.current.length === 0) jewelsRef.current = makeJewels(6);
         drawHornyRoyalty(
           ctx,
           cx,
