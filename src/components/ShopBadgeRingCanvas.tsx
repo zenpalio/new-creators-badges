@@ -3698,6 +3698,10 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
   const teardropsRef = useRef<Teardrop[]>([]);
   const woundedHeartsRef = useRef<WoundedHeart[]>([]);
   const mommyEmojisRef = useRef<MommyEmoji[]>([]);
+  const ghostWispsRef = useRef<GhostWisp[]>([]);
+  const ectoMistRef = useRef<EctoMist[]>([]);
+  const phaseBlipsRef = useRef<PhaseBlip[]>([]);
+  const ghostEmojisRef = useRef<GhostEmoji[]>([]);
   const rafRef = useRef<number>(0);
   const sizeRef = useRef({ w: 0, h: 0 });
 
