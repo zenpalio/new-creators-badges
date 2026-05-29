@@ -2383,6 +2383,8 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
   const sparksLegendRef = useRef<Spark[]>([]);
   const powerPulsesRef = useRef<PowerPulse[]>([]);
   const chadEmojisRef = useRef<ChadEmoji[]>([]);
+  const glitchSlicesRef = useRef<GlitchSlice[]>([]);
+  const driftEmojisRef = useRef<DriftEmoji[]>([]);
   const rafRef = useRef<number>(0);
   const sizeRef = useRef({ w: 0, h: 0 });
 
