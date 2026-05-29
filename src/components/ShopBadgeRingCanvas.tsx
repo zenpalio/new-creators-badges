@@ -1461,7 +1461,35 @@ interface Jewel {
   hue: number;
 }
 
-const makeSigils = (count: number): Sigil[] =>
+interface NaughtyEmoji {
+  emoji: string;
+  angle: number;
+  radius: number;
+  speed: number;
+  rise: number;
+  life: number;
+  maxLife: number;
+  size: number;
+  spin: number;
+  spinSpeed: number;
+}
+
+const NAUGHTY_GLYPHS = ["🍑", "🍆", "🥒", "💦", "😈", "💋"];
+
+const makeNaughtyEmojis = (count: number): NaughtyEmoji[] =>
+  Array.from({ length: count }, () => ({
+    emoji: NAUGHTY_GLYPHS[Math.floor(Math.random() * NAUGHTY_GLYPHS.length)],
+    angle: Math.random() * Math.PI * 2,
+    radius: 0.95 + Math.random() * 0.1,
+    speed: 0.05 + Math.random() * 0.08,
+    rise: 0.0015 + Math.random() * 0.003,
+    life: Math.random() * 180,
+    maxLife: 160 + Math.random() * 100,
+    size: 12 + Math.random() * 6,
+    spin: Math.random() * Math.PI * 2,
+    spinSpeed: (Math.random() - 0.5) * 0.04,
+  }));
+
   Array.from({ length: count }, (_, i) => ({
     angle: (i / count) * Math.PI * 2,
     speed: 0.18,
