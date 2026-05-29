@@ -3336,6 +3336,24 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         );
         break;
       }
+      case "Cougar Tamer": {
+        if (clawSwipesRef.current.length === 0) clawSwipesRef.current = makeClawSwipes(3);
+        if (leopardSpotsRef.current.length === 0)
+          leopardSpotsRef.current = makeLeopardSpots(12);
+        if (cougarEmojisRef.current.length === 0)
+          cougarEmojisRef.current = makeCougarEmojis(4);
+        drawCougarTamer(
+          ctx,
+          cx,
+          cy,
+          baseRadius,
+          time,
+          clawSwipesRef.current,
+          leopardSpotsRef.current,
+          cougarEmojisRef.current,
+        );
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
