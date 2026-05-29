@@ -1461,6 +1461,35 @@ interface Jewel {
   hue: number;
 }
 
+interface NaughtyEmoji {
+  emoji: string;
+  angle: number;
+  radius: number;
+  speed: number;
+  rise: number;
+  life: number;
+  maxLife: number;
+  size: number;
+  spin: number;
+  spinSpeed: number;
+}
+
+const NAUGHTY_GLYPHS = ["🍑", "🍆", "🥒", "💦", "😈", "💋"];
+
+const makeNaughtyEmojis = (count: number): NaughtyEmoji[] =>
+  Array.from({ length: count }, () => ({
+    emoji: NAUGHTY_GLYPHS[Math.floor(Math.random() * NAUGHTY_GLYPHS.length)],
+    angle: Math.random() * Math.PI * 2,
+    radius: 0.95 + Math.random() * 0.1,
+    speed: 0.05 + Math.random() * 0.08,
+    rise: 0.0015 + Math.random() * 0.003,
+    life: Math.random() * 180,
+    maxLife: 160 + Math.random() * 100,
+    size: 12 + Math.random() * 6,
+    spin: Math.random() * Math.PI * 2,
+    spinSpeed: (Math.random() - 0.5) * 0.04,
+  }));
+
 const makeSigils = (count: number): Sigil[] =>
   Array.from({ length: count }, (_, i) => ({
     angle: (i / count) * Math.PI * 2,
@@ -1580,6 +1609,7 @@ function drawHornyRoyalty(
   sigils: Sigil[],
   flames: HornFlame[],
   jewels: Jewel[],
+  emojis: NaughtyEmoji[],
 ) {
   // Subtle purple breathing aura
   const breath = 0.5 + Math.sin(time * 1.2) * 0.5;
@@ -1664,6 +1694,37 @@ function drawHornyRoyalty(
     ctx.fill();
     drawFleurDeLis(ctx, x, y, sg.size, 0.95, rot);
   });
+  // Naughty emojis rising & orbiting around ring
+  ctx.save();
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  emojis.forEach((e) => {
+    e.life += 1;
+    e.angle += e.speed * 0.016;
+    e.radius += e.rise;
+    e.spin += e.spinSpeed;
+    if (e.life > e.maxLife || e.radius > 1.5) {
+      e.life = 0;
+      e.angle = Math.random() * Math.PI * 2;
+      e.radius = 0.95 + Math.random() * 0.05;
+      e.emoji = NAUGHTY_GLYPHS[Math.floor(Math.random() * NAUGHTY_GLYPHS.length)];
+    }
+    const t = e.life / e.maxLife;
+    const alpha = Math.sin(t * Math.PI) * 0.95;
+    const x = cx + Math.cos(e.angle) * baseRadius * e.radius;
+    const y = cy + Math.sin(e.angle) * baseRadius * e.radius;
+    const wobble = Math.sin(time * 3 + e.spin) * 0.12;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(wobble);
+    ctx.globalAlpha = alpha;
+    ctx.font = `${e.size * DPR}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+    ctx.shadowColor = "hsla(285, 100%, 60%, 0.6)";
+    ctx.shadowBlur = 6 * DPR;
+    ctx.fillText(e.emoji, 0, 0);
+    ctx.restore();
+  });
+  ctx.restore();
   // Suppress unused flames param (kept for signature stability)
   void flames;
 }
@@ -1693,6 +1754,7 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
   const sigilsRef = useRef<Sigil[]>([]);
   const hornFlamesRef = useRef<HornFlame[]>([]);
   const jewelsRef = useRef<Jewel[]>([]);
+  const naughtyEmojisRef = useRef<NaughtyEmoji[]>([]);
   const rafRef = useRef<number>(0);
   const sizeRef = useRef({ w: 0, h: 0 });
 
@@ -1786,6 +1848,8 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         if (sigilsRef.current.length === 0) sigilsRef.current = makeSigils(4);
         if (hornFlamesRef.current.length === 0) hornFlamesRef.current = makeHornFlames(0);
         if (jewelsRef.current.length === 0) jewelsRef.current = makeJewels(6);
+        if (naughtyEmojisRef.current.length === 0)
+          naughtyEmojisRef.current = makeNaughtyEmojis(10);
         drawHornyRoyalty(
           ctx,
           cx,
@@ -1795,6 +1859,7 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
           sigilsRef.current,
           hornFlamesRef.current,
           jewelsRef.current,
+          naughtyEmojisRef.current,
         );
         break;
       }
@@ -1824,6 +1889,7 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
     sigilsRef.current = [];
     hornFlamesRef.current = [];
     jewelsRef.current = [];
+    naughtyEmojisRef.current = [];
     sizeRef.current = { w: 0, h: 0 };
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
