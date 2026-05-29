@@ -1092,6 +1092,29 @@ interface Flare {
   size: number;
 }
 
+interface Bolt {
+  angle: number;        // angle on ring where bolt strikes (outward)
+  length: number;       // length in px
+  segments: number[];   // perpendicular offsets for zigzag
+  born: number;         // time when bolt was created
+  duration: number;     // how long it stays visible (sec)
+}
+
+interface Pulse {
+  angle: number;        // current head angle on the ring
+  speed: number;        // rad/sec
+  width: number;        // arc length of the trail
+}
+
+interface OrbitHeart {
+  angle: number;
+  speed: number;
+  radius: number; // fraction of baseRadius
+  size: number;
+  spinPhase: number;
+  hueShift: number;
+}
+
 const makeEmbers = (count: number): Ember[] =>
   Array.from({ length: count }, () => ({
     angle: Math.random() * Math.PI * 2,
@@ -1113,6 +1136,35 @@ const makeFlares = (count: number, baseRadius: number): Flare[] =>
     size: 1.5 + Math.random() * 1.2,
   }));
 
+const makePulses = (count: number): Pulse[] =>
+  Array.from({ length: count }, (_, i) => ({
+    angle: (i / count) * Math.PI * 2,
+    speed: 2.4 + (i % 2 === 0 ? 0 : 0.8), // alternating speeds
+    width: 0.8 + Math.random() * 0.4,
+  }));
+
+const makeOrbitHearts = (count: number): OrbitHeart[] =>
+  Array.from({ length: count }, (_, i) => ({
+    angle: (i / count) * Math.PI * 2,
+    speed: 0.35,
+    radius: 1.12,
+    size: 4 + Math.random() * 1.5,
+    spinPhase: Math.random() * Math.PI * 2,
+    hueShift: -10 + Math.random() * 20,
+  }));
+
+function makeBolt(time: number, baseRadius: number): Bolt {
+  const segCount = 6 + Math.floor(Math.random() * 3);
+  const segments = Array.from({ length: segCount }, () => (Math.random() - 0.5) * 2);
+  return {
+    angle: Math.random() * Math.PI * 2,
+    length: baseRadius * (0.55 + Math.random() * 0.35),
+    segments,
+    born: time,
+    duration: 0.18 + Math.random() * 0.12,
+  };
+}
+
 function drawRizzler(
   ctx: CanvasRenderingContext2D,
   cx: number,
@@ -1121,60 +1173,203 @@ function drawRizzler(
   time: number,
   embers: Ember[],
   flares: Flare[],
+  pulses: Pulse[],
+  orbitHearts: OrbitHeart[],
+  boltsRef: { bolts: Bolt[]; nextStrike: number },
 ) {
   const breathe = 0.5 + 0.5 * Math.sin(time * 1.6);
+  const fastPulse = 0.5 + 0.5 * Math.sin(time * 4);
 
-  // Warm orange halo (smoky heat)
-  const haloR = baseRadius + (16 + breathe * 10) * DPR;
+  // ── Outer atmospheric glow (very soft, large) ────────────────
+  const outerR = baseRadius + (38 + breathe * 14) * DPR;
+  const outer = ctx.createRadialGradient(cx, cy, baseRadius * 0.7, cx, cy, outerR);
+  outer.addColorStop(0, `hsla(320, 100%, 60%, 0)`);
+  outer.addColorStop(0.55, `hsla(310, 100%, 55%, ${0.14 + breathe * 0.06})`);
+  outer.addColorStop(1, `hsla(280, 90%, 40%, 0)`);
+  ctx.fillStyle = outer;
+  ctx.beginPath();
+  ctx.arc(cx, cy, outerR, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ── Inner sharp halo right around ring ───────────────────────
+  const haloR = baseRadius + (14 + breathe * 8) * DPR;
   const halo = ctx.createRadialGradient(cx, cy, baseRadius - 1, cx, cy, haloR);
-  halo.addColorStop(0, `hsla(320, 100%, 65%, ${0.26 + breathe * 0.12})`);
-  halo.addColorStop(0.55, `hsla(290, 90%, 55%, ${0.14 + breathe * 0.06})`);
-  halo.addColorStop(1, `hsla(275, 85%, 45%, 0)`);
+  halo.addColorStop(0, `hsla(325, 100%, 70%, ${0.4 + breathe * 0.15})`);
+  halo.addColorStop(0.55, `hsla(295, 100%, 55%, ${0.2 + breathe * 0.08})`);
+  halo.addColorStop(1, `hsla(275, 90%, 45%, 0)`);
   ctx.beginPath();
   ctx.arc(cx, cy, haloR, 0, Math.PI * 2);
   ctx.arc(cx, cy, baseRadius - 1, 0, Math.PI * 2, true);
   ctx.fillStyle = halo;
   ctx.fill();
 
-  // Smooth flowing wavy ring — radius modulates with a low-frequency sine
-  // for that "smooth operator" charm.
-  const steps = 120;
-  const sweep = (time * 1.2) % (Math.PI * 2);
+  // ── Plasma ring: layered with chromatic offset (pink + purple) ─
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+  const offset = 1.2 * DPR;
+  // Pink layer
+  ctx.beginPath();
+  ctx.arc(cx + offset, cy, baseRadius, 0, Math.PI * 2);
+  ctx.strokeStyle = `hsla(325, 100%, 65%, 0.55)`;
+  ctx.lineWidth = 3.2 * DPR;
+  ctx.stroke();
+  // Purple layer
+  ctx.beginPath();
+  ctx.arc(cx - offset, cy, baseRadius, 0, Math.PI * 2);
+  ctx.strokeStyle = `hsla(285, 100%, 60%, 0.55)`;
+  ctx.lineWidth = 3.2 * DPR;
+  ctx.stroke();
+  ctx.restore();
+
+  // Main flowing wavy ring with hue gradient + heartbeat pulse on radius
+  const ringR = baseRadius + fastPulse * 0.8 * DPR;
+  const steps = 140;
   ctx.lineCap = "round";
   for (let i = 0; i < steps; i++) {
     const a0 = (i / steps) * Math.PI * 2;
     const a1 = ((i + 1.6) / steps) * Math.PI * 2;
-    // Slow, smooth radius wave
-    const wave = Math.sin(a0 * 3 - time * 1.4) * 1.6 * DPR;
-    const r = baseRadius + wave;
-    let d = Math.abs(((a0 - sweep + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
-    const sweepBoost = Math.max(0, 1 - d / 0.55);
+    const wave = Math.sin(a0 * 3 - time * 1.6) * 1.6 * DPR;
+    const r = ringR + wave;
     const hueShift = 0.5 + 0.5 * Math.sin(a0 * 2 + time * 0.7);
-    const hue = 285 + hueShift * 40; // 285 (purple) -> 325 (hot pink)
-    const lightness = 55 + hueShift * 10 + sweepBoost * 28;
-    const alpha = 0.78 + sweepBoost * 0.22;
+    const hue = 285 + hueShift * 45; // purple -> hot pink
+    const lightness = 60 + hueShift * 14;
     ctx.beginPath();
     ctx.arc(cx, cy, r, a0, a1);
-    ctx.strokeStyle = `hsla(${hue}, 95%, ${lightness}%, ${alpha})`;
-    ctx.lineWidth = (2.4 + sweepBoost * 1.3) * DPR;
+    ctx.strokeStyle = `hsla(${hue}, 100%, ${lightness}%, 0.85)`;
+    ctx.lineWidth = 2.2 * DPR;
     ctx.stroke();
   }
 
-  // Soft inner highlight (warm cream)
+  // Bright traveling energy pulses (comet-like arcs)
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+  for (const p of pulses) {
+    p.angle += p.speed * 0.016;
+    const head = p.angle;
+    const segs = 22;
+    for (let i = 0; i < segs; i++) {
+      const t = i / segs; // 0 head, 1 tail
+      const a0 = head - t * p.width;
+      const a1 = a0 - p.width / segs;
+      const alpha = (1 - t) * 0.9;
+      ctx.beginPath();
+      ctx.arc(cx, cy, ringR, a1, a0);
+      ctx.strokeStyle = `hsla(${320 - t * 15}, 100%, ${90 - t * 20}%, ${alpha})`;
+      ctx.lineWidth = (3 - t * 1.8) * DPR;
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+
+  // Inner highlight (polished)
   ctx.beginPath();
-  ctx.arc(cx, cy, baseRadius - 2 * DPR, 0, Math.PI * 2);
-  ctx.strokeStyle = `hsla(320, 100%, 90%, 0.32)`;
+  ctx.arc(cx, cy, ringR - 2 * DPR, 0, Math.PI * 2);
+  ctx.strokeStyle = `hsla(320, 100%, 95%, 0.35)`;
   ctx.lineWidth = 0.8 * DPR;
   ctx.stroke();
 
-  // Drifting embers around the avatar, spiraling outward and upward
+  // ── Lightning bolts ──────────────────────────────────────────
+  // Spawn new bolts on a timer
+  if (time >= boltsRef.nextStrike) {
+    boltsRef.bolts.push(makeBolt(time, baseRadius));
+    if (Math.random() < 0.35) boltsRef.bolts.push(makeBolt(time, baseRadius));
+    boltsRef.nextStrike = time + 0.35 + Math.random() * 0.7;
+  }
+  // Render and prune
+  boltsRef.bolts = boltsRef.bolts.filter((b) => time - b.born < b.duration);
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+  for (const b of boltsRef.bolts) {
+    const age = (time - b.born) / b.duration;
+    const intensity = Math.sin(age * Math.PI); // fade in/out
+    if (intensity <= 0.02) continue;
+    // Bolt extends from the ring outward
+    const ox = Math.cos(b.angle);
+    const oy = Math.sin(b.angle);
+    const px = -oy; // perpendicular
+    const py = ox;
+    const startX = cx + ox * baseRadius;
+    const startY = cy + oy * baseRadius;
+    const endX = cx + ox * (baseRadius + b.length);
+    const endY = cy + oy * (baseRadius + b.length);
+
+    // Build zigzag path
+    const segCount = b.segments.length;
+    const points: Array<[number, number]> = [[startX, startY]];
+    for (let i = 0; i < segCount; i++) {
+      const t = (i + 1) / (segCount + 1);
+      const lx = startX + (endX - startX) * t;
+      const ly = startY + (endY - startY) * t;
+      const off = b.segments[i] * 8 * DPR * (1 - Math.abs(t - 0.5)); // taper toward ends
+      points.push([lx + px * off, ly + py * off]);
+    }
+    points.push([endX, endY]);
+
+    // Outer glow stroke
+    ctx.beginPath();
+    ctx.moveTo(points[0][0], points[0][1]);
+    for (let i = 1; i < points.length; i++) ctx.lineTo(points[i][0], points[i][1]);
+    ctx.strokeStyle = `hsla(310, 100%, 70%, ${0.55 * intensity})`;
+    ctx.lineWidth = 6 * DPR;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.stroke();
+    // Mid stroke
+    ctx.strokeStyle = `hsla(320, 100%, 80%, ${0.85 * intensity})`;
+    ctx.lineWidth = 2.6 * DPR;
+    ctx.stroke();
+    // Bright core
+    ctx.strokeStyle = `hsla(320, 100%, 96%, ${intensity})`;
+    ctx.lineWidth = 1 * DPR;
+    ctx.stroke();
+
+    // Spark at strike point on ring
+    const sparkR = 8 * DPR * intensity;
+    const sg = ctx.createRadialGradient(startX, startY, 0, startX, startY, sparkR);
+    sg.addColorStop(0, `hsla(320, 100%, 95%, ${intensity})`);
+    sg.addColorStop(0.5, `hsla(310, 100%, 65%, ${0.7 * intensity})`);
+    sg.addColorStop(1, `hsla(290, 100%, 50%, 0)`);
+    ctx.fillStyle = sg;
+    ctx.beginPath();
+    ctx.arc(startX, startY, sparkR, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+
+  // ── Orbiting glowing hearts (the rizz hearts) ────────────────
+  for (let i = 0; i < orbitHearts.length; i++) {
+    const oh = orbitHearts[i];
+    oh.angle += oh.speed * 0.012;
+    const baseA = oh.angle + (i / orbitHearts.length) * Math.PI * 2 * 0;
+    const bob = Math.sin(time * 2 + oh.spinPhase) * 0.02;
+    const r = baseRadius * (oh.radius + bob);
+    const x = cx + Math.cos(baseA) * r;
+    const y = cy + Math.sin(baseA) * r;
+    // Glow under heart
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    const glowR = oh.size * 3 * DPR;
+    const hg = ctx.createRadialGradient(x, y, 0, x, y, glowR);
+    hg.addColorStop(0, `hsla(${320 + oh.hueShift}, 100%, 75%, 0.7)`);
+    hg.addColorStop(1, `hsla(${300 + oh.hueShift}, 100%, 55%, 0)`);
+    ctx.fillStyle = hg;
+    ctx.beginPath();
+    ctx.arc(x, y, glowR, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+    // Heart shape (reuse drawHeart) — pinker fill
+    ctx.fillStyle = `hsla(${320 + oh.hueShift}, 100%, 72%, 0.95)`;
+    drawHeart(ctx, x, y, oh.size * DPR, Math.sin(time * 2 + oh.spinPhase) * 0.2);
+  }
+
+  // ── Drifting embers spiraling outward ────────────────────────
   ctx.save();
   ctx.globalCompositeOperation = "lighter";
   for (const e of embers) {
     e.angle += e.speed * 0.012;
     e.radius += e.rise * 0.01;
     e.life += 1;
-    if (e.life > e.maxLife || e.radius > 1.15) {
+    if (e.life > e.maxLife || e.radius > 1.2) {
       e.life = 0;
       e.angle = Math.random() * Math.PI * 2;
       e.radius = 0.78 + Math.random() * 0.08;
@@ -1187,45 +1382,48 @@ function drawRizzler(
     const x = cx + Math.cos(e.angle) * r;
     const y = cy + Math.sin(e.angle) * r;
     const size = e.size * DPR * (0.7 + flicker * 0.5);
-    // Glow
     const g = ctx.createRadialGradient(x, y, 0, x, y, size * 3);
-    g.addColorStop(0, `hsla(320, 100%, 80%, ${0.85 * fade * flicker})`);
-    g.addColorStop(0.5, `hsla(300, 100%, 60%, ${0.5 * fade * flicker})`);
-    g.addColorStop(1, `hsla(280, 90%, 45%, 0)`);
+    g.addColorStop(0, `hsla(325, 100%, 85%, ${0.85 * fade * flicker})`);
+    g.addColorStop(0.5, `hsla(305, 100%, 60%, ${0.5 * fade * flicker})`);
+    g.addColorStop(1, `hsla(285, 100%, 45%, 0)`);
     ctx.fillStyle = g;
     ctx.beginPath();
     ctx.arc(x, y, size * 3, 0, Math.PI * 2);
     ctx.fill();
-    // Bright core
-    ctx.fillStyle = `hsla(320, 100%, 92%, ${fade * flicker})`;
+    ctx.fillStyle = `hsla(320, 100%, 96%, ${fade * flicker})`;
     ctx.beginPath();
     ctx.arc(x, y, size * 0.7, 0, Math.PI * 2);
     ctx.fill();
   }
   ctx.restore();
 
-  // Lens flares — quick warm twinkles on the ring (the "rizz" sparkle)
+  // ── Lens flares (8-point sparkles) ───────────────────────────
   for (const f of flares) {
     const flicker = 0.5 + 0.5 * Math.sin(time * f.speed + f.phase);
-    if (flicker < 0.2) continue;
+    if (flicker < 0.15) continue;
     const x = cx + Math.cos(f.angle) * f.radius;
     const y = cy + Math.sin(f.angle) * f.radius;
-    const len = (f.size + flicker * 3) * DPR;
+    const len = (f.size + flicker * 4) * DPR;
     ctx.save();
     ctx.translate(x, y);
-    ctx.rotate(time * 0.4 + f.phase);
-    ctx.strokeStyle = `hsla(320, 100%, 85%, ${flicker})`;
-    ctx.lineWidth = 1 * DPR;
+    ctx.rotate(time * 0.5 + f.phase);
+    ctx.strokeStyle = `hsla(320, 100%, 92%, ${flicker})`;
+    ctx.lineWidth = 1.1 * DPR;
     ctx.lineCap = "round";
     ctx.beginPath();
     ctx.moveTo(-len, 0);
     ctx.lineTo(len, 0);
-    ctx.moveTo(0, -len * 0.7);
-    ctx.lineTo(0, len * 0.7);
+    ctx.moveTo(0, -len);
+    ctx.lineTo(0, len);
+    const dl = len * 0.55;
+    ctx.moveTo(-dl, -dl);
+    ctx.lineTo(dl, dl);
+    ctx.moveTo(-dl, dl);
+    ctx.lineTo(dl, -dl);
     ctx.stroke();
     ctx.beginPath();
-    ctx.arc(0, 0, 1.1 * DPR, 0, Math.PI * 2);
-    ctx.fillStyle = `hsla(320, 100%, 95%, ${flicker})`;
+    ctx.arc(0, 0, 1.3 * DPR, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(320, 100%, 98%, ${flicker})`;
     ctx.fill();
     ctx.restore();
   }
