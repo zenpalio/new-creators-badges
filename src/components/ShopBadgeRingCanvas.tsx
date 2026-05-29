@@ -2138,7 +2138,7 @@ function drawGigaChad(
   ctx.restore();
 }
 
-
+interface ShopBadgeRingCanvasProps {
   badgeName: string;
   glowColor: string;
 }
