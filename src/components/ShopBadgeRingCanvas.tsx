@@ -1871,25 +1871,25 @@ function drawFckingLegend(
   flames: Flame[],
   sparks: Spark[],
 ) {
-  // 1. Bottom-up heat glow (warm gradient pushed from below the ring)
+  // 1. Tight red heat glow (centered, contained within canvas bounds)
   const heat = ctx.createRadialGradient(
     cx,
-    cy + baseRadius * 0.4,
-    baseRadius * 0.2,
+    cy + baseRadius * 0.15,
+    baseRadius * 0.3,
     cx,
-    cy + baseRadius * 0.4,
-    baseRadius * 2.0,
+    cy + baseRadius * 0.15,
+    baseRadius * 1.35,
   );
   const pulse = 0.5 + Math.sin(time * 3) * 0.5;
-  heat.addColorStop(0, `hsla(25, 100%, 55%, ${0.28 + pulse * 0.1})`);
-  heat.addColorStop(0.4, `hsla(15, 100%, 45%, ${0.14 + pulse * 0.06})`);
-  heat.addColorStop(1, `hsla(0, 90%, 30%, 0)`);
+  heat.addColorStop(0, `hsla(8, 100%, 50%, ${0.22 + pulse * 0.08})`);
+  heat.addColorStop(0.5, `hsla(0, 95%, 40%, ${0.12 + pulse * 0.05})`);
+  heat.addColorStop(1, `hsla(355, 90%, 25%, 0)`);
   ctx.fillStyle = heat;
   ctx.beginPath();
-  ctx.arc(cx, cy, baseRadius * 2.2, 0, Math.PI * 2);
+  ctx.arc(cx, cy, baseRadius * 1.4, 0, Math.PI * 2);
   ctx.fill();
 
-  // 2. Smoldering fiery ring with crackling wave
+  // 2. Smoldering crimson ring with crackling wave
   const steps = 160;
   ctx.beginPath();
   for (let i = 0; i <= steps; i++) {
@@ -1904,15 +1904,15 @@ function drawFckingLegend(
     else ctx.lineTo(x, y);
   }
   ctx.closePath();
-  ctx.strokeStyle = `hsla(25, 100%, 60%, 0.9)`;
+  ctx.strokeStyle = `hsla(5, 100%, 55%, 0.95)`;
   ctx.lineWidth = 2.4 * DPR;
-  ctx.shadowColor = `hsla(20, 100%, 55%, 1)`;
-  ctx.shadowBlur = 16 * DPR;
+  ctx.shadowColor = `hsla(0, 100%, 50%, 1)`;
+  ctx.shadowBlur = 12 * DPR;
   ctx.stroke();
-  // hot inner outline
+  // hot inner outline (bright ember)
   ctx.lineWidth = 1.2 * DPR;
-  ctx.strokeStyle = `hsla(50, 100%, 85%, 0.7)`;
-  ctx.shadowBlur = 6 * DPR;
+  ctx.strokeStyle = `hsla(20, 100%, 75%, 0.6)`;
+  ctx.shadowBlur = 4 * DPR;
   ctx.stroke();
   ctx.shadowBlur = 0;
 
