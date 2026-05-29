@@ -1524,7 +1524,20 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
       case "Rizzler": {
         if (embersRef.current.length === 0) embersRef.current = makeEmbers(22);
         if (flaresRef.current.length === 0) flaresRef.current = makeFlares(7, baseRadius);
-        drawRizzler(ctx, cx, cy, baseRadius, time, embersRef.current, flaresRef.current);
+        if (pulsesRef.current.length === 0) pulsesRef.current = makePulses(2);
+        if (orbitHeartsRef.current.length === 0) orbitHeartsRef.current = makeOrbitHearts(5);
+        drawRizzler(
+          ctx,
+          cx,
+          cy,
+          baseRadius,
+          time,
+          embersRef.current,
+          flaresRef.current,
+          pulsesRef.current,
+          orbitHeartsRef.current,
+          boltsRef.current,
+        );
         break;
       }
       default:
