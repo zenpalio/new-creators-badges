@@ -1581,15 +1581,15 @@ function drawHornyRoyalty(
   flames: HornFlame[],
   jewels: Jewel[],
 ) {
-  // Soft purple breathing aura
+  // Subtle purple breathing aura
   const breath = 0.5 + Math.sin(time * 1.2) * 0.5;
-  const auraGrad = ctx.createRadialGradient(cx, cy, baseRadius * 0.8, cx, cy, baseRadius * 1.7);
-  auraGrad.addColorStop(0, `hsla(285, 85%, 50%, ${0.22 + breath * 0.1})`);
-  auraGrad.addColorStop(0.6, `hsla(275, 80%, 30%, ${0.1 + breath * 0.05})`);
-  auraGrad.addColorStop(1, `hsla(265, 70%, 18%, 0)`);
+  const auraGrad = ctx.createRadialGradient(cx, cy, baseRadius * 0.95, cx, cy, baseRadius * 1.4);
+  auraGrad.addColorStop(0, `hsla(285, 80%, 50%, ${0.08 + breath * 0.05})`);
+  auraGrad.addColorStop(0.6, `hsla(275, 70%, 30%, ${0.04 + breath * 0.02})`);
+  auraGrad.addColorStop(1, `hsla(265, 60%, 18%, 0)`);
   ctx.fillStyle = auraGrad;
   ctx.beginPath();
-  ctx.arc(cx, cy, baseRadius * 1.7, 0, Math.PI * 2);
+  ctx.arc(cx, cy, baseRadius * 1.4, 0, Math.PI * 2);
   ctx.fill();
 
   // Subtle gold rim hint
