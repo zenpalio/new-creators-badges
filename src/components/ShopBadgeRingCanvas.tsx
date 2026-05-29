@@ -1225,7 +1225,7 @@ function drawRizzler(
     ctx.stroke();
     ctx.beginPath();
     ctx.arc(0, 0, 1.1 * DPR, 0, Math.PI * 2);
-    ctx.fillStyle = `hsla(40, 100%, 92%, ${flicker})`;
+    ctx.fillStyle = `hsla(320, 100%, 95%, ${flicker})`;
     ctx.fill();
     ctx.restore();
   }
