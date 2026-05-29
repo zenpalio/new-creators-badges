@@ -4010,6 +4010,305 @@ function drawPromptDiddy(
 }
 
 
+// ─── AI Simp: Lub-dub heartbeat aura + EKG sweep + heart shockwaves + throbbing hearts ───
+interface HeartPulse {
+  life: number;
+  maxLife: number;
+  delay: number;
+}
+
+interface SimpHeart {
+  angle: number;
+  radius: number;       // factor of baseRadius
+  size: number;
+  pulsePhase: number;
+  life: number;
+  maxLife: number;
+  rot: number;
+  hue: number;
+}
+
+interface SimpSparkle {
+  angle: number;
+  radius: number;
+  size: number;
+  life: number;
+  maxLife: number;
+}
+
+interface SimpFloatEmoji {
+  emoji: string;
+  angle: number;
+  speed: number;
+  size: number;
+  bobPhase: number;
+}
+
+const SIMP_GLYPHS = ["💗", "😍", "🥰", "💘"];
+
+// Returns 0..1 pulse value with lub-dub heartbeat envelope (period ~1.0s)
+const heartbeatEnv = (time: number) => {
+  const t = (time % 1.0);
+  const lub = Math.max(0, 1 - Math.abs(t - 0.05) * 14);
+  const dub = Math.max(0, 1 - Math.abs(t - 0.28) * 16);
+  return Math.max(lub, dub * 0.85);
+};
+
+const makeHeartPulses = (count: number): HeartPulse[] =>
+  Array.from({ length: count }, (_, i) => ({
+    life: -i * 28,
+    maxLife: 70,
+    delay: 0,
+  }));
+
+const makeSimpHearts = (count: number): SimpHeart[] =>
+  Array.from({ length: count }, () => ({
+    angle: Math.random() * Math.PI * 2,
+    radius: 1.05 + Math.random() * 0.18,
+    size: 3.5 + Math.random() * 2.5,
+    pulsePhase: Math.random() * Math.PI * 2,
+    life: Math.random() * 140,
+    maxLife: 120 + Math.random() * 80,
+    rot: (Math.random() - 0.5) * 0.5,
+    hue: 335 + Math.random() * 15,
+  }));
+
+const makeSimpSparkles = (count: number): SimpSparkle[] =>
+  Array.from({ length: count }, () => ({
+    angle: Math.random() * Math.PI * 2,
+    radius: 0.98 + Math.random() * 0.28,
+    size: 1.3 + Math.random() * 1.6,
+    life: Math.random() * 50,
+    maxLife: 35 + Math.random() * 30,
+  }));
+
+const makeSimpFloatEmojis = (count: number): SimpFloatEmoji[] =>
+  Array.from({ length: count }, (_, i) => ({
+    emoji: SIMP_GLYPHS[i % SIMP_GLYPHS.length],
+    angle: (i / count) * Math.PI * 2,
+    speed: 0.07 + Math.random() * 0.04,
+    size: 12 + Math.random() * 2,
+    bobPhase: Math.random() * Math.PI * 2,
+  }));
+
+// Draws a glossy filled heart (rose-magenta gradient)
+function drawFilledHeart(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  rot: number,
+  hue: number,
+  alpha: number,
+) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  const s = size;
+  const grad = ctx.createLinearGradient(0, -s, 0, s);
+  grad.addColorStop(0, `hsla(${hue}, 100%, 88%, ${alpha})`);
+  grad.addColorStop(0.55, `hsla(${hue}, 95%, 60%, ${alpha})`);
+  grad.addColorStop(1, `hsla(${hue - 10}, 85%, 38%, ${alpha * 0.95})`);
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.moveTo(0, s * 0.4);
+  ctx.bezierCurveTo(s * 1.1, -s * 0.4, s * 0.4, -s * 1.1, 0, -s * 0.3);
+  ctx.bezierCurveTo(-s * 0.4, -s * 1.1, -s * 1.1, -s * 0.4, 0, s * 0.4);
+  ctx.fill();
+  // Highlight
+  ctx.fillStyle = `hsla(0, 0%, 100%, ${alpha * 0.55})`;
+  ctx.beginPath();
+  ctx.ellipse(-s * 0.32, -s * 0.45, s * 0.16, s * 0.22, -0.5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+// Draws a heart-shaped stroked path of given size centered at (0,0). Caller handles transform.
+function tracePulseHeart(ctx: CanvasRenderingContext2D, s: number) {
+  ctx.beginPath();
+  ctx.moveTo(0, s * 0.4);
+  ctx.bezierCurveTo(s * 1.1, -s * 0.4, s * 0.4, -s * 1.1, 0, -s * 0.3);
+  ctx.bezierCurveTo(-s * 0.4, -s * 1.1, -s * 1.1, -s * 0.4, 0, s * 0.4);
+}
+
+function drawAiSimp(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  baseRadius: number,
+  time: number,
+  pulses: HeartPulse[],
+  hearts: SimpHeart[],
+  sparkles: SimpSparkle[],
+  emojis: SimpFloatEmoji[],
+) {
+  const auraMax = baseRadius * 1.3;
+  const beat = heartbeatEnv(time);
+
+  // 1. Contained rose aura that throbs with the heartbeat
+  const breath = 0.5 + Math.sin(time * 1.6) * 0.5;
+  const aura = ctx.createRadialGradient(cx, cy, baseRadius * 0.88, cx, cy, auraMax);
+  aura.addColorStop(0, `hsla(340, 100%, 75%, 0)`);
+  aura.addColorStop(0.45, `hsla(340, 95%, 60%, ${0.2 + breath * 0.08 + beat * 0.12})`);
+  aura.addColorStop(0.8, `hsla(330, 85%, 45%, ${0.1 + breath * 0.04 + beat * 0.06})`);
+  aura.addColorStop(1, `hsla(325, 75%, 28%, 0)`);
+  ctx.fillStyle = aura;
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.fill();
+
+  // 2. Floating throbbing simp hearts clipped to ring zone
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.arc(cx, cy, baseRadius * 0.95, 0, Math.PI * 2, true);
+  ctx.clip();
+  hearts.forEach((h) => {
+    h.life += 1;
+    h.pulsePhase += 0.04;
+    if (h.life >= h.maxLife) {
+      h.angle = Math.random() * Math.PI * 2;
+      h.radius = 1.05 + Math.random() * 0.18;
+      h.size = 3.5 + Math.random() * 2.5;
+      h.life = 0;
+      h.maxLife = 120 + Math.random() * 80;
+      h.rot = (Math.random() - 0.5) * 0.5;
+      h.hue = 335 + Math.random() * 15;
+    }
+    const t = h.life / h.maxLife;
+    const fade = t < 0.2 ? t / 0.2 : t > 0.78 ? (1 - t) / 0.22 : 1;
+    // Each heart syncs subtly with global beat
+    const scale = 0.85 + 0.15 * Math.sin(h.pulsePhase) + beat * 0.25;
+    const x = cx + Math.cos(h.angle) * baseRadius * h.radius;
+    const y = cy + Math.sin(h.angle) * baseRadius * h.radius;
+    // Halo
+    const halo = ctx.createRadialGradient(x, y, 0, x, y, h.size * DPR * 2.4);
+    halo.addColorStop(0, `hsla(${h.hue}, 100%, 75%, ${0.4 * fade})`);
+    halo.addColorStop(1, `hsla(${h.hue}, 100%, 55%, 0)`);
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(x, y, h.size * DPR * 2.4, 0, Math.PI * 2);
+    ctx.fill();
+    drawFilledHeart(ctx, x, y, h.size * DPR * scale, h.rot, h.hue, 0.9 * fade);
+  });
+  ctx.restore();
+
+  // 3. Heart-shaped shockwaves expanding outward (synced to heartbeat)
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.clip();
+  pulses.forEach((p, idx) => {
+    p.life += 1;
+    if (p.life >= p.maxLife) {
+      p.life = -idx * 28;
+    }
+    if (p.life < 0) return;
+    const t = p.life / p.maxLife;
+    const env = 1 - t;
+    const baseSize = baseRadius * (0.6 + t * 0.75);
+    ctx.save();
+    ctx.translate(cx, cy);
+    // Bias upward so heart sits centered visually
+    ctx.translate(0, baseSize * 0.12);
+    ctx.strokeStyle = `hsla(340, 100%, 80%, ${0.7 * env})`;
+    ctx.lineWidth = 1.6 * DPR * env;
+    ctx.shadowColor = `hsla(335, 100%, 65%, ${0.6 * env})`;
+    ctx.shadowBlur = 8 * DPR * env;
+    tracePulseHeart(ctx, baseSize);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+    ctx.restore();
+  });
+  ctx.restore();
+
+  // 4. Double-stroke rose ring + EKG-style heartbeat sweep arc
+  ctx.save();
+  ctx.strokeStyle = `hsla(340, 85%, 45%, 0.9)`;
+  ctx.lineWidth = 3 * DPR;
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.strokeStyle = `hsla(345, 100%, 82%, 0.92)`;
+  ctx.lineWidth = 1.2 * DPR;
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius - 1.6 * DPR, 0, Math.PI * 2);
+  ctx.stroke();
+  // Heartbeat sweep highlight: rotates and brightens on each beat
+  const sweepStart = time * 1.4;
+  const sweepLen = Math.PI * (0.25 + beat * 0.2);
+  ctx.strokeStyle = `hsla(340, 100%, 92%, ${0.75 + beat * 0.25})`;
+  ctx.lineWidth = (2.0 + beat * 1.8) * DPR;
+  ctx.lineCap = "round";
+  ctx.shadowColor = `hsla(340, 100%, 70%, ${0.6 + beat * 0.4})`;
+  ctx.shadowBlur = (4 + beat * 6) * DPR;
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius, sweepStart, sweepStart + sweepLen);
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+  ctx.restore();
+
+  // 5. Tiny sparkle bursts
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.clip();
+  sparkles.forEach((s) => {
+    s.life += 1;
+    if (s.life >= s.maxLife) {
+      s.angle = Math.random() * Math.PI * 2;
+      s.radius = 0.98 + Math.random() * 0.28;
+      s.size = 1.3 + Math.random() * 1.6;
+      s.life = 0;
+      s.maxLife = 35 + Math.random() * 30;
+    }
+    const t = s.life / s.maxLife;
+    const pop = Math.sin(t * Math.PI);
+    const x = cx + Math.cos(s.angle) * baseRadius * s.radius;
+    const y = cy + Math.sin(s.angle) * baseRadius * s.radius;
+    const r = s.size * DPR * (0.6 + pop * 0.9);
+    ctx.strokeStyle = `hsla(345, 100%, 92%, ${0.95 * pop})`;
+    ctx.lineWidth = 1.2 * DPR;
+    ctx.lineCap = "round";
+    ctx.shadowColor = `hsla(340, 100%, 70%, ${0.85 * pop})`;
+    ctx.shadowBlur = r * 2.3;
+    ctx.beginPath();
+    ctx.moveTo(x - r, y);
+    ctx.lineTo(x + r, y);
+    ctx.moveTo(x, y - r);
+    ctx.lineTo(x, y + r);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  });
+  ctx.restore();
+
+  // 6. Orbiting simp emojis with heartbeat-synced scale
+  ctx.save();
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  emojis.forEach((e) => {
+    e.angle += e.speed * 0.016;
+    const bob = Math.sin(time * 1.8 + e.bobPhase) * 2 * DPR;
+    const x = cx + Math.cos(e.angle) * baseRadius;
+    const y = cy + Math.sin(e.angle) * baseRadius + bob;
+    const scale = 1 + beat * 0.18;
+    const halo = ctx.createRadialGradient(x, y, 0, x, y, e.size * DPR * 1.5);
+    halo.addColorStop(0, `hsla(340, 100%, 80%, ${0.55 + beat * 0.2})`);
+    halo.addColorStop(1, `hsla(330, 100%, 55%, 0)`);
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(x, y, e.size * DPR * 1.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.font = `${e.size * DPR * scale}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+    ctx.shadowColor = "hsla(340, 100%, 65%, 0.8)";
+    ctx.shadowBlur = 5 * DPR;
+    ctx.fillText(e.emoji, x, y);
+    ctx.shadowBlur = 0;
+  });
+  ctx.restore();
+}
+
+
 interface ShopBadgeRingCanvasProps {
   badgeName: string;
   glowColor: string;
@@ -4063,6 +4362,10 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
   const cashBillsRef = useRef<CashBill[]>([]);
   const goldSparklesRef = useRef<GoldSparkle[]>([]);
   const diddyEmojisRef = useRef<DiddyEmoji[]>([]);
+  const heartPulsesRef = useRef<HeartPulse[]>([]);
+  const simpHeartsRef = useRef<SimpHeart[]>([]);
+  const simpSparklesRef = useRef<SimpSparkle[]>([]);
+  const simpFloatEmojisRef = useRef<SimpFloatEmoji[]>([]);
   const rafRef = useRef<number>(0);
   const sizeRef = useRef({ w: 0, h: 0 });
 
@@ -4335,6 +4638,26 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         );
         break;
       }
+      case "AI Simp": {
+        if (heartPulsesRef.current.length === 0) heartPulsesRef.current = makeHeartPulses(3);
+        if (simpHeartsRef.current.length === 0) simpHeartsRef.current = makeSimpHearts(8);
+        if (simpSparklesRef.current.length === 0)
+          simpSparklesRef.current = makeSimpSparkles(12);
+        if (simpFloatEmojisRef.current.length === 0)
+          simpFloatEmojisRef.current = makeSimpFloatEmojis(4);
+        drawAiSimp(
+          ctx,
+          cx,
+          cy,
+          baseRadius,
+          time,
+          heartPulsesRef.current,
+          simpHeartsRef.current,
+          simpSparklesRef.current,
+          simpFloatEmojisRef.current,
+        );
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
@@ -4389,6 +4712,10 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
     cashBillsRef.current = [];
     goldSparklesRef.current = [];
     diddyEmojisRef.current = [];
+    heartPulsesRef.current = [];
+    simpHeartsRef.current = [];
+    simpSparklesRef.current = [];
+    simpFloatEmojisRef.current = [];
     sizeRef.current = { w: 0, h: 0 };
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
