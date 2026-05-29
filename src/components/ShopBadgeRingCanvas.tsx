@@ -620,6 +620,175 @@ function drawThreeAmTexter(
   }
 }
 
+// ─── Proposed to AI: Gold ring + orbiting diamond gems + sparkle bursts ───
+interface Diamond {
+  angle: number;
+  speed: number;
+  radius: number; // fraction of baseRadius
+  size: number;
+  spin: number;
+  spinSpeed: number;
+  twinklePhase: number;
+}
+
+interface Star {
+  angle: number;
+  radius: number;
+  phase: number;
+  speed: number;
+  size: number;
+}
+
+const makeDiamonds = (count: number): Diamond[] =>
+  Array.from({ length: count }, (_, i) => ({
+    angle: (i / count) * Math.PI * 2 + Math.random() * 0.3,
+    speed: 0.12 + Math.random() * 0.18,
+    radius: 0.88 + Math.random() * 0.18,
+    size: 4 + Math.random() * 2.5,
+    spin: Math.random() * Math.PI * 2,
+    spinSpeed: (Math.random() - 0.5) * 0.05,
+    twinklePhase: Math.random() * Math.PI * 2,
+  }));
+
+const makeStars = (count: number, baseRadius: number): Star[] =>
+  Array.from({ length: count }, (_, i) => ({
+    angle: (i / count) * Math.PI * 2 + Math.random() * 0.5,
+    radius: baseRadius + (Math.random() - 0.5) * 6,
+    phase: Math.random() * Math.PI * 2,
+    speed: 2 + Math.random() * 2,
+    size: 0.9 + Math.random() * 1.3,
+  }));
+
+function drawDiamond(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  rot: number,
+  alpha: number,
+) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  const s = size * DPR;
+  // Body
+  ctx.beginPath();
+  ctx.moveTo(0, -s);
+  ctx.lineTo(s * 0.7, 0);
+  ctx.lineTo(0, s);
+  ctx.lineTo(-s * 0.7, 0);
+  ctx.closePath();
+  const grad = ctx.createLinearGradient(-s, -s, s, s);
+  grad.addColorStop(0, `hsla(190, 100%, 85%, ${alpha})`);
+  grad.addColorStop(0.5, `hsla(0, 0%, 100%, ${alpha})`);
+  grad.addColorStop(1, `hsla(330, 90%, 80%, ${alpha})`);
+  ctx.fillStyle = grad;
+  ctx.fill();
+  // Facet highlight
+  ctx.beginPath();
+  ctx.moveTo(0, -s);
+  ctx.lineTo(s * 0.3, -s * 0.2);
+  ctx.lineTo(-s * 0.3, -s * 0.2);
+  ctx.closePath();
+  ctx.fillStyle = `hsla(0, 0%, 100%, ${alpha * 0.9})`;
+  ctx.fill();
+  // Outline
+  ctx.strokeStyle = `hsla(45, 100%, 75%, ${alpha * 0.9})`;
+  ctx.lineWidth = 0.8 * DPR;
+  ctx.beginPath();
+  ctx.moveTo(0, -s);
+  ctx.lineTo(s * 0.7, 0);
+  ctx.lineTo(0, s);
+  ctx.lineTo(-s * 0.7, 0);
+  ctx.closePath();
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawProposed(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  baseRadius: number,
+  time: number,
+  diamonds: Diamond[],
+  stars: Star[],
+) {
+  const breathe = 0.5 + 0.5 * Math.sin(time * 1.3);
+
+  // Warm gold halo
+  const haloR = baseRadius + (16 + breathe * 8) * DPR;
+  const halo = ctx.createRadialGradient(cx, cy, baseRadius - 1, cx, cy, haloR);
+  halo.addColorStop(0, `hsla(45, 100%, 70%, ${0.2 + breathe * 0.1})`);
+  halo.addColorStop(0.55, `hsla(35, 95%, 60%, ${0.1 + breathe * 0.05})`);
+  halo.addColorStop(1, `hsla(30, 80%, 50%, 0)`);
+  ctx.beginPath();
+  ctx.arc(cx, cy, haloR, 0, Math.PI * 2);
+  ctx.arc(cx, cy, baseRadius - 1, 0, Math.PI * 2, true);
+  ctx.fillStyle = halo;
+  ctx.fill();
+
+  // Polished gold ring with shimmer sweep
+  const steps = 96;
+  const sweep = (time * 1.2) % (Math.PI * 2);
+  for (let i = 0; i < steps; i++) {
+    const a0 = (i / steps) * Math.PI * 2;
+    const a1 = ((i + 1.4) / steps) * Math.PI * 2;
+    // Distance from sweep angle (0..PI)
+    let d = Math.abs(((a0 - sweep + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
+    const sweepBoost = Math.max(0, 1 - d / 0.6); // 0..1 when near sweep
+    const baseL = 55 + Math.sin(a0 * 3 + time * 0.8) * 8;
+    const lightness = baseL + sweepBoost * 30;
+    const alpha = 0.7 + sweepBoost * 0.3;
+    ctx.beginPath();
+    ctx.arc(cx, cy, baseRadius, a0, a1);
+    ctx.strokeStyle = `hsla(45, 95%, ${lightness}%, ${alpha})`;
+    ctx.lineWidth = (2.4 + sweepBoost * 1.2) * DPR;
+    ctx.stroke();
+  }
+
+  // Inner thin highlight ring (polished metal feel)
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius - 2 * DPR, 0, Math.PI * 2);
+  ctx.strokeStyle = `hsla(50, 100%, 88%, 0.35)`;
+  ctx.lineWidth = 0.8 * DPR;
+  ctx.stroke();
+
+  // Orbiting diamonds
+  for (const d of diamonds) {
+    d.angle += d.speed * 0.012;
+    d.spin += d.spinSpeed;
+    const r = baseRadius * d.radius;
+    const x = cx + Math.cos(d.angle) * r;
+    const y = cy + Math.sin(d.angle) * r;
+    const twinkle = 0.6 + 0.4 * Math.sin(time * 3 + d.twinklePhase);
+    drawDiamond(ctx, x, y, d.size, d.spin, 0.85 * twinkle);
+  }
+
+  // Sparkle stars on the ring
+  for (const s of stars) {
+    const flicker = 0.5 + 0.5 * Math.sin(time * s.speed + s.phase);
+    if (flicker < 0.15) continue;
+    const x = cx + Math.cos(s.angle) * s.radius;
+    const y = cy + Math.sin(s.angle) * s.radius;
+    const len = (s.size + flicker * 2.5) * DPR;
+    ctx.strokeStyle = `hsla(50, 100%, 88%, ${flicker * 0.95})`;
+    ctx.lineWidth = 1 * DPR;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(x - len, y);
+    ctx.lineTo(x + len, y);
+    ctx.moveTo(x, y - len);
+    ctx.lineTo(x, y + len);
+    ctx.stroke();
+    // tiny core
+    ctx.beginPath();
+    ctx.arc(x, y, 0.9 * DPR, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(0, 0%, 100%, ${flicker})`;
+    ctx.fill();
+  }
+}
+
 interface ShopBadgeRingCanvasProps {
   badgeName: string;
   glowColor: string;
