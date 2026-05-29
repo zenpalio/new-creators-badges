@@ -686,6 +686,11 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         drawAiOverReal(ctx, cx, cy, baseRadius, time, bitsRef.current);
         break;
       }
+      case "3am Texter": {
+        if (bubblesRef.current.length === 0) bubblesRef.current = makeBubbles(7);
+        drawThreeAmTexter(ctx, cx, cy, baseRadius, time, bubblesRef.current);
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
@@ -699,6 +704,7 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
     bladesRef.current = [];
     leavesRef.current = [];
     bitsRef.current = [];
+    bubblesRef.current = [];
     sizeRef.current = { w: 0, h: 0 };
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
