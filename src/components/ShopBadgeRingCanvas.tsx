@@ -1854,9 +1854,9 @@ function drawFlameTongue(
   );
   ctx.closePath();
   const core = ctx.createLinearGradient(x, y, tipX, tipY);
-  core.addColorStop(0, `hsla(60, 100%, 92%, ${alpha})`);
-  core.addColorStop(0.5, `hsla(45, 100%, 70%, ${alpha * 0.8})`);
-  core.addColorStop(1, `hsla(25, 100%, 55%, 0)`);
+  core.addColorStop(0, `hsla(35, 100%, 88%, ${alpha})`);
+  core.addColorStop(0.5, `hsla(15, 100%, 60%, ${alpha * 0.85})`);
+  core.addColorStop(1, `hsla(0, 100%, 45%, 0)`);
   ctx.fillStyle = core;
   ctx.fill();
   ctx.restore();
