@@ -1889,6 +1889,7 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
     sigilsRef.current = [];
     hornFlamesRef.current = [];
     jewelsRef.current = [];
+    naughtyEmojisRef.current = [];
     sizeRef.current = { w: 0, h: 0 };
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
