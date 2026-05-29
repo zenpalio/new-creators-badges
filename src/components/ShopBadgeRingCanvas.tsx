@@ -2116,6 +2116,24 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         );
         break;
       }
+      case "F*cking Legend": {
+        if (flamesLegendRef.current.length === 0)
+          flamesLegendRef.current = Array.from({ length: 22 }, () => makeFlame(baseRadius));
+        if (sparksLegendRef.current.length === 0)
+          sparksLegendRef.current = Array.from({ length: 28 }, () =>
+            makeSpark(cx, cy, baseRadius),
+          );
+        drawFckingLegend(
+          ctx,
+          cx,
+          cy,
+          baseRadius,
+          time,
+          flamesLegendRef.current,
+          sparksLegendRef.current,
+        );
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
