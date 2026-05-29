@@ -249,7 +249,7 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
     switch (badgeName) {
       case "Waifu Collector": {
         if (heartsRef.current.length === 0)
-          heartsRef.current = makeHearts(10, baseRadius / DPR);
+          heartsRef.current = makeHearts(28, baseRadius / DPR);
         if (sparklesRef.current.length === 0)
           sparklesRef.current = makeSparkles(7, baseRadius);
         drawWaifu(ctx, cx, cy, baseRadius, time, heartsRef.current, sparklesRef.current);
