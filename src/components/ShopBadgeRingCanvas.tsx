@@ -177,6 +177,173 @@ function drawWaifu(
   }
 }
 
+// ─── Touch Grass Never: Green ring + swaying grass blades + drifting leaves ───
+interface Blade {
+  angle: number;
+  length: number;
+  width: number;
+  swayPhase: number;
+  swayAmp: number;
+  hue: number;
+  lightness: number;
+}
+interface Leaf {
+  angle: number;
+  radius: number;
+  speed: number;
+  spin: number;
+  spinSpeed: number;
+  size: number;
+  life: number;
+  maxLife: number;
+}
+
+const makeBlades = (count: number): Blade[] =>
+  Array.from({ length: count }, (_, i) => ({
+    angle: (i / count) * Math.PI * 2 + (Math.random() - 0.5) * 0.08,
+    length: 10 + Math.random() * 10,
+    width: 1.4 + Math.random() * 1.2,
+    swayPhase: Math.random() * Math.PI * 2,
+    swayAmp: 0.18 + Math.random() * 0.22,
+    hue: 100 + Math.random() * 30,
+    lightness: 32 + Math.random() * 22,
+  }));
+
+const makeLeaves = (count: number, baseRadius: number): Leaf[] =>
+  Array.from({ length: count }, () => ({
+    angle: Math.random() * Math.PI * 2,
+    radius: baseRadius * (0.55 + Math.random() * 0.5),
+    speed: 0.08 + Math.random() * 0.15,
+    spin: Math.random() * Math.PI * 2,
+    spinSpeed: (Math.random() - 0.5) * 0.06,
+    size: 2.5 + Math.random() * 2.5,
+    life: Math.random() * 200,
+    maxLife: 160 + Math.random() * 120,
+  }));
+
+function drawLeaf(ctx: CanvasRenderingContext2D, x: number, y: number, size: number, rot: number) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  ctx.beginPath();
+  ctx.moveTo(0, -size);
+  ctx.quadraticCurveTo(size * 0.9, -size * 0.2, 0, size);
+  ctx.quadraticCurveTo(-size * 0.9, -size * 0.2, 0, -size);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawTouchGrass(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  baseRadius: number,
+  time: number,
+  blades: Blade[],
+  leaves: Leaf[],
+) {
+  const windGlobal = Math.sin(time * 1.6) * 0.5 + Math.sin(time * 0.7) * 0.3;
+  const breathe = 0.5 + 0.5 * Math.sin(time * 1.1);
+
+  // Soft earthy green halo
+  const haloR = baseRadius + (14 + breathe * 8) * DPR;
+  const halo = ctx.createRadialGradient(cx, cy, baseRadius - 1, cx, cy, haloR);
+  halo.addColorStop(0, `hsla(120, 60%, 38%, ${0.13 + breathe * 0.07})`);
+  halo.addColorStop(0.6, `hsla(115, 55%, 30%, ${0.05 + breathe * 0.03})`);
+  halo.addColorStop(1, `hsla(120, 50%, 25%, 0)`);
+  ctx.beginPath();
+  ctx.arc(cx, cy, haloR, 0, Math.PI * 2);
+  ctx.arc(cx, cy, baseRadius - 1, 0, Math.PI * 2, true);
+  ctx.fillStyle = halo;
+  ctx.fill();
+
+  // Green ring
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius, 0, Math.PI * 2);
+  ctx.strokeStyle = `hsla(120, 65%, 42%, ${0.5 + breathe * 0.25})`;
+  ctx.lineWidth = (1.8 + breathe * 0.6) * DPR;
+  ctx.stroke();
+
+  // Grass blades sprouting outward, swaying with wind
+  for (const b of blades) {
+    const localWind = windGlobal + Math.sin(time * 2.2 + b.swayPhase + b.angle * 3) * 0.6;
+    const sway = localWind * b.swayAmp;
+
+    const rootX = cx + Math.cos(b.angle) * baseRadius;
+    const rootY = cy + Math.sin(b.angle) * baseRadius;
+    const radial = b.length * DPR;
+    const perpAngle = b.angle + Math.PI / 2;
+    const tangent = Math.sin(time * 1.2 + b.swayPhase) * 4 * DPR + sway * radial * 0.5;
+    const tipX = rootX + Math.cos(b.angle) * radial + Math.cos(perpAngle) * tangent;
+    const tipY = rootY + Math.sin(b.angle) * radial + Math.sin(perpAngle) * tangent;
+    const midX = (rootX + tipX) / 2 + Math.cos(perpAngle) * tangent * 0.4;
+    const midY = (rootY + tipY) / 2 + Math.sin(perpAngle) * tangent * 0.4;
+
+    const halfW = b.width * DPR;
+    const baseLX = rootX + Math.cos(perpAngle) * halfW;
+    const baseLY = rootY + Math.sin(perpAngle) * halfW;
+    const baseRX = rootX - Math.cos(perpAngle) * halfW;
+    const baseRY = rootY - Math.sin(perpAngle) * halfW;
+
+    ctx.beginPath();
+    ctx.moveTo(baseLX, baseLY);
+    ctx.quadraticCurveTo(midX + Math.cos(perpAngle) * halfW * 0.3, midY + Math.sin(perpAngle) * halfW * 0.3, tipX, tipY);
+    ctx.quadraticCurveTo(midX - Math.cos(perpAngle) * halfW * 0.3, midY - Math.sin(perpAngle) * halfW * 0.3, baseRX, baseRY);
+    ctx.closePath();
+    const grad = ctx.createLinearGradient(rootX, rootY, tipX, tipY);
+    grad.addColorStop(0, `hsla(${b.hue}, 70%, ${b.lightness}%, 0.9)`);
+    grad.addColorStop(1, `hsla(${b.hue + 5}, 80%, ${b.lightness + 18}%, 0.55)`);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Spine highlight
+    ctx.beginPath();
+    ctx.moveTo(rootX, rootY);
+    ctx.quadraticCurveTo(midX, midY, tipX, tipY);
+    ctx.strokeStyle = `hsla(${b.hue + 10}, 80%, ${b.lightness + 25}%, 0.5)`;
+    ctx.lineWidth = 0.6 * DPR;
+    ctx.stroke();
+  }
+
+  // Drifting leaves inside
+  for (const l of leaves) {
+    l.angle += l.speed * 0.005;
+    l.spin += l.spinSpeed;
+    l.life += 1;
+    if (l.life > l.maxLife) {
+      l.life = 0;
+      l.angle = Math.random() * Math.PI * 2;
+      l.radius = (baseRadius / DPR) * (0.55 + Math.random() * 0.5);
+      l.size = 2.5 + Math.random() * 2.5;
+    }
+    const lifeFrac = l.life / l.maxLife;
+    const fade =
+      lifeFrac < 0.15 ? lifeFrac / 0.15 : lifeFrac > 0.7 ? (1 - lifeFrac) / 0.3 : 1;
+    const drift = Math.sin(time * 0.9 + l.angle * 2) * 4 * DPR;
+    const r = l.radius * DPR + drift;
+    const px = cx + Math.cos(l.angle) * r;
+    const py = cy + Math.sin(l.angle) * r;
+    const s = l.size * DPR;
+
+    ctx.fillStyle = `hsla(110, 70%, 50%, ${0.12 * fade})`;
+    drawLeaf(ctx, px, py, s * 1.6, l.spin);
+    ctx.fillStyle = `hsla(115, 75%, 45%, ${0.85 * fade})`;
+    drawLeaf(ctx, px, py, s, l.spin);
+
+    ctx.strokeStyle = `hsla(120, 70%, 75%, ${0.6 * fade})`;
+    ctx.lineWidth = 0.5 * DPR;
+    ctx.save();
+    ctx.translate(px, py);
+    ctx.rotate(l.spin);
+    ctx.beginPath();
+    ctx.moveTo(0, -s);
+    ctx.lineTo(0, s);
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
 // Generic fallback ring (matches old badge-border-pulse) until each badge gets its own animation
 function drawFallback(
   ctx: CanvasRenderingContext2D,
