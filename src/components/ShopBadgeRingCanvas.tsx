@@ -148,7 +148,7 @@ function drawWaifu(
     if (h.life > h.maxLife) {
       h.life = 0;
       h.angle = Math.random() * Math.PI * 2;
-      h.radius = baseRadius + 2 + Math.random() * 4;
+      h.radius = baseRadius - 2 + Math.random() * 4;
       h.size = 3 + Math.random() * 3.5;
       h.hueShift = -10 + Math.random() * 25;
     }
