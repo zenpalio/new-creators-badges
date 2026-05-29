@@ -3072,6 +3072,28 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         );
         break;
       }
+      case "Anime Addict": {
+        if (sakuraPetalsRef.current.length === 0)
+          sakuraPetalsRef.current = makeSakuraPetals(14);
+        if (speedLinesRef.current.length === 0)
+          speedLinesRef.current = makeSpeedLines(18);
+        if (animeSparklesRef.current.length === 0)
+          animeSparklesRef.current = makeAnimeSparkles(10);
+        if (animeEmojisRef.current.length === 0)
+          animeEmojisRef.current = makeAnimeEmojis(4);
+        drawAnimeAddict(
+          ctx,
+          cx,
+          cy,
+          baseRadius,
+          time,
+          sakuraPetalsRef.current,
+          speedLinesRef.current,
+          animeSparklesRef.current,
+          animeEmojisRef.current,
+        );
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
