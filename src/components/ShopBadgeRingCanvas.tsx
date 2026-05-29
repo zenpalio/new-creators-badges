@@ -1155,6 +1155,12 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         drawProposed(ctx, cx, cy, baseRadius, time, diamondsRef.current, starsRef.current);
         break;
       }
+      case "Harem King": {
+        if (crownsRef.current.length === 0) crownsRef.current = makeCrowns(6);
+        if (petalsRef.current.length === 0) petalsRef.current = makePetals(14);
+        drawHaremKing(ctx, cx, cy, baseRadius, time, crownsRef.current, petalsRef.current);
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
@@ -1171,6 +1177,8 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
     bubblesRef.current = [];
     diamondsRef.current = [];
     starsRef.current = [];
+    crownsRef.current = [];
+    petalsRef.current = [];
     sizeRef.current = { w: 0, h: 0 };
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
