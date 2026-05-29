@@ -62,7 +62,7 @@ const badgeEffects: Record<string, {
   },
   "F*cking Legend": {
     className: "badge-effect-legend",
-    glowColor: "hsl(25 100% 55%)",
+    glowColor: "hsl(5 90% 50%)",
     animation: "fire",
     particleEmoji: "🔥",
   },
