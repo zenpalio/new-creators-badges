@@ -3098,6 +3098,280 @@ function drawCougarTamer(
 }
 
 
+// ─── Mommy Issues: Violet aura + falling tears + throbbing wounded hearts + longing emojis ───
+interface Teardrop {
+  angle: number;       // attachment angle on ring (top-biased)
+  yOff: number;        // falling offset from attachment point
+  vy: number;
+  life: number;
+  maxLife: number;
+  size: number;
+  alpha: number;
+}
+
+interface WoundedHeart {
+  angle: number;
+  radius: number;      // factor of baseRadius
+  size: number;
+  pulsePhase: number;
+  life: number;
+  maxLife: number;
+  rot: number;
+}
+
+interface MommyEmoji {
+  emoji: string;
+  angle: number;
+  speed: number;
+  size: number;
+  bobPhase: number;
+}
+
+const MOMMY_GLYPHS = ["😭", "💔", "🍼", "💜"];
+
+const makeTeardrops = (count: number): Teardrop[] =>
+  Array.from({ length: count }, () => {
+    // Bias to top half (negative y) so tears fall down
+    const a = -Math.PI / 2 + (Math.random() - 0.5) * 2.2;
+    return {
+      angle: a,
+      yOff: 0,
+      vy: 0.4 + Math.random() * 0.7,
+      life: Math.random() * 90,
+      maxLife: 80 + Math.random() * 50,
+      size: 1.8 + Math.random() * 1.2,
+      alpha: 0.7 + Math.random() * 0.3,
+    };
+  });
+
+const makeWoundedHearts = (count: number): WoundedHeart[] =>
+  Array.from({ length: count }, () => ({
+    angle: Math.random() * Math.PI * 2,
+    radius: 1.05 + Math.random() * 0.16,
+    size: 4 + Math.random() * 2,
+    pulsePhase: Math.random() * Math.PI * 2,
+    life: Math.random() * 150,
+    maxLife: 130 + Math.random() * 80,
+    rot: (Math.random() - 0.5) * 0.4,
+  }));
+
+const makeMommyEmojis = (count: number): MommyEmoji[] =>
+  Array.from({ length: count }, (_, i) => ({
+    emoji: MOMMY_GLYPHS[i % MOMMY_GLYPHS.length],
+    angle: (i / count) * Math.PI * 2,
+    speed: 0.06 + Math.random() * 0.04,
+    size: 12 + Math.random() * 2,
+    bobPhase: Math.random() * Math.PI * 2,
+  }));
+
+// Draws a cracked/wounded heart shape
+function drawWoundedHeart(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  rot: number,
+  pulse: number,
+  alpha: number,
+) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  const s = size * (0.9 + pulse * 0.15);
+  // Heart fill gradient (violet to deep magenta)
+  const grad = ctx.createLinearGradient(0, -s, 0, s);
+  grad.addColorStop(0, `hsla(300, 95%, 75%, ${alpha})`);
+  grad.addColorStop(0.6, `hsla(300, 85%, 55%, ${alpha * 0.95})`);
+  grad.addColorStop(1, `hsla(285, 80%, 35%, ${alpha * 0.85})`);
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.moveTo(0, s * 0.4);
+  ctx.bezierCurveTo(s * 1.1, -s * 0.4, s * 0.4, -s * 1.1, 0, -s * 0.3);
+  ctx.bezierCurveTo(-s * 0.4, -s * 1.1, -s * 1.1, -s * 0.4, 0, s * 0.4);
+  ctx.fill();
+  // Crack down the middle
+  ctx.strokeStyle = `hsla(285, 60%, 18%, ${alpha * 0.9})`;
+  ctx.lineWidth = Math.max(0.8, s * 0.08);
+  ctx.lineCap = "round";
+  ctx.beginPath();
+  ctx.moveTo(0, -s * 0.3);
+  ctx.lineTo(s * 0.15, -s * 0.05);
+  ctx.lineTo(-s * 0.1, s * 0.1);
+  ctx.lineTo(s * 0.05, s * 0.35);
+  ctx.stroke();
+  ctx.restore();
+}
+
+// Draws a single teardrop
+function drawTear(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  alpha: number,
+) {
+  ctx.save();
+  ctx.translate(x, y);
+  const grad = ctx.createLinearGradient(0, -size * 1.6, 0, size);
+  grad.addColorStop(0, `hsla(290, 100%, 88%, ${alpha * 0.85})`);
+  grad.addColorStop(0.6, `hsla(295, 95%, 72%, ${alpha})`);
+  grad.addColorStop(1, `hsla(300, 90%, 55%, ${alpha * 0.9})`);
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.moveTo(0, -size * 1.6);
+  ctx.quadraticCurveTo(size, size * 0.1, 0, size);
+  ctx.quadraticCurveTo(-size, size * 0.1, 0, -size * 1.6);
+  ctx.fill();
+  // Highlight
+  ctx.fillStyle = `hsla(0, 0%, 100%, ${alpha * 0.55})`;
+  ctx.beginPath();
+  ctx.ellipse(-size * 0.25, -size * 0.1, size * 0.18, size * 0.4, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawMommyIssues(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  baseRadius: number,
+  time: number,
+  tears: Teardrop[],
+  hearts: WoundedHeart[],
+  emojis: MommyEmoji[],
+) {
+  const auraMax = baseRadius * 1.3;
+
+  // 1. Contained violet aura with melancholic magenta edge
+  const breath = 0.5 + Math.sin(time * 1.4) * 0.5;
+  const aura = ctx.createRadialGradient(cx, cy, baseRadius * 0.9, cx, cy, auraMax);
+  aura.addColorStop(0, `hsla(300, 90%, 65%, 0)`);
+  aura.addColorStop(0.5, `hsla(300, 85%, 55%, ${0.22 + breath * 0.1})`);
+  aura.addColorStop(0.8, `hsla(285, 75%, 40%, ${0.12 + breath * 0.05})`);
+  aura.addColorStop(1, `hsla(280, 70%, 25%, 0)`);
+  ctx.fillStyle = aura;
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.fill();
+
+  // 2. Floating wounded hearts clipped to ring zone
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.arc(cx, cy, baseRadius * 0.95, 0, Math.PI * 2, true);
+  ctx.clip();
+  hearts.forEach((h) => {
+    h.life += 1;
+    h.pulsePhase += 0.04;
+    if (h.life >= h.maxLife) {
+      h.angle = Math.random() * Math.PI * 2;
+      h.radius = 1.05 + Math.random() * 0.16;
+      h.size = 4 + Math.random() * 2;
+      h.life = 0;
+      h.maxLife = 130 + Math.random() * 80;
+      h.rot = (Math.random() - 0.5) * 0.4;
+    }
+    const t = h.life / h.maxLife;
+    const fade = t < 0.2 ? t / 0.2 : t > 0.75 ? (1 - t) / 0.25 : 1;
+    const pulse = 0.5 + Math.sin(h.pulsePhase) * 0.5;
+    const x = cx + Math.cos(h.angle) * baseRadius * h.radius;
+    const y = cy + Math.sin(h.angle) * baseRadius * h.radius;
+    // Halo
+    const halo = ctx.createRadialGradient(x, y, 0, x, y, h.size * DPR * 2.4);
+    halo.addColorStop(0, `hsla(300, 100%, 70%, ${0.4 * fade})`);
+    halo.addColorStop(1, `hsla(300, 100%, 50%, 0)`);
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(x, y, h.size * DPR * 2.4, 0, Math.PI * 2);
+    ctx.fill();
+    drawWoundedHeart(ctx, x, y, h.size * DPR, h.rot, pulse, 0.85 * fade);
+  });
+  ctx.restore();
+
+  // 3. Double-stroke violet ring with sweeping shine
+  ctx.save();
+  ctx.strokeStyle = `hsla(295, 85%, 45%, 0.9)`;
+  ctx.lineWidth = 3 * DPR;
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.strokeStyle = `hsla(310, 100%, 80%, 0.9)`;
+  ctx.lineWidth = 1.2 * DPR;
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius - 1.6 * DPR, 0, Math.PI * 2);
+  ctx.stroke();
+  const shineStart = time * 1.2;
+  ctx.strokeStyle = `hsla(300, 100%, 92%, 0.95)`;
+  ctx.lineWidth = 2.2 * DPR;
+  ctx.lineCap = "round";
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius, shineStart, shineStart + Math.PI * 0.3);
+  ctx.stroke();
+  ctx.restore();
+
+  // 4. Falling tears from top arc with gravity + fading streak
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
+  ctx.clip();
+  tears.forEach((d) => {
+    d.life += 1;
+    d.vy += 0.025; // gravity
+    d.yOff += d.vy;
+    if (d.life >= d.maxLife || d.yOff > baseRadius * 0.55) {
+      const a = -Math.PI / 2 + (Math.random() - 0.5) * 2.2;
+      d.angle = a;
+      d.yOff = 0;
+      d.vy = 0.4 + Math.random() * 0.7;
+      d.life = 0;
+      d.maxLife = 80 + Math.random() * 50;
+      d.size = 1.8 + Math.random() * 1.2;
+      d.alpha = 0.7 + Math.random() * 0.3;
+    }
+    const t = d.life / d.maxLife;
+    const fade = t < 0.15 ? t / 0.15 : t > 0.7 ? (1 - t) / 0.3 : 1;
+    const ax = cx + Math.cos(d.angle) * baseRadius;
+    const ay = cy + Math.sin(d.angle) * baseRadius;
+    const tx = ax;
+    const ty = ay + d.yOff * DPR;
+    // Trailing streak
+    ctx.strokeStyle = `hsla(295, 100%, 80%, ${0.4 * fade * d.alpha})`;
+    ctx.lineWidth = d.size * DPR * 0.7;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(tx, ty - d.size * DPR * 3);
+    ctx.lineTo(tx, ty);
+    ctx.stroke();
+    drawTear(ctx, tx, ty, d.size * DPR, d.alpha * fade);
+  });
+  ctx.restore();
+
+  // 5. Orbiting longing emojis
+  ctx.save();
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  emojis.forEach((e) => {
+    e.angle += e.speed * 0.016;
+    const bob = Math.sin(time * 1.4 + e.bobPhase) * 2 * DPR;
+    const x = cx + Math.cos(e.angle) * baseRadius;
+    const y = cy + Math.sin(e.angle) * baseRadius + bob;
+    const halo = ctx.createRadialGradient(x, y, 0, x, y, e.size * DPR * 1.4);
+    halo.addColorStop(0, `hsla(300, 100%, 75%, 0.55)`);
+    halo.addColorStop(1, `hsla(290, 100%, 50%, 0)`);
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(x, y, e.size * DPR * 1.4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.font = `${e.size * DPR}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+    ctx.shadowColor = "hsla(300, 100%, 65%, 0.75)";
+    ctx.shadowBlur = 5 * DPR;
+    ctx.fillText(e.emoji, x, y);
+    ctx.shadowBlur = 0;
+  });
+  ctx.restore();
+}
+
+
 interface ShopBadgeRingCanvasProps {
   badgeName: string;
   glowColor: string;
