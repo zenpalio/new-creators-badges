@@ -715,12 +715,41 @@ function drawProposed(
   stars: Star[],
 ) {
   const breathe = 0.5 + 0.5 * Math.sin(time * 1.3);
+  const pulse = 0.5 + 0.5 * Math.sin(time * 2.2);
 
-  // Warm gold halo
-  const haloR = baseRadius + (16 + breathe * 8) * DPR;
+  // Rotating sunburst light rays behind the ring
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+  const rayCount = 14;
+  const rayRotation = time * 0.35;
+  const rayInner = baseRadius + 2 * DPR;
+  const rayOuter = baseRadius + (22 + pulse * 10) * DPR;
+  for (let i = 0; i < rayCount; i++) {
+    const a = (i / rayCount) * Math.PI * 2 + rayRotation;
+    const intensity = 0.35 + 0.45 * (0.5 + 0.5 * Math.sin(time * 2 + i));
+    const grad = ctx.createLinearGradient(
+      cx + Math.cos(a) * rayInner,
+      cy + Math.sin(a) * rayInner,
+      cx + Math.cos(a) * rayOuter,
+      cy + Math.sin(a) * rayOuter,
+    );
+    grad.addColorStop(0, `hsla(45, 100%, 75%, ${0.55 * intensity})`);
+    grad.addColorStop(1, `hsla(40, 100%, 60%, 0)`);
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = (1.6 + intensity * 1.2) * DPR;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(cx + Math.cos(a) * rayInner, cy + Math.sin(a) * rayInner);
+    ctx.lineTo(cx + Math.cos(a) * rayOuter, cy + Math.sin(a) * rayOuter);
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  // Warm gold halo (additive bloom)
+  const haloR = baseRadius + (18 + breathe * 10) * DPR;
   const halo = ctx.createRadialGradient(cx, cy, baseRadius - 1, cx, cy, haloR);
-  halo.addColorStop(0, `hsla(45, 100%, 70%, ${0.2 + breathe * 0.1})`);
-  halo.addColorStop(0.55, `hsla(35, 95%, 60%, ${0.1 + breathe * 0.05})`);
+  halo.addColorStop(0, `hsla(45, 100%, 72%, ${0.28 + breathe * 0.12})`);
+  halo.addColorStop(0.55, `hsla(35, 95%, 60%, ${0.14 + breathe * 0.06})`);
   halo.addColorStop(1, `hsla(30, 80%, 50%, 0)`);
   ctx.beginPath();
   ctx.arc(cx, cy, haloR, 0, Math.PI * 2);
@@ -728,33 +757,46 @@ function drawProposed(
   ctx.fillStyle = halo;
   ctx.fill();
 
-  // Polished gold ring with shimmer sweep
+  // Polished gold ring with shimmer sweep + heart-beat pulse on radius
+  const ringR = baseRadius + pulse * 0.6 * DPR;
   const steps = 96;
-  const sweep = (time * 1.2) % (Math.PI * 2);
+  const sweep = (time * 1.6) % (Math.PI * 2);
   for (let i = 0; i < steps; i++) {
     const a0 = (i / steps) * Math.PI * 2;
     const a1 = ((i + 1.4) / steps) * Math.PI * 2;
-    // Distance from sweep angle (0..PI)
     let d = Math.abs(((a0 - sweep + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
-    const sweepBoost = Math.max(0, 1 - d / 0.6); // 0..1 when near sweep
-    const baseL = 55 + Math.sin(a0 * 3 + time * 0.8) * 8;
-    const lightness = baseL + sweepBoost * 30;
-    const alpha = 0.7 + sweepBoost * 0.3;
+    const sweepBoost = Math.max(0, 1 - d / 0.5);
+    const baseL = 58 + Math.sin(a0 * 3 + time * 0.8) * 10;
+    const lightness = baseL + sweepBoost * 35;
+    const alpha = 0.75 + sweepBoost * 0.25;
     ctx.beginPath();
-    ctx.arc(cx, cy, baseRadius, a0, a1);
+    ctx.arc(cx, cy, ringR, a0, a1);
     ctx.strokeStyle = `hsla(45, 95%, ${lightness}%, ${alpha})`;
-    ctx.lineWidth = (2.4 + sweepBoost * 1.2) * DPR;
+    ctx.lineWidth = (2.6 + sweepBoost * 1.6) * DPR;
+    ctx.stroke();
+  }
+
+  // Counter-rotating shimmer sweep (second, faster, brighter)
+  const sweep2 = (-time * 2.4) % (Math.PI * 2);
+  for (let i = 0; i < 24; i++) {
+    const a0 = sweep2 + (i / 24) * 0.35;
+    ctx.beginPath();
+    ctx.arc(cx, cy, ringR, a0, a0 + 0.04);
+    ctx.strokeStyle = `hsla(55, 100%, ${85 - i * 1.5}%, ${0.85 - i * 0.03})`;
+    ctx.lineWidth = (2.2 - i * 0.05) * DPR;
     ctx.stroke();
   }
 
   // Inner thin highlight ring (polished metal feel)
   ctx.beginPath();
-  ctx.arc(cx, cy, baseRadius - 2 * DPR, 0, Math.PI * 2);
-  ctx.strokeStyle = `hsla(50, 100%, 88%, 0.35)`;
+  ctx.arc(cx, cy, ringR - 2 * DPR, 0, Math.PI * 2);
+  ctx.strokeStyle = `hsla(50, 100%, 90%, 0.4)`;
   ctx.lineWidth = 0.8 * DPR;
   ctx.stroke();
 
-  // Orbiting diamonds
+  // Orbiting diamonds with glow trail
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
   for (const d of diamonds) {
     d.angle += d.speed * 0.012;
     d.spin += d.spinSpeed;
@@ -762,30 +804,55 @@ function drawProposed(
     const x = cx + Math.cos(d.angle) * r;
     const y = cy + Math.sin(d.angle) * r;
     const twinkle = 0.6 + 0.4 * Math.sin(time * 3 + d.twinklePhase);
-    drawDiamond(ctx, x, y, d.size, d.spin, 0.85 * twinkle);
+    // soft glow under diamond
+    const glowR = d.size * 3 * DPR;
+    const dg = ctx.createRadialGradient(x, y, 0, x, y, glowR);
+    dg.addColorStop(0, `hsla(50, 100%, 80%, ${0.5 * twinkle})`);
+    dg.addColorStop(1, `hsla(50, 100%, 70%, 0)`);
+    ctx.fillStyle = dg;
+    ctx.beginPath();
+    ctx.arc(x, y, glowR, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+  for (const d of diamonds) {
+    const r = baseRadius * d.radius;
+    const x = cx + Math.cos(d.angle) * r;
+    const y = cy + Math.sin(d.angle) * r;
+    const twinkle = 0.6 + 0.4 * Math.sin(time * 3 + d.twinklePhase);
+    drawDiamond(ctx, x, y, d.size, d.spin, 0.9 * twinkle);
   }
 
-  // Sparkle stars on the ring
+  // Sparkle stars on the ring (bigger, more dramatic)
   for (const s of stars) {
     const flicker = 0.5 + 0.5 * Math.sin(time * s.speed + s.phase);
-    if (flicker < 0.15) continue;
+    if (flicker < 0.1) continue;
     const x = cx + Math.cos(s.angle) * s.radius;
     const y = cy + Math.sin(s.angle) * s.radius;
-    const len = (s.size + flicker * 2.5) * DPR;
-    ctx.strokeStyle = `hsla(50, 100%, 88%, ${flicker * 0.95})`;
-    ctx.lineWidth = 1 * DPR;
+    const len = (s.size + flicker * 4) * DPR;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(time * 0.6 + s.phase);
+    ctx.strokeStyle = `hsla(50, 100%, 90%, ${flicker})`;
+    ctx.lineWidth = 1.1 * DPR;
     ctx.lineCap = "round";
     ctx.beginPath();
-    ctx.moveTo(x - len, y);
-    ctx.lineTo(x + len, y);
-    ctx.moveTo(x, y - len);
-    ctx.lineTo(x, y + len);
+    ctx.moveTo(-len, 0);
+    ctx.lineTo(len, 0);
+    ctx.moveTo(0, -len);
+    ctx.lineTo(0, len);
+    // diagonal cross
+    const dlen = len * 0.55;
+    ctx.moveTo(-dlen, -dlen);
+    ctx.lineTo(dlen, dlen);
+    ctx.moveTo(-dlen, dlen);
+    ctx.lineTo(dlen, -dlen);
     ctx.stroke();
-    // tiny core
     ctx.beginPath();
-    ctx.arc(x, y, 0.9 * DPR, 0, Math.PI * 2);
+    ctx.arc(0, 0, 1.2 * DPR, 0, Math.PI * 2);
     ctx.fillStyle = `hsla(0, 0%, 100%, ${flicker})`;
     ctx.fill();
+    ctx.restore();
   }
 }
 
