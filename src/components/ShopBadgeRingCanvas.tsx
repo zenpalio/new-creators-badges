@@ -2351,6 +2351,219 @@ function drawNoLife(
   ctx.restore();
 }
 
+// ─── Down Bad: Icy aura + dripping water + rising cold mist + simp emojis ───
+interface Drip {
+  angle: number;     // attachment angle on ring (bottom-biased)
+  yOff: number;      // current falling offset from ring point
+  vy: number;
+  life: number;
+  maxLife: number;
+  size: number;      // base droplet radius
+  alpha: number;
+}
+
+interface MistPuff {
+  angle: number;     // angle around ring
+  radius: number;    // current radius factor
+  rise: number;
+  drift: number;     // angular drift
+  life: number;
+  maxLife: number;
+  size: number;
+}
+
+interface SimpEmoji {
+  emoji: string;
+  angle: number;
+  speed: number;
+  size: number;
+  bobPhase: number;
+}
+
+const DOWNBAD_GLYPHS = ["🥶", "💧", "😵‍💫", "💦"];
+
+const makeDrips = (count: number): Drip[] =>
+  Array.from({ length: count }, () => {
+    // Bias to bottom half: angle around PI/2 +/- ~1.1
+    const a = Math.PI / 2 + (Math.random() - 0.5) * 2.0;
+    return {
+      angle: a,
+      yOff: 0,
+      vy: 0.5 + Math.random() * 0.8,
+      life: Math.random() * 80,
+      maxLife: 70 + Math.random() * 50,
+      size: 1.6 + Math.random() * 1.2,
+      alpha: 0.7 + Math.random() * 0.3,
+    };
+  });
+
+const makeMistPuffs = (count: number): MistPuff[] =>
+  Array.from({ length: count }, () => ({
+    angle: Math.random() * Math.PI * 2,
+    radius: 0.95 + Math.random() * 0.05,
+    rise: 0.0015 + Math.random() * 0.002,
+    drift: (Math.random() - 0.5) * 0.008,
+    life: Math.random() * 200,
+    maxLife: 150 + Math.random() * 100,
+    size: 8 + Math.random() * 6,
+  }));
+
+const makeSimpEmojis = (count: number): SimpEmoji[] =>
+  Array.from({ length: count }, (_, i) => ({
+    emoji: DOWNBAD_GLYPHS[i % DOWNBAD_GLYPHS.length],
+    angle: (i / count) * Math.PI * 2,
+    speed: 0.06 + Math.random() * 0.04,
+    size: 12 + Math.random() * 2,
+    bobPhase: Math.random() * Math.PI * 2,
+  }));
+
+function drawDownBad(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  baseRadius: number,
+  time: number,
+  drips: Drip[],
+  mist: MistPuff[],
+  emojis: SimpEmoji[],
+) {
+  // 1. Cool cyan contained aura
+  const breath = 0.5 + Math.sin(time * 1.6) * 0.5;
+  const aura = ctx.createRadialGradient(cx, cy, baseRadius * 0.9, cx, cy, baseRadius * 1.3);
+  aura.addColorStop(0, `hsla(200, 90%, 60%, 0)`);
+  aura.addColorStop(0.5, `hsla(200, 85%, 55%, ${0.18 + breath * 0.08})`);
+  aura.addColorStop(1, `hsla(210, 80%, 35%, 0)`);
+  ctx.fillStyle = aura;
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius * 1.3, 0, Math.PI * 2);
+  ctx.fill();
+
+  // 2. Rising cold mist clouds (white-blue, soft)
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius * 1.28, 0, Math.PI * 2);
+  ctx.clip();
+  ctx.globalCompositeOperation = "lighter";
+  mist.forEach((m) => {
+    m.life += 1;
+    m.angle += m.drift;
+    m.radius += m.rise;
+    if (m.life > m.maxLife || m.radius > 1.25) {
+      m.life = 0;
+      m.angle = Math.random() * Math.PI * 2;
+      m.radius = 0.92 + Math.random() * 0.06;
+      m.size = 8 + Math.random() * 6;
+    }
+    const t = m.life / m.maxLife;
+    const alpha = Math.sin(t * Math.PI) * 0.35;
+    const x = cx + Math.cos(m.angle) * baseRadius * m.radius;
+    const y = cy + Math.sin(m.angle) * baseRadius * m.radius;
+    const s = m.size * DPR;
+    const g = ctx.createRadialGradient(x, y, 0, x, y, s);
+    g.addColorStop(0, `hsla(195, 80%, 92%, ${alpha})`);
+    g.addColorStop(1, `hsla(205, 70%, 70%, 0)`);
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(x, y, s, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  ctx.restore();
+
+  // 3. Icy ring (double stroke) with frost shimmer
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius, 0, Math.PI * 2);
+  ctx.strokeStyle = `hsla(205, 90%, 50%, 0.9)`;
+  ctx.lineWidth = 2.4 * DPR;
+  ctx.shadowColor = `hsla(200, 100%, 60%, 0.8)`;
+  ctx.shadowBlur = 10 * DPR;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius, 0, Math.PI * 2);
+  ctx.strokeStyle = `hsla(190, 100%, 88%, 0.9)`;
+  ctx.lineWidth = 1.1 * DPR;
+  ctx.shadowBlur = 0;
+  ctx.stroke();
+
+  // Frost shimmer sparkles along the ring
+  const sparkCount = 14;
+  for (let i = 0; i < sparkCount; i++) {
+    const a = (i / sparkCount) * Math.PI * 2 + time * 0.25;
+    const tw = 0.4 + (Math.sin(time * 4 + i * 1.3) * 0.5 + 0.5) * 0.6;
+    if (tw < 0.55) continue;
+    const x = cx + Math.cos(a) * baseRadius;
+    const y = cy + Math.sin(a) * baseRadius;
+    ctx.beginPath();
+    ctx.arc(x, y, 1.6 * DPR * tw, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(190, 100%, 95%, ${tw * 0.9})`;
+    ctx.fill();
+  }
+
+  // 4. Drips: water droplets falling from ring (bottom-biased)
+  drips.forEach((d) => {
+    d.life += 1;
+    d.vy += 0.015;
+    d.yOff += d.vy;
+    if (d.life > d.maxLife || d.yOff > baseRadius * 0.35) {
+      d.angle = Math.PI / 2 + (Math.random() - 0.5) * 2.0;
+      d.yOff = 0;
+      d.vy = 0.4 + Math.random() * 0.8;
+      d.life = 0;
+      d.maxLife = 70 + Math.random() * 50;
+      d.size = 1.6 + Math.random() * 1.2;
+      d.alpha = 0.7 + Math.random() * 0.3;
+    }
+    const t = d.life / d.maxLife;
+    const fade = 1 - t * 0.4;
+    const ax = Math.cos(d.angle);
+    const ay = Math.sin(d.angle);
+    const px = cx + ax * baseRadius;
+    // gravity falls straight down regardless of angle direction
+    const py = cy + ay * baseRadius + d.yOff;
+    const s = d.size * DPR;
+    // teardrop: small circle + tail upward to attachment
+    const tailLen = Math.min(d.yOff * 0.6, 18 * DPR);
+    const grad = ctx.createLinearGradient(px, py - tailLen, px, py + s);
+    grad.addColorStop(0, `hsla(195, 100%, 85%, 0)`);
+    grad.addColorStop(0.7, `hsla(200, 100%, 70%, ${d.alpha * fade * 0.85})`);
+    grad.addColorStop(1, `hsla(205, 100%, 60%, ${d.alpha * fade})`);
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.moveTo(px - s * 0.6, py);
+    ctx.quadraticCurveTo(px, py - tailLen, px + s * 0.6, py);
+    ctx.arc(px, py, s, 0, Math.PI);
+    ctx.closePath();
+    ctx.fill();
+    // bright highlight
+    ctx.beginPath();
+    ctx.arc(px - s * 0.25, py - s * 0.15, s * 0.35, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(195, 100%, 95%, ${d.alpha * fade * 0.8})`;
+    ctx.fill();
+  });
+
+  // 5. Orbiting simp emojis
+  ctx.save();
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  emojis.forEach((e) => {
+    e.angle += e.speed * 0.016;
+    const bob = Math.sin(time * 1.5 + e.bobPhase) * 2 * DPR;
+    const x = cx + Math.cos(e.angle) * baseRadius;
+    const y = cy + Math.sin(e.angle) * baseRadius + bob;
+    const halo = ctx.createRadialGradient(x, y, 0, x, y, e.size * DPR * 1.4);
+    halo.addColorStop(0, `hsla(200, 100%, 75%, 0.5)`);
+    halo.addColorStop(1, `hsla(210, 100%, 50%, 0)`);
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(x, y, e.size * DPR * 1.4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.font = `${e.size * DPR}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+    ctx.shadowColor = "hsla(200, 100%, 60%, 0.7)";
+    ctx.shadowBlur = 5 * DPR;
+    ctx.fillText(e.emoji, x, y);
+    ctx.shadowBlur = 0;
+  });
+  ctx.restore();
+}
 
 
 interface ShopBadgeRingCanvasProps {
@@ -2385,6 +2598,9 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
   const chadEmojisRef = useRef<ChadEmoji[]>([]);
   const glitchSlicesRef = useRef<GlitchSlice[]>([]);
   const driftEmojisRef = useRef<DriftEmoji[]>([]);
+  const dripsRef = useRef<Drip[]>([]);
+  const mistRef = useRef<MistPuff[]>([]);
+  const simpEmojisRef = useRef<SimpEmoji[]>([]);
   const rafRef = useRef<number>(0);
   const sizeRef = useRef({ w: 0, h: 0 });
 
@@ -2543,6 +2759,22 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         );
         break;
       }
+      case "Down Bad": {
+        if (dripsRef.current.length === 0) dripsRef.current = makeDrips(10);
+        if (mistRef.current.length === 0) mistRef.current = makeMistPuffs(8);
+        if (simpEmojisRef.current.length === 0) simpEmojisRef.current = makeSimpEmojis(4);
+        drawDownBad(
+          ctx,
+          cx,
+          cy,
+          baseRadius,
+          time,
+          dripsRef.current,
+          mistRef.current,
+          simpEmojisRef.current,
+        );
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
@@ -2576,6 +2808,9 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
     chadEmojisRef.current = [];
     glitchSlicesRef.current = [];
     driftEmojisRef.current = [];
+    dripsRef.current = [];
+    mistRef.current = [];
+    simpEmojisRef.current = [];
     sizeRef.current = { w: 0, h: 0 };
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
