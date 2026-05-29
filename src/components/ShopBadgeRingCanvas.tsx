@@ -2138,6 +2138,221 @@ function drawGigaChad(
   ctx.restore();
 }
 
+// ─── No Life: Glitch ring + RGB chroma split + scanlines + drifting skulls ───
+interface GlitchSlice {
+  yFrac: number;     // 0..1 along ring vertical extent
+  height: number;    // px
+  shift: number;     // px horizontal offset
+  life: number;
+  maxLife: number;
+}
+
+interface DriftEmoji {
+  emoji: string;
+  angle: number;
+  speed: number;
+  radius: number;
+  size: number;
+  bobPhase: number;
+  alpha: number;
+  jitterT: number;
+}
+
+const NOLIFE_GLYPHS = ["💀", "😵", "🕳️", "⌛"];
+
+const makeGlitchSlices = (count: number): GlitchSlice[] =>
+  Array.from({ length: count }, () => ({
+    yFrac: Math.random(),
+    height: 2 + Math.random() * 4,
+    shift: 0,
+    life: 0,
+    maxLife: 4 + Math.random() * 6,
+  }));
+
+const makeDriftEmojis = (count: number): DriftEmoji[] =>
+  Array.from({ length: count }, (_, i) => ({
+    emoji: NOLIFE_GLYPHS[i % NOLIFE_GLYPHS.length],
+    angle: (i / count) * Math.PI * 2,
+    speed: 0.04 + Math.random() * 0.05,
+    radius: 0.98 + Math.random() * 0.08,
+    size: 11 + Math.random() * 3,
+    bobPhase: Math.random() * Math.PI * 2,
+    alpha: 0.55 + Math.random() * 0.3,
+    jitterT: Math.random() * 100,
+  }));
+
+function strokeBrokenRing(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  baseRadius: number,
+  color: string,
+  width: number,
+  time: number,
+  offsetX: number,
+  offsetY: number,
+) {
+  // Draw ring as 6-8 broken arc segments with gaps for glitch feel
+  const segs = 7;
+  for (let i = 0; i < segs; i++) {
+    const start = (i / segs) * Math.PI * 2 + Math.sin(time * 0.6 + i) * 0.05;
+    const end = start + (Math.PI * 2) / segs - 0.12;
+    ctx.beginPath();
+    ctx.arc(cx + offsetX, cy + offsetY, baseRadius, start, end);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.stroke();
+  }
+}
+
+function drawNoLife(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  baseRadius: number,
+  time: number,
+  slices: GlitchSlice[],
+  emojis: DriftEmoji[],
+) {
+  // 1. Dead gray contained aura with subtle vignette
+  const aura = ctx.createRadialGradient(cx, cy, baseRadius * 0.9, cx, cy, baseRadius * 1.25);
+  aura.addColorStop(0, `hsla(0, 0%, 35%, 0)`);
+  aura.addColorStop(0.5, `hsla(0, 0%, 35%, 0.16)`);
+  aura.addColorStop(1, `hsla(0, 0%, 10%, 0)`);
+  ctx.fillStyle = aura;
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius * 1.25, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Occasional cyan/magenta glitch flash on the aura
+  const flashTrigger = Math.sin(time * 17) > 0.96;
+  if (flashTrigger) {
+    ctx.fillStyle = `hsla(180, 100%, 50%, 0.06)`;
+    ctx.beginPath();
+    ctx.arc(cx + 4 * DPR, cy, baseRadius * 1.2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = `hsla(320, 100%, 55%, 0.06)`;
+    ctx.beginPath();
+    ctx.arc(cx - 4 * DPR, cy, baseRadius * 1.2, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // 2. Chromatic ring — cyan ghost (left) + magenta ghost (right) + gray core
+  const chroma = 2.5 * DPR + Math.sin(time * 5) * 1.5 * DPR;
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+  strokeBrokenRing(
+    ctx,
+    cx,
+    cy,
+    baseRadius,
+    `hsla(180, 100%, 55%, 0.55)`,
+    1.6 * DPR,
+    time,
+    -chroma,
+    0,
+  );
+  strokeBrokenRing(
+    ctx,
+    cx,
+    cy,
+    baseRadius,
+    `hsla(320, 100%, 55%, 0.55)`,
+    1.6 * DPR,
+    time,
+    chroma,
+    0,
+  );
+  ctx.restore();
+  // Core gray broken ring
+  strokeBrokenRing(
+    ctx,
+    cx,
+    cy,
+    baseRadius,
+    `hsla(0, 0%, 78%, 0.9)`,
+    1.8 * DPR,
+    time,
+    0,
+    0,
+  );
+
+  // 3. Horizontal glitch slice shifts — re-draw thin slices of the ring offset
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius + 4 * DPR, 0, Math.PI * 2);
+  ctx.clip();
+  slices.forEach((s) => {
+    s.life += 1;
+    if (s.life > s.maxLife) {
+      s.life = 0;
+      s.yFrac = Math.random();
+      s.height = 2 + Math.random() * 5;
+      s.shift = (Math.random() - 0.5) * 14 * DPR;
+      s.maxLife = 3 + Math.random() * 8;
+    }
+    if (Math.abs(s.shift) < 0.5) return;
+    const y = cy - baseRadius + s.yFrac * baseRadius * 2;
+    const h = s.height * DPR;
+    // White glitch bar
+    ctx.fillStyle = `hsla(0, 0%, 90%, 0.18)`;
+    ctx.fillRect(cx - baseRadius - 6 * DPR + s.shift, y, baseRadius * 2 + 12 * DPR, h);
+    // RGB edges
+    ctx.fillStyle = `hsla(180, 100%, 55%, 0.35)`;
+    ctx.fillRect(cx - baseRadius - 6 * DPR + s.shift - 2 * DPR, y, 2 * DPR, h);
+    ctx.fillStyle = `hsla(320, 100%, 55%, 0.35)`;
+    ctx.fillRect(cx + baseRadius + 6 * DPR + s.shift, y, 2 * DPR, h);
+  });
+  ctx.restore();
+
+  // 4. Scanlines clipped to ring zone
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius * 1.05, 0, Math.PI * 2);
+  ctx.clip();
+  ctx.strokeStyle = `hsla(0, 0%, 100%, 0.04)`;
+  ctx.lineWidth = 1;
+  const scanStep = 3 * DPR;
+  const scanOffset = (time * 30) % scanStep;
+  for (let y = cy - baseRadius; y < cy + baseRadius; y += scanStep) {
+    ctx.beginPath();
+    ctx.moveTo(cx - baseRadius, y + scanOffset);
+    ctx.lineTo(cx + baseRadius, y + scanOffset);
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  // 5. Drifting skull / sleep emojis with low alpha + occasional jitter
+  ctx.save();
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  emojis.forEach((e) => {
+    e.angle += e.speed * 0.016;
+    e.jitterT += 1;
+    const bob = Math.sin(time * 1.3 + e.bobPhase) * 2 * DPR;
+    const jitter = e.jitterT > 60 && Math.random() < 0.05;
+    if (jitter) e.jitterT = 0;
+    const jx = jitter ? (Math.random() - 0.5) * 6 * DPR : 0;
+    const jy = jitter ? (Math.random() - 0.5) * 4 * DPR : 0;
+    const x = cx + Math.cos(e.angle) * baseRadius * e.radius + jx;
+    const y = cy + Math.sin(e.angle) * baseRadius * e.radius + bob + jy;
+    ctx.font = `${e.size * DPR}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+    // chroma split ghost on emoji
+    ctx.globalAlpha = e.alpha * 0.35;
+    ctx.fillStyle = `hsla(180, 100%, 60%, 1)`;
+    ctx.fillText(e.emoji, x - 1.5 * DPR, y);
+    ctx.fillStyle = `hsla(320, 100%, 60%, 1)`;
+    ctx.fillText(e.emoji, x + 1.5 * DPR, y);
+    // main emoji desaturated via low alpha
+    ctx.globalAlpha = e.alpha;
+    ctx.fillText(e.emoji, x, y);
+    ctx.globalAlpha = 1;
+  });
+  ctx.restore();
+}
+
+
+
 interface ShopBadgeRingCanvasProps {
   badgeName: string;
   glowColor: string;
@@ -2168,6 +2383,8 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
   const sparksLegendRef = useRef<Spark[]>([]);
   const powerPulsesRef = useRef<PowerPulse[]>([]);
   const chadEmojisRef = useRef<ChadEmoji[]>([]);
+  const glitchSlicesRef = useRef<GlitchSlice[]>([]);
+  const driftEmojisRef = useRef<DriftEmoji[]>([]);
   const rafRef = useRef<number>(0);
   const sizeRef = useRef({ w: 0, h: 0 });
 
@@ -2310,6 +2527,22 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         );
         break;
       }
+      case "No Life": {
+        if (glitchSlicesRef.current.length === 0)
+          glitchSlicesRef.current = makeGlitchSlices(5);
+        if (driftEmojisRef.current.length === 0)
+          driftEmojisRef.current = makeDriftEmojis(4);
+        drawNoLife(
+          ctx,
+          cx,
+          cy,
+          baseRadius,
+          time,
+          glitchSlicesRef.current,
+          driftEmojisRef.current,
+        );
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
@@ -2341,6 +2574,8 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
     sparksLegendRef.current = [];
     powerPulsesRef.current = [];
     chadEmojisRef.current = [];
+    glitchSlicesRef.current = [];
+    driftEmojisRef.current = [];
     sizeRef.current = { w: 0, h: 0 };
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
