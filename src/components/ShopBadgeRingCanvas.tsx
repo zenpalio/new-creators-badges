@@ -802,6 +802,8 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
   const leavesRef = useRef<Leaf[]>([]);
   const bitsRef = useRef<Bit[]>([]);
   const bubblesRef = useRef<Bubble[]>([]);
+  const diamondsRef = useRef<Diamond[]>([]);
+  const starsRef = useRef<Star[]>([]);
   const rafRef = useRef<number>(0);
   const sizeRef = useRef({ w: 0, h: 0 });
 
