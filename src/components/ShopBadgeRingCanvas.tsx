@@ -2759,6 +2759,22 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
         );
         break;
       }
+      case "Down Bad": {
+        if (dripsRef.current.length === 0) dripsRef.current = makeDrips(10);
+        if (mistRef.current.length === 0) mistRef.current = makeMistPuffs(8);
+        if (simpEmojisRef.current.length === 0) simpEmojisRef.current = makeSimpEmojis(4);
+        drawDownBad(
+          ctx,
+          cx,
+          cy,
+          baseRadius,
+          time,
+          dripsRef.current,
+          mistRef.current,
+          simpEmojisRef.current,
+        );
+        break;
+      }
       default:
         drawFallback(ctx, cx, cy, baseRadius, time, glowColor);
     }
