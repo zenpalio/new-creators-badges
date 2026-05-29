@@ -1980,7 +1980,165 @@ function drawFckingLegend(
   ctx.restore();
 }
 
-interface ShopBadgeRingCanvasProps {
+// ─── Giga Chad: Gold sunburst rays + metallic shine sweep + power pulses ───
+interface PowerPulse {
+  life: number;
+  maxLife: number;
+  delay: number;
+}
+
+interface ChadEmoji {
+  emoji: string;
+  angle: number;
+  speed: number;
+  size: number;
+  bobPhase: number;
+}
+
+const CHAD_GLYPHS = ["💪", "🏆", "⚡"];
+
+const makePowerPulses = (count: number): PowerPulse[] =>
+  Array.from({ length: count }, (_, i) => ({
+    life: 0,
+    maxLife: 90,
+    delay: (i / count) * 90,
+  }));
+
+const makeChadEmojis = (count: number): ChadEmoji[] =>
+  Array.from({ length: count }, (_, i) => ({
+    emoji: CHAD_GLYPHS[i % CHAD_GLYPHS.length],
+    angle: (i / count) * Math.PI * 2,
+    speed: 0.12,
+    size: 13 + Math.random() * 2,
+    bobPhase: Math.random() * Math.PI * 2,
+  }));
+
+function drawGigaChad(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  baseRadius: number,
+  time: number,
+  pulses: PowerPulse[],
+  emojis: ChadEmoji[],
+) {
+  const breath = 0.5 + Math.sin(time * 2) * 0.5;
+  const aura = ctx.createRadialGradient(cx, cy, baseRadius * 0.85, cx, cy, baseRadius * 1.3);
+  aura.addColorStop(0, `hsla(45, 100%, 55%, 0)`);
+  aura.addColorStop(0.55, `hsla(45, 100%, 55%, ${0.22 + breath * 0.1})`);
+  aura.addColorStop(1, `hsla(38, 100%, 40%, 0)`);
+  ctx.fillStyle = aura;
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius * 1.3, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Rotating golden sunburst rays (clipped to contained zone)
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius * 1.28, 0, Math.PI * 2);
+  ctx.clip();
+  ctx.globalCompositeOperation = "lighter";
+  const rayCount = 14;
+  const rayRot = time * 0.35;
+  for (let i = 0; i < rayCount; i++) {
+    const a = rayRot + (i / rayCount) * Math.PI * 2;
+    const rayPulse = 0.6 + Math.sin(time * 2.5 + i) * 0.4;
+    const innerR = baseRadius * 1.0;
+    const outerR = baseRadius * 1.26;
+    const halfW = 0.06;
+    const x1 = cx + Math.cos(a - halfW) * innerR;
+    const y1 = cy + Math.sin(a - halfW) * innerR;
+    const x2 = cx + Math.cos(a + halfW) * innerR;
+    const y2 = cy + Math.sin(a + halfW) * innerR;
+    const x3 = cx + Math.cos(a) * outerR;
+    const y3 = cy + Math.sin(a) * outerR;
+    const grad = ctx.createLinearGradient((x1 + x2) / 2, (y1 + y2) / 2, x3, y3);
+    grad.addColorStop(0, `hsla(48, 100%, 70%, ${0.55 * rayPulse})`);
+    grad.addColorStop(1, `hsla(45, 100%, 60%, 0)`);
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.lineTo(x3, y3);
+    ctx.closePath();
+    ctx.fill();
+  }
+  ctx.restore();
+
+  // Solid metallic gold ring (double stroke)
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius, 0, Math.PI * 2);
+  ctx.strokeStyle = `hsla(38, 100%, 38%, 0.9)`;
+  ctx.lineWidth = 3.4 * DPR;
+  ctx.shadowColor = `hsla(45, 100%, 55%, 0.8)`;
+  ctx.shadowBlur = 8 * DPR;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius, 0, Math.PI * 2);
+  ctx.strokeStyle = `hsla(50, 100%, 70%, 0.95)`;
+  ctx.lineWidth = 1.6 * DPR;
+  ctx.shadowBlur = 0;
+  ctx.stroke();
+
+  // Bright metallic shine sweep
+  const sweepStart = time * 1.3;
+  const sweepLen = Math.PI * 0.35;
+  ctx.beginPath();
+  ctx.arc(cx, cy, baseRadius, sweepStart, sweepStart + sweepLen);
+  ctx.strokeStyle = `hsla(55, 100%, 92%, 0.95)`;
+  ctx.lineWidth = 2.4 * DPR;
+  ctx.shadowColor = `hsla(50, 100%, 80%, 1)`;
+  ctx.shadowBlur = 14 * DPR;
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // Power pulse rings expanding (contained)
+  pulses.forEach((p) => {
+    if (p.delay > 0) {
+      p.delay -= 1;
+      return;
+    }
+    p.life += 1;
+    if (p.life > p.maxLife) {
+      p.life = 0;
+      p.delay = 60;
+    }
+    const t = p.life / p.maxLife;
+    const r = baseRadius * (1.0 + t * 0.26);
+    const alpha = (1 - t) * 0.6;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = `hsla(48, 100%, 68%, ${alpha})`;
+    ctx.lineWidth = 1.6 * DPR;
+    ctx.stroke();
+  });
+
+  // Orbiting power emojis with gold halo
+  ctx.save();
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  emojis.forEach((e) => {
+    e.angle += e.speed * 0.016;
+    const bob = Math.sin(time * 2 + e.bobPhase) * 2 * DPR;
+    const x = cx + Math.cos(e.angle) * baseRadius;
+    const y = cy + Math.sin(e.angle) * baseRadius + bob;
+    const halo = ctx.createRadialGradient(x, y, 0, x, y, e.size * DPR * 1.6);
+    halo.addColorStop(0, `hsla(48, 100%, 70%, 0.65)`);
+    halo.addColorStop(1, `hsla(40, 100%, 50%, 0)`);
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(x, y, e.size * DPR * 1.6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.font = `${e.size * DPR}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+    ctx.shadowColor = "hsla(45, 100%, 60%, 0.7)";
+    ctx.shadowBlur = 6 * DPR;
+    ctx.fillText(e.emoji, x, y);
+    ctx.shadowBlur = 0;
+  });
+  ctx.restore();
+}
+
+
   badgeName: string;
   glowColor: string;
 }
