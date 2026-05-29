@@ -4362,6 +4362,10 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
   const cashBillsRef = useRef<CashBill[]>([]);
   const goldSparklesRef = useRef<GoldSparkle[]>([]);
   const diddyEmojisRef = useRef<DiddyEmoji[]>([]);
+  const heartPulsesRef = useRef<HeartPulse[]>([]);
+  const simpHeartsRef = useRef<SimpHeart[]>([]);
+  const simpSparklesRef = useRef<SimpSparkle[]>([]);
+  const simpFloatEmojisRef = useRef<SimpFloatEmoji[]>([]);
   const rafRef = useRef<number>(0);
   const sizeRef = useRef({ w: 0, h: 0 });
 
