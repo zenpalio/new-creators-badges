@@ -3826,36 +3826,36 @@ function drawPromptDiddy(
   sparkles: GoldSparkle[],
   emojis: DiddyEmoji[],
 ) {
-  const auraMax = baseRadius * 1.3;
+  const auraMax = baseRadius * 1.22;
 
-  // 1. Contained luxury gold aura
-  const breath = 0.5 + Math.sin(time * 1.8) * 0.5;
-  const aura = ctx.createRadialGradient(cx, cy, baseRadius * 0.88, cx, cy, auraMax);
+  // 1. Contained luxury gold aura (subtler)
+  const breath = 0.5 + Math.sin(time * 1.4) * 0.5;
+  const aura = ctx.createRadialGradient(cx, cy, baseRadius * 0.92, cx, cy, auraMax);
   aura.addColorStop(0, `hsla(50, 100%, 70%, 0)`);
-  aura.addColorStop(0.5, `hsla(45, 100%, 55%, ${0.22 + breath * 0.1})`);
-  aura.addColorStop(0.8, `hsla(38, 95%, 40%, ${0.12 + breath * 0.05})`);
+  aura.addColorStop(0.55, `hsla(45, 95%, 55%, ${0.1 + breath * 0.05})`);
+  aura.addColorStop(0.85, `hsla(38, 90%, 40%, ${0.06 + breath * 0.025})`);
   aura.addColorStop(1, `hsla(32, 80%, 25%, 0)`);
   ctx.fillStyle = aura;
   ctx.beginPath();
   ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
   ctx.fill();
 
-  // 2. Rotating spotlight sweep beam (clipped to ring zone)
+  // 2. Single soft spotlight sweep (clipped to ring zone)
   ctx.save();
   ctx.beginPath();
   ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
   ctx.arc(cx, cy, baseRadius * 0.98, 0, Math.PI * 2, true);
   ctx.clip();
-  const sweepA = time * 0.9;
-  const sweepSpan = Math.PI * 0.18;
-  for (let i = 0; i < 2; i++) {
-    const a0 = sweepA + i * Math.PI;
+  const sweepA = time * 0.7;
+  const sweepSpan = Math.PI * 0.14;
+  {
+    const a0 = sweepA;
     const x1 = cx + Math.cos(a0) * baseRadius * 1.02;
     const y1 = cy + Math.sin(a0) * baseRadius * 1.02;
     const x2 = cx + Math.cos(a0) * auraMax;
     const y2 = cy + Math.sin(a0) * auraMax;
     const g = ctx.createLinearGradient(x1, y1, x2, y2);
-    g.addColorStop(0, `hsla(55, 100%, 92%, 0.6)`);
+    g.addColorStop(0, `hsla(55, 100%, 90%, 0.28)`);
     g.addColorStop(1, `hsla(45, 100%, 60%, 0)`);
     ctx.fillStyle = g;
     ctx.beginPath();
@@ -3891,30 +3891,31 @@ function drawPromptDiddy(
     const fade = t < 0.1 ? t / 0.1 : t > 0.85 ? (1 - t) / 0.15 : 1;
     const x = cx + b.x * baseRadius;
     const y = cy + b.y * baseRadius;
-    drawCashBill(ctx, x, y, b.size * DPR, b.rot, 0.9 * fade);
+    drawCashBill(ctx, x, y, b.size * DPR, b.rot, 0.7 * fade);
   });
   ctx.restore();
 
-  // 4. Double-stroke gold ring with sweeping bright shine
+  // 4. Double-stroke gold ring with subtle shine arc
   ctx.save();
-  ctx.strokeStyle = `hsla(38, 100%, 38%, 0.95)`;
+  ctx.strokeStyle = `hsla(38, 95%, 42%, 0.85)`;
   ctx.lineWidth = 3 * DPR;
   ctx.beginPath();
   ctx.arc(cx, cy, baseRadius, 0, Math.PI * 2);
   ctx.stroke();
-  ctx.strokeStyle = `hsla(50, 100%, 78%, 0.95)`;
+  ctx.strokeStyle = `hsla(50, 95%, 75%, 0.75)`;
   ctx.lineWidth = 1.2 * DPR;
   ctx.beginPath();
   ctx.arc(cx, cy, baseRadius - 1.6 * DPR, 0, Math.PI * 2);
   ctx.stroke();
-  const shineStart = time * 1.6;
-  ctx.strokeStyle = `hsla(55, 100%, 95%, 0.98)`;
-  ctx.lineWidth = 2.4 * DPR;
+  const shineStart = time * 1.2;
+  ctx.strokeStyle = `hsla(55, 100%, 92%, 0.7)`;
+  ctx.lineWidth = 2 * DPR;
   ctx.lineCap = "round";
   ctx.beginPath();
-  ctx.arc(cx, cy, baseRadius, shineStart, shineStart + Math.PI * 0.32);
+  ctx.arc(cx, cy, baseRadius, shineStart, shineStart + Math.PI * 0.22);
   ctx.stroke();
   ctx.restore();
+
 
   // 5. Bling sparkles (small cross stars across the ring zone)
   ctx.save();
