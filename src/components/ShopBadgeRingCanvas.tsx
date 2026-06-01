@@ -3975,13 +3975,13 @@ function drawPromptDiddy(
     const y = cy + Math.sin(m.angle) * baseRadius * m.radius;
     // Soft halo
     const halo = ctx.createRadialGradient(x, y, 0, x, y, m.size * DPR * 2);
-    halo.addColorStop(0, `hsla(50, 100%, 75%, ${0.45 * fade})`);
+    halo.addColorStop(0, `hsla(50, 100%, 75%, ${0.28 * fade})`);
     halo.addColorStop(1, `hsla(40, 100%, 50%, 0)`);
     ctx.fillStyle = halo;
     ctx.beginPath();
     ctx.arc(x, y, m.size * DPR * 2, 0, Math.PI * 2);
     ctx.fill();
-    drawMedallion(ctx, x, y, m.size * DPR, m.spin, 0.95 * fade);
+    drawMedallion(ctx, x, y, m.size * DPR, m.spin, 0.85 * fade);
   });
   ctx.restore();
 
