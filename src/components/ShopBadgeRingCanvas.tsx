@@ -3936,11 +3936,11 @@ function drawPromptDiddy(
     const x = cx + Math.cos(s.angle) * baseRadius * s.radius;
     const y = cy + Math.sin(s.angle) * baseRadius * s.radius;
     const r = s.size * DPR * (0.6 + pop * 0.9);
-    ctx.strokeStyle = `hsla(55, 100%, 92%, ${0.95 * pop})`;
-    ctx.lineWidth = 1.2 * DPR;
+    ctx.strokeStyle = `hsla(55, 100%, 92%, ${0.7 * pop})`;
+    ctx.lineWidth = 1.1 * DPR;
     ctx.lineCap = "round";
-    ctx.shadowColor = `hsla(50, 100%, 70%, ${0.9 * pop})`;
-    ctx.shadowBlur = r * 2.5;
+    ctx.shadowColor = `hsla(50, 100%, 70%, ${0.5 * pop})`;
+    ctx.shadowBlur = r * 1.5;
     ctx.beginPath();
     ctx.moveTo(x - r, y);
     ctx.lineTo(x + r, y);
