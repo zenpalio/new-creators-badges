@@ -3826,36 +3826,36 @@ function drawPromptDiddy(
   sparkles: GoldSparkle[],
   emojis: DiddyEmoji[],
 ) {
-  const auraMax = baseRadius * 1.3;
+  const auraMax = baseRadius * 1.22;
 
-  // 1. Contained luxury gold aura
-  const breath = 0.5 + Math.sin(time * 1.8) * 0.5;
-  const aura = ctx.createRadialGradient(cx, cy, baseRadius * 0.88, cx, cy, auraMax);
+  // 1. Contained luxury gold aura (subtler)
+  const breath = 0.5 + Math.sin(time * 1.4) * 0.5;
+  const aura = ctx.createRadialGradient(cx, cy, baseRadius * 0.92, cx, cy, auraMax);
   aura.addColorStop(0, `hsla(50, 100%, 70%, 0)`);
-  aura.addColorStop(0.5, `hsla(45, 100%, 55%, ${0.22 + breath * 0.1})`);
-  aura.addColorStop(0.8, `hsla(38, 95%, 40%, ${0.12 + breath * 0.05})`);
+  aura.addColorStop(0.55, `hsla(45, 95%, 55%, ${0.1 + breath * 0.05})`);
+  aura.addColorStop(0.85, `hsla(38, 90%, 40%, ${0.06 + breath * 0.025})`);
   aura.addColorStop(1, `hsla(32, 80%, 25%, 0)`);
   ctx.fillStyle = aura;
   ctx.beginPath();
   ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
   ctx.fill();
 
-  // 2. Rotating spotlight sweep beam (clipped to ring zone)
+  // 2. Single soft spotlight sweep (clipped to ring zone)
   ctx.save();
   ctx.beginPath();
   ctx.arc(cx, cy, auraMax, 0, Math.PI * 2);
   ctx.arc(cx, cy, baseRadius * 0.98, 0, Math.PI * 2, true);
   ctx.clip();
-  const sweepA = time * 0.9;
-  const sweepSpan = Math.PI * 0.18;
-  for (let i = 0; i < 2; i++) {
-    const a0 = sweepA + i * Math.PI;
+  const sweepA = time * 0.7;
+  const sweepSpan = Math.PI * 0.14;
+  {
+    const a0 = sweepA;
     const x1 = cx + Math.cos(a0) * baseRadius * 1.02;
     const y1 = cy + Math.sin(a0) * baseRadius * 1.02;
     const x2 = cx + Math.cos(a0) * auraMax;
     const y2 = cy + Math.sin(a0) * auraMax;
     const g = ctx.createLinearGradient(x1, y1, x2, y2);
-    g.addColorStop(0, `hsla(55, 100%, 92%, 0.6)`);
+    g.addColorStop(0, `hsla(55, 100%, 90%, 0.28)`);
     g.addColorStop(1, `hsla(45, 100%, 60%, 0)`);
     ctx.fillStyle = g;
     ctx.beginPath();
@@ -3891,30 +3891,31 @@ function drawPromptDiddy(
     const fade = t < 0.1 ? t / 0.1 : t > 0.85 ? (1 - t) / 0.15 : 1;
     const x = cx + b.x * baseRadius;
     const y = cy + b.y * baseRadius;
-    drawCashBill(ctx, x, y, b.size * DPR, b.rot, 0.9 * fade);
+    drawCashBill(ctx, x, y, b.size * DPR, b.rot, 0.7 * fade);
   });
   ctx.restore();
 
-  // 4. Double-stroke gold ring with sweeping bright shine
+  // 4. Double-stroke gold ring with subtle shine arc
   ctx.save();
-  ctx.strokeStyle = `hsla(38, 100%, 38%, 0.95)`;
+  ctx.strokeStyle = `hsla(38, 95%, 42%, 0.85)`;
   ctx.lineWidth = 3 * DPR;
   ctx.beginPath();
   ctx.arc(cx, cy, baseRadius, 0, Math.PI * 2);
   ctx.stroke();
-  ctx.strokeStyle = `hsla(50, 100%, 78%, 0.95)`;
+  ctx.strokeStyle = `hsla(50, 95%, 75%, 0.75)`;
   ctx.lineWidth = 1.2 * DPR;
   ctx.beginPath();
   ctx.arc(cx, cy, baseRadius - 1.6 * DPR, 0, Math.PI * 2);
   ctx.stroke();
-  const shineStart = time * 1.6;
-  ctx.strokeStyle = `hsla(55, 100%, 95%, 0.98)`;
-  ctx.lineWidth = 2.4 * DPR;
+  const shineStart = time * 1.2;
+  ctx.strokeStyle = `hsla(55, 100%, 92%, 0.7)`;
+  ctx.lineWidth = 2 * DPR;
   ctx.lineCap = "round";
   ctx.beginPath();
-  ctx.arc(cx, cy, baseRadius, shineStart, shineStart + Math.PI * 0.32);
+  ctx.arc(cx, cy, baseRadius, shineStart, shineStart + Math.PI * 0.22);
   ctx.stroke();
   ctx.restore();
+
 
   // 5. Bling sparkles (small cross stars across the ring zone)
   ctx.save();
@@ -3935,11 +3936,11 @@ function drawPromptDiddy(
     const x = cx + Math.cos(s.angle) * baseRadius * s.radius;
     const y = cy + Math.sin(s.angle) * baseRadius * s.radius;
     const r = s.size * DPR * (0.6 + pop * 0.9);
-    ctx.strokeStyle = `hsla(55, 100%, 92%, ${0.95 * pop})`;
-    ctx.lineWidth = 1.2 * DPR;
+    ctx.strokeStyle = `hsla(55, 100%, 92%, ${0.7 * pop})`;
+    ctx.lineWidth = 1.1 * DPR;
     ctx.lineCap = "round";
-    ctx.shadowColor = `hsla(50, 100%, 70%, ${0.9 * pop})`;
-    ctx.shadowBlur = r * 2.5;
+    ctx.shadowColor = `hsla(50, 100%, 70%, ${0.5 * pop})`;
+    ctx.shadowBlur = r * 1.5;
     ctx.beginPath();
     ctx.moveTo(x - r, y);
     ctx.lineTo(x + r, y);
@@ -3974,13 +3975,13 @@ function drawPromptDiddy(
     const y = cy + Math.sin(m.angle) * baseRadius * m.radius;
     // Soft halo
     const halo = ctx.createRadialGradient(x, y, 0, x, y, m.size * DPR * 2);
-    halo.addColorStop(0, `hsla(50, 100%, 75%, ${0.45 * fade})`);
+    halo.addColorStop(0, `hsla(50, 100%, 75%, ${0.28 * fade})`);
     halo.addColorStop(1, `hsla(40, 100%, 50%, 0)`);
     ctx.fillStyle = halo;
     ctx.beginPath();
     ctx.arc(x, y, m.size * DPR * 2, 0, Math.PI * 2);
     ctx.fill();
-    drawMedallion(ctx, x, y, m.size * DPR, m.spin, 0.95 * fade);
+    drawMedallion(ctx, x, y, m.size * DPR, m.spin, 0.85 * fade);
   });
   ctx.restore();
 
@@ -3994,15 +3995,15 @@ function drawPromptDiddy(
     const x = cx + Math.cos(e.angle) * baseRadius;
     const y = cy + Math.sin(e.angle) * baseRadius + bob;
     const halo = ctx.createRadialGradient(x, y, 0, x, y, e.size * DPR * 1.4);
-    halo.addColorStop(0, `hsla(50, 100%, 75%, 0.6)`);
+    halo.addColorStop(0, `hsla(50, 100%, 75%, 0.35)`);
     halo.addColorStop(1, `hsla(40, 100%, 50%, 0)`);
     ctx.fillStyle = halo;
     ctx.beginPath();
     ctx.arc(x, y, e.size * DPR * 1.4, 0, Math.PI * 2);
     ctx.fill();
     ctx.font = `${e.size * DPR}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
-    ctx.shadowColor = "hsla(45, 100%, 60%, 0.8)";
-    ctx.shadowBlur = 5 * DPR;
+    ctx.shadowColor = "hsla(45, 100%, 60%, 0.4)";
+    ctx.shadowBlur = 3 * DPR;
     ctx.fillText(e.emoji, x, y);
     ctx.shadowBlur = 0;
   });
@@ -4619,10 +4620,10 @@ const ShopBadgeRingCanvas = ({ badgeName, glowColor }: ShopBadgeRingCanvasProps)
       }
       case "Prompt Diddy": {
         if (blingMedallionsRef.current.length === 0)
-          blingMedallionsRef.current = makeBlingMedallions(7);
-        if (cashBillsRef.current.length === 0) cashBillsRef.current = makeCashBills(10);
+          blingMedallionsRef.current = makeBlingMedallions(4);
+        if (cashBillsRef.current.length === 0) cashBillsRef.current = makeCashBills(6);
         if (goldSparklesRef.current.length === 0)
-          goldSparklesRef.current = makeGoldSparkles(12);
+          goldSparklesRef.current = makeGoldSparkles(7);
         if (diddyEmojisRef.current.length === 0)
           diddyEmojisRef.current = makeDiddyEmojis(4);
         drawPromptDiddy(
