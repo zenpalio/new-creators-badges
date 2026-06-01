@@ -3995,15 +3995,15 @@ function drawPromptDiddy(
     const x = cx + Math.cos(e.angle) * baseRadius;
     const y = cy + Math.sin(e.angle) * baseRadius + bob;
     const halo = ctx.createRadialGradient(x, y, 0, x, y, e.size * DPR * 1.4);
-    halo.addColorStop(0, `hsla(50, 100%, 75%, 0.6)`);
+    halo.addColorStop(0, `hsla(50, 100%, 75%, 0.35)`);
     halo.addColorStop(1, `hsla(40, 100%, 50%, 0)`);
     ctx.fillStyle = halo;
     ctx.beginPath();
     ctx.arc(x, y, e.size * DPR * 1.4, 0, Math.PI * 2);
     ctx.fill();
     ctx.font = `${e.size * DPR}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
-    ctx.shadowColor = "hsla(45, 100%, 60%, 0.8)";
-    ctx.shadowBlur = 5 * DPR;
+    ctx.shadowColor = "hsla(45, 100%, 60%, 0.4)";
+    ctx.shadowBlur = 3 * DPR;
     ctx.fillText(e.emoji, x, y);
     ctx.shadowBlur = 0;
   });
