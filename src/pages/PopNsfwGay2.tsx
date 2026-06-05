@@ -50,35 +50,26 @@ const PopNsfwGay2 = () => {
         .dick-card:focus-within .lower-blur {
           filter: blur(0px) brightness(1);
         }
-        .dick-card .send-btn {
-          opacity: 1;
-          transition: opacity 0.25s ease, transform 0.25s ease;
-        }
-        .dick-card:hover .send-btn,
-        .dick-card:active .send-btn,
-        .dick-card:focus-within .send-btn {
-          opacity: 0;
-          transform: translate(-50%, -50%) scale(0.85);
-        }
         @keyframes idleJump {
-          0%, 100% { transform: translateY(0) rotate(-1.2deg); }
-          50% { transform: translateY(-12px) rotate(1.2deg); }
+          0%, 100% { transform: translateY(0) rotate(-1deg); }
+          50% { transform: translateY(-10px) rotate(1deg); }
         }
         .dick-card .frame {
-          animation: idleJump 2.2s ease-in-out infinite;
+          animation: idleJump 2.4s ease-in-out infinite;
           transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .dick-card:nth-of-type(2) .frame { animation-delay: 0.35s; }
         .dick-card:nth-of-type(3) .frame { animation-delay: 0.7s; }
         .dick-card:hover .frame {
           animation-play-state: paused;
-          transform: scale(1.06) translateY(-6px);
+          transform: scale(1.04) translateY(-4px);
         }
-        @keyframes wiggle {
-          0%, 100% { transform: translate(-50%, -50%) rotate(-3deg); }
-          50% { transform: translate(-50%, -50%) rotate(3deg); }
+        @keyframes ctaPulse {
+          0%, 100% { transform: translateX(-50%) scale(1); box-shadow: 0 8px 24px rgba(0,0,0,0.6); }
+          50% { transform: translateX(-50%) scale(1.06); }
         }
-        .dick-card .send-btn { animation: wiggle 1.4s ease-in-out infinite; }
+        .chat-cta { animation: ctaPulse 1.4s ease-in-out infinite; }
+        .chat-cta:hover { filter: brightness(1.15); }
       `}</style>
 
       {/* Dim vignette */}
