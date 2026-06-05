@@ -100,7 +100,7 @@ const PopNsfwHer = () => {
         <h1
           className="font-black uppercase leading-[1.05] tracking-wider"
           style={{
-            fontSize: "clamp(1.05rem, 3.6vw, 3.2rem)",
+            fontSize: "clamp(1.75rem, 6vw, 3.2rem)",
             color: "#ffdd00",
             WebkitTextStroke: "1.5px #000000",
             textShadow: "0 4px 0 rgba(0,0,0,0.55), 0 10px 24px rgba(0,0,0,0.7)",
