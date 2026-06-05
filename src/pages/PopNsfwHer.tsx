@@ -1,4 +1,5 @@
 import bg from "@/assets/nsfw-her-bg.jpg";
+import bgMobile from "@/assets/nsfw-her-bg-mobile.jpg";
 import babe1 from "@/assets/popunder/babe1.png.asset.json";
 import babe2 from "@/assets/popunder/babe2.png.asset.json";
 import babe3 from "@/assets/popunder/babe3.png.asset.json";
