@@ -100,6 +100,41 @@ const PopNsfwHer = () => {
         </g>
       </svg>
 
+      {/* Graffiti scrawls */}
+      {[
+        { text: "CALL 4 A GOOD TIME", top: "8%", left: "6%", rotate: -8, size: "2.2rem", color: "#ff1f6b" },
+        { text: "SLUTZ ONLY", top: "14%", left: "68%", rotate: 6, size: "2.6rem", color: "#39ff14" },
+        { text: "XXX", top: "30%", left: "44%", rotate: -4, size: "4rem", color: "#ffdd00" },
+        { text: "WET", top: "62%", left: "8%", rotate: -12, size: "3rem", color: "#00e0ff" },
+        { text: "+1 555 0HOT", top: "78%", left: "55%", rotate: 4, size: "1.6rem", color: "#ffffff" },
+        { text: "♥ JESS ♥", top: "70%", left: "78%", rotate: -6, size: "1.8rem", color: "#ff66cc" },
+        { text: "DONT TELL MOM", top: "88%", left: "18%", rotate: 2, size: "1.4rem", color: "#ffdd00" },
+      ].map((g, i) => (
+        <div
+          key={`graf-${i}`}
+          className="absolute pointer-events-none select-none uppercase font-black"
+          style={{
+            top: g.top,
+            left: g.left,
+            transform: `rotate(${g.rotate}deg)`,
+            fontFamily: "'Permanent Marker', 'Marker Felt', 'Comic Sans MS', cursive",
+            fontSize: g.size,
+            color: g.color,
+            opacity: 0.8,
+            mixBlendMode: "screen",
+            textShadow: `2px 2px 0 rgba(0,0,0,0.6), 0 0 10px ${g.color}55`,
+            letterSpacing: "0.04em",
+            filter: "blur(0.3px) contrast(1.1)",
+            whiteSpace: "nowrap",
+            zIndex: 2,
+          }}
+        >
+          {g.text}
+        </div>
+      ))}
+
+
+
 
       {positions.map((left, i) => (
         <div
