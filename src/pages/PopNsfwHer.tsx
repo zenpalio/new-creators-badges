@@ -252,7 +252,7 @@ const PopNsfwHer = () => {
             </div>
           </div>
 
-          <div className="flex flex-col items-center transition-transform duration-300 ease-out group-hover:scale-110 sm:group-hover:scale-125 origin-bottom [filter:brightness(0.55)_saturate(0.35)_contrast(0.95)] group-hover:[filter:none]">
+          <div className="babe-inner flex flex-col items-center transition-transform duration-300 ease-out group-hover:scale-125 origin-bottom [filter:brightness(0.55)_saturate(0.35)_contrast(0.95)] group-hover:[filter:none]">
             {/* Name above frame */}
             <div className="mb-2 whitespace-nowrap pointer-events-none">
               <div
