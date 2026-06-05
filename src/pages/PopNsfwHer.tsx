@@ -215,8 +215,8 @@ const PopNsfwHer = () => {
           className="babe-card absolute group"
           style={{
             left,
-            bottom: "2%",
-            transform: "translateX(-50%)",
+            top: "50%",
+            transform: "translate(-50%, -50%)",
             width: "clamp(110px, 26vw, 320px)",
             zIndex: 5,
             cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'><text x='4' y='38' font-size='38'>👉</text></svg>") 8 24, pointer`,
