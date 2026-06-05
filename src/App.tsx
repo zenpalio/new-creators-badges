@@ -15,6 +15,7 @@ import Popunder from "./pages/Popunder.tsx";
 import PopNsfwHer from "./pages/PopNsfwHer.tsx";
 import PopNsfwGay from "./pages/PopNsfwGay.tsx";
 import PopSfwHim from "./pages/PopSfwHim.tsx";
+import PopSfwGay from "./pages/PopSfwGay.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -38,6 +39,7 @@ const App = () => (
           <Route path="/pop/nsfw-her" element={<PopNsfwHer />} />
           <Route path="/pop/nsfw-gay" element={<PopNsfwGay />} />
           <Route path="/pop/sfw-him" element={<PopSfwHim />} />
+          <Route path="/pop/sfw-gay" element={<PopSfwGay />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
