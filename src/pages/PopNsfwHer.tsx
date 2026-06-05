@@ -171,13 +171,10 @@ const PopNsfwHer = () => {
 
       {/* Graffiti scrawls */}
       {[
-        { text: "CALL 4 A GOOD TIME", top: "8%", left: "6%", rotate: -8, size: "clamp(0.9rem, 2.4vw, 2.2rem)", color: "#ff1f6b" },
-        { text: "SLUTZ ONLY", top: "14%", left: "68%", rotate: 6, size: "clamp(1rem, 2.8vw, 2.6rem)", color: "#39ff14" },
-        { text: "XXX", top: "30%", left: "44%", rotate: -4, size: "clamp(1.6rem, 4.5vw, 4rem)", color: "#ffdd00" },
-        { text: "WET", top: "62%", left: "8%", rotate: -12, size: "clamp(1.2rem, 3.2vw, 3rem)", color: "#00e0ff" },
-        { text: "+1 555 0HOT", top: "78%", left: "55%", rotate: 4, size: "clamp(0.7rem, 1.8vw, 1.6rem)", color: "#ffffff" },
-        { text: "♥ JESS ♥", top: "70%", left: "78%", rotate: -6, size: "clamp(0.8rem, 2vw, 1.8rem)", color: "#ff66cc" },
-        { text: "DONT TELL MOM", top: "88%", left: "18%", rotate: 2, size: "clamp(0.65rem, 1.6vw, 1.4rem)", color: "#ffdd00" },
+        { text: "FREE TO USE", top: "8%", left: "6%", rotate: -8, size: "clamp(1rem, 2.6vw, 2.4rem)", color: "#ff1f6b" },
+        { text: "CUMHOLE", top: "14%", left: "66%", rotate: 6, size: "clamp(1.1rem, 3vw, 2.8rem)", color: "#39ff14" },
+        { text: "DON'T TELL MOM", top: "70%", left: "8%", rotate: -10, size: "clamp(0.9rem, 2.2vw, 2rem)", color: "#ffdd00" },
+        { text: "FREE TO USE", top: "78%", left: "62%", rotate: 4, size: "clamp(1rem, 2.4vw, 2.2rem)", color: "#00e0ff" },
       ].map((g, i) => (
         <div
           key={`graf-${i}`}
