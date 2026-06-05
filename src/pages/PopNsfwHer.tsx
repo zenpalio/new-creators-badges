@@ -28,16 +28,22 @@ const PopNsfwHer = () => {
             left: auto !important;
             bottom: auto !important;
             transform: none !important;
-            width: 80% !important;
-            max-width: 360px !important;
+            width: 55% !important;
+            max-width: 240px !important;
             margin: 0 auto;
+          }
+          .babe-card .babe-inner {
+            transform: none !important;
+          }
+          .babe-card:hover .babe-inner {
+            transform: scale(1.05) !important;
           }
           .babes-stack {
             display: flex !important;
             flex-direction: column;
             align-items: center;
-            gap: 1rem;
-            padding: 7rem 0 2rem;
+            gap: 0.5rem;
+            padding: 6rem 0 1.5rem;
           }
         }
         @media (min-width: 768px) and (max-width: 1023px) {
@@ -246,7 +252,7 @@ const PopNsfwHer = () => {
             </div>
           </div>
 
-          <div className="flex flex-col items-center transition-transform duration-300 ease-out group-hover:scale-110 sm:group-hover:scale-125 origin-bottom [filter:brightness(0.55)_saturate(0.35)_contrast(0.95)] group-hover:[filter:none]">
+          <div className="babe-inner flex flex-col items-center transition-transform duration-300 ease-out group-hover:scale-125 origin-bottom [filter:brightness(0.55)_saturate(0.35)_contrast(0.95)] group-hover:[filter:none]">
             {/* Name above frame */}
             <div className="mb-2 whitespace-nowrap pointer-events-none">
               <div
