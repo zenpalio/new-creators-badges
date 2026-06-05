@@ -188,8 +188,7 @@ const PopNsfwHer = () => {
             left,
             bottom: "2%",
             transform: "translateX(-50%)",
-            width: "20%",
-            maxWidth: "320px",
+            width: "clamp(110px, 26vw, 320px)",
             zIndex: 5,
             cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'><text x='4' y='38' font-size='38'>👉</text></svg>") 8 24, pointer`,
           }}
@@ -197,15 +196,16 @@ const PopNsfwHer = () => {
           {/* PICK ME tooltip */}
           <div
             className="absolute left-1/2 -translate-x-1/2 z-30 pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-200 ease-out -translate-y-2 group-hover:translate-y-0"
-            style={{ top: "-3.5rem" }}
+            style={{ top: "clamp(-3.5rem, -8vw, -2.2rem)" }}
           >
             <div
-              className="relative px-4 py-2 rounded-lg whitespace-nowrap"
+              className="relative rounded-lg whitespace-nowrap"
               style={{
                 background: "#ffdd00",
                 color: "#000",
                 fontFamily: "'Permanent Marker', cursive",
-                fontSize: "1.1rem",
+                fontSize: "clamp(0.65rem, 1.6vw, 1.1rem)",
+                padding: "clamp(0.25rem, 0.8vw, 0.5rem) clamp(0.5rem, 1.5vw, 1rem)",
                 transform: "rotate(-3deg)",
                 boxShadow: "0 6px 14px rgba(0,0,0,0.5)",
                 border: "2px solid #000",
@@ -223,13 +223,13 @@ const PopNsfwHer = () => {
             </div>
           </div>
 
-          <div className="flex flex-col items-center transition-transform duration-300 ease-out group-hover:scale-125 origin-bottom [filter:brightness(0.55)_saturate(0.35)_contrast(0.95)] group-hover:[filter:none]">
+          <div className="flex flex-col items-center transition-transform duration-300 ease-out group-hover:scale-110 sm:group-hover:scale-125 origin-bottom [filter:brightness(0.55)_saturate(0.35)_contrast(0.95)] group-hover:[filter:none]">
             {/* Name above frame */}
             <div className="mb-2 whitespace-nowrap pointer-events-none">
               <div
                 className="font-black uppercase leading-none tracking-wider"
                 style={{
-                  fontSize: "2.6rem",
+                  fontSize: "clamp(1rem, 3.4vw, 2.6rem)",
                   color: babes[i].color,
                   WebkitTextStroke: "2px #ffffff",
                   textShadow: "0 4px 0 rgba(0,0,0,0.4), 0 8px 18px rgba(0,0,0,0.6)",
