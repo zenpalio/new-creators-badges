@@ -42,6 +42,7 @@ const App = () => (
           
           <Route path="/pop/nsfw-her" element={<PopNsfwHer />} />
           <Route path="/pop/nsfw-gay" element={<PopNsfwGay />} />
+          <Route path="/pop/nsfw-gay2" element={<PopNsfwGay2 />} />
           <Route path="/pop/sfw-him-anime" element={<PopSfwHimAnime />} />
           <Route path="/pop/sfw-him-real" element={<PopSfwHimReal />} />
           
