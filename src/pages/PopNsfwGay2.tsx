@@ -6,7 +6,7 @@ import mybabesHeart from "@/assets/popunder/mybabes-heart.png.asset.json";
 
 const dudes = [
   { src: marco.url, name: "MARCO", age: 28, color: "#ff3b6b", teaser: "Ride me till sunrise 💋" },
-  { src: jake.url, name: "JAKE", age: 26, color: "#39ff14", teaser: "Choke on it, baby 🥵" },
+  { src: jake.url, name: "JAKE", age: 20, color: "#39ff14", teaser: "Choke on it, baby 🥵" },
   { src: diego.url, name: "DIEGO", age: 30, color: "#00e0ff", teaser: "I'll stretch you open 💦" },
 ];
 
