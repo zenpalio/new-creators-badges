@@ -71,7 +71,9 @@ const PopNsfwGay = () => {
           50% { transform: scale(1.29) rotate(1deg); }
           75% { transform: scale(1.28) rotate(-0.8deg); }
         }
-        .babe-card:hover .babe-inner {
+        .babe-card:hover .babe-inner,
+        .babe-card:active .babe-inner,
+        .babe-card:focus-within .babe-inner {
           animation: babeShake 0.7s ease-in-out infinite;
         }
       `}</style>
