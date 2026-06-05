@@ -204,40 +204,35 @@ const PopNsfwGay2 = () => {
                     transform: "translateY(-60%)",
                   }}
                 />
-                {/* dark gradient to keep text legible */}
-                <div className="absolute inset-x-0 bottom-0 h-2/3 pointer-events-none"
-                  style={{ background: "linear-gradient(180deg, transparent, rgba(0,0,0,0.85))" }}
-                />
               </div>
+            </div>
 
-              {/* Teaser line — bottom of card */}
-              <div className="absolute inset-x-0 bottom-20 z-10 px-3 text-center pointer-events-none">
-                <p
-                  className="font-bold leading-tight"
-                  style={{
-                    color: "#fff",
-                    fontSize: "clamp(0.8rem, 1.6vw, 1.05rem)",
-                    fontFamily: "'Onest', sans-serif",
-                    textShadow: "0 2px 8px rgba(0,0,0,0.9)",
-                    fontStyle: "italic",
-                  }}
-                >
-                  "{dudes[i].teaser}"
-                </p>
-              </div>
+            {/* Teaser line — below card */}
+            <p
+              className="mt-3 text-center font-bold leading-tight px-2"
+              style={{
+                color: "#fff",
+                fontSize: "clamp(0.8rem, 1.6vw, 1.05rem)",
+                fontFamily: "'Onest', sans-serif",
+                textShadow: "0 2px 8px rgba(0,0,0,0.9)",
+                fontStyle: "italic",
+              }}
+            >
+              "{dudes[i].teaser}"
+            </p>
 
-              {/* Chat CTA — always visible, obvious */}
+            {/* Chat CTA — always visible, obvious */}
+            <div className="mt-3 flex justify-center">
               <button
                 type="button"
-                className="chat-cta absolute left-1/2 bottom-4 z-20 whitespace-nowrap flex items-center gap-2"
+                className="chat-cta whitespace-nowrap flex items-center gap-2"
                 style={{
-                  transform: "translateX(-50%)",
                   background: `linear-gradient(180deg, ${dudes[i].color}, ${dudes[i].color}cc)`,
                   color: "#fff",
                   fontFamily: "'Onest', sans-serif",
                   fontWeight: 900,
-                  fontSize: "clamp(0.8rem, 1.5vw, 1rem)",
-                  padding: "clamp(0.6rem, 1.3vw, 0.85rem) clamp(1.1rem, 2.4vw, 1.6rem)",
+                  fontSize: "clamp(0.85rem, 1.5vw, 1.05rem)",
+                  padding: "clamp(0.7rem, 1.4vw, 0.95rem) clamp(1.3rem, 2.6vw, 1.8rem)",
                   borderRadius: "999px",
                   boxShadow: `0 8px 24px rgba(0,0,0,0.6), 0 0 28px ${dudes[i].color}aa`,
                   letterSpacing: "0.06em",
