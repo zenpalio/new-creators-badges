@@ -205,10 +205,11 @@ const PopNsfwHer = () => {
 
 
 
+      <div className="babes-stack contents">
       {positions.map((left, i) => (
         <div
           key={i}
-          className="absolute group"
+          className="babe-card absolute group"
           style={{
             left,
             bottom: "2%",
