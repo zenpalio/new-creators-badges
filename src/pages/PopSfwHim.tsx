@@ -106,30 +106,9 @@ const PopSfwHim = () => {
           .babes-stack { gap: 1.5rem; padding: 1rem 0 1.5rem; }
         }
         @media (min-width: 768px) and (max-width: 1023px) {
-          .sfw-root {
-            display: flex !important;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 4.5rem;
-          }
           .babes-stack {
-            display: grid !important;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem !important;
-            width: 94%;
-            max-width: 760px;
-            padding: 0 0 2rem !important;
-            order: 2;
-          }
-          .babe-card {
-            width: 100% !important;
-            max-width: 100% !important;
-            margin: 0 !important;
-          }
-          .headline-wrap {
-            order: 1;
-            padding-top: 0 !important;
-            margin-bottom: 1rem;
+            gap: 2.5rem;
+            padding: 2rem 0 3rem;
           }
         }
         @keyframes floatY {
