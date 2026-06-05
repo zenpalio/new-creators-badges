@@ -7,10 +7,8 @@ import Profile from "./pages/Profile.tsx";
 import Creators from "./pages/Creators.tsx";
 import Explore from "./pages/Explore.tsx";
 import ExploreKling from "./pages/ExploreKling.tsx";
-import Verification from "./pages/Verification.tsx";
 import Gallery from "./pages/Gallery.tsx";
 import EventDetail from "./pages/EventDetail.tsx";
-import YotiVerificationDemo from "./pages/YotiVerificationDemo.tsx";
 import PopNsfwHer from "./pages/PopNsfwHer.tsx";
 import PopNsfwGay from "./pages/PopNsfwGay.tsx";
 import PopSfwHimReal from "./pages/PopSfwHimReal.tsx";
@@ -36,8 +34,10 @@ const App = () => (
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/badges" element={<Profile />} />
           <Route path="/creators" element={<Creators />} />
-          <Route path="/verification" element={<Verification />} />
-          <Route path="/yoti-verification" element={<YotiVerificationDemo />} />
+
+
+          
+
           
           <Route path="/pop/nsfw-her" element={<PopNsfwHer />} />
           <Route path="/pop/nsfw-gay" element={<PopNsfwGay />} />
