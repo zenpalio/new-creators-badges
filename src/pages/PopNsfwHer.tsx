@@ -152,6 +152,22 @@ const PopNsfwHer = () => {
             zIndex: 5,
           }}
         >
+          {/* Name above frame */}
+          <div className="mb-2 z-20 whitespace-nowrap pointer-events-none">
+            <div
+              className="font-black uppercase leading-none tracking-wider"
+              style={{
+                fontSize: "2.6rem",
+                color: babes[i].color,
+                WebkitTextStroke: "2px #ffffff",
+                textShadow: "0 4px 0 rgba(0,0,0,0.4), 0 8px 18px rgba(0,0,0,0.6)",
+                fontFamily: "'Onest', sans-serif",
+              }}
+            >
+              {babes[i].name}
+            </div>
+          </div>
+
           {/* Portrait inside frame */}
           <div
             className="relative transition-transform duration-300 ease-out group-hover:scale-125 origin-bottom"
@@ -172,23 +188,7 @@ const PopNsfwHer = () => {
               className="block w-full h-full object-cover pointer-events-none select-none transition-[filter] duration-300 ease-out [filter:brightness(0.45)_saturate(0.25)_contrast(0.95)] group-hover:[filter:none]"
             />
           </div>
-          {/* dark veil over portrait that fades on hover */}
 
-          {/* Name below frame */}
-          <div className="mt-2 z-10 whitespace-nowrap">
-            <div
-              className="font-black uppercase leading-none tracking-wider"
-              style={{
-                fontSize: "1.6rem",
-                color: babes[i].color,
-                WebkitTextStroke: "1.5px #ffffff",
-                textShadow: "0 3px 0 rgba(0,0,0,0.35), 0 6px 14px rgba(0,0,0,0.5)",
-                fontFamily: "'Onest', sans-serif",
-              }}
-            >
-              {babes[i].name}
-            </div>
-          </div>
 
           {/* Full body babe image, smaller and at the bottom */}
           <img
