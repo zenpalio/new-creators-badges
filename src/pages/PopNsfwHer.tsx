@@ -183,7 +183,7 @@ const PopNsfwHer = () => {
       {positions.map((left, i) => (
         <div
           key={i}
-          className="absolute group cursor-pointer"
+          className="absolute group"
           style={{
             left,
             bottom: "2%",
@@ -191,8 +191,38 @@ const PopNsfwHer = () => {
             width: "20%",
             maxWidth: "320px",
             zIndex: 5,
+            cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'><text x='4' y='38' font-size='38'>👉</text></svg>") 8 24, pointer`,
           }}
         >
+          {/* PICK ME tooltip */}
+          <div
+            className="absolute left-1/2 -translate-x-1/2 z-30 pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-200 ease-out -translate-y-2 group-hover:translate-y-0"
+            style={{ top: "-3.5rem" }}
+          >
+            <div
+              className="relative px-4 py-2 rounded-lg whitespace-nowrap"
+              style={{
+                background: "#ffdd00",
+                color: "#000",
+                fontFamily: "'Permanent Marker', cursive",
+                fontSize: "1.1rem",
+                transform: "rotate(-3deg)",
+                boxShadow: "0 6px 14px rgba(0,0,0,0.5)",
+                border: "2px solid #000",
+              }}
+            >
+              PICK ME — this is the hole 👇
+              <div
+                className="absolute left-1/2 -translate-x-1/2 -bottom-2 w-0 h-0"
+                style={{
+                  borderLeft: "8px solid transparent",
+                  borderRight: "8px solid transparent",
+                  borderTop: "10px solid #000",
+                }}
+              />
+            </div>
+          </div>
+
           <div className="flex flex-col items-center transition-transform duration-300 ease-out group-hover:scale-125 origin-bottom [filter:brightness(0.55)_saturate(0.35)_contrast(0.95)] group-hover:[filter:none]">
             {/* Name above frame */}
             <div className="mb-2 whitespace-nowrap pointer-events-none">
