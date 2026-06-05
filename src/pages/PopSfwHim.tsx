@@ -20,6 +20,7 @@ const guys = [
     tooltip: "come closer, kitten 🥀",
     default: mafiaA.url,
     spicy: mafiaB.url,
+    sceneBg: bgMafia.url,
     accent: "#ff2d6f",
   },
   {
@@ -30,6 +31,7 @@ const guys = [
     tooltip: "stay close to me 🛡️",
     default: guardA.url,
     spicy: guardB.url,
+    sceneBg: bgGuard.url,
     accent: "#5ac8ff",
   },
   {
@@ -40,6 +42,7 @@ const guys = [
     tooltip: "tease me, senpai 😈",
     default: bullyA.url,
     spicy: bullyB.url,
+    sceneBg: bgBully.url,
     accent: "#ffd23f",
   },
 ];
@@ -47,6 +50,7 @@ const guys = [
 const positions = ["18%", "50%", "82%"];
 
 const PopSfwHim = () => {
+  const [hovered, setHovered] = useState<number | null>(null);
   return (
     <div
       className="min-h-screen w-full bg-no-repeat bg-center bg-cover relative sfw-bg"
