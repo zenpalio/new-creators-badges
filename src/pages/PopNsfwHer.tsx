@@ -42,6 +42,7 @@ const PopNsfwHer = () => {
           }
           .babe-card:hover .babe-inner {
             transform: scale(1.05) !important;
+            animation: none !important;
           }
           .babes-stack {
             display: flex !important;
@@ -59,6 +60,16 @@ const PopNsfwHer = () => {
           .babe-card {
             width: 30% !important;
           }
+        }
+        @keyframes babeShake {
+          0%, 100% { transform: scale(1.28) rotate(0deg); }
+          20% { transform: scale(1.28) rotate(-2.5deg); }
+          40% { transform: scale(1.3) rotate(2.5deg); }
+          60% { transform: scale(1.28) rotate(-2deg); }
+          80% { transform: scale(1.3) rotate(2deg); }
+        }
+        .babe-card:hover .babe-inner {
+          animation: babeShake 0.5s ease-in-out infinite;
         }
       `}</style>
       {/* Logo */}
@@ -224,7 +235,7 @@ const PopNsfwHer = () => {
           className="babe-card absolute group"
           style={{
             left,
-            top: "50%",
+            top: "62%",
             transform: "translate(-50%, -50%)",
             width: "clamp(110px, 26vw, 320px)",
             zIndex: 5,
