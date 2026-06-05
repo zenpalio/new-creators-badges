@@ -47,8 +47,8 @@ const PopNsfwHer = () => {
             display: flex !important;
             flex-direction: column;
             align-items: center;
-            gap: 0.5rem;
-            padding: 6rem 0 1.5rem;
+            gap: 2.5rem;
+            padding: 6rem 0 2rem;
           }
         }
         @media (min-width: 768px) and (max-width: 1023px) {
