@@ -18,6 +18,8 @@ import PopSfwHim from "./pages/PopSfwHim.tsx";
 import PopSfwHimReal from "./pages/PopSfwHimReal.tsx";
 import PopSfwGay from "./pages/PopSfwGay.tsx";
 import PopSfwGayAnime from "./pages/PopSfwGayAnime.tsx";
+import PopSfwHerReal from "./pages/PopSfwHerReal.tsx";
+import PopSfwHerAnime from "./pages/PopSfwHerAnime.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -46,6 +48,8 @@ const App = () => (
           <Route path="/pop/sfw-gay" element={<PopSfwGay />} />
           <Route path="/pop/sfw-gay-realistic" element={<PopSfwGay />} />
           <Route path="/pop/sfw-gay-anime" element={<PopSfwGayAnime />} />
+          <Route path="/pop/sfw-her-realistic" element={<PopSfwHerReal />} />
+          <Route path="/pop/sfw-her-anime" element={<PopSfwHerAnime />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
