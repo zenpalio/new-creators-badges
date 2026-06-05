@@ -42,8 +42,8 @@ const PopNsfwGay2 = () => {
           .dick-card { width: 28% !important; }
         }
         .dick-card .lower-blur {
-          filter: blur(22px) brightness(0.6);
-          transition: filter 0.35s ease;
+          filter: blur(30px) brightness(0.55) saturate(1.1);
+          transition: filter 0.4s ease;
         }
         .dick-card:hover .lower-blur,
         .dick-card:active .lower-blur,
@@ -60,11 +60,20 @@ const PopNsfwGay2 = () => {
           opacity: 0;
           transform: translate(-50%, -50%) scale(0.85);
         }
-        .dick-card .frame {
-          transform: scale(1);
-          transition: transform 0.3s ease;
+        @keyframes idleJump {
+          0%, 100% { transform: translateY(0) rotate(-1.2deg); }
+          50% { transform: translateY(-12px) rotate(1.2deg); }
         }
-        .dick-card:hover .frame { transform: scale(1.04); }
+        .dick-card .frame {
+          animation: idleJump 2.2s ease-in-out infinite;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .dick-card:nth-of-type(2) .frame { animation-delay: 0.35s; }
+        .dick-card:nth-of-type(3) .frame { animation-delay: 0.7s; }
+        .dick-card:hover .frame {
+          animation-play-state: paused;
+          transform: scale(1.06) translateY(-6px);
+        }
         @keyframes wiggle {
           0%, 100% { transform: translate(-50%, -50%) rotate(-3deg); }
           50% { transform: translate(-50%, -50%) rotate(3deg); }
