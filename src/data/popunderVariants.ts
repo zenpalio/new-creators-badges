@@ -106,38 +106,55 @@ export const popunderVariants: Record<PopunderVariantId, PopunderVariant> = {
 
 export const accentClasses: Record<
   PopunderVariant["accent"],
-  { ring: string; text: string; glow: string; btn: string; from: string; to: string }
+  {
+    ring: string;
+    hoverRing: string;
+    text: string;
+    glow: string;
+    btn: string;
+    orbA: string;
+    orbB: string;
+    headingGradient: string;
+  }
 > = {
   pink: {
     ring: "ring-pink-500/70",
+    hoverRing: "hover:ring-pink-500/70",
     text: "text-pink-400",
     glow: "shadow-[0_0_40px_-5px_rgba(236,72,153,0.7)]",
     btn: "bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-400 hover:to-rose-400",
-    from: "from-pink-500/30",
-    to: "to-rose-500/10",
+    orbA: "bg-gradient-to-br from-pink-500/30 to-rose-500/10",
+    orbB: "bg-gradient-to-tr from-pink-500/30 to-rose-500/10",
+    headingGradient: "bg-gradient-to-br from-pink-300 via-white to-rose-200 bg-clip-text text-transparent",
   },
   "electric-blue": {
     ring: "ring-blue-500/70",
+    hoverRing: "hover:ring-blue-500/70",
     text: "text-blue-400",
     glow: "shadow-[0_0_40px_-5px_rgba(59,130,246,0.7)]",
     btn: "bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-400 hover:to-cyan-400",
-    from: "from-blue-500/30",
-    to: "to-cyan-500/10",
+    orbA: "bg-gradient-to-br from-blue-500/30 to-cyan-500/10",
+    orbB: "bg-gradient-to-tr from-blue-500/30 to-cyan-500/10",
+    headingGradient: "bg-gradient-to-br from-blue-300 via-white to-cyan-200 bg-clip-text text-transparent",
   },
   gold: {
     ring: "ring-amber-500/70",
+    hoverRing: "hover:ring-amber-500/70",
     text: "text-amber-400",
     glow: "shadow-[0_0_40px_-5px_rgba(245,158,11,0.7)]",
     btn: "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400",
-    from: "from-amber-500/30",
-    to: "to-orange-500/10",
+    orbA: "bg-gradient-to-br from-amber-500/30 to-orange-500/10",
+    orbB: "bg-gradient-to-tr from-amber-500/30 to-orange-500/10",
+    headingGradient: "bg-gradient-to-br from-amber-300 via-white to-orange-200 bg-clip-text text-transparent",
   },
   violet: {
     ring: "ring-violet-500/70",
+    hoverRing: "hover:ring-violet-500/70",
     text: "text-violet-400",
     glow: "shadow-[0_0_40px_-5px_rgba(139,92,246,0.7)]",
     btn: "bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-400 hover:to-fuchsia-400",
-    from: "from-violet-500/30",
-    to: "to-fuchsia-500/10",
+    orbA: "bg-gradient-to-br from-violet-500/30 to-fuchsia-500/10",
+    orbB: "bg-gradient-to-tr from-violet-500/30 to-fuchsia-500/10",
+    headingGradient: "bg-gradient-to-br from-violet-300 via-white to-fuchsia-200 bg-clip-text text-transparent",
   },
 };
