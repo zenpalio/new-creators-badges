@@ -22,16 +22,16 @@ const PopNsfwHer = () => {
       style={{ backgroundImage: `url(${bg})` }}
     >
       {/* Logo */}
-      <div className="absolute top-4 left-4 z-30 flex items-center gap-2 pointer-events-none select-none">
+      <div className="absolute top-2 left-2 sm:top-4 sm:left-4 z-30 flex items-center gap-1.5 sm:gap-2 pointer-events-none select-none">
         <img
           src={mybabesHeart.url}
           alt="mybabes logo"
-          className="w-10 h-10 drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)]"
+          className="w-7 h-7 sm:w-10 sm:h-10 drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)]"
         />
         <span
           className="font-black lowercase tracking-tight"
           style={{
-            fontSize: "1.75rem",
+            fontSize: "clamp(1rem, 3.2vw, 1.75rem)",
             color: "#ffffff",
             fontFamily: "'Onest', sans-serif",
             textShadow: "0 2px 0 rgba(0,0,0,0.5), 0 6px 14px rgba(0,0,0,0.6)",
@@ -146,13 +146,13 @@ const PopNsfwHer = () => {
 
       {/* Graffiti scrawls */}
       {[
-        { text: "CALL 4 A GOOD TIME", top: "8%", left: "6%", rotate: -8, size: "2.2rem", color: "#ff1f6b" },
-        { text: "SLUTZ ONLY", top: "14%", left: "68%", rotate: 6, size: "2.6rem", color: "#39ff14" },
-        { text: "XXX", top: "30%", left: "44%", rotate: -4, size: "4rem", color: "#ffdd00" },
-        { text: "WET", top: "62%", left: "8%", rotate: -12, size: "3rem", color: "#00e0ff" },
-        { text: "+1 555 0HOT", top: "78%", left: "55%", rotate: 4, size: "1.6rem", color: "#ffffff" },
-        { text: "♥ JESS ♥", top: "70%", left: "78%", rotate: -6, size: "1.8rem", color: "#ff66cc" },
-        { text: "DONT TELL MOM", top: "88%", left: "18%", rotate: 2, size: "1.4rem", color: "#ffdd00" },
+        { text: "CALL 4 A GOOD TIME", top: "8%", left: "6%", rotate: -8, size: "clamp(0.9rem, 2.4vw, 2.2rem)", color: "#ff1f6b" },
+        { text: "SLUTZ ONLY", top: "14%", left: "68%", rotate: 6, size: "clamp(1rem, 2.8vw, 2.6rem)", color: "#39ff14" },
+        { text: "XXX", top: "30%", left: "44%", rotate: -4, size: "clamp(1.6rem, 4.5vw, 4rem)", color: "#ffdd00" },
+        { text: "WET", top: "62%", left: "8%", rotate: -12, size: "clamp(1.2rem, 3.2vw, 3rem)", color: "#00e0ff" },
+        { text: "+1 555 0HOT", top: "78%", left: "55%", rotate: 4, size: "clamp(0.7rem, 1.8vw, 1.6rem)", color: "#ffffff" },
+        { text: "♥ JESS ♥", top: "70%", left: "78%", rotate: -6, size: "clamp(0.8rem, 2vw, 1.8rem)", color: "#ff66cc" },
+        { text: "DONT TELL MOM", top: "88%", left: "18%", rotate: 2, size: "clamp(0.65rem, 1.6vw, 1.4rem)", color: "#ffdd00" },
       ].map((g, i) => (
         <div
           key={`graf-${i}`}
@@ -188,8 +188,7 @@ const PopNsfwHer = () => {
             left,
             bottom: "2%",
             transform: "translateX(-50%)",
-            width: "20%",
-            maxWidth: "320px",
+            width: "clamp(110px, 26vw, 320px)",
             zIndex: 5,
             cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'><text x='4' y='38' font-size='38'>👉</text></svg>") 8 24, pointer`,
           }}
@@ -197,15 +196,16 @@ const PopNsfwHer = () => {
           {/* PICK ME tooltip */}
           <div
             className="absolute left-1/2 -translate-x-1/2 z-30 pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-200 ease-out -translate-y-2 group-hover:translate-y-0"
-            style={{ top: "-3.5rem" }}
+            style={{ top: "clamp(-3.5rem, -8vw, -2.2rem)" }}
           >
             <div
-              className="relative px-4 py-2 rounded-lg whitespace-nowrap"
+              className="relative rounded-lg whitespace-nowrap"
               style={{
                 background: "#ffdd00",
                 color: "#000",
                 fontFamily: "'Permanent Marker', cursive",
-                fontSize: "1.1rem",
+                fontSize: "clamp(0.65rem, 1.6vw, 1.1rem)",
+                padding: "clamp(0.25rem, 0.8vw, 0.5rem) clamp(0.5rem, 1.5vw, 1rem)",
                 transform: "rotate(-3deg)",
                 boxShadow: "0 6px 14px rgba(0,0,0,0.5)",
                 border: "2px solid #000",
@@ -223,13 +223,13 @@ const PopNsfwHer = () => {
             </div>
           </div>
 
-          <div className="flex flex-col items-center transition-transform duration-300 ease-out group-hover:scale-125 origin-bottom [filter:brightness(0.55)_saturate(0.35)_contrast(0.95)] group-hover:[filter:none]">
+          <div className="flex flex-col items-center transition-transform duration-300 ease-out group-hover:scale-110 sm:group-hover:scale-125 origin-bottom [filter:brightness(0.55)_saturate(0.35)_contrast(0.95)] group-hover:[filter:none]">
             {/* Name above frame */}
             <div className="mb-2 whitespace-nowrap pointer-events-none">
               <div
                 className="font-black uppercase leading-none tracking-wider"
                 style={{
-                  fontSize: "2.6rem",
+                  fontSize: "clamp(1rem, 3.4vw, 2.6rem)",
                   color: babes[i].color,
                   WebkitTextStroke: "2px #ffffff",
                   textShadow: "0 4px 0 rgba(0,0,0,0.4), 0 8px 18px rgba(0,0,0,0.6)",
