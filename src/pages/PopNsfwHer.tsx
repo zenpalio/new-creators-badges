@@ -32,6 +32,9 @@ const PopNsfwHer = () => {
           }
         }
         @media (max-width: 767px) {
+          .headline-wrap {
+            top: 3.5rem !important;
+          }
           .babe-card {
             position: relative !important;
             left: auto !important;
