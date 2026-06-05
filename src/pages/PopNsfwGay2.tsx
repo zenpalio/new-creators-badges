@@ -216,7 +216,7 @@ const PopNsfwGay2 = () => {
                   cursor: "pointer",
                 }}
               >
-                💬 Fuck me now
+                💬 Sext me now
               </button>
             </div>
           </div>
