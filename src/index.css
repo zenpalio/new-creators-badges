@@ -293,9 +293,3 @@ button, a, [role="button"] {
 .babe-card:focus-within {
   animation-play-state: paused;
 }
-
-/* Slight blur on popunder background layers */
-.sfw-bg,
-.sfw-bg > .absolute.inset-0 {
-  filter: blur(3px);
-}
