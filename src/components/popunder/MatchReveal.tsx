@@ -25,12 +25,20 @@ export default function MatchReveal({ variant, picked }: Props) {
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center text-center">
-      <div className="animate-pop-rise">
+      <div className="animate-pop-rise text-center">
         <p className="text-xs font-bold uppercase tracking-[0.3em] text-white/60">It's a match</p>
-        <h1 className={cn("mt-1 text-4xl font-black uppercase", accent.text)}>
+        <h1
+          className="mt-1 text-5xl font-black uppercase leading-none"
+          style={{
+            color: accent.banner.fill,
+            WebkitTextStroke: `2px ${accent.banner.stroke}`,
+            textShadow: `0 4px 0 ${accent.banner.shadow}, 0 8px 18px rgba(0,0,0,0.6)`,
+          }}
+        >
           {picked.name} 💋
         </h1>
       </div>
+
 
       <div
         className={cn(
