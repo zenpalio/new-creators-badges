@@ -219,7 +219,7 @@ const PopSfwHerReal = () => {
                 }}
               >
                 <div
-                  className="absolute left-1/2 -translate-x-1/2 z-30 pointer-events-none opacity-0 group-hover:opacity-100 group-active:opacity-100 group-focus-within:opacity-100 transition-all duration-300 ease-out -translate-y-2 group-hover:translate-y-0"
+                  className="absolute left-1/2 -translate-x-1/2 z-[60] pointer-events-none opacity-0 group-hover:opacity-100 group-active:opacity-100 group-focus-within:opacity-100 transition-all duration-300 ease-out -translate-y-2 group-hover:translate-y-0"
                   style={{ top: "-3.2rem" }}
                 >
                   <div
