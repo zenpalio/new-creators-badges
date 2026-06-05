@@ -11,6 +11,7 @@ import Gallery from "./pages/Gallery.tsx";
 import EventDetail from "./pages/EventDetail.tsx";
 import PopNsfwHer from "./pages/PopNsfwHer.tsx";
 import PopNsfwGay from "./pages/PopNsfwGay.tsx";
+import PopNsfwGay2 from "./pages/PopNsfwGay2.tsx";
 import PopSfwHimReal from "./pages/PopSfwHimReal.tsx";
 import PopSfwHimAnime from "./pages/PopSfwHimAnime.tsx";
 import PopSfwGay from "./pages/PopSfwGay.tsx";
