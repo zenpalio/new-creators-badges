@@ -16,6 +16,7 @@ import PopNsfwHer from "./pages/PopNsfwHer.tsx";
 import PopNsfwGay from "./pages/PopNsfwGay.tsx";
 import PopSfwHim from "./pages/PopSfwHim.tsx";
 import PopSfwHimReal from "./pages/PopSfwHimReal.tsx";
+import PopSfwHimAnime from "./pages/PopSfwHimAnime.tsx";
 import PopSfwGay from "./pages/PopSfwGay.tsx";
 import PopSfwGayAnime from "./pages/PopSfwGayAnime.tsx";
 import PopSfwHerReal from "./pages/PopSfwHerReal.tsx";
@@ -43,7 +44,7 @@ const App = () => (
           <Route path="/pop/nsfw-her" element={<PopNsfwHer />} />
           <Route path="/pop/nsfw-gay" element={<PopNsfwGay />} />
           <Route path="/pop/sfw-him" element={<PopSfwHim />} />
-          <Route path="/pop/sfw-him-anime" element={<PopSfwHim />} />
+          <Route path="/pop/sfw-him-anime" element={<PopSfwHimAnime />} />
           <Route path="/pop/sfw-him-real" element={<PopSfwHimReal />} />
           <Route path="/pop/sfw-gay" element={<PopSfwGay />} />
           <Route path="/pop/sfw-gay-realistic" element={<PopSfwGay />} />
