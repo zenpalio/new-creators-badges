@@ -56,6 +56,11 @@ const PopNsfwHer = () => {
             gap: 2.5rem;
             padding: 6rem 0 2rem;
           }
+          .pick-tooltip {
+            top: 38% !important;
+            opacity: 1 !important;
+            transform: translate(-50%, -50%) rotate(-3deg) !important;
+          }
         }
         @media (min-width: 768px) and (max-width: 1023px) {
           .babe-card {
@@ -244,7 +249,7 @@ const PopNsfwHer = () => {
         >
           {/* PICK ME tooltip */}
           <div
-            className="absolute left-1/2 -translate-x-1/2 z-30 pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-200 ease-out -translate-y-2 group-hover:translate-y-0"
+            className="pick-tooltip absolute left-1/2 -translate-x-1/2 z-30 pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-200 ease-out -translate-y-2 group-hover:translate-y-0"
             style={{ top: "clamp(-3.5rem, -8vw, -2.2rem)" }}
           >
             <div
