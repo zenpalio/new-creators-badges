@@ -119,7 +119,7 @@ const PopSfwHim = () => {
             width: 94%;
             max-width: 760px;
             padding: 0 0 2rem !important;
-            order: 1;
+            order: 2;
           }
           .babe-card {
             width: 100% !important;
@@ -127,9 +127,9 @@ const PopSfwHim = () => {
             margin: 0 !important;
           }
           .headline-wrap {
-            order: 2;
+            order: 1;
             padding-top: 0 !important;
-            margin-bottom: 1.25rem;
+            margin-bottom: 1rem;
           }
         }
         @keyframes floatY {
