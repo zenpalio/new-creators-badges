@@ -62,11 +62,11 @@ const PopSfwHim = () => {
     >
       <style>{`
         html, body { overflow-x: hidden; }
-        @media (max-width: 767px) {
+        @media (max-width: 1023px) {
           .sfw-root {
             min-height: auto !important;
             height: auto !important;
-            padding-bottom: 4rem;
+            padding-bottom: 3rem;
           }
           .headline-wrap {
             position: relative !important;
@@ -82,8 +82,8 @@ const PopSfwHim = () => {
             bottom: auto !important;
             top: auto !important;
             transform: none !important;
-            width: 80% !important;
-            max-width: 320px !important;
+            width: 86% !important;
+            max-width: 360px !important;
             margin: 0 auto;
           }
           .babe-card .babe-inner {
@@ -93,13 +93,22 @@ const PopSfwHim = () => {
             display: flex !important;
             flex-direction: column;
             align-items: center;
-            gap: 2.5rem;
-            padding: 2.5rem 0 2rem;
+            gap: 2rem;
+            padding: 1.5rem 0 2rem;
           }
         }
-        @media (min-width: 768px) and (max-width: 1023px) {
+        @media (max-width: 480px) {
           .babe-card {
-            width: 28% !important;
+            width: 90% !important;
+            max-width: 300px !important;
+          }
+          .headline-wrap { padding-top: 4rem; }
+          .babes-stack { gap: 1.5rem; padding: 1rem 0 1.5rem; }
+        }
+        @media (min-width: 768px) and (max-width: 1023px) {
+          .babes-stack {
+            gap: 2.5rem;
+            padding: 2rem 0 3rem;
           }
         }
         @keyframes floatY {
