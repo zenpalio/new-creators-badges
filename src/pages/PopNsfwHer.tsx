@@ -18,15 +18,20 @@ const positions = ["18%", "50%", "82%"];
 const PopNsfwHer = () => {
   return (
     <div
-      className="min-h-screen w-full bg-no-repeat bg-center bg-cover relative overflow-x-hidden"
-      style={{ backgroundImage: `url(${bg})` }}
+      className="min-h-screen w-full bg-no-repeat bg-center bg-cover relative overflow-x-hidden nsfw-bg"
+      style={{ backgroundImage: `url(${bg})`, backgroundColor: "#0a0a14" }}
     >
       <style>{`
         @media (max-width: 767px) {
+          .nsfw-bg {
+            background-size: auto 60vh !important;
+            background-position: center top !important;
+          }
           .babe-card {
             position: relative !important;
             left: auto !important;
             bottom: auto !important;
+            top: auto !important;
             transform: none !important;
             width: 55% !important;
             max-width: 240px !important;
@@ -47,6 +52,10 @@ const PopNsfwHer = () => {
           }
         }
         @media (min-width: 768px) and (max-width: 1023px) {
+          .nsfw-bg {
+            background-size: auto 85vh !important;
+            background-position: center center !important;
+          }
           .babe-card {
             width: 30% !important;
           }
