@@ -173,38 +173,25 @@ const PopNsfwGay2 = () => {
                 overflow: "hidden",
               }}
             >
-              {/* Upper (sharp) */}
-              <div
-                className="absolute inset-x-0 top-0 overflow-hidden"
-                style={{ height: "60%" }}
-              >
-                <img
-                  src={dudes[i].src}
-                  alt={dudes[i].name}
-                  loading="lazy"
-                  className="block w-full pointer-events-none select-none"
-                  style={{ height: "auto", width: "100%" }}
-                />
-              </div>
+              {/* Single image */}
+              <img
+                src={dudes[i].src}
+                alt={dudes[i].name}
+                loading="lazy"
+                className="block w-full h-full object-cover pointer-events-none select-none"
+              />
 
-              {/* Lower (blurred until hover) */}
+              {/* Backdrop-blur overlay on bottom half */}
               <div
-                className="lower-blur absolute inset-x-0 bottom-0 overflow-hidden"
-                style={{ height: "40%" }}
-              >
-                <img
-                  src={dudes[i].src}
-                  alt=""
-                  aria-hidden
-                  loading="lazy"
-                  className="block w-full pointer-events-none select-none"
-                  style={{
-                    width: "100%",
-                    height: "auto",
-                    transform: "translateY(-60%)",
-                  }}
-                />
-              </div>
+                className="lower-blur absolute inset-x-0 bottom-0 pointer-events-none"
+                style={{
+                  height: "45%",
+                  WebkitBackdropFilter: "blur(22px) brightness(0.7)",
+                  backdropFilter: "blur(22px) brightness(0.7)",
+                  WebkitMaskImage: "linear-gradient(180deg, transparent 0%, #000 18%)",
+                  maskImage: "linear-gradient(180deg, transparent 0%, #000 18%)",
+                }}
+              />
             </div>
 
             {/* Teaser line — below card */}
