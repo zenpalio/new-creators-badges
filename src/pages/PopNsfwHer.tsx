@@ -60,6 +60,16 @@ const PopNsfwHer = () => {
             width: 30% !important;
           }
         }
+        @keyframes babeShake {
+          0%, 100% { transform: scale(1.28) rotate(0deg); }
+          20% { transform: scale(1.28) rotate(-2.5deg); }
+          40% { transform: scale(1.3) rotate(2.5deg); }
+          60% { transform: scale(1.28) rotate(-2deg); }
+          80% { transform: scale(1.3) rotate(2deg); }
+        }
+        .babe-card:hover .babe-inner {
+          animation: babeShake 0.5s ease-in-out infinite;
+        }
       `}</style>
       {/* Logo */}
       <div className="absolute top-2 left-2 sm:top-4 sm:left-4 z-30 flex items-center gap-1.5 sm:gap-2 pointer-events-none select-none">
