@@ -42,13 +42,14 @@ const PopNsfwGay2 = () => {
           .dick-card { width: 28% !important; }
         }
         .dick-card .lower-blur {
-          filter: blur(30px) brightness(0.55) saturate(1.1);
-          transition: filter 0.4s ease;
+          transition: backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease, opacity 0.4s ease;
         }
         .dick-card:hover .lower-blur,
         .dick-card:active .lower-blur,
         .dick-card:focus-within .lower-blur {
-          filter: blur(0px) brightness(1);
+          -webkit-backdrop-filter: blur(0px) brightness(1) !important;
+          backdrop-filter: blur(0px) brightness(1) !important;
+          opacity: 0;
         }
         @keyframes idleJump {
           0%, 100% { transform: translateY(0) rotate(-1deg); }
