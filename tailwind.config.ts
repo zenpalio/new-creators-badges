@@ -335,6 +335,35 @@ const config: Config = {
               "linear-gradient(90deg, hsl(var(--primary-v2)) 100%, rgba(196, 196, 196, 1) 100%)",
           },
         },
+        "pop-float": {
+          "0%, 100%": { transform: "translateY(0)", opacity: "0.2" },
+          "50%": { transform: "translateY(-30px)", opacity: "0.8" },
+        },
+        "pop-rise": {
+          from: { opacity: "0", transform: "translateY(20px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+        "pop-burst": {
+          "0%": { opacity: "0", transform: "scale(0.5)" },
+          "60%": { opacity: "1", transform: "scale(1.1)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
+        "pop-pulse": {
+          "0%, 100%": { opacity: "0.4" },
+          "50%": { opacity: "0.8" },
+        },
+        "pop-pulse-soft": {
+          "0%, 100%": { transform: "scale(1)", filter: "brightness(1)" },
+          "50%": { transform: "scale(1.03)", filter: "brightness(1.15)" },
+        },
+        "pop-dot": {
+          "0%, 80%, 100%": { opacity: "0.2" },
+          "40%": { opacity: "1" },
+        },
+        "pop-blink": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -351,6 +380,13 @@ const config: Config = {
           "shrink-horizontal 150ms ease-in forwards",
         "gradient-x": "gradient-x 0.5s ease forwards",
         soundbar: "soundbar 0ms -600ms linear infinite alternate",
+        "pop-float": "pop-float 7s ease-in-out infinite",
+        "pop-rise": "pop-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both",
+        "pop-burst": "pop-burst 0.5s cubic-bezier(0.16, 1, 0.3, 1) both",
+        "pop-pulse": "pop-pulse 1.4s ease-in-out infinite",
+        "pop-pulse-soft": "pop-pulse-soft 2s ease-in-out infinite",
+        "pop-dot": "pop-dot 1.2s ease-in-out infinite",
+        "pop-blink": "pop-blink 1s steps(2, end) infinite",
       },
       animationDelay: {
         "300ms": "0.3s",
