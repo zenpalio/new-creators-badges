@@ -244,7 +244,7 @@ const PopNsfwHer = () => {
         >
           {/* PICK ME tooltip */}
           <div
-            className="absolute left-1/2 -translate-x-1/2 z-30 pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-200 ease-out -translate-y-2 group-hover:translate-y-0"
+            className="pick-tooltip absolute left-1/2 -translate-x-1/2 z-30 pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-200 ease-out -translate-y-2 group-hover:translate-y-0"
             style={{ top: "clamp(-3.5rem, -8vw, -2.2rem)" }}
           >
             <div
