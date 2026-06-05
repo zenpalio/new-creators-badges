@@ -64,13 +64,12 @@ const PopNsfwHer = () => {
         }
         @keyframes babeShake {
           0%, 100% { transform: scale(1.28) rotate(0deg); }
-          20% { transform: scale(1.28) rotate(-2.5deg); }
-          40% { transform: scale(1.3) rotate(2.5deg); }
-          60% { transform: scale(1.28) rotate(-2deg); }
-          80% { transform: scale(1.3) rotate(2deg); }
+          25% { transform: scale(1.28) rotate(-1deg); }
+          50% { transform: scale(1.29) rotate(1deg); }
+          75% { transform: scale(1.28) rotate(-0.8deg); }
         }
         .babe-card:hover .babe-inner {
-          animation: babeShake 0.5s ease-in-out infinite;
+          animation: babeShake 0.7s ease-in-out infinite;
         }
       `}</style>
       {/* Logo */}
