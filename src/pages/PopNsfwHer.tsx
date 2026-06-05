@@ -4,9 +4,9 @@ import babe2 from "@/assets/popunder/babe2.png.asset.json";
 import babe3 from "@/assets/popunder/babe3.png.asset.json";
 
 const babes = [
-  { src: babe1.url, name: "AMY", age: 21 },
-  { src: babe2.url, name: "VIOLET", age: 23 },
-  { src: babe3.url, name: "RAYNA", age: 22 },
+  { src: babe1.url, name: "AMY", color: "#1d3a8a" },
+  { src: babe2.url, name: "VIOLET", color: "#b026ff" },
+  { src: babe3.url, name: "RAYNA", color: "#1d3a8a" },
 ];
 
 const positions = ["18%", "50%", "82%"];
@@ -149,38 +149,42 @@ const PopNsfwHer = () => {
             zIndex: 5,
           }}
         >
-          {/* Name frame */}
+          {/* Name above frame */}
           <div
-            className="absolute left-1/2 -translate-x-1/2 -top-4 z-10 px-5 py-2 rounded-md ring-2 ring-white/30"
-            style={{
-              background: "linear-gradient(180deg, #ff2d87 0%, #c4006b 100%)",
-              boxShadow: "0 8px 22px rgba(0,0,0,0.55), inset 0 2px 0 rgba(255,255,255,0.25)",
-              transform: "translateX(-50%) rotate(-3deg)",
-            }}
+            className="absolute left-1/2 -translate-x-1/2 z-10 whitespace-nowrap"
+            style={{ top: "-3.2rem" }}
           >
             <div
-              className="font-black uppercase leading-none tracking-tight text-white whitespace-nowrap"
+              className="font-black uppercase leading-none tracking-wider"
               style={{
-                fontSize: "1.5rem",
-                WebkitTextStroke: "1.5px #5a002a",
-                textShadow: "0 2px 0 #5a002a, 0 4px 10px rgba(0,0,0,0.6)",
+                fontSize: "2.2rem",
+                color: babes[i].color,
+                WebkitTextStroke: "1.5px #ffffff",
+                textShadow: "0 3px 0 rgba(0,0,0,0.35), 0 6px 14px rgba(0,0,0,0.5)",
+                fontFamily: "'Onest', sans-serif",
               }}
             >
               {babes[i].name}
-              <span className="ml-1.5 text-white/90" style={{ WebkitTextStroke: "1px #5a002a" }}>
-                {babes[i].age}
-              </span>
             </div>
           </div>
 
-          {/* Image */}
-          <img
-            src={babes[i].src}
-            alt={babes[i].name}
-            loading="lazy"
-            className="block w-full pointer-events-none select-none"
-            style={{ filter: "drop-shadow(0 16px 30px rgba(0,0,0,0.6))" }}
-          />
+          {/* Image inside thin colored frame */}
+          <div
+            className="relative w-full"
+            style={{
+              border: `3px solid ${babes[i].color}`,
+              borderRadius: "6px",
+              boxShadow: `0 0 0 2px rgba(255,255,255,0.6), 0 12px 28px rgba(0,0,0,0.55)`,
+            }}
+          >
+            <img
+              src={babes[i].src}
+              alt={babes[i].name}
+              loading="lazy"
+              className="block w-full pointer-events-none select-none"
+              style={{ filter: "drop-shadow(0 8px 16px rgba(0,0,0,0.5))" }}
+            />
+          </div>
         </div>
       ))}
     </div>
