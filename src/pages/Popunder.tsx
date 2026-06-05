@@ -24,20 +24,16 @@ export default function Popunder() {
 
   return (
     <PopunderShell variant={variant}>
-      {/* Top brand bar */}
-      <div className="flex items-center justify-between">
-        <div className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/50">
-          Exclusive · {variant.nsfw ? "18+" : "Preview"}
-        </div>
-        <button
-          type="button"
-          className="text-xs text-white/40 hover:text-white/70"
-          onClick={() => window.close()}
-          aria-label="Close"
-        >
-          ✕
-        </button>
-      </div>
+      {/* Close button (floats top-right) */}
+      <button
+        type="button"
+        className="absolute right-3 top-3 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-black/40 text-sm text-white/60 ring-1 ring-white/10 hover:text-white"
+        onClick={() => window.close()}
+        aria-label="Close"
+      >
+        ✕
+      </button>
+
 
       {/* Step */}
       {step === "select" && (
