@@ -169,9 +169,11 @@ const PopNsfwHer = () => {
               src={babes[i].portrait}
               alt={`${babes[i].name} portrait`}
               loading="lazy"
-              className="block w-full h-full object-cover pointer-events-none select-none"
+              className="block w-full h-full object-cover pointer-events-none select-none transition-[filter] duration-300 ease-out group-hover:[filter:none]"
+              style={{ filter: "brightness(0.45) saturate(0.25) contrast(0.95)" }}
             />
           </div>
+          {/* dark veil over portrait that fades on hover */}
 
           {/* Name below frame */}
           <div className="mt-2 z-10 whitespace-nowrap">
