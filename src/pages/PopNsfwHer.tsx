@@ -21,6 +21,26 @@ const PopNsfwHer = () => {
       className="min-h-screen w-full bg-no-repeat bg-center bg-cover relative overflow-hidden"
       style={{ backgroundImage: `url(${bg})` }}
     >
+      {/* Logo */}
+      <div className="absolute top-4 left-4 z-30 flex items-center gap-2 pointer-events-none select-none">
+        <img
+          src={mybabesHeart.url}
+          alt="mybabes logo"
+          className="w-10 h-10 drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)]"
+        />
+        <span
+          className="font-black lowercase tracking-tight"
+          style={{
+            fontSize: "1.75rem",
+            color: "#ffffff",
+            fontFamily: "'Onest', sans-serif",
+            textShadow: "0 2px 0 rgba(0,0,0,0.5), 0 6px 14px rgba(0,0,0,0.6)",
+          }}
+        >
+          mybabes
+        </span>
+      </div>
+
       {/* Headline */}
       <div
         className="absolute left-1/2 -translate-x-1/2 z-20 text-center pointer-events-none whitespace-nowrap"
