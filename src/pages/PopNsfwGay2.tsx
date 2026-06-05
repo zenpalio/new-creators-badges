@@ -65,8 +65,8 @@ const PopNsfwGay2 = () => {
           transform: scale(1.04) translateY(-4px);
         }
         @keyframes ctaPulse {
-          0%, 100% { transform: translateX(-50%) scale(1); box-shadow: 0 8px 24px rgba(0,0,0,0.6); }
-          50% { transform: translateX(-50%) scale(1.06); }
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.06); }
         }
         .chat-cta { animation: ctaPulse 1.4s ease-in-out infinite; }
         .chat-cta:hover { filter: brightness(1.15); }
