@@ -1,4 +1,8 @@
+import { useState } from "react";
 import bg from "@/assets/popunder-sfw-him/bg.png.asset.json";
+import bgMafia from "@/assets/popunder-sfw-him/bg_mafia.png.asset.json";
+import bgGuard from "@/assets/popunder-sfw-him/bg_guard.png.asset.json";
+import bgBully from "@/assets/popunder-sfw-him/bg_bully.png.asset.json";
 import mafiaA from "@/assets/popunder-sfw-him/mafia_a.png.asset.json";
 import mafiaB from "@/assets/popunder-sfw-him/mafia_b.png.asset.json";
 import guardA from "@/assets/popunder-sfw-him/guard_a.png.asset.json";
@@ -16,6 +20,7 @@ const guys = [
     tooltip: "come closer, kitten 🥀",
     default: mafiaA.url,
     spicy: mafiaB.url,
+    sceneBg: bgMafia.url,
     accent: "#ff2d6f",
   },
   {
@@ -26,6 +31,7 @@ const guys = [
     tooltip: "stay close to me 🛡️",
     default: guardA.url,
     spicy: guardB.url,
+    sceneBg: bgGuard.url,
     accent: "#5ac8ff",
   },
   {
@@ -36,6 +42,7 @@ const guys = [
     tooltip: "tease me, senpai 😈",
     default: bullyA.url,
     spicy: bullyB.url,
+    sceneBg: bgBully.url,
     accent: "#ffd23f",
   },
 ];
@@ -43,6 +50,7 @@ const guys = [
 const positions = ["18%", "50%", "82%"];
 
 const PopSfwHim = () => {
+  const [hovered, setHovered] = useState<number | null>(null);
   return (
     <div
       className="min-h-screen w-full bg-no-repeat bg-center bg-cover relative sfw-bg"
@@ -131,6 +139,20 @@ const PopSfwHim = () => {
       `}</style>
 
       <div className="sfw-root relative w-full h-screen">
+        {/* Scenario backgrounds — crossfade in on hover */}
+        {guys.map((g, idx) => (
+          <div
+            key={`scene-${idx}`}
+            className="absolute inset-0 pointer-events-none bg-no-repeat bg-center bg-cover"
+            style={{
+              backgroundImage: `url(${g.sceneBg})`,
+              opacity: hovered === idx ? 1 : 0,
+              transition: "opacity 700ms ease",
+              zIndex: 0,
+            }}
+          />
+        ))}
+
         {/* Dark gradient overlay for legibility */}
         <div
           className="absolute inset-0 pointer-events-none"
@@ -224,6 +246,10 @@ const PopSfwHim = () => {
               <div
                 key={i}
                 className="babe-card absolute group"
+                onMouseEnter={() => setHovered(i)}
+                onMouseLeave={() => setHovered((h) => (h === i ? null : h))}
+                onFocus={() => setHovered(i)}
+                onBlur={() => setHovered((h) => (h === i ? null : h))}
                 style={{
                   left,
                   top: "58%",
