@@ -48,10 +48,6 @@ const PopNsfwHer = () => {
           .babe-card .babe-inner {
             transform: none !important;
           }
-          .babe-card:hover .babe-inner {
-            transform: scale(1.05) !important;
-            animation: none !important;
-          }
           .babes-stack {
             display: flex !important;
             flex-direction: column;
@@ -61,7 +57,6 @@ const PopNsfwHer = () => {
           }
           .pick-tooltip {
             top: 38% !important;
-            opacity: 1 !important;
             transform: translate(-50%, -50%) rotate(-3deg) !important;
           }
         }
