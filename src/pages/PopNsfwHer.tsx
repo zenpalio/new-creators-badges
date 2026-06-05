@@ -1,10 +1,15 @@
 import bg from "@/assets/nsfw-her-bg.jpg";
+import babe1 from "@/assets/popunder/babe1.png.asset.json";
+import babe2 from "@/assets/popunder/babe2.png.asset.json";
+import babe3 from "@/assets/popunder/babe3.png.asset.json";
 
-const holes = [
-  { left: "18%" },
-  { left: "50%" },
-  { left: "82%" },
+const babes = [
+  { src: babe1.url, name: "AMY" },
+  { src: babe2.url, name: "VIOLET" },
+  { src: babe3.url, name: "RAYNA" },
 ];
+
+const positions = ["18%", "50%", "82%"];
 
 const PopNsfwHer = () => {
   return (
@@ -12,67 +17,79 @@ const PopNsfwHer = () => {
       className="min-h-screen w-full bg-no-repeat bg-center bg-cover relative overflow-hidden"
       style={{ backgroundImage: `url(${bg})` }}
     >
-      {holes.map((h, i) => (
-        <div
-          key={i}
-          className="absolute"
-          style={{
-            left: h.left,
-            top: "55%",
-            transform: "translate(-50%, -50%)",
-          }}
-        >
-          {/* Cracks radiating from hole */}
-          <svg
-            width="280"
-            height="280"
-            viewBox="0 0 280 280"
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-70 pointer-events-none"
-          >
-            <g stroke="rgba(30,30,60,0.55)" strokeWidth="1.2" fill="none" strokeLinecap="round">
-              <path d="M140 140 L40 60" />
-              <path d="M140 140 L60 50 L75 70" />
-              <path d="M140 140 L240 55" />
-              <path d="M140 140 L255 80 L235 95" />
-              <path d="M140 140 L35 220" />
-              <path d="M140 140 L55 240 L80 230" />
-              <path d="M140 140 L245 235" />
-              <path d="M140 140 L230 250 L210 235" />
-              <path d="M140 140 L140 30" />
-              <path d="M140 140 L140 255" />
-            </g>
-          </svg>
-
-          {/* The hole */}
+      {/* Holes + babes */}
+      {positions.map((left, i) => (
+        <div key={i}>
+          {/* Hole + cracks at hip level */}
           <div
-            className="relative rounded-full"
-            style={{
-              width: "140px",
-              height: "140px",
-              background:
-                "radial-gradient(ellipse at 50% 35%, #1a1a22 0%, #050507 55%, #000 100%)",
-              boxShadow:
-                "inset 0 12px 24px rgba(0,0,0,0.95), inset 0 -6px 14px rgba(255,255,255,0.05), 0 6px 18px rgba(0,0,0,0.55)",
-            }}
+            className="absolute"
+            style={{ left, top: "58%", transform: "translate(-50%, -50%)" }}
           >
-            {/* Inner darkness depth */}
+            <svg
+              width="320"
+              height="320"
+              viewBox="0 0 320 320"
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-70 pointer-events-none"
+            >
+              <g stroke="rgba(20,30,70,0.6)" strokeWidth="1.3" fill="none" strokeLinecap="round">
+                <path d="M160 160 L40 60" />
+                <path d="M160 160 L60 50 L80 75" />
+                <path d="M160 160 L280 55" />
+                <path d="M160 160 L295 85 L270 100" />
+                <path d="M160 160 L35 260" />
+                <path d="M160 160 L60 285 L90 270" />
+                <path d="M160 160 L285 275" />
+                <path d="M160 160 L270 290 L245 270" />
+                <path d="M160 160 L160 25" />
+                <path d="M160 160 L160 295" />
+              </g>
+            </svg>
+
             <div
-              className="absolute inset-3 rounded-full"
+              className="relative rounded-full"
               style={{
+                width: "150px",
+                height: "150px",
                 background:
-                  "radial-gradient(ellipse at 50% 40%, #0a0a0f 0%, #000 80%)",
-                boxShadow: "inset 0 8px 20px rgba(0,0,0,0.9)",
+                  "radial-gradient(ellipse at 50% 35%, #1a1a22 0%, #050507 55%, #000 100%)",
+                boxShadow:
+                  "inset 0 14px 28px rgba(0,0,0,0.95), inset 0 -6px 14px rgba(255,255,255,0.05), 0 8px 22px rgba(0,0,0,0.6)",
               }}
-            />
-            {/* Rim highlight */}
-            <div
-              className="absolute inset-0 rounded-full pointer-events-none"
-              style={{
-                background:
-                  "radial-gradient(ellipse at 50% 8%, rgba(255,255,255,0.35) 0%, transparent 25%)",
-              }}
-            />
+            >
+              <div
+                className="absolute inset-3 rounded-full"
+                style={{
+                  background:
+                    "radial-gradient(ellipse at 50% 40%, #0a0a0f 0%, #000 80%)",
+                  boxShadow: "inset 0 8px 20px rgba(0,0,0,0.9)",
+                }}
+              />
+              <div
+                className="absolute inset-0 rounded-full pointer-events-none"
+                style={{
+                  background:
+                    "radial-gradient(ellipse at 50% 8%, rgba(255,255,255,0.35) 0%, transparent 25%)",
+                }}
+              />
+            </div>
           </div>
+
+          {/* Babe sticking out of the hole */}
+          <img
+            src={babes[i].src}
+            alt={babes[i].name}
+            loading="lazy"
+            className="absolute pointer-events-none select-none"
+            style={{
+              left,
+              top: "58%",
+              transform: "translate(-50%, -10%)",
+              width: "26%",
+              maxWidth: "360px",
+              filter: "drop-shadow(0 12px 24px rgba(0,0,0,0.55))",
+              zIndex: 5,
+            }}
+          />
         </div>
       ))}
     </div>
