@@ -1,14 +1,14 @@
 import { useState } from "react";
-import bg from "@/assets/popunder-sfw-him/bg.png.asset.json";
-import bgMafia from "@/assets/popunder-sfw-him/bg_mafia.png.asset.json";
-import bgGuard from "@/assets/popunder-sfw-him/bg_guard.png.asset.json";
-import bgBully from "@/assets/popunder-sfw-him/bg_bully.png.asset.json";
-import mafiaA from "@/assets/popunder-sfw-him/mafia_a.png.asset.json";
-import mafiaB from "@/assets/popunder-sfw-him/mafia_b.png.asset.json";
-import guardA from "@/assets/popunder-sfw-him/guard_a.png.asset.json";
-import guardB from "@/assets/popunder-sfw-him/guard_b.png.asset.json";
-import bullyA from "@/assets/popunder-sfw-him/bully_a.png.asset.json";
-import bullyB from "@/assets/popunder-sfw-him/bully_b.png.asset.json";
+import bg from "@/assets/popunder-sfw-him-real/bg.jpg.asset.json";
+import bgMafia from "@/assets/popunder-sfw-him-real/bg_kenji.jpg.asset.json";
+import bgGuard from "@/assets/popunder-sfw-him-real/bg_ryu.jpg.asset.json";
+import bgBully from "@/assets/popunder-sfw-him-real/bg_haru.jpg.asset.json";
+import mafiaA from "@/assets/popunder-sfw-him-real/kenji_a.jpg.asset.json";
+import mafiaB from "@/assets/popunder-sfw-him-real/kenji_b.jpg.asset.json";
+import guardA from "@/assets/popunder-sfw-him-real/ryu_a.jpg.asset.json";
+import guardB from "@/assets/popunder-sfw-him-real/ryu_b.jpg.asset.json";
+import bullyA from "@/assets/popunder-sfw-him-real/haru_a.jpg.asset.json";
+import bullyB from "@/assets/popunder-sfw-him-real/haru_b.jpg.asset.json";
 import mybabesHeart from "@/assets/popunder/mybabes-heart.png.asset.json";
 
 const guys = [
