@@ -38,7 +38,7 @@ const App = () => (
           <Route path="/creators" element={<Creators />} />
           <Route path="/verification" element={<Verification />} />
           <Route path="/yoti-verification" element={<YotiVerificationDemo />} />
-          <Route path="/p/:variant" element={<PopNsfwHer />} />
+          
           <Route path="/pop/nsfw-her" element={<PopNsfwHer />} />
           <Route path="/pop/nsfw-gay" element={<PopNsfwGay />} />
           <Route path="/pop/sfw-him-anime" element={<PopSfwHimAnime />} />
