@@ -49,7 +49,7 @@ const guys = [
 
 const positions = ["18%", "50%", "82%"];
 
-const PopSfwHim = () => {
+const PopSfwHimReal = () => {
   const [hovered, setHovered] = useState<number | null>(null);
   return (
     <div
@@ -408,4 +408,4 @@ const PopSfwHim = () => {
   );
 };
 
-export default PopSfwHim;
+export default PopSfwHimReal;
