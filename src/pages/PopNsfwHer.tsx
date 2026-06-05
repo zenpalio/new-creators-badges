@@ -1,10 +1,10 @@
-import bg from "@/assets/nsfw-her-bg.png.asset.json";
+import bg from "@/assets/nsfw-her-bg.jpg";
 
 const PopNsfwHer = () => {
   return (
     <div
-      className="min-h-screen w-full bg-black bg-no-repeat bg-center bg-cover"
-      style={{ backgroundImage: `url(${bg.url})` }}
+      className="min-h-screen w-full bg-no-repeat bg-center bg-cover"
+      style={{ backgroundImage: `url(${bg})` }}
     >
       {/* Characters and content coming next */}
     </div>
