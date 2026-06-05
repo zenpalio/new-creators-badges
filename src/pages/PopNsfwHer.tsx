@@ -4,9 +4,9 @@ import babe2 from "@/assets/popunder/babe2.png.asset.json";
 import babe3 from "@/assets/popunder/babe3.png.asset.json";
 
 const babes = [
-  { src: babe1.url, name: "AMY", age: 21 },
-  { src: babe2.url, name: "VIOLET", age: 23 },
-  { src: babe3.url, name: "RAYNA", age: 22 },
+  { src: babe1.url, name: "AMY", color: "#1d3a8a" },
+  { src: babe2.url, name: "VIOLET", color: "#b026ff" },
+  { src: babe3.url, name: "RAYNA", color: "#1d3a8a" },
 ];
 
 const positions = ["18%", "50%", "82%"];
