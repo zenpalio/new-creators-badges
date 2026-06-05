@@ -32,6 +32,9 @@ const PopNsfwHer = () => {
           }
         }
         @media (max-width: 767px) {
+          .headline-wrap {
+            top: 3.5rem !important;
+          }
           .babe-card {
             position: relative !important;
             left: auto !important;
@@ -53,8 +56,8 @@ const PopNsfwHer = () => {
             display: flex !important;
             flex-direction: column;
             align-items: center;
-            gap: 2.5rem;
-            padding: 6rem 0 2rem;
+            gap: 3rem;
+            padding: 13rem 0 2rem;
           }
           .pick-tooltip {
             top: 38% !important;
@@ -99,7 +102,7 @@ const PopNsfwHer = () => {
 
       {/* Headline */}
       <div
-        className="absolute left-1/2 -translate-x-1/2 z-20 text-center pointer-events-none w-[92%] max-w-[900px] px-2"
+        className="headline-wrap absolute left-1/2 -translate-x-1/2 z-20 text-center pointer-events-none w-[92%] max-w-[900px] px-2"
         style={{ top: "3%" }}
       >
         <h1
