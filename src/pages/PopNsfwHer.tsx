@@ -82,10 +82,10 @@ const PopNsfwHer = () => {
             className="absolute pointer-events-none select-none"
             style={{
               left,
-              top: "58%",
-              transform: "translate(-50%, -10%)",
-              width: "26%",
-              maxWidth: "360px",
+              bottom: 0,
+              transform: "translateX(-50%)",
+              width: "30%",
+              maxWidth: "420px",
               filter: "drop-shadow(0 12px 24px rgba(0,0,0,0.55))",
               zIndex: 5,
             }}
