@@ -1,4 +1,8 @@
+import { useState } from "react";
 import bg from "@/assets/popunder-sfw-him/bg.png.asset.json";
+import bgMafia from "@/assets/popunder-sfw-him/bg_mafia.png.asset.json";
+import bgGuard from "@/assets/popunder-sfw-him/bg_guard.png.asset.json";
+import bgBully from "@/assets/popunder-sfw-him/bg_bully.png.asset.json";
 import mafiaA from "@/assets/popunder-sfw-him/mafia_a.png.asset.json";
 import mafiaB from "@/assets/popunder-sfw-him/mafia_b.png.asset.json";
 import guardA from "@/assets/popunder-sfw-him/guard_a.png.asset.json";
