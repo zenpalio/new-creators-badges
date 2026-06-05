@@ -175,11 +175,9 @@ const PopNsfwGay2 = () => {
               className="frame relative origin-bottom"
               style={{
                 aspectRatio: "3 / 4.2",
-                border: `6px solid #ffffff`,
-                borderRadius: "22px",
-                outline: `4px dashed ${dudes[i].color}`,
-                outlineOffset: "-12px",
-                boxShadow: `0 0 0 3px #000, 0 22px 50px rgba(0,0,0,0.75), 0 0 60px ${dudes[i].color}66`,
+                border: `2px solid ${dudes[i].color}`,
+                borderRadius: "20px",
+                boxShadow: `0 20px 40px rgba(0,0,0,0.6), 0 0 32px ${dudes[i].color}40`,
                 background: "#000",
                 overflow: "hidden",
               }}
@@ -215,51 +213,49 @@ const PopNsfwGay2 = () => {
                     transform: "translateY(-60%)",
                   }}
                 />
+                {/* dark gradient to keep text legible */}
+                <div className="absolute inset-x-0 bottom-0 h-2/3 pointer-events-none"
+                  style={{ background: "linear-gradient(180deg, transparent, rgba(0,0,0,0.85))" }}
+                />
               </div>
 
-              {/* Send dick pic button - centered over the blur */}
+              {/* Teaser line — bottom of card */}
+              <div className="absolute inset-x-0 bottom-20 z-10 px-3 text-center pointer-events-none">
+                <p
+                  className="font-bold leading-tight"
+                  style={{
+                    color: "#fff",
+                    fontSize: "clamp(0.8rem, 1.6vw, 1.05rem)",
+                    fontFamily: "'Onest', sans-serif",
+                    textShadow: "0 2px 8px rgba(0,0,0,0.9)",
+                    fontStyle: "italic",
+                  }}
+                >
+                  "{dudes[i].teaser}"
+                </p>
+              </div>
+
+              {/* Chat CTA — always visible, obvious */}
               <button
                 type="button"
-                className="send-btn absolute left-1/2 z-20 whitespace-nowrap"
+                className="chat-cta absolute left-1/2 bottom-4 z-20 whitespace-nowrap flex items-center gap-2"
                 style={{
-                  top: "80%",
-                  transform: "translate(-50%, -50%) rotate(-3deg)",
-                  background: "linear-gradient(180deg, #ff3b6b, #b00030)",
-                  color: "#ffdd00",
-                  fontFamily: "'Permanent Marker', cursive",
-                  fontSize: "clamp(0.7rem, 1.5vw, 1.05rem)",
-                  padding: "clamp(0.5rem, 1.2vw, 0.9rem) clamp(0.9rem, 2vw, 1.4rem)",
-                  border: "3px solid #000",
+                  transform: "translateX(-50%)",
+                  background: `linear-gradient(180deg, ${dudes[i].color}, ${dudes[i].color}cc)`,
+                  color: "#fff",
+                  fontFamily: "'Onest', sans-serif",
+                  fontWeight: 900,
+                  fontSize: "clamp(0.8rem, 1.5vw, 1rem)",
+                  padding: "clamp(0.6rem, 1.3vw, 0.85rem) clamp(1.1rem, 2.4vw, 1.6rem)",
                   borderRadius: "999px",
-                  boxShadow: "0 6px 0 #000, 0 14px 30px rgba(0,0,0,0.6), 0 0 24px rgba(255,59,107,0.6)",
-                  letterSpacing: "0.04em",
+                  boxShadow: `0 8px 24px rgba(0,0,0,0.6), 0 0 28px ${dudes[i].color}aa`,
+                  letterSpacing: "0.06em",
                   textTransform: "uppercase",
                   cursor: "pointer",
                 }}
               >
-                📩 Send dick pic
+                💬 Fuck me now
               </button>
-            </div>
-
-            {/* Teaser sticker under card */}
-            <div
-              className="mt-3 mx-auto w-fit pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-            >
-              <div
-                className="rounded-lg whitespace-nowrap"
-                style={{
-                  background: "#ffdd00",
-                  color: "#000",
-                  fontFamily: "'Permanent Marker', cursive",
-                  fontSize: "clamp(0.65rem, 1.5vw, 1rem)",
-                  padding: "clamp(0.25rem, 0.7vw, 0.45rem) clamp(0.5rem, 1.4vw, 0.9rem)",
-                  transform: "rotate(-2deg)",
-                  boxShadow: "0 6px 14px rgba(0,0,0,0.5)",
-                  border: "2px solid #000",
-                }}
-              >
-                {dudes[i].teaser}
-              </div>
             </div>
           </div>
         ))}
