@@ -23,9 +23,7 @@ export default function CharacterSelector({ variant, onPick }: Props) {
       {/* Hook */}
       <div className="mb-6 text-center">
         <h1 className="text-3xl font-black uppercase leading-tight tracking-tight animate-pop-rise [text-shadow:0_2px_30px_rgba(0,0,0,0.6)]">
-          <span className={cn("bg-clip-text text-transparent bg-gradient-to-br", accent.from.replace("/30", ""), "to-white")}>
-            {variant.hook.line1}
-          </span>
+          <span className={accent.headingGradient}>{variant.hook.line1}</span>
         </h1>
         <p className="mt-2 text-sm text-white/80 animate-pop-rise" style={{ animationDelay: "120ms" }}>
           {variant.hook.line2}
@@ -46,7 +44,7 @@ export default function CharacterSelector({ variant, onPick }: Props) {
                 "group relative aspect-[3/4] overflow-hidden rounded-2xl ring-1 ring-white/10",
                 "transition-all duration-300 ease-out animate-pop-rise",
                 "hover:scale-[1.03] hover:ring-2 active:scale-95",
-                "hover:" + accent.ring,
+                accent.hoverRing,
                 isPicked && cn("scale-105 ring-2", accent.ring, accent.glow),
                 isDimmed && "scale-95 opacity-40 blur-[1px]",
               )}
