@@ -99,7 +99,7 @@ const PopNsfwHer = () => {
 
       {/* Headline */}
       <div
-        className="absolute left-1/2 -translate-x-1/2 z-20 text-center pointer-events-none w-[92%] max-w-[900px] px-2"
+        className="headline-wrap absolute left-1/2 -translate-x-1/2 z-20 text-center pointer-events-none w-[92%] max-w-[900px] px-2"
         style={{ top: "3%" }}
       >
         <h1
