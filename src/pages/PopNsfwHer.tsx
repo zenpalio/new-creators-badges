@@ -1,4 +1,5 @@
 import bg from "@/assets/nsfw-her-bg.jpg";
+import bgMobile from "@/assets/nsfw-her-bg-mobile.jpg";
 import babe1 from "@/assets/popunder/babe1.png.asset.json";
 import babe2 from "@/assets/popunder/babe2.png.asset.json";
 import babe3 from "@/assets/popunder/babe3.png.asset.json";
@@ -22,12 +23,15 @@ const PopNsfwHer = () => {
       style={{ backgroundImage: `url(${bg})`, backgroundColor: "#0a0a14" }}
     >
       <style>{`
-        @media (max-width: 767px) {
+        @media (max-width: 1023px) {
           .nsfw-bg {
-            background-size: 100% auto !important;
+            background-image: url(${bgMobile}) !important;
+            background-size: cover !important;
             background-position: center top !important;
-            background-repeat: repeat-y !important;
+            background-repeat: no-repeat !important;
           }
+        }
+        @media (max-width: 767px) {
           .babe-card {
             position: relative !important;
             left: auto !important;
@@ -54,10 +58,6 @@ const PopNsfwHer = () => {
           }
         }
         @media (min-width: 768px) and (max-width: 1023px) {
-          .nsfw-bg {
-            background-size: auto 85vh !important;
-            background-position: center center !important;
-          }
           .babe-card {
             width: 30% !important;
           }
