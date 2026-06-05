@@ -17,6 +17,90 @@ const PopNsfwHer = () => {
       className="min-h-screen w-full bg-no-repeat bg-center bg-cover relative overflow-hidden"
       style={{ backgroundImage: `url(${bg})` }}
     >
+      {/* Grime + cracks overlay */}
+      <svg
+        className="absolute inset-0 w-full h-full pointer-events-none mix-blend-multiply opacity-80"
+        viewBox="0 0 1000 1000"
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <filter id="rough">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3" />
+            <feDisplacementMap in="SourceGraphic" scale="3" />
+          </filter>
+          <filter id="grime">
+            <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="3" seed="7" />
+            <feColorMatrix values="0 0 0 0 0.05  0 0 0 0 0.04  0 0 0 0 0.08  0 0 0 0.35 0" />
+          </filter>
+        </defs>
+
+        {/* Dirty grime wash */}
+        <rect width="1000" height="1000" filter="url(#grime)" />
+
+        {/* Cracks */}
+        <g
+          stroke="rgba(15,18,40,0.85)"
+          strokeWidth="1.2"
+          fill="none"
+          strokeLinecap="round"
+          filter="url(#rough)"
+        >
+          {/* Top-left web */}
+          <path d="M40 80 L180 220 L260 200 L340 310 L300 380" />
+          <path d="M180 220 L120 320 L60 360" />
+          <path d="M180 220 L240 130 L320 90" />
+          <path d="M260 200 L330 170" />
+
+          {/* Top-center */}
+          <path d="M500 30 L470 180 L540 260 L500 360 L580 440" />
+          <path d="M470 180 L380 230" />
+          <path d="M540 260 L640 240" />
+          <path d="M500 360 L420 410" />
+
+          {/* Top-right web */}
+          <path d="M960 70 L820 200 L760 180 L660 290 L700 360" />
+          <path d="M820 200 L880 320 L940 360" />
+          <path d="M820 200 L760 110 L680 70" />
+          <path d="M760 180 L690 150" />
+
+          {/* Mid horizontal cracks */}
+          <path d="M0 520 L150 540 L260 510 L380 560 L520 530 L660 570 L800 540 L1000 580" />
+          <path d="M260 510 L290 600 L240 700" />
+          <path d="M660 570 L700 660 L640 760" />
+
+          {/* Lower-left */}
+          <path d="M60 820 L200 760 L320 820 L260 920 L340 980" />
+          <path d="M200 760 L180 660" />
+          <path d="M320 820 L420 800" />
+
+          {/* Lower-center */}
+          <path d="M480 880 L540 800 L620 860 L580 960" />
+          <path d="M540 800 L520 720" />
+
+          {/* Lower-right */}
+          <path d="M940 820 L820 780 L720 850 L780 940 L700 990" />
+          <path d="M820 780 L860 690" />
+          <path d="M720 850 L620 820" />
+        </g>
+
+        {/* Tiny chipped paint specks */}
+        <g fill="rgba(10,12,30,0.55)">
+          <circle cx="120" cy="160" r="2" />
+          <circle cx="340" cy="60" r="1.5" />
+          <circle cx="610" cy="120" r="2.2" />
+          <circle cx="880" cy="240" r="1.8" />
+          <circle cx="220" cy="430" r="2" />
+          <circle cx="450" cy="500" r="1.6" />
+          <circle cx="730" cy="450" r="2.4" />
+          <circle cx="160" cy="690" r="1.8" />
+          <circle cx="380" cy="740" r="2" />
+          <circle cx="660" cy="710" r="1.5" />
+          <circle cx="900" cy="640" r="2.2" />
+          <circle cx="510" cy="940" r="1.7" />
+        </g>
+      </svg>
+
+
       {positions.map((left, i) => (
         <div
           key={i}
