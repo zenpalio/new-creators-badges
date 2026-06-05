@@ -162,7 +162,7 @@ const PopNsfwHer = () => {
       {positions.map((left, i) => (
         <div
           key={i}
-          className="absolute flex flex-col items-center group cursor-pointer"
+          className="absolute group cursor-pointer"
           style={{
             left,
             bottom: "2%",
@@ -172,51 +172,52 @@ const PopNsfwHer = () => {
             zIndex: 5,
           }}
         >
-          {/* Name above frame */}
-          <div className="mb-2 z-20 whitespace-nowrap pointer-events-none transition-transform duration-300 ease-out group-hover:scale-125 origin-bottom">
+          <div className="flex flex-col items-center transition-transform duration-300 ease-out group-hover:scale-125 origin-bottom [filter:brightness(0.55)_saturate(0.35)_contrast(0.95)] group-hover:[filter:none]">
+            {/* Name above frame */}
+            <div className="mb-2 whitespace-nowrap pointer-events-none">
+              <div
+                className="font-black uppercase leading-none tracking-wider"
+                style={{
+                  fontSize: "2.6rem",
+                  color: babes[i].color,
+                  WebkitTextStroke: "2px #ffffff",
+                  textShadow: "0 4px 0 rgba(0,0,0,0.4), 0 8px 18px rgba(0,0,0,0.6)",
+                  fontFamily: "'Onest', sans-serif",
+                }}
+              >
+                {babes[i].name}
+              </div>
+            </div>
+
+            {/* Portrait inside frame */}
             <div
-              className="font-black uppercase leading-none tracking-wider transition-[filter] duration-300 ease-out [filter:brightness(0.7)_saturate(0.6)] group-hover:[filter:none]"
+              className="relative"
               style={{
-                fontSize: "2.6rem",
-                color: babes[i].color,
-                WebkitTextStroke: "2px #ffffff",
-                textShadow: "0 4px 0 rgba(0,0,0,0.4), 0 8px 18px rgba(0,0,0,0.6)",
-                fontFamily: "'Onest', sans-serif",
+                width: "55%",
+                aspectRatio: "1 / 1.15",
+                border: `4px solid ${babes[i].color}`,
+                borderRadius: "8px",
+                boxShadow: `0 0 0 2px rgba(255,255,255,0.7), 0 14px 30px rgba(0,0,0,0.6)`,
+                background: "#000",
+                overflow: "hidden",
               }}
             >
-              {babes[i].name}
+              <img
+                src={babes[i].portrait}
+                alt={`${babes[i].name} portrait`}
+                loading="lazy"
+                className="block w-full h-full object-cover pointer-events-none select-none"
+              />
             </div>
-          </div>
 
-          {/* Portrait inside frame */}
-          <div
-            className="relative transition-transform duration-300 ease-out group-hover:scale-125 origin-bottom"
-            style={{
-              width: "55%",
-              aspectRatio: "1 / 1.15",
-              border: `4px solid ${babes[i].color}`,
-              borderRadius: "8px",
-              boxShadow: `0 0 0 2px rgba(255,255,255,0.7), 0 14px 30px rgba(0,0,0,0.6)`,
-              background: "#000",
-              overflow: "hidden",
-            }}
-          >
+            {/* Full body babe image */}
             <img
-              src={babes[i].portrait}
-              alt={`${babes[i].name} portrait`}
+              src={babes[i].src}
+              alt={babes[i].name}
               loading="lazy"
-              className="block w-full h-full object-cover pointer-events-none select-none transition-[filter] duration-300 ease-out [filter:brightness(0.45)_saturate(0.25)_contrast(0.95)] group-hover:[filter:none]"
+              className="block w-full pointer-events-none select-none mt-1"
             />
           </div>
-
-
-          {/* Full body babe image, smaller and at the bottom */}
-          <img
-            src={babes[i].src}
-            alt={babes[i].name}
-            loading="lazy"
-            className="block w-full pointer-events-none select-none mt-1 transition-all duration-300 ease-out group-hover:scale-125 origin-bottom [filter:brightness(0.5)_saturate(0.25)_contrast(0.95)_drop-shadow(0_8px_16px_rgba(0,0,0,0.5))] group-hover:[filter:drop-shadow(0_10px_18px_rgba(0,0,0,0.55))]"
-          />
         </div>
       ))}
     </div>
