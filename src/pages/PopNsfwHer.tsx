@@ -18,9 +18,34 @@ const positions = ["18%", "50%", "82%"];
 const PopNsfwHer = () => {
   return (
     <div
-      className="min-h-screen w-full bg-no-repeat bg-center bg-cover relative overflow-hidden"
+      className="min-h-screen w-full bg-no-repeat bg-center bg-cover relative overflow-x-hidden"
       style={{ backgroundImage: `url(${bg})` }}
     >
+      <style>{`
+        @media (max-width: 767px) {
+          .babe-card {
+            position: relative !important;
+            left: auto !important;
+            bottom: auto !important;
+            transform: none !important;
+            width: 80% !important;
+            max-width: 360px !important;
+            margin: 0 auto;
+          }
+          .babes-stack {
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            padding: 7rem 0 2rem;
+          }
+        }
+        @media (min-width: 768px) and (max-width: 1023px) {
+          .babe-card {
+            width: 30% !important;
+          }
+        }
+      `}</style>
       {/* Logo */}
       <div className="absolute top-2 left-2 sm:top-4 sm:left-4 z-30 flex items-center gap-1.5 sm:gap-2 pointer-events-none select-none">
         <img
@@ -180,10 +205,11 @@ const PopNsfwHer = () => {
 
 
 
+      <div className="babes-stack contents">
       {positions.map((left, i) => (
         <div
           key={i}
-          className="absolute group"
+          className="babe-card absolute group"
           style={{
             left,
             bottom: "2%",
@@ -271,6 +297,7 @@ const PopNsfwHer = () => {
           </div>
         </div>
       ))}
+      </div>
     </div>
   );
 };
