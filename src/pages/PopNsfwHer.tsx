@@ -22,16 +22,16 @@ const PopNsfwHer = () => {
       style={{ backgroundImage: `url(${bg})` }}
     >
       {/* Logo */}
-      <div className="absolute top-4 left-4 z-30 flex items-center gap-2 pointer-events-none select-none">
+      <div className="absolute top-2 left-2 sm:top-4 sm:left-4 z-30 flex items-center gap-1.5 sm:gap-2 pointer-events-none select-none">
         <img
           src={mybabesHeart.url}
           alt="mybabes logo"
-          className="w-10 h-10 drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)]"
+          className="w-7 h-7 sm:w-10 sm:h-10 drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)]"
         />
         <span
           className="font-black lowercase tracking-tight"
           style={{
-            fontSize: "1.75rem",
+            fontSize: "clamp(1rem, 3.2vw, 1.75rem)",
             color: "#ffffff",
             fontFamily: "'Onest', sans-serif",
             textShadow: "0 2px 0 rgba(0,0,0,0.5), 0 6px 14px rgba(0,0,0,0.6)",
