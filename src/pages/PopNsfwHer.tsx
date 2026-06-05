@@ -55,7 +55,12 @@ const PopNsfwHer = () => {
             align-items: center;
             gap: 2.5rem;
             padding: 6rem 0 2rem;
+          .pick-tooltip {
+            top: 38% !important;
+            opacity: 1 !important;
+            transform: translate(-50%, -50%) !important;
           }
+        }
         }
         @media (min-width: 768px) and (max-width: 1023px) {
           .babe-card {
