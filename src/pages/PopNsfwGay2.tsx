@@ -125,7 +125,7 @@ const PopNsfwGay2 = () => {
             transform: "rotate(-1deg)",
           }}
         >
-          Hover to unblur — pick your favorite 🍆
+          Hover to unblur · Tap to fuck 💦
         </p>
       </div>
 
