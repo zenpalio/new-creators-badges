@@ -174,10 +174,12 @@ const PopNsfwGay2 = () => {
             <div
               className="frame relative origin-bottom"
               style={{
-                aspectRatio: "3 / 4.5",
-                border: `4px solid ${dudes[i].color}`,
-                borderRadius: "10px",
-                boxShadow: `0 0 0 2px rgba(255,255,255,0.7), 0 18px 40px rgba(0,0,0,0.7), 0 0 40px ${dudes[i].color}55`,
+                aspectRatio: "3 / 4.2",
+                border: `6px solid #ffffff`,
+                borderRadius: "22px",
+                outline: `4px dashed ${dudes[i].color}`,
+                outlineOffset: "-12px",
+                boxShadow: `0 0 0 3px #000, 0 22px 50px rgba(0,0,0,0.75), 0 0 60px ${dudes[i].color}66`,
                 background: "#000",
                 overflow: "hidden",
               }}
