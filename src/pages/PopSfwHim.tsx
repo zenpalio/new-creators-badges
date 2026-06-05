@@ -246,6 +246,10 @@ const PopSfwHim = () => {
               <div
                 key={i}
                 className="babe-card absolute group"
+                onMouseEnter={() => setHovered(i)}
+                onMouseLeave={() => setHovered((h) => (h === i ? null : h))}
+                onFocus={() => setHovered(i)}
+                onBlur={() => setHovered((h) => (h === i ? null : h))}
                 style={{
                   left,
                   top: "58%",
