@@ -1,7 +1,7 @@
 import bg from "@/assets/popunder-nsfw-gay2/bg.jpg.asset.json";
-import marco from "@/assets/popunder-nsfw-gay2/marco.jpg.asset.json";
-import jake from "@/assets/popunder-nsfw-gay2/jake.jpg.asset.json";
-import diego from "@/assets/popunder-nsfw-gay2/diego.jpg.asset.json";
+import marco from "@/assets/popunder-nsfw-gay2/marco.png.asset.json";
+import jake from "@/assets/popunder-nsfw-gay2/jake2.jpg.asset.json";
+import diego from "@/assets/popunder-nsfw-gay2/diego.png.asset.json";
 import mybabesHeart from "@/assets/popunder/mybabes-heart.png.asset.json";
 
 const dudes = [
@@ -42,8 +42,8 @@ const PopNsfwGay2 = () => {
           .dick-card { width: 28% !important; }
         }
         .dick-card .lower-blur {
-          filter: blur(22px) brightness(0.6);
-          transition: filter 0.35s ease;
+          filter: blur(30px) brightness(0.55) saturate(1.1);
+          transition: filter 0.4s ease;
         }
         .dick-card:hover .lower-blur,
         .dick-card:active .lower-blur,
@@ -60,11 +60,20 @@ const PopNsfwGay2 = () => {
           opacity: 0;
           transform: translate(-50%, -50%) scale(0.85);
         }
-        .dick-card .frame {
-          transform: scale(1);
-          transition: transform 0.3s ease;
+        @keyframes idleJump {
+          0%, 100% { transform: translateY(0) rotate(-1.2deg); }
+          50% { transform: translateY(-12px) rotate(1.2deg); }
         }
-        .dick-card:hover .frame { transform: scale(1.04); }
+        .dick-card .frame {
+          animation: idleJump 2.2s ease-in-out infinite;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .dick-card:nth-of-type(2) .frame { animation-delay: 0.35s; }
+        .dick-card:nth-of-type(3) .frame { animation-delay: 0.7s; }
+        .dick-card:hover .frame {
+          animation-play-state: paused;
+          transform: scale(1.06) translateY(-6px);
+        }
         @keyframes wiggle {
           0%, 100% { transform: translate(-50%, -50%) rotate(-3deg); }
           50% { transform: translate(-50%, -50%) rotate(3deg); }
@@ -130,7 +139,7 @@ const PopNsfwGay2 = () => {
               left,
               top: "58%",
               transform: "translate(-50%, -50%)",
-              width: "clamp(180px, 26vw, 340px)",
+              width: "clamp(220px, 30vw, 400px)",
               zIndex: 5,
               cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'><text x='4' y='38' font-size='38'>🍆</text></svg>") 24 24, pointer`,
             }}
@@ -165,10 +174,12 @@ const PopNsfwGay2 = () => {
             <div
               className="frame relative origin-bottom"
               style={{
-                aspectRatio: "3 / 4.5",
-                border: `4px solid ${dudes[i].color}`,
-                borderRadius: "10px",
-                boxShadow: `0 0 0 2px rgba(255,255,255,0.7), 0 18px 40px rgba(0,0,0,0.7), 0 0 40px ${dudes[i].color}55`,
+                aspectRatio: "3 / 4.2",
+                border: `6px solid #ffffff`,
+                borderRadius: "22px",
+                outline: `4px dashed ${dudes[i].color}`,
+                outlineOffset: "-12px",
+                boxShadow: `0 0 0 3px #000, 0 22px 50px rgba(0,0,0,0.75), 0 0 60px ${dudes[i].color}66`,
                 background: "#000",
                 overflow: "hidden",
               }}
