@@ -34,7 +34,8 @@ const App = () => (
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/badges" element={<Profile />} />
           <Route path="/creators" element={<Creators />} />
-          <Route path="/creators" element={<Creators />} />
+
+
           
 
           
