@@ -53,8 +53,8 @@ const PopNsfwHer = () => {
             display: flex !important;
             flex-direction: column;
             align-items: center;
-            gap: 2.5rem;
-            padding: 6rem 0 2rem;
+            gap: 3rem;
+            padding: 13rem 0 2rem;
           }
           .pick-tooltip {
             top: 38% !important;
