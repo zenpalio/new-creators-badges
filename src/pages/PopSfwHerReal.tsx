@@ -214,12 +214,12 @@ const PopSfwHerReal = () => {
                   top: "58%",
                   transform: "translate(-50%, -50%)",
                   width: "clamp(160px, 23vw, 290px)",
-                  zIndex: 5,
+                  zIndex: hovered === i ? 80 : 40,
                   cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'><text x='4' y='38' font-size='38'>💖</text></svg>") 24 24, pointer`,
                 }}
               >
                 <div
-                  className="absolute left-1/2 -translate-x-1/2 z-[60] pointer-events-none opacity-0 group-hover:opacity-100 group-active:opacity-100 group-focus-within:opacity-100 transition-all duration-300 ease-out -translate-y-2 group-hover:translate-y-0"
+                  className="absolute left-1/2 -translate-x-1/2 z-[90] pointer-events-none opacity-0 group-hover:opacity-100 group-active:opacity-100 group-focus-within:opacity-100 transition-all duration-300 ease-out -translate-y-2 group-hover:translate-y-0"
                   style={{ top: "-3.2rem" }}
                 >
                   <div
