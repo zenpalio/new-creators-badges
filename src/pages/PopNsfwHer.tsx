@@ -169,9 +169,11 @@ const PopNsfwHer = () => {
               src={babes[i].portrait}
               alt={`${babes[i].name} portrait`}
               loading="lazy"
-              className="block w-full h-full object-cover pointer-events-none select-none"
+              className="block w-full h-full object-cover pointer-events-none select-none transition-[filter] duration-300 ease-out group-hover:[filter:none]"
+              style={{ filter: "brightness(0.45) saturate(0.25) contrast(0.95)" }}
             />
           </div>
+          {/* dark veil over portrait that fades on hover */}
 
           {/* Name below frame */}
           <div className="mt-2 z-10 whitespace-nowrap">
@@ -194,8 +196,8 @@ const PopNsfwHer = () => {
             src={babes[i].src}
             alt={babes[i].name}
             loading="lazy"
-            className="block w-full pointer-events-none select-none mt-1 transition-transform duration-300 ease-out group-hover:scale-125 origin-bottom"
-            style={{ filter: "drop-shadow(0 8px 16px rgba(0,0,0,0.5))" }}
+            className="block w-full pointer-events-none select-none mt-1 transition-all duration-300 ease-out group-hover:scale-125 origin-bottom group-hover:[filter:drop-shadow(0_10px_18px_rgba(0,0,0,0.55))]"
+            style={{ filter: "brightness(0.5) saturate(0.25) contrast(0.95) drop-shadow(0 8px 16px rgba(0,0,0,0.5))" }}
           />
         </div>
       ))}
