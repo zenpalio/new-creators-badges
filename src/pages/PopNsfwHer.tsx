@@ -2,11 +2,14 @@ import bg from "@/assets/nsfw-her-bg.jpg";
 import babe1 from "@/assets/popunder/babe1.png.asset.json";
 import babe2 from "@/assets/popunder/babe2.png.asset.json";
 import babe3 from "@/assets/popunder/babe3.png.asset.json";
+import portrait1 from "@/assets/popunder/portrait1.jpg.asset.json";
+import portrait2 from "@/assets/popunder/portrait2.jpg.asset.json";
+import portrait3 from "@/assets/popunder/portrait3.jpg.asset.json";
 
 const babes = [
-  { src: babe1.url, name: "AMY", color: "#1d3a8a" },
-  { src: babe2.url, name: "VIOLET", color: "#b026ff" },
-  { src: babe3.url, name: "RAYNA", color: "#1d3a8a" },
+  { src: babe1.url, portrait: portrait1.url, name: "AMY", color: "#1d3a8a" },
+  { src: babe2.url, portrait: portrait2.url, name: "VIOLET", color: "#b026ff" },
+  { src: babe3.url, portrait: portrait3.url, name: "RAYNA", color: "#1d3a8a" },
 ];
 
 const positions = ["18%", "50%", "82%"];
