@@ -2,11 +2,14 @@ import bg from "@/assets/nsfw-her-bg.jpg";
 import babe1 from "@/assets/popunder/babe1.png.asset.json";
 import babe2 from "@/assets/popunder/babe2.png.asset.json";
 import babe3 from "@/assets/popunder/babe3.png.asset.json";
+import portrait1 from "@/assets/popunder/portrait1.jpg.asset.json";
+import portrait2 from "@/assets/popunder/portrait2.jpg.asset.json";
+import portrait3 from "@/assets/popunder/portrait3.jpg.asset.json";
 
 const babes = [
-  { src: babe1.url, name: "AMY", color: "#1d3a8a" },
-  { src: babe2.url, name: "VIOLET", color: "#b026ff" },
-  { src: babe3.url, name: "RAYNA", color: "#1d3a8a" },
+  { src: babe1.url, portrait: portrait1.url, name: "AMY", color: "#1d3a8a" },
+  { src: babe2.url, portrait: portrait2.url, name: "VIOLET", color: "#b026ff" },
+  { src: babe3.url, portrait: portrait3.url, name: "RAYNA", color: "#1d3a8a" },
 ];
 
 const positions = ["18%", "50%", "82%"];
@@ -139,25 +142,43 @@ const PopNsfwHer = () => {
       {positions.map((left, i) => (
         <div
           key={i}
-          className="absolute"
+          className="absolute flex flex-col items-center"
           style={{
             left,
-            top: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "32%",
-            maxWidth: "520px",
+            bottom: "2%",
+            transform: "translateX(-50%)",
+            width: "26%",
+            maxWidth: "420px",
             zIndex: 5,
           }}
         >
-          {/* Name above frame */}
+          {/* Portrait inside frame */}
           <div
-            className="absolute left-1/2 -translate-x-1/2 z-10 whitespace-nowrap"
-            style={{ top: "-3.2rem" }}
+            className="relative"
+            style={{
+              width: "55%",
+              aspectRatio: "1 / 1.15",
+              border: `4px solid ${babes[i].color}`,
+              borderRadius: "8px",
+              boxShadow: `0 0 0 2px rgba(255,255,255,0.7), 0 14px 30px rgba(0,0,0,0.6)`,
+              background: "#000",
+              overflow: "hidden",
+            }}
           >
+            <img
+              src={babes[i].portrait}
+              alt={`${babes[i].name} portrait`}
+              loading="lazy"
+              className="block w-full h-full object-cover pointer-events-none select-none"
+            />
+          </div>
+
+          {/* Name below frame */}
+          <div className="mt-2 z-10 whitespace-nowrap">
             <div
               className="font-black uppercase leading-none tracking-wider"
               style={{
-                fontSize: "2.2rem",
+                fontSize: "2rem",
                 color: babes[i].color,
                 WebkitTextStroke: "1.5px #ffffff",
                 textShadow: "0 3px 0 rgba(0,0,0,0.35), 0 6px 14px rgba(0,0,0,0.5)",
@@ -168,23 +189,14 @@ const PopNsfwHer = () => {
             </div>
           </div>
 
-          {/* Image inside thin colored frame */}
-          <div
-            className="relative w-full"
-            style={{
-              border: `3px solid ${babes[i].color}`,
-              borderRadius: "6px",
-              boxShadow: `0 0 0 2px rgba(255,255,255,0.6), 0 12px 28px rgba(0,0,0,0.55)`,
-            }}
-          >
-            <img
-              src={babes[i].src}
-              alt={babes[i].name}
-              loading="lazy"
-              className="block w-full pointer-events-none select-none"
-              style={{ filter: "drop-shadow(0 8px 16px rgba(0,0,0,0.5))" }}
-            />
-          </div>
+          {/* Full body babe image, smaller and at the bottom */}
+          <img
+            src={babes[i].src}
+            alt={babes[i].name}
+            loading="lazy"
+            className="block w-full pointer-events-none select-none mt-1"
+            style={{ filter: "drop-shadow(0 8px 16px rgba(0,0,0,0.5))" }}
+          />
         </div>
       ))}
     </div>
