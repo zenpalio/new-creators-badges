@@ -40,6 +40,7 @@ const App = () => (
           <Route path="/pop/nsfw-her" element={<PopNsfwHer />} />
           <Route path="/pop/nsfw-gay" element={<PopNsfwGay />} />
           <Route path="/pop/sfw-him" element={<PopSfwHim />} />
+          <Route path="/pop/sfw-him-anime" element={<PopSfwHim />} />
           <Route path="/pop/sfw-him-real" element={<PopSfwHimReal />} />
           <Route path="/pop/sfw-gay" element={<PopSfwGay />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
