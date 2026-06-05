@@ -195,8 +195,7 @@ const PopNsfwHer = () => {
             src={babes[i].src}
             alt={babes[i].name}
             loading="lazy"
-            className="block w-full pointer-events-none select-none mt-1 transition-all duration-300 ease-out group-hover:scale-125 origin-bottom group-hover:[filter:drop-shadow(0_10px_18px_rgba(0,0,0,0.55))]"
-            style={{ filter: "brightness(0.5) saturate(0.25) contrast(0.95) drop-shadow(0 8px 16px rgba(0,0,0,0.5))" }}
+            className="block w-full pointer-events-none select-none mt-1 transition-all duration-300 ease-out group-hover:scale-125 origin-bottom [filter:brightness(0.5)_saturate(0.25)_contrast(0.95)_drop-shadow(0_8px_16px_rgba(0,0,0,0.5))] group-hover:[filter:drop-shadow(0_10px_18px_rgba(0,0,0,0.55))]"
           />
         </div>
       ))}
