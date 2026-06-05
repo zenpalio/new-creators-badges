@@ -12,6 +12,7 @@ import Gallery from "./pages/Gallery.tsx";
 import EventDetail from "./pages/EventDetail.tsx";
 import YotiVerificationDemo from "./pages/YotiVerificationDemo.tsx";
 import Popunder from "./pages/Popunder.tsx";
+import PopNsfwHer from "./pages/PopNsfwHer.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/verification" element={<Verification />} />
           <Route path="/yoti-verification" element={<YotiVerificationDemo />} />
           <Route path="/p/:variant" element={<Popunder />} />
+          <Route path="/pop/nsfw-her" element={<PopNsfwHer />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
