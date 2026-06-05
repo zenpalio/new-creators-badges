@@ -203,7 +203,7 @@ const PopNsfwGay = () => {
             left,
             top: "62%",
             transform: "translate(-50%, -50%)",
-            width: "clamp(110px, 26vw, 320px)",
+            width: "clamp(110px, 18vw, 220px)",
             zIndex: 5,
             cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'><text x='4' y='38' font-size='38'>🍆</text></svg>") 24 24, pointer`,
           }}
