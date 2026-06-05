@@ -74,15 +74,15 @@ const PopNsfwHer = () => {
 
       {/* Headline */}
       <div
-        className="absolute left-1/2 -translate-x-1/2 z-20 text-center pointer-events-none whitespace-nowrap"
+        className="absolute left-1/2 -translate-x-1/2 z-20 text-center pointer-events-none w-[92%] max-w-[900px] px-2"
         style={{ top: "3%" }}
       >
         <h1
-          className="font-black uppercase leading-none tracking-wider"
+          className="font-black uppercase leading-[1.05] tracking-wider"
           style={{
-            fontSize: "clamp(1.6rem, 3.6vw, 3.2rem)",
+            fontSize: "clamp(1.05rem, 3.6vw, 3.2rem)",
             color: "#ffdd00",
-            WebkitTextStroke: "2px #000000",
+            WebkitTextStroke: "1.5px #000000",
             textShadow: "0 4px 0 rgba(0,0,0,0.55), 0 10px 24px rgba(0,0,0,0.7)",
             fontFamily: "'Permanent Marker', 'Onest', cursive",
             transform: "rotate(-2deg)",
