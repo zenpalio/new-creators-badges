@@ -114,47 +114,54 @@ export const accentClasses: Record<
     btn: string;
     orbA: string;
     orbB: string;
-    headingGradient: string;
+    /** chunky banner: solid fill colors (hex) for text + shadow + outline */
+    banner: { fill: string; shadow: string; stroke: string; bg: string };
+    /** big name sticker color (hex) for character name labels */
+    nameSticker: { fill: string; shadow: string; stroke: string };
   }
 > = {
   pink: {
-    ring: "ring-pink-500/70",
-    hoverRing: "hover:ring-pink-500/70",
+    ring: "ring-pink-500/80",
+    hoverRing: "hover:ring-pink-400",
     text: "text-pink-400",
-    glow: "shadow-[0_0_40px_-5px_rgba(236,72,153,0.7)]",
+    glow: "shadow-[0_0_40px_-5px_rgba(236,72,153,0.8)]",
     btn: "bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-400 hover:to-rose-400",
-    orbA: "bg-gradient-to-br from-pink-500/30 to-rose-500/10",
-    orbB: "bg-gradient-to-tr from-pink-500/30 to-rose-500/10",
-    headingGradient: "bg-gradient-to-br from-pink-300 via-white to-rose-200 bg-clip-text text-transparent",
+    orbA: "bg-gradient-to-br from-pink-500/40 to-rose-500/10",
+    orbB: "bg-gradient-to-tr from-fuchsia-500/30 to-pink-500/10",
+    banner: { fill: "#ffd1e0", shadow: "#9d174d", stroke: "#4a044e", bg: "linear-gradient(180deg, rgba(40,10,30,0.85), rgba(20,5,15,0.95))" },
+    nameSticker: { fill: "#ffe4ec", shadow: "#be185d", stroke: "#3b0a25" },
   },
   "electric-blue": {
-    ring: "ring-blue-500/70",
-    hoverRing: "hover:ring-blue-500/70",
+    ring: "ring-blue-500/80",
+    hoverRing: "hover:ring-blue-400",
     text: "text-blue-400",
-    glow: "shadow-[0_0_40px_-5px_rgba(59,130,246,0.7)]",
+    glow: "shadow-[0_0_40px_-5px_rgba(59,130,246,0.8)]",
     btn: "bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-400 hover:to-cyan-400",
-    orbA: "bg-gradient-to-br from-blue-500/30 to-cyan-500/10",
-    orbB: "bg-gradient-to-tr from-blue-500/30 to-cyan-500/10",
-    headingGradient: "bg-gradient-to-br from-blue-300 via-white to-cyan-200 bg-clip-text text-transparent",
+    orbA: "bg-gradient-to-br from-blue-500/40 to-cyan-500/10",
+    orbB: "bg-gradient-to-tr from-sky-500/30 to-blue-500/10",
+    banner: { fill: "#dbeafe", shadow: "#1e3a8a", stroke: "#082f49", bg: "linear-gradient(180deg, rgba(10,20,40,0.85), rgba(5,10,25,0.95))" },
+    nameSticker: { fill: "#e0f2fe", shadow: "#1d4ed8", stroke: "#0c1e3d" },
   },
   gold: {
-    ring: "ring-amber-500/70",
-    hoverRing: "hover:ring-amber-500/70",
+    ring: "ring-amber-500/80",
+    hoverRing: "hover:ring-amber-400",
     text: "text-amber-400",
-    glow: "shadow-[0_0_40px_-5px_rgba(245,158,11,0.7)]",
+    glow: "shadow-[0_0_40px_-5px_rgba(245,158,11,0.8)]",
     btn: "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400",
-    orbA: "bg-gradient-to-br from-amber-500/30 to-orange-500/10",
-    orbB: "bg-gradient-to-tr from-amber-500/30 to-orange-500/10",
-    headingGradient: "bg-gradient-to-br from-amber-300 via-white to-orange-200 bg-clip-text text-transparent",
+    orbA: "bg-gradient-to-br from-amber-500/40 to-orange-500/10",
+    orbB: "bg-gradient-to-tr from-yellow-500/30 to-amber-500/10",
+    banner: { fill: "#fde68a", shadow: "#92400e", stroke: "#1c1006", bg: "linear-gradient(180deg, rgba(40,25,5,0.85), rgba(20,12,3,0.95))" },
+    nameSticker: { fill: "#fef3c7", shadow: "#b45309", stroke: "#1c1006" },
   },
   violet: {
-    ring: "ring-violet-500/70",
-    hoverRing: "hover:ring-violet-500/70",
+    ring: "ring-violet-500/80",
+    hoverRing: "hover:ring-violet-400",
     text: "text-violet-400",
-    glow: "shadow-[0_0_40px_-5px_rgba(139,92,246,0.7)]",
+    glow: "shadow-[0_0_40px_-5px_rgba(139,92,246,0.8)]",
     btn: "bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-400 hover:to-fuchsia-400",
-    orbA: "bg-gradient-to-br from-violet-500/30 to-fuchsia-500/10",
-    orbB: "bg-gradient-to-tr from-violet-500/30 to-fuchsia-500/10",
-    headingGradient: "bg-gradient-to-br from-violet-300 via-white to-fuchsia-200 bg-clip-text text-transparent",
+    orbA: "bg-gradient-to-br from-violet-500/40 to-fuchsia-500/10",
+    orbB: "bg-gradient-to-tr from-purple-500/30 to-violet-500/10",
+    banner: { fill: "#ede9fe", shadow: "#5b21b6", stroke: "#1e1033", bg: "linear-gradient(180deg, rgba(25,15,40,0.85), rgba(12,7,22,0.95))" },
+    nameSticker: { fill: "#f3e8ff", shadow: "#7e22ce", stroke: "#1e1033" },
   },
 };
