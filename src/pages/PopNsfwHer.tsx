@@ -24,8 +24,9 @@ const PopNsfwHer = () => {
       <style>{`
         @media (max-width: 767px) {
           .nsfw-bg {
-            background-size: auto 60vh !important;
+            background-size: 100% auto !important;
             background-position: center top !important;
+            background-repeat: repeat-y !important;
           }
           .babe-card {
             position: relative !important;
