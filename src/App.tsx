@@ -17,6 +17,7 @@ import PopNsfwGay from "./pages/PopNsfwGay.tsx";
 import PopSfwHim from "./pages/PopSfwHim.tsx";
 import PopSfwHimReal from "./pages/PopSfwHimReal.tsx";
 import PopSfwGay from "./pages/PopSfwGay.tsx";
+import PopSfwGayAnime from "./pages/PopSfwGayAnime.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
