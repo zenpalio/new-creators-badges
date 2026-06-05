@@ -139,6 +139,20 @@ const PopSfwHim = () => {
       `}</style>
 
       <div className="sfw-root relative w-full h-screen">
+        {/* Scenario backgrounds — crossfade in on hover */}
+        {guys.map((g, idx) => (
+          <div
+            key={`scene-${idx}`}
+            className="absolute inset-0 pointer-events-none bg-no-repeat bg-center bg-cover"
+            style={{
+              backgroundImage: `url(${g.sceneBg})`,
+              opacity: hovered === idx ? 1 : 0,
+              transition: "opacity 700ms ease",
+              zIndex: 0,
+            }}
+          />
+        ))}
+
         {/* Dark gradient overlay for legibility */}
         <div
           className="absolute inset-0 pointer-events-none"
