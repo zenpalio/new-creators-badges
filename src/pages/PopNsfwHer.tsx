@@ -142,19 +142,19 @@ const PopNsfwHer = () => {
       {positions.map((left, i) => (
         <div
           key={i}
-          className="absolute flex flex-col items-center"
+          className="absolute flex flex-col items-center group cursor-pointer"
           style={{
             left,
             bottom: "2%",
             transform: "translateX(-50%)",
-            width: "26%",
-            maxWidth: "420px",
+            width: "20%",
+            maxWidth: "320px",
             zIndex: 5,
           }}
         >
           {/* Portrait inside frame */}
           <div
-            className="relative"
+            className="relative transition-transform duration-300 ease-out group-hover:scale-125 origin-bottom"
             style={{
               width: "55%",
               aspectRatio: "1 / 1.15",
@@ -178,7 +178,7 @@ const PopNsfwHer = () => {
             <div
               className="font-black uppercase leading-none tracking-wider"
               style={{
-                fontSize: "2rem",
+                fontSize: "1.6rem",
                 color: babes[i].color,
                 WebkitTextStroke: "1.5px #ffffff",
                 textShadow: "0 3px 0 rgba(0,0,0,0.35), 0 6px 14px rgba(0,0,0,0.5)",
@@ -194,7 +194,7 @@ const PopNsfwHer = () => {
             src={babes[i].src}
             alt={babes[i].name}
             loading="lazy"
-            className="block w-full pointer-events-none select-none mt-1"
+            className="block w-full pointer-events-none select-none mt-1 transition-transform duration-300 ease-out group-hover:scale-125 origin-bottom"
             style={{ filter: "drop-shadow(0 8px 16px rgba(0,0,0,0.5))" }}
           />
         </div>
