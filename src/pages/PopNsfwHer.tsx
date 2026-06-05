@@ -235,7 +235,7 @@ const PopNsfwHer = () => {
           className="babe-card absolute group"
           style={{
             left,
-            top: "50%",
+            top: "62%",
             transform: "translate(-50%, -50%)",
             width: "clamp(110px, 26vw, 320px)",
             zIndex: 5,
