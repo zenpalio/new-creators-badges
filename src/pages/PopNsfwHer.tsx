@@ -173,9 +173,9 @@ const PopNsfwHer = () => {
           }}
         >
           {/* Name above frame */}
-          <div className="mb-2 z-20 whitespace-nowrap pointer-events-none">
+          <div className="mb-2 z-20 whitespace-nowrap pointer-events-none transition-transform duration-300 ease-out group-hover:scale-125 origin-bottom">
             <div
-              className="font-black uppercase leading-none tracking-wider"
+              className="font-black uppercase leading-none tracking-wider transition-[filter] duration-300 ease-out [filter:brightness(0.7)_saturate(0.6)] group-hover:[filter:none]"
               style={{
                 fontSize: "2.6rem",
                 color: babes[i].color,
