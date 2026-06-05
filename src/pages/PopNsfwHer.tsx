@@ -42,6 +42,7 @@ const PopNsfwHer = () => {
           }
           .babe-card:hover .babe-inner {
             transform: scale(1.05) !important;
+            animation: none !important;
           }
           .babes-stack {
             display: flex !important;
