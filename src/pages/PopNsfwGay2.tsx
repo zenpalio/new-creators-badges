@@ -1,7 +1,7 @@
 import bg from "@/assets/popunder-nsfw-gay2/bg.jpg.asset.json";
-import marco from "@/assets/popunder-nsfw-gay2/marco.jpg.asset.json";
-import jake from "@/assets/popunder-nsfw-gay2/jake.jpg.asset.json";
-import diego from "@/assets/popunder-nsfw-gay2/diego.jpg.asset.json";
+import marco from "@/assets/popunder-nsfw-gay2/marco.png.asset.json";
+import jake from "@/assets/popunder-nsfw-gay2/jake2.jpg.asset.json";
+import diego from "@/assets/popunder-nsfw-gay2/diego.png.asset.json";
 import mybabesHeart from "@/assets/popunder/mybabes-heart.png.asset.json";
 
 const dudes = [
