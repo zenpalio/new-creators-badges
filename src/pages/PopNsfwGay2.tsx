@@ -107,18 +107,6 @@ const PopNsfwGay2 = () => {
         >
           Who's sending the best dick pic?
         </h1>
-        <p
-          className="mt-3 font-bold uppercase"
-          style={{
-            fontSize: "clamp(0.85rem, 2.2vw, 1.3rem)",
-            color: "#ffffff",
-            fontFamily: "'Permanent Marker', cursive",
-            textShadow: "0 2px 0 rgba(0,0,0,0.6), 0 6px 14px rgba(0,0,0,0.7)",
-            transform: "rotate(-1deg)",
-          }}
-        >
-          Hover to unblur · Tap to fuck 💦
-        </p>
       </div>
 
       {/* Cards */}
