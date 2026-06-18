@@ -15,6 +15,12 @@ import ExpHimAnime from "./pages/ExpHimAnime.tsx";
 import ExpHimReal from "./pages/ExpHimReal.tsx";
 import ExpGayAnime from "./pages/ExpGayAnime.tsx";
 import ExpGayReal from "./pages/ExpGayReal.tsx";
+import ExpHerAnimeNsfw from "./pages/ExpHerAnimeNsfw.tsx";
+import ExpHerRealNsfw from "./pages/ExpHerRealNsfw.tsx";
+import ExpHimAnimeNsfw from "./pages/ExpHimAnimeNsfw.tsx";
+import ExpHimRealNsfw from "./pages/ExpHimRealNsfw.tsx";
+import ExpGayAnimeNsfw from "./pages/ExpGayAnimeNsfw.tsx";
+import ExpGayRealNsfw from "./pages/ExpGayRealNsfw.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 
