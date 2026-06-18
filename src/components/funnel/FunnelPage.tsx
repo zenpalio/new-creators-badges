@@ -1,7 +1,7 @@
-import { useParams, Navigate } from "react-router-dom";
-import CinematicHero, { type CinematicHeroLabels } from "../components/explore/CinematicHero";
-import PostCard from "../components/explore/PostCard";
-import { getFunnelVariant } from "../data/funnelVariants";
+import { Navigate } from "react-router-dom";
+import CinematicHero, { type CinematicHeroLabels } from "../explore/CinematicHero";
+import PostCard from "../explore/PostCard";
+import { getFunnelVariant, type FunnelAudience, type FunnelMode } from "../../data/funnelVariants";
 
 const heroLabels: CinematicHeroLabels = {
   defaultFeaturedBadge: "Featured",
@@ -19,21 +19,22 @@ const heroLabels: CinematicHeroLabels = {
   defaultPremiumPlanName: "Premium",
 };
 
-const ExpFunnel = () => {
-  const { audience = "", mode = "" } = useParams<{ audience: string; mode: string }>();
-  const variant = getFunnelVariant(audience, mode);
+interface FunnelPageProps {
+  audience: FunnelAudience;
+  mode: FunnelMode;
+}
 
+export default function FunnelPage({ audience, mode }: FunnelPageProps) {
+  const variant = getFunnelVariant(audience, mode);
   if (!variant) return <Navigate to="/" replace />;
 
   return (
     <div className="relative flex min-h-svh w-full flex-col overflow-x-hidden bg-background-v2 font-onest text-foreground-v2">
       <main className="relative flex w-full flex-1 flex-col">
-        {/* Cinematic hero (full-bleed) */}
         <div className="sfw">
           <CinematicHero slides={variant.heroSlides} labels={heroLabels} />
         </div>
 
-        {/* Characters grid */}
         <section
           aria-label={variant.sectionTitle}
           className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-20 pt-8 md:px-8"
@@ -56,11 +57,8 @@ const ExpFunnel = () => {
               </div>
             ))}
           </div>
-
         </section>
       </main>
     </div>
   );
-};
-
-export default ExpFunnel;
+}
