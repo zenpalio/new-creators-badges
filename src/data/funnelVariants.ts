@@ -10,6 +10,8 @@ export interface FunnelCharacter {
   name: string;
   description: string;
   imageUrl: string;
+  /** Optional looping profile video — autoplays muted when present. */
+  videoUrl?: string;
   messageCount?: number | string;
   likeCount?: number | string;
   /** If set, card links here instead of /chat/:id */
