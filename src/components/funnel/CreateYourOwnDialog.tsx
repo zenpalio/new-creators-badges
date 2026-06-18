@@ -49,14 +49,14 @@ export default function CreateYourOwnDialog({
 
           <ul className="mb-6 space-y-2.5">
             {BENEFITS.map((b) => (
-              <li key={b} className="flex items-center gap-2.5">
+              <li key={b} className="flex items-center gap-2">
                 <span
-                  className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary-v2 text-primary-v2-foreground"
+                  className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-primary-v2 text-primary-v2-foreground"
                   aria-hidden
                 >
-                  <Check className="h-3 w-3" strokeWidth={4} />
+                  <Check className="h-2.5 w-2.5" strokeWidth={4} />
                 </span>
-                <span className="text-sm font-medium text-neutral-200">{b}</span>
+                <span className="text-[13px] font-medium text-neutral-200">{b}</span>
               </li>
             ))}
           </ul>
