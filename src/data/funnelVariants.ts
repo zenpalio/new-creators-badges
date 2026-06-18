@@ -12,6 +12,8 @@ export interface FunnelCharacter {
   imageUrl: string;
   messageCount?: number | string;
   likeCount?: number | string;
+  /** If set, card links here instead of /chat/:id */
+  externalUrl?: string;
 }
 
 export interface FunnelVariant {
