@@ -229,11 +229,12 @@ export default function FunnelPage({ audience, mode }: FunnelPageProps) {
                     className="absolute inset-0 z-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-2/3 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                  <div className="absolute bottom-2 right-2 z-[3]" onClick={(e) => { e.preventDefault(); toggleLiked(c.id); }}>
-                    <LikeButton variant="video" liked={!!likedMap[c.id]}>
+                  <div className="absolute bottom-2 right-2 z-[3]">
+                    <LikeButton variant="video" liked={!!likedMap[c.id]} onClick={(e: React.MouseEvent) => { e.preventDefault(); toggleLiked(c.id); }}>
                       <span>{c.likeCount ?? 0}</span>
                     </LikeButton>
                   </div>
+
                   <div className="absolute inset-x-0 bottom-0 z-[3] p-2.5">
                     <h3 className="text-sm font-semibold text-white drop-shadow-md line-clamp-1">{c.name}</h3>
                     <p className="mt-0.5 text-[11px] leading-snug text-white/75 line-clamp-2 pr-14">{c.description}</p>
