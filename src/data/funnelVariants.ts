@@ -208,11 +208,20 @@ function buildVariant(audience: FunnelAudience, mode: FunnelMode): FunnelVariant
     key: `${audience}-${mode}` as FunnelKey,
     audience,
     mode,
+  const key = `${audience}-${mode}` as FunnelKey;
+  const placeholders = buildCharacters(audience, mode, names, pool);
+  const real = REAL_CHARACTERS[key] ?? [];
+  const characters = [...real, ...placeholders].slice(0, 20);
+
+  return {
+    key,
+    audience,
+    mode,
     pageTitle: `${audienceLabel} — ${modeLabel}`,
     sectionTitle: `Pick your ${modeLabel.toLowerCase()} companion`,
     accent,
     heroSlides: buildHeroSlides(audience, mode, accent, pool),
-    characters: buildCharacters(audience, mode, names, pool),
+    characters,
   };
 }
 
