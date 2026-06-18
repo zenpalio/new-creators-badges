@@ -201,6 +201,14 @@ export default function FunnelPage({ audience, mode }: FunnelPageProps) {
   const banners = buildBanners(variant);
   const toggleLiked = (id: string) => setLikedMap((m) => ({ ...m, [id]: !m[id] }));
 
+  const trendingIds = new Set(
+    [...variant.characters]
+      .filter((c) => typeof c.likeCount === "number")
+      .sort((a, b) => (b.likeCount as number) - (a.likeCount as number))
+      .slice(0, 3)
+      .map((c) => c.id),
+  );
+
   return (
     <div className="relative flex min-h-svh w-full overflow-x-hidden bg-background-v2 font-onest text-foreground-v2">
       <main className="relative flex w-full flex-1 flex-col">
