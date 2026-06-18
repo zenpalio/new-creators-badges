@@ -196,6 +196,26 @@ interface FunnelPageProps {
 export default function FunnelPage({ audience, mode }: FunnelPageProps) {
   const variant = getFunnelVariant(audience, mode);
   const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [hasShownModal, setHasShownModal] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!sentinelRef.current || hasShownModal) return;
+    const el = sentinelRef.current;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setShowCreateModal(true);
+          setHasShownModal(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "0px 0px 200px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [hasShownModal]);
 
   if (!variant) return <Navigate to="/" replace />;
 
@@ -209,6 +229,8 @@ export default function FunnelPage({ audience, mode }: FunnelPageProps) {
       .slice(0, 3)
       .map((c) => c.id),
   );
+
+  const modalImage = variant.characters[0]?.imageUrl ?? "";
 
   return (
     <div className="relative flex min-h-svh w-full overflow-x-hidden bg-background-v2 font-onest text-foreground-v2">
