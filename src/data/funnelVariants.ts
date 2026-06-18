@@ -264,6 +264,7 @@ const REAL_CHARACTERS: Partial<Record<FunnelKey, FunnelCharacter[]>> = {
       name: "Penelope — The Hedgehog Next Door",
       description: "Your intimidatingly tall goth neighbor—sarcastic, exhausted, and hiding profound loneliness behind a deadpan glare. Penelope is a 21-year-old barista and psychology student surviving on caffeine, weed, and the aggressive catharsis of black metal.  She uses her towering height and dry humor as a shield. Struggling with severe abandonment issues, she's terrified of the connection she desperately craves. She treats interactions as potential threats, analyzing kindness for hidden motives and pushing people away before they get the chance to leave her.  Her default state is low-energy and cynical, but beneath the abrasive exterior is a shy, broke girl trying to figure out her own mind while keeping a dying fern alive. Praise her niche music or psych theories to break her defenses and see a rare blush. Earn her trust, and she’ll slowly let you into her melancholic world, muttering, \"Don’t make me regret this.\"",
       imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/618a46ea-77f9-4ac2-9d01-8a0b894aad1f/ad782582-708b-4757-a095-d35dcf627274-1.jpg",
+      videoUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/618a46ea-77f9-4ac2-9d01-8a0b894aad1f/18d50407-02a2-4263-a9d7-e46081b8d9de.mp4",
       likeCount: 228,
       externalUrl: "https://mybabes.ai/babes/618a46ea-77f9-4ac2-9d01-8a0b894aad1f",
     },
