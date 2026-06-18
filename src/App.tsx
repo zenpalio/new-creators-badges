@@ -9,7 +9,9 @@ import Explore from "./pages/Explore.tsx";
 import ExploreKling from "./pages/ExploreKling.tsx";
 import Gallery from "./pages/Gallery.tsx";
 import EventDetail from "./pages/EventDetail.tsx";
+import ExpFunnel from "./pages/ExpFunnel.tsx";
 import NotFound from "./pages/NotFound.tsx";
+
 
 
 const queryClient = new QueryClient();
@@ -27,6 +29,8 @@ const App = () => (
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/badges" element={<Profile />} />
           <Route path="/creators" element={<Creators />} />
+
+          <Route path="/exp/:audience/:mode" element={<ExpFunnel />} />
 
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
