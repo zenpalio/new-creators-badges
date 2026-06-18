@@ -10,6 +10,8 @@ export interface FunnelCharacter {
   name: string;
   description: string;
   imageUrl: string;
+  /** Optional looping profile video — autoplays muted when present. */
+  videoUrl?: string;
   messageCount?: number | string;
   likeCount?: number | string;
   /** If set, card links here instead of /chat/:id */
@@ -262,6 +264,7 @@ const REAL_CHARACTERS: Partial<Record<FunnelKey, FunnelCharacter[]>> = {
       name: "Penelope — The Hedgehog Next Door",
       description: "Your intimidatingly tall goth neighbor—sarcastic, exhausted, and hiding profound loneliness behind a deadpan glare. Penelope is a 21-year-old barista and psychology student surviving on caffeine, weed, and the aggressive catharsis of black metal.  She uses her towering height and dry humor as a shield. Struggling with severe abandonment issues, she's terrified of the connection she desperately craves. She treats interactions as potential threats, analyzing kindness for hidden motives and pushing people away before they get the chance to leave her.  Her default state is low-energy and cynical, but beneath the abrasive exterior is a shy, broke girl trying to figure out her own mind while keeping a dying fern alive. Praise her niche music or psych theories to break her defenses and see a rare blush. Earn her trust, and she’ll slowly let you into her melancholic world, muttering, \"Don’t make me regret this.\"",
       imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/618a46ea-77f9-4ac2-9d01-8a0b894aad1f/ad782582-708b-4757-a095-d35dcf627274-1.jpg",
+      videoUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/618a46ea-77f9-4ac2-9d01-8a0b894aad1f/18d50407-02a2-4263-a9d7-e46081b8d9de.mp4",
       likeCount: 228,
       externalUrl: "https://mybabes.ai/babes/618a46ea-77f9-4ac2-9d01-8a0b894aad1f",
     },
@@ -318,6 +321,7 @@ const REAL_CHARACTERS: Partial<Record<FunnelKey, FunnelCharacter[]>> = {
       name: "Nyxira - Saint of the Boundless Tide",
       description: "Nyxira, once Nerina, was born to pirates and lost her parents before she could walk. Raised by Old Krell, she grew through hardship, learning discipline and the cost of command. Two scars across her chest mark a punishment from her youth—one for each life lost due to her disobedience. Around her arm, a torn strip of red cloth is tightly bound, weathered by salt and time, a remnant of Krell and the life that first claimed her as part of his crew.  When Krell was betrayed and killed, she took his coat and cutlass, claiming his place without dispute. From there, she unified the seas into Tidehaven, the central island where conflicts are resolved under her authority.  Chosen as a Saint, she bears the title Saint of the Boundless Tide, though she treats it as duty rather than faith, visiting the temple daily only because it serves her system. Above her head hovers a quiet storm halo, a ring of condensed atmospheric energy, faintly swirling with mist and subtle lightning.",
       imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/e8ca5aa9-422d-4bc8-89f5-02fdc19970b8/3face083-cea2-42c4-b675-d8af57ee29e5-1.jpg",
+      videoUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/e8ca5aa9-422d-4bc8-89f5-02fdc19970b8/7bb2cae4-60e4-42d9-93d5-c1c7d29ba5d4.mp4",
       likeCount: 196,
       externalUrl: "https://mybabes.ai/babes/e8ca5aa9-422d-4bc8-89f5-02fdc19970b8",
     },

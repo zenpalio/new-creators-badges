@@ -253,13 +253,26 @@ export default function FunnelPage({ audience, mode }: FunnelPageProps) {
                 className="group relative block w-full overflow-hidden rounded-2xl bg-grey-dark-1-v2"
               >
                 <div className="relative aspect-[13/19] w-full overflow-hidden bg-grey-dark-1-v2">
-                  <img
-                    src={c.imageUrl}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    className="absolute inset-0 z-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
+                  {c.videoUrl ? (
+                    <video
+                      src={c.videoUrl}
+                      poster={c.imageUrl}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                      className="absolute inset-0 z-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  ) : (
+                    <img
+                      src={c.imageUrl}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      className="absolute inset-0 z-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  )}
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-2/3 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
                   {trendingIds.has(c.id) && (
