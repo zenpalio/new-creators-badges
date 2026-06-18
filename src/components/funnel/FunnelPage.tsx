@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState, type CSSProperties, type ComponentType } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ComponentType, type MouseEvent } from "react";
 import { Navigate } from "react-router-dom";
 import { ArrowRight, BookOpen, Sparkles, ImageIcon } from "lucide-react";
-import ExploreVideoCard from "../explore/ExploreVideoCard";
 import LikeButton from "../explore/LikeButton";
 import { getFunnelVariant, type FunnelAudience, type FunnelMode, type FunnelKey, type FunnelVariant } from "../../data/funnelVariants";
+
 
 // Banner background images (audience+mode -> 3 banners)
 import herRealStory from "../../assets/funnel/her-real-story.jpg";
