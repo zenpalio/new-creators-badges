@@ -290,8 +290,16 @@ export default function FunnelPage({ audience, mode }: FunnelPageProps) {
             ))}
           </section>
 
+          <div ref={sentinelRef} aria-hidden className="h-px w-full" />
         </div>
       </main>
+
+      <CreateYourOwnDialog
+        open={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        imageUrl={modalImage}
+        accent={variant.accent}
+      />
     </div>
   );
 }
