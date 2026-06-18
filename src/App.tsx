@@ -9,7 +9,8 @@ import Explore from "./pages/Explore.tsx";
 import ExploreKling from "./pages/ExploreKling.tsx";
 import Gallery from "./pages/Gallery.tsx";
 import EventDetail from "./pages/EventDetail.tsx";
-import NotFound from "./pages/NotFound.tsx";
+import ExpFunnel from "./pages/ExpFunnel.tsx";
+
 
 
 const queryClient = new QueryClient();
