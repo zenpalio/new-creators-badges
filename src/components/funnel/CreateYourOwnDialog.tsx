@@ -51,8 +51,7 @@ export default function CreateYourOwnDialog({
             {BENEFITS.map((b) => (
               <li key={b} className="flex items-center gap-3">
                 <span
-                  className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-white"
-                  style={{ backgroundColor: accent }}
+                  className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary-v2 text-primary-v2-foreground"
                   aria-hidden
                 >
                   <Check className="h-3.5 w-3.5" strokeWidth={4} />
