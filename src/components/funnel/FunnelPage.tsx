@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState, type CSSProperties, type ComponentType } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ComponentType, type MouseEvent } from "react";
 import { Navigate } from "react-router-dom";
 import { ArrowRight, BookOpen, Sparkles, ImageIcon } from "lucide-react";
-import ExploreVideoCard from "../explore/ExploreVideoCard";
 import LikeButton from "../explore/LikeButton";
 import { getFunnelVariant, type FunnelAudience, type FunnelMode, type FunnelKey, type FunnelVariant } from "../../data/funnelVariants";
+
 
 // Banner background images (audience+mode -> 3 banners)
 import herRealStory from "../../assets/funnel/her-real-story.jpg";
@@ -214,23 +214,36 @@ export default function FunnelPage({ audience, mode }: FunnelPageProps) {
             className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5"
           >
             {variant.characters.map((c) => (
-              <ExploreVideoCard
+              <a
                 key={c.id}
-                poster={c.imageUrl}
                 href={`/chat/${c.id}`}
-                imageAlt={c.name}
-                likeButton={
-                  <LikeButton
-                    variant="video"
-                    liked={!!likedMap[c.id]}
-                    onClick={() => toggleLiked(c.id)}
-                  >
-                    <span>{c.likeCount ?? 0}</span>
-                  </LikeButton>
-                }
-              />
+                aria-label={c.name}
+                className="group relative block w-full overflow-hidden rounded-2xl bg-grey-dark-1-v2"
+              >
+                <div className="relative aspect-[13/19] w-full overflow-hidden bg-grey-dark-1-v2">
+                  <img
+                    src={c.imageUrl}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 z-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-2/3 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                  <div className="absolute bottom-2 right-2 z-[3]">
+                    <LikeButton variant="video" liked={!!likedMap[c.id]} onClick={(e: MouseEvent<HTMLButtonElement>) => { e.preventDefault(); toggleLiked(c.id); }}>
+                      <span>{c.likeCount ?? 0}</span>
+                    </LikeButton>
+                  </div>
+
+                  <div className="absolute inset-x-0 bottom-0 z-[3] p-2.5">
+                    <h3 className="text-sm font-semibold text-white drop-shadow-md line-clamp-1">{c.name}</h3>
+                    <p className="mt-0.5 text-[11px] leading-snug text-white/75 line-clamp-2 pr-14">{c.description}</p>
+                  </div>
+                </div>
+              </a>
             ))}
           </section>
+
         </div>
       </main>
     </div>
