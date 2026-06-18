@@ -204,14 +204,11 @@ function buildVariant(audience: FunnelAudience, mode: FunnelMode): FunnelVariant
 
   const modeLabel = mode === "anime" ? "Anime" : "Photoreal";
 
-  return {
-    key: `${audience}-${mode}` as FunnelKey,
-    audience,
-    mode,
   const key = `${audience}-${mode}` as FunnelKey;
   const placeholders = buildCharacters(audience, mode, names, pool);
   const real = REAL_CHARACTERS[key] ?? [];
   const characters = [...real, ...placeholders].slice(0, 20);
+
 
   return {
     key,
