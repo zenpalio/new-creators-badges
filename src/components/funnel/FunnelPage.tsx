@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties, type ComponentType, ty
 import { Navigate } from "react-router-dom";
 import { ArrowRight, BookOpen, Flame, Sparkles, ImageIcon } from "lucide-react";
 import LikeButton from "../explore/LikeButton";
+import CreateYourOwnDialog from "./CreateYourOwnDialog";
 import { getFunnelVariant, type FunnelAudience, type FunnelMode, type FunnelKey, type FunnelVariant } from "../../data/funnelVariants";
 
 
