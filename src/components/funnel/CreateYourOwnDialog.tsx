@@ -1,4 +1,4 @@
-import { Check, Sparkles, X } from "lucide-react";
+import { Check, Sparkles } from "lucide-react";
 import { Dialog, DialogContent } from "../ui/dialog";
 
 interface Props {
@@ -19,19 +19,7 @@ const BENEFITS = [
 export default function CreateYourOwnDialog({ open, onClose, imageUrl, accent, ctaUrl = "https://mybabes.ai/create" }: Props) {
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent
-        className="max-w-md overflow-hidden border-white/10 bg-grey-dark-1-v2 p-0 text-white sm:rounded-3xl"
-        showCloseButton={false}
-      >
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close"
-          className="absolute right-3 top-3 z-20 rounded-full bg-black/50 p-1.5 text-white/80 hover:text-white"
-        >
-          <X className="h-4 w-4" />
-        </button>
-
+      <DialogContent className="max-w-md overflow-hidden border-white/10 bg-grey-dark-1-v2 p-0 text-white sm:rounded-3xl">
         <div className="relative h-56 w-full overflow-hidden">
           <img src={imageUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-grey-dark-1-v2 via-grey-dark-1-v2/40 to-transparent" />
