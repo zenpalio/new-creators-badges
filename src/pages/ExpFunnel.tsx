@@ -1,4 +1,4 @@
-import { useParams, Link, Navigate } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 import CinematicHero, { type CinematicHeroLabels } from "../components/explore/CinematicHero";
 import PostCard from "../components/explore/PostCard";
 import { getFunnelVariant } from "../data/funnelVariants";
@@ -44,25 +44,19 @@ const ExpFunnel = () => {
 
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-4 lg:grid-cols-5">
             {variant.characters.map((c) => (
-              <Link
-                key={c.id}
-                to={`/chat/${c.id}`}
-                className="block w-full"
-                aria-label={`Chat with ${c.name}`}
-              >
-                <div className="w-full [&>a]:!w-full">
-                  <PostCard
-                    name={c.name}
-                    description={c.description}
-                    imageUrl={c.imageUrl}
-                    href={`/chat/${c.id}`}
-                    messageCount={c.messageCount}
-                    variant="stats"
-                  />
-                </div>
-              </Link>
+              <div key={c.id} className="[&>a]:!w-full">
+                <PostCard
+                  name={c.name}
+                  description={c.description}
+                  imageUrl={c.imageUrl}
+                  href={`/chat/${c.id}`}
+                  messageCount={c.messageCount}
+                  variant="stats"
+                />
+              </div>
             ))}
           </div>
+
         </section>
       </main>
     </div>
