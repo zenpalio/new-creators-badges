@@ -15,6 +15,12 @@ import ExpHimAnime from "./pages/ExpHimAnime.tsx";
 import ExpHimReal from "./pages/ExpHimReal.tsx";
 import ExpGayAnime from "./pages/ExpGayAnime.tsx";
 import ExpGayReal from "./pages/ExpGayReal.tsx";
+import ExpHerAnimeNsfw from "./pages/ExpHerAnimeNsfw.tsx";
+import ExpHerRealNsfw from "./pages/ExpHerRealNsfw.tsx";
+import ExpHimAnimeNsfw from "./pages/ExpHimAnimeNsfw.tsx";
+import ExpHimRealNsfw from "./pages/ExpHimRealNsfw.tsx";
+import ExpGayAnimeNsfw from "./pages/ExpGayAnimeNsfw.tsx";
+import ExpGayRealNsfw from "./pages/ExpGayRealNsfw.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 
@@ -35,12 +41,27 @@ const App = () => (
           <Route path="/badges" element={<Profile />} />
           <Route path="/creators" element={<Creators />} />
 
+          {/* SFW funnels (default) */}
           <Route path="/exp/her/anime" element={<ExpHerAnime />} />
+          <Route path="/exp/her/anime/sfw" element={<ExpHerAnime />} />
           <Route path="/exp/her/real" element={<ExpHerReal />} />
+          <Route path="/exp/her/real/sfw" element={<ExpHerReal />} />
           <Route path="/exp/him/anime" element={<ExpHimAnime />} />
+          <Route path="/exp/him/anime/sfw" element={<ExpHimAnime />} />
           <Route path="/exp/him/real" element={<ExpHimReal />} />
+          <Route path="/exp/him/real/sfw" element={<ExpHimReal />} />
           <Route path="/exp/gay/anime" element={<ExpGayAnime />} />
+          <Route path="/exp/gay/anime/sfw" element={<ExpGayAnime />} />
           <Route path="/exp/gay/real" element={<ExpGayReal />} />
+          <Route path="/exp/gay/real/sfw" element={<ExpGayReal />} />
+
+          {/* NSFW funnels */}
+          <Route path="/exp/her/anime/nsfw" element={<ExpHerAnimeNsfw />} />
+          <Route path="/exp/her/real/nsfw" element={<ExpHerRealNsfw />} />
+          <Route path="/exp/him/anime/nsfw" element={<ExpHimAnimeNsfw />} />
+          <Route path="/exp/him/real/nsfw" element={<ExpHimRealNsfw />} />
+          <Route path="/exp/gay/anime/nsfw" element={<ExpGayAnimeNsfw />} />
+          <Route path="/exp/gay/real/nsfw" element={<ExpGayRealNsfw />} />
 
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

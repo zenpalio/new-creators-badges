@@ -188,12 +188,15 @@ function HeroBannerCard({ banner: b, large }: { banner: FunnelBanner; large: boo
   );
 }
 
+export type FunnelSafety = "sfw" | "nsfw";
+
 interface FunnelPageProps {
   audience: FunnelAudience;
   mode: FunnelMode;
+  safety?: FunnelSafety;
 }
 
-export default function FunnelPage({ audience, mode }: FunnelPageProps) {
+export default function FunnelPage({ audience, mode, safety = "sfw" }: FunnelPageProps) {
   const variant = getFunnelVariant(audience, mode);
   const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
   const [showCreateModal, setShowCreateModal] = useState(false);
