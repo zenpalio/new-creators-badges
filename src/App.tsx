@@ -41,19 +41,14 @@ const App = () => (
           <Route path="/badges" element={<Profile />} />
           <Route path="/creators" element={<Creators />} />
 
-          {/* SFW funnels (default) */}
-          <Route path="/exp/her/anime" element={<ExpHerAnime />} />
+          {/* SFW funnels */}
           <Route path="/exp/her/anime/sfw" element={<ExpHerAnime />} />
-          <Route path="/exp/her/real" element={<ExpHerReal />} />
           <Route path="/exp/her/real/sfw" element={<ExpHerReal />} />
-          <Route path="/exp/him/anime" element={<ExpHimAnime />} />
           <Route path="/exp/him/anime/sfw" element={<ExpHimAnime />} />
-          <Route path="/exp/him/real" element={<ExpHimReal />} />
           <Route path="/exp/him/real/sfw" element={<ExpHimReal />} />
-          <Route path="/exp/gay/anime" element={<ExpGayAnime />} />
           <Route path="/exp/gay/anime/sfw" element={<ExpGayAnime />} />
-          <Route path="/exp/gay/real" element={<ExpGayReal />} />
           <Route path="/exp/gay/real/sfw" element={<ExpGayReal />} />
+
 
           {/* NSFW funnels */}
           <Route path="/exp/her/anime/nsfw" element={<ExpHerAnimeNsfw />} />
