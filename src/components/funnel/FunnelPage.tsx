@@ -41,6 +41,7 @@ type FunnelBanner = {
   title: string;
   description: string;
   cta: string;
+  href: string;
   bg: string;
   accentHsl: string;
   badgeIcon: ComponentType<{ className?: string; style?: CSSProperties }>;
@@ -59,6 +60,7 @@ function buildBanners(variant: FunnelVariant): FunnelBanner[] {
       title: "Build your own",
       description: "Design the perfect companion — looks, voice, personality. Yours, forever.",
       cta: "Create now",
+      href: "https://mybabes.ai/babes/create",
       bg: bgs.create,
       accentHsl: accent,
       badgeIcon: Sparkles,
@@ -68,7 +70,8 @@ function buildBanners(variant: FunnelVariant): FunnelBanner[] {
       eyebrow: "Story",
       title: "Write your fantasy",
       description: "Co-create immersive stories with your companion — endless plots, your rules.",
-      cta: "Start a story",
+      cta: "Explore stories",
+      href: "https://mybabes.ai/explore/stories?sort=most_liked&authFiltersInitialized=true",
       bg: bgs.story,
       accentHsl: accent,
       badgeIcon: BookOpen,
@@ -78,7 +81,8 @@ function buildBanners(variant: FunnelVariant): FunnelBanner[] {
       eyebrow: "Images",
       title: "Generate spicy AI photos",
       description: "Turn any prompt into stunning AI images of your favorite characters.",
-      cta: "Generate",
+      cta: "Explore images & videos",
+      href: "https://mybabes.ai/explore/images?sort=most_liked&authFiltersInitialized=true",
       bg: bgs.image,
       accentHsl: accent,
       badgeIcon: ImageIcon,
@@ -86,6 +90,7 @@ function buildBanners(variant: FunnelVariant): FunnelBanner[] {
     },
   ];
 }
+
 
 // ---- Hero banners (mirrors ExploreKling layout: mobile slider + xl 65/35 split) ----
 function HeroBanners({ banners }: { banners: FunnelBanner[] }) {
