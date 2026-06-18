@@ -1,12 +1,38 @@
 import { useEffect, useRef, useState, type CSSProperties, type ComponentType } from "react";
 import { Navigate } from "react-router-dom";
-import { ArrowRight, BookOpen, Crown, Sparkles, MessageCircle } from "lucide-react";
+import { ArrowRight, BookOpen, Sparkles, ImageIcon } from "lucide-react";
 import ExploreVideoCard from "../explore/ExploreVideoCard";
 import LikeButton from "../explore/LikeButton";
-import { getFunnelVariant, type FunnelAudience, type FunnelMode, type FunnelVariant } from "../../data/funnelVariants";
-import storyCreatorBg from "../../assets/story-creator-bg.jpg";
-import premiumBg from "../../assets/premium-bg.jpg";
-import badgesBannerBg from "../../assets/badges-banner-bg.jpg";
+import { getFunnelVariant, type FunnelAudience, type FunnelMode, type FunnelKey, type FunnelVariant } from "../../data/funnelVariants";
+
+// Banner background images (audience+mode -> 3 banners)
+import herRealStory from "../../assets/funnel/her-real-story.jpg";
+import herRealImage from "../../assets/funnel/her-real-image.jpg";
+import herRealCreate from "../../assets/funnel/her-real-create.jpg";
+import herAnimeStory from "../../assets/funnel/her-anime-story.jpg";
+import herAnimeImage from "../../assets/funnel/her-anime-image.jpg";
+import herAnimeCreate from "../../assets/funnel/her-anime-create.jpg";
+import himRealStory from "../../assets/funnel/him-real-story.jpg";
+import himRealImage from "../../assets/funnel/him-real-image.jpg";
+import himRealCreate from "../../assets/funnel/him-real-create.jpg";
+import himAnimeStory from "../../assets/funnel/him-anime-story.jpg";
+import himAnimeImage from "../../assets/funnel/him-anime-image.jpg";
+import himAnimeCreate from "../../assets/funnel/him-anime-create.jpg";
+import gayRealStory from "../../assets/funnel/gay-real-story.jpg";
+import gayRealImage from "../../assets/funnel/gay-real-image.jpg";
+import gayRealCreate from "../../assets/funnel/gay-real-create.jpg";
+import gayAnimeStory from "../../assets/funnel/gay-anime-story.jpg";
+import gayAnimeImage from "../../assets/funnel/gay-anime-image.jpg";
+import gayAnimeCreate from "../../assets/funnel/gay-anime-create.jpg";
+
+const BANNER_BG: Record<FunnelKey, { story: string; image: string; create: string }> = {
+  "her-real":   { story: herRealStory,   image: herRealImage,   create: herRealCreate   },
+  "her-anime":  { story: herAnimeStory,  image: herAnimeImage,  create: herAnimeCreate  },
+  "him-real":   { story: himRealStory,   image: himRealImage,   create: himRealCreate   },
+  "him-anime":  { story: himAnimeStory,  image: himAnimeImage,  create: himAnimeCreate  },
+  "gay-real":   { story: gayRealStory,   image: gayRealImage,   create: gayRealCreate   },
+  "gay-anime":  { story: gayAnimeStory,  image: gayAnimeImage,  create: gayAnimeCreate  },
+};
 
 // ---- Banner types ----
 type FunnelBanner = {
@@ -24,39 +50,37 @@ function buildBanners(variant: FunnelVariant): FunnelBanner[] {
   const accent = variant.audience === "her" ? "320 70% 55%"
     : variant.audience === "him" ? "213 100% 50%"
     : "281 85% 62%";
-  const isAnime = variant.mode === "anime";
+  const bgs = BANNER_BG[variant.key];
 
   return [
     {
-      eyebrow: isAnime ? "Anime" : "Photoreal",
-      title: "Find your match",
-      description: isAnime
-        ? "Stylized anime companions — pick one and start chatting in seconds."
-        : "Photoreal companions — pick one and start chatting in seconds.",
-      cta: "Start chatting",
-      bg: storyCreatorBg,
+      eyebrow: "Create",
+      title: "Build your own",
+      description: "Design the perfect companion — looks, voice, personality. Yours, forever.",
+      cta: "Create now",
+      bg: bgs.create,
       accentHsl: accent,
-      badgeIcon: MessageCircle,
+      badgeIcon: Sparkles,
       ctaClass: "bg-primary-v2 text-primary-v2-foreground hover:bg-primary-v2/90",
     },
     {
-      eyebrow: "Premium",
-      title: "Skip the queue",
-      description: "Unlimited chats, HD images and videos, exclusive characters.",
-      cta: "Upgrade",
-      bg: premiumBg,
-      accentHsl: "292 91% 73%",
-      badgeIcon: Crown,
+      eyebrow: "Story",
+      title: "Write your fantasy",
+      description: "Co-create immersive stories with your companion — endless plots, your rules.",
+      cta: "Start a story",
+      bg: bgs.story,
+      accentHsl: accent,
+      badgeIcon: BookOpen,
       ctaClass: "bg-white text-black hover:bg-white/90",
     },
     {
-      eyebrow: "Create",
-      title: "Build your own",
-      description: "Design a companion from scratch — looks, voice and personality.",
-      cta: "Create now",
-      bg: badgesBannerBg,
+      eyebrow: "Images",
+      title: "Generate spicy AI photos",
+      description: "Turn any prompt into stunning AI images of your favorite characters.",
+      cta: "Generate",
+      bg: bgs.image,
       accentHsl: accent,
-      badgeIcon: Sparkles,
+      badgeIcon: ImageIcon,
       ctaClass: "bg-primary-v2 text-primary-v2-foreground hover:bg-primary-v2/90",
     },
   ];
