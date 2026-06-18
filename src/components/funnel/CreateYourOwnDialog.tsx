@@ -21,7 +21,7 @@ export default function CreateYourOwnDialog({
   onClose,
   imageUrl,
   accent,
-  ctaUrl = "https://mybabes.ai/create",
+  ctaUrl = "https://mybabes.ai/babes/create",
 }: Props) {
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
