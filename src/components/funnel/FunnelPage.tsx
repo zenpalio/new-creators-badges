@@ -197,7 +197,7 @@ interface FunnelPageProps {
 }
 
 export default function FunnelPage({ audience, mode, safety = "sfw" }: FunnelPageProps) {
-  const variant = getFunnelVariant(audience, mode);
+  const variant = getFunnelVariant(audience, mode, safety);
   const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [hasShownModal, setHasShownModal] = useState(false);
