@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
-import CinematicHero, { type CinematicHeroLabels } from "../components/explore/CinematicHero";
-import PostCard from "../components/explore/PostCard";
-import { getFunnelVariant, type FunnelAudience, type FunnelMode } from "../data/funnelVariants";
+import CinematicHero, { type CinematicHeroLabels } from "../explore/CinematicHero";
+import PostCard from "../explore/PostCard";
+import { getFunnelVariant, type FunnelAudience, type FunnelMode } from "../../data/funnelVariants";
 
 const heroLabels: CinematicHeroLabels = {
   defaultFeaturedBadge: "Featured",
