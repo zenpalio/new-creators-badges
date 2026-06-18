@@ -66,8 +66,7 @@ export default function CreateYourOwnDialog({
               href={ctaUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex w-full items-center justify-center rounded-2xl px-8 py-4 font-bold text-white shadow-lg shadow-pink-500/10 transition-transform hover:scale-[1.02] active:scale-[0.98]"
-              style={{ backgroundColor: accent }}
+              className="inline-flex w-full items-center justify-center rounded-2xl bg-primary-v2 px-8 py-4 font-bold text-primary-v2-foreground transition-transform hover:scale-[1.02] active:scale-[0.98]"
             >
               Start creating — free
             </a>
