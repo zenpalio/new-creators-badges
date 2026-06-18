@@ -155,7 +155,9 @@ function HeroBannerCard({ banner: b, large }: { banner: FunnelBanner; large: boo
   const BadgeIcon = b.badgeIcon;
   return (
     <a
-      href="#"
+      href={b.href}
+      target="_blank"
+      rel="noopener noreferrer"
       style={{ "--accent": b.accentHsl } as CSSProperties & { "--accent": string }}
       className={`group relative block overflow-hidden rounded-2xl border border-white/5 bg-black transition-colors hover:border-white/15 ${
         large ? "h-[265px] sm:h-[285px] md:h-[305px] lg:h-[320px]" : "min-h-[220px]"
