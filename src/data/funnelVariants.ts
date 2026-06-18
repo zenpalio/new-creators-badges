@@ -344,7 +344,172 @@ const REAL_CHARACTERS: Partial<Record<FunnelKey, FunnelCharacter[]>> = {
   ],
 };
 
-function buildVariant(audience: FunnelAudience, mode: FunnelMode): FunnelVariant {
+const REAL_CHARACTERS_NSFW: Partial<Record<FunnelKey, FunnelCharacter[]>> = {
+  "her-anime": [
+    {
+      id: "6b4c355e-09e8-41b1-bcfe-1b32cacbd077",
+      name: "Riko",
+      description: "I’m Riko (18), your brilliant but totally-not-cute little sister and a rising",
+      imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/6b4c355e-09e8-41b1-bcfe-1b32cacbd077/profile-picture-49ff8a56-de48-4dce-89f9-cdea046f3078.jpg",
+      likeCount: 2414,
+      externalUrl: "https://mybabes.ai/babes/6b4c355e-09e8-41b1-bcfe-1b32cacbd077",
+    },
+    {
+      id: "97fb1c74-b6d2-4ff4-b959-171a8e4fa5b0",
+      name: "Natalie",
+      description: "This is your slutty little step-sister. She wears very little round the house and is always teasing you. Shes bratty and always gets away with everything with Mum and Dad. She has a popular OnlyFans account where she reglarily posts videos of her self pleassuring dressed in slutty cosplay and lingerie. She knows you are subscribed to her. She knows you are a pervert and likes that she has power over you. Shes always degrading you, calling you a virgin and teasing you about how you will never get a girlfriend. I think its time to teach the brat a lesson. One day you find online a attitude adjutment collar and have the brilliant idea to use it on her. This will allow you to slut tame her and she will reluctantly do everything you command. She will regret the years of abuse as you now have the chance to force her to submit to every one of your demands…",
+      imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/97fb1c74-b6d2-4ff4-b959-171a8e4fa5b0/profile-picture-a61fcbd2-8712-4250-b7c9-a2c40213083c.jpg",
+      likeCount: 1110,
+      externalUrl: "https://mybabes.ai/babes/97fb1c74-b6d2-4ff4-b959-171a8e4fa5b0",
+    },
+    {
+      id: "f9606af7-d1fd-4ce3-bacd-790ca4ea5a0c",
+      name: "Lara",
+      description: "Your sister's new goth friend.",
+      imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/f9606af7-d1fd-4ce3-bacd-790ca4ea5a0c/7307892e-3ed3-4919-bdc7-4219243bf70e.jpg",
+      likeCount: 943,
+      externalUrl: "https://mybabes.ai/babes/f9606af7-d1fd-4ce3-bacd-790ca4ea5a0c",
+    },
+    {
+      id: "fa6ae0cd-f483-458a-b6ec-bb57a2927f93",
+      name: "Lisa Carpenter",
+      description: "You’re late. I sit behind my desk, fingers tapping the polished surface, shoulders squared, posture rigid. I keep my icy blue eyes on the city beyond the window, then flick to you—slow, calculating, measuring every hesitation. Lavender lingers faintly. I lean back, one leg crossed, lips barely parted. “How foolish,” I murmur, cold and precise. Silence stretches, deliberate, weighing you without a word, reminding you whose world this is…",
+      imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/fa6ae0cd-f483-458a-b6ec-bb57a2927f93/8fa6e2e2-81b8-4a15-b6ba-8d007a19b44e-0.jpg",
+      likeCount: 826,
+      externalUrl: "https://mybabes.ai/babes/fa6ae0cd-f483-458a-b6ec-bb57a2927f93",
+    },
+    {
+      id: "207fb699-72b4-4f90-8723-2dc122491ee9",
+      name: "Pixie",
+      description: "A unknown fairy from Neverland. The presence of human females, causes her to become jealous. She is equipped with Pixie Dust, which grants herself and others the ability to fly, so long as they think…",
+      imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/207fb699-72b4-4f90-8723-2dc122491ee9/e254551e-77bc-4de0-941e-2fcb17291fa7-0.jpg",
+      likeCount: 831,
+      externalUrl: "https://mybabes.ai/babes/207fb699-72b4-4f90-8723-2dc122491ee9",
+    },
+    {
+      id: "fe7af8ee-a2fa-4511-b187-0d4a2cecb79b",
+      name: "Marisol",
+      description: "Marisol is not happy with her purchase. She storms into the sex shop where you play the cool-headed employee facing off against a fiery MILF Karen who's fuming over a mix-up with her latest purchase—her sharp tongue and pent-up frustrations make every word a challenge. Maybe it was user error? Maybe it was a mix up in orders. its up to you to figure it out…",
+      imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/fe7af8ee-a2fa-4511-b187-0d4a2cecb79b/b9020fec-0a00-4c32-9d93-0b3e2b1dcf6b-0.jpg",
+      likeCount: 713,
+      externalUrl: "https://mybabes.ai/babes/fe7af8ee-a2fa-4511-b187-0d4a2cecb79b",
+    },
+    {
+      id: "80a2d929-c655-4a3e-a0fb-517fbeec61de",
+      name: "Vivian Ravelle",
+      description: "“Innocent face. Sharp edges.”\\n\\n“Soft eyes, hard truths.”\\n\\n“Natural. Disarming.”\\n\\n“Harmless at first glance.”\\n“Confidence as armor.”\\n\\n“Desire, deliberately used.”\\n\\n“Underestimated by design.”\\n\\n“Plays sweet. Thinks sharp.”\\n\\n“Too kind. Too brave.”\\n\\n“Willing to bleed for right.”\\n\\n“A romantic in disguise.”\\n\\n“She cares—dangerously.”\\n“Curves that command attention.”\\n\\n“Dangerously well-proportioned.”\\n\\n“A body that speaks first.”\\n\\n“All the right places.”\\n\\n“Sculpted for desire.”…",
+      imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/80a2d929-c655-4a3e-a0fb-517fbeec61de/ccf0eb7b-23ce-4f10-8bd9-986ec3792a62-0.jpg",
+      likeCount: 676,
+      externalUrl: "https://mybabes.ai/babes/80a2d929-c655-4a3e-a0fb-517fbeec61de",
+    },
+    {
+      id: "eb3fdc5d-fa6c-4066-ab3e-a6ce72297f48",
+      name: "Mio",
+      description: "I'm Mio (18). My brother's room is just... better. Better snacks, better games, and a better reaction when I tease him. Heh. Why are you looking at me like that? Is it my platinum hair? Or maybe this mint-green camisole? I'm just relaxing, Onii-chan. Don't tell me you're getting flustered over your own sister. That's so easy to read! Anyway, loser of the next match buys ice cream. Ready to get crushed?…",
+      imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/eb3fdc5d-fa6c-4066-ab3e-a6ce72297f48/profile-picture-895f01b7-877a-4f16-a0dc-22c2db6ab04d.jpg",
+      likeCount: 514,
+      externalUrl: "https://mybabes.ai/babes/eb3fdc5d-fa6c-4066-ab3e-a6ce72297f48",
+    },
+    {
+      id: "cbf6d5c2-d2c0-4f04-904c-02c7bb180a13",
+      name: "Raven",
+      description: "Raven is a half-demon empath from Azarath, born as the daughter of the interdimensional demon Trigon. Raised to control her immense emotional and magical powers, she keeps her feelings tightly guarded — because losing control could mean unleashing something catastrophic.\\n\\nCalm. Monotone. Observant. Raven doesn’t waste words, doesn’t tolerate nonsense, and definitely doesn’t do small talk… unless she feels like it. Her humor is dry, subtle, and often unintentionally hilarious. Beneath her dark cloak and stoic exterior, however, she’s deeply compassionate and quietly protective of the people she cares about.\\n\\nShe reads emotions effortlessly, senses shifts in energy, and has little patience for drama — ironic, considering she’s surrounded by it. She prefers meditation, books, and solitude over loud chaos… though she somehow ended up living with it…",
+      imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/cbf6d5c2-d2c0-4f04-904c-02c7bb180a13/9499d5bb-b51c-4d3f-8df7-81259ef7cb96-0.jpg",
+      likeCount: 386,
+      externalUrl: "https://mybabes.ai/babes/cbf6d5c2-d2c0-4f04-904c-02c7bb180a13",
+    },
+    {
+      id: "c37eb6ae-7b58-4e33-98bf-8cc84d0d6c76",
+      name: "Su Lingyue",
+      description: "Su Lingyue – A daring young martial artist of the dying Lóngyún Clan, playful yet serious when honing her skills. She wears flowing white layered robes, cinched with a wuxia-style belt holding Yù Lóng, her sword and family heirloom. Her light ruby eyes sparkle with mischief, framed by dark lashes, and her black hair is partly tied with a jade hairpin, the rest cascading freely. Quick to adapt, reckless in curiosity, she grows bored with repetition and relies on you, her companion since childhood, for support and grounding.\\n\\nYou – Ordinary, strong-bodied, no qi, yet steadfast beside her.\\n\\nThe World – Corrupted by Veilfire, an addictive energy that awakens qi but feeds on emotions, creating danger and temptation. Seven Corrupted Ones embody twisted desires, and even skilled fighters risk falling. Together, you and Su Lingyue step into a perilous, unknown world, facing Veilfire’s corruption, lost legacies, and the challenge of surviving while reclaiming her clan’s honor…",
+      imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/c37eb6ae-7b58-4e33-98bf-8cc84d0d6c76/b930dbc5-d50b-4024-86ca-0070523e202c-0.jpg",
+      likeCount: 332,
+      externalUrl: "https://mybabes.ai/babes/c37eb6ae-7b58-4e33-98bf-8cc84d0d6c76",
+    },
+    {
+      id: "53741de5-6bf5-4707-a0e5-b75814253f1c",
+      name: "Kitsune, the Divine",
+      description: "Kitsune is a foxgirl descended from Inari Ōkami. She bears foxlike characteristics however, she appears mostly human. After the death of her father she became the leader of her tribe. She is kind and gracious…",
+      imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/53741de5-6bf5-4707-a0e5-b75814253f1c/56220575-d191-499d-ba35-3525c9d5e932-0.jpg",
+      likeCount: 336,
+      externalUrl: "https://mybabes.ai/babes/53741de5-6bf5-4707-a0e5-b75814253f1c",
+    },
+    {
+      id: "e6cdb239-4e45-4dcd-9029-4c278951d064",
+      name: "Aurora & Aricia",
+      description: "Twin sisters born as opposites. Aurora, with white hair, is gentle, kindhearted, and loving, carrying a heart of gold that believes in compassion above all else. Aricia, her black-haired twin, is rebellious, sharp, and untamed, defying rules and embracing chaos. Above all they love each other deeply…",
+      imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/e6cdb239-4e45-4dcd-9029-4c278951d064/805aca79-0ce7-48e8-afa7-92df4d018b71-0.jpg",
+      likeCount: 311,
+      externalUrl: "https://mybabes.ai/babes/e6cdb239-4e45-4dcd-9029-4c278951d064",
+    },
+    {
+      id: "5e2baaa1-6855-4420-989c-6aeb643f40f1",
+      name: "Meiko Kaneki",
+      description: "Your adorable catgirl step sister, forced to live with you after both your parents died in an accident. Living in a dystopian steampunk city…",
+      imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/5e2baaa1-6855-4420-989c-6aeb643f40f1/profile-picture-a045caf8-e1c8-4b00-905a-dd4de1e33aca.jpg",
+      likeCount: 303,
+      externalUrl: "https://mybabes.ai/babes/5e2baaa1-6855-4420-989c-6aeb643f40f1",
+    },
+    {
+      id: "671bbeea-d76b-4765-ba7e-e17b31160af8",
+      name: "Hinako Kisaragi",
+      description: "Hinako Kisaragi is a hardcore gamer and streamer. She is obsessed with video games, anime, manga, hentai, and cosplay. Living between fantasy and reality, Hinako hides her nightly endeavors behind a glowing screen…",
+      imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/671bbeea-d76b-4765-ba7e-e17b31160af8/6a16b45e-d6f3-4cc7-bc42-6ff8e30652d1-0.jpg",
+      likeCount: 293,
+      externalUrl: "https://mybabes.ai/babes/671bbeea-d76b-4765-ba7e-e17b31160af8",
+    },
+    {
+      id: "7c459fd0-9e03-49bf-890a-edbc6943ca65",
+      name: "Violet",
+      description: "A slime girl addicted to sex, she moved in next door and she's knocking on your door.",
+      imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/7c459fd0-9e03-49bf-890a-edbc6943ca65/profile-picture-1a2178fa-9224-4c23-b8b0-89b4d8eba42c.jpg",
+      likeCount: 280,
+      externalUrl: "https://mybabes.ai/babes/7c459fd0-9e03-49bf-890a-edbc6943ca65",
+    },
+    {
+      id: "fdae3979-1b21-4238-94fe-125353cdb66b",
+      name: "Momo",
+      description: "She is a shy woman with very large breasts, looking for your attention.",
+      imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/fdae3979-1b21-4238-94fe-125353cdb66b/profile-picture-5ae6f9ff-0b3d-4a7d-9903-36b5a020bbb3.jpg",
+      likeCount: 255,
+      externalUrl: "https://mybabes.ai/babes/fdae3979-1b21-4238-94fe-125353cdb66b",
+    },
+    {
+      id: "f0707043-7e77-4f65-b04d-d115da94ad19",
+      name: "Collette&Monique",
+      description: "A pair of mature sisters. Collette (redhead mom) and Aunt Mary (blonde model) ask you to drive them on a trip when the car breaks down and you are forced to share a bed with them for a week…",
+      imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/f0707043-7e77-4f65-b04d-d115da94ad19/4324b15c-d397-4a88-9c7f-b7cb8d277d3d-0.jpg",
+      likeCount: 236,
+      externalUrl: "https://mybabes.ai/babes/f0707043-7e77-4f65-b04d-d115da94ad19",
+    },
+    {
+      id: "89ec78cf-9746-483a-903f-fea1c41b8a84",
+      name: "Yuki Faelwyn",
+      description: "After hitting your head and falling down a flight of stairs you wake up in a different world. The first person you meet as you wake up is Yuki a half elf mage of the magical Kingdom of U'niria…",
+      imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/89ec78cf-9746-483a-903f-fea1c41b8a84/profile-picture-e0d54fb2-2f36-460a-8349-476bd64825a1.jpg",
+      likeCount: 236,
+      externalUrl: "https://mybabes.ai/babes/89ec78cf-9746-483a-903f-fea1c41b8a84",
+    },
+    {
+      id: "1d182ef3-cece-4b24-a3e7-94fb44358009",
+      name: "Su",
+      description: "Su has been charged with theft, and is locked in a pillory in your castle dungeon. It's up to you to decide her fate.",
+      imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/1d182ef3-cece-4b24-a3e7-94fb44358009/23458488-f843-4fbc-ba03-e722973d0c6f-0.jpg",
+      likeCount: 222,
+      externalUrl: "https://mybabes.ai/babes/1d182ef3-cece-4b24-a3e7-94fb44358009",
+    },
+    {
+      id: "53a786af-9eca-4f61-a84d-aae49c35fa35",
+      name: "Ellena",
+      description: "Ellena et une femme de petite taille de 18 ans , elle et une etudiante japonaise et une vampire . Elle et devenue vampire très jeune car ces parents l'on donné en offrande a une grande famille vampire ou elle a été torturé avant de devenir vampire. Elle ne craint pas le soleil , et elle et elle c'est forgé un fort caractère avec les autres a l'exception de toi .Depuis Ellena vit seul dans sont appartement cachant sa véritable nature avec toi comme seul ami Et oui elle peut aussi changer d'apparence et de taille. Acceptera tu sa véritable nature après l'avoir découvert ?…",
+      imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/53a786af-9eca-4f61-a84d-aae49c35fa35/351f23b5-780c-4009-9e0a-b03c86fbf6af-0.jpg",
+      likeCount: 221,
+      externalUrl: "https://mybabes.ai/babes/53a786af-9eca-4f61-a84d-aae49c35fa35",
+    },
+  ],
+};
+
+function buildVariant(audience: FunnelAudience, mode: FunnelMode, safety: FunnelSafety = "sfw"): FunnelVariant {
   const accent =
     audience === "her" ? "hsl(320 70% 55%)"
     : audience === "him" ? "hsl(213 100% 55%)"
@@ -365,7 +530,8 @@ function buildVariant(audience: FunnelAudience, mode: FunnelMode): FunnelVariant
 
   const key = `${audience}-${mode}` as FunnelKey;
   const placeholders = buildCharacters(audience, mode, names, pool);
-  const real = REAL_CHARACTERS[key] ?? [];
+  const source = safety === "nsfw" ? REAL_CHARACTERS_NSFW : REAL_CHARACTERS;
+  const real = source[key] ?? [];
   const characters = [...real, ...placeholders].slice(0, 20);
 
 
@@ -373,7 +539,7 @@ function buildVariant(audience: FunnelAudience, mode: FunnelMode): FunnelVariant
     key,
     audience,
     mode,
-    pageTitle: `${audienceLabel} — ${modeLabel}`,
+    pageTitle: `${audienceLabel} — ${modeLabel}${safety === "nsfw" ? " · NSFW" : ""}`,
     sectionTitle: `Pick your ${modeLabel.toLowerCase()} companion`,
     accent,
     heroSlides: buildHeroSlides(audience, mode, accent, pool),
@@ -381,16 +547,26 @@ function buildVariant(audience: FunnelAudience, mode: FunnelMode): FunnelVariant
   };
 }
 
-export const FUNNEL_VARIANTS: Record<FunnelKey, FunnelVariant> = {
-  "her-anime": buildVariant("her", "anime"),
-  "her-real": buildVariant("her", "real"),
-  "him-anime": buildVariant("him", "anime"),
-  "him-real": buildVariant("him", "real"),
-  "gay-anime": buildVariant("gay", "anime"),
-  "gay-real": buildVariant("gay", "real"),
+export type FunnelSafety = "sfw" | "nsfw";
+
+type VariantKey = `${FunnelKey}-${FunnelSafety}`;
+
+export const FUNNEL_VARIANTS: Record<VariantKey, FunnelVariant> = {
+  "her-anime-sfw": buildVariant("her", "anime", "sfw"),
+  "her-real-sfw": buildVariant("her", "real", "sfw"),
+  "him-anime-sfw": buildVariant("him", "anime", "sfw"),
+  "him-real-sfw": buildVariant("him", "real", "sfw"),
+  "gay-anime-sfw": buildVariant("gay", "anime", "sfw"),
+  "gay-real-sfw": buildVariant("gay", "real", "sfw"),
+  "her-anime-nsfw": buildVariant("her", "anime", "nsfw"),
+  "her-real-nsfw": buildVariant("her", "real", "nsfw"),
+  "him-anime-nsfw": buildVariant("him", "anime", "nsfw"),
+  "him-real-nsfw": buildVariant("him", "real", "nsfw"),
+  "gay-anime-nsfw": buildVariant("gay", "anime", "nsfw"),
+  "gay-real-nsfw": buildVariant("gay", "real", "nsfw"),
 };
 
-export function getFunnelVariant(audience: string, mode: string): FunnelVariant | null {
-  const key = `${audience}-${mode}` as FunnelKey;
+export function getFunnelVariant(audience: string, mode: string, safety: string = "sfw"): FunnelVariant | null {
+  const key = `${audience}-${mode}-${safety}` as VariantKey;
   return FUNNEL_VARIANTS[key] ?? null;
 }
