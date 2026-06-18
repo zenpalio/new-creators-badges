@@ -9,7 +9,12 @@ import Explore from "./pages/Explore.tsx";
 import ExploreKling from "./pages/ExploreKling.tsx";
 import Gallery from "./pages/Gallery.tsx";
 import EventDetail from "./pages/EventDetail.tsx";
-import ExpFunnel from "./pages/ExpFunnel.tsx";
+import ExpHerSfw from "./pages/ExpHerSfw.tsx";
+import ExpHerNsfw from "./pages/ExpHerNsfw.tsx";
+import ExpHimSfw from "./pages/ExpHimSfw.tsx";
+import ExpHimNsfw from "./pages/ExpHimNsfw.tsx";
+import ExpGaySfw from "./pages/ExpGaySfw.tsx";
+import ExpGayNsfw from "./pages/ExpGayNsfw.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 
@@ -30,7 +35,12 @@ const App = () => (
           <Route path="/badges" element={<Profile />} />
           <Route path="/creators" element={<Creators />} />
 
-          <Route path="/exp/:audience/:mode" element={<ExpFunnel />} />
+          <Route path="/exp/her/sfw" element={<ExpHerSfw />} />
+          <Route path="/exp/her/nsfw" element={<ExpHerNsfw />} />
+          <Route path="/exp/him/sfw" element={<ExpHimSfw />} />
+          <Route path="/exp/him/nsfw" element={<ExpHimNsfw />} />
+          <Route path="/exp/gay/sfw" element={<ExpGaySfw />} />
+          <Route path="/exp/gay/nsfw" element={<ExpGayNsfw />} />
 
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
