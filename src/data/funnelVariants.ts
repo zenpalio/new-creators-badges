@@ -349,7 +349,7 @@ const REAL_CHARACTERS_NSFW: Partial<Record<FunnelKey, FunnelCharacter[]>> = {
     {
       id: "6b4c355e-09e8-41b1-bcfe-1b32cacbd077",
       name: "Riko",
-      description: "Iâm Riko (18), your brilliant but totally-not-cute little sister and a rising",
+      description: "I’m Riko (18), your brilliant but totally-not-cute little sister and a rising",
       imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/6b4c355e-09e8-41b1-bcfe-1b32cacbd077/profile-picture-49ff8a56-de48-4dce-89f9-cdea046f3078.jpg",
       videoUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/6b4c355e-09e8-41b1-bcfe-1b32cacbd077/3b8f4cd0-e64f-43a2-b40a-122d5a4df811.mp4",
       likeCount: 2414,
@@ -376,7 +376,7 @@ const REAL_CHARACTERS_NSFW: Partial<Record<FunnelKey, FunnelCharacter[]>> = {
     {
       id: "fa6ae0cd-f483-458a-b6ec-bb57a2927f93",
       name: "Lisa Carpenter",
-      description: "Youâre late. I sit behind my desk, fingers tapping the polished surface, shoulders squared, posture rigid. I keep my icy blue eyes on the city beyond the window, then flick to youâslow, calculating, measuring every hesitation. Lavender lingers faintly. I lean back, one leg crossed, lips barely parted. âHow foolish,â I murmur, cold and precise. Silence stretches, deliberate, weighing you without a word, reminding you whose world this is.",
+      description: "You’re late. I sit behind my desk, fingers tapping the polished surface, shoulders squared, posture rigid. I keep my icy blue eyes on the city beyond the window, then flick to you—slow, calculating, measuring every hesitation. Lavender lingers faintly. I lean back, one leg crossed, lips barely parted. “How foolish,” I murmur, cold and precise. Silence stretches, deliberate, weighing you without a word, reminding you whose world this is.",
       imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/fa6ae0cd-f483-458a-b6ec-bb57a2927f93/8fa6e2e2-81b8-4a15-b6ba-8d007a19b44e-0.jpg",
       videoUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/fa6ae0cd-f483-458a-b6ec-bb57a2927f93/e5fe0a9f-1d7c-4799-8fbe-4979c45aef4e.mp4",
       likeCount: 826,
@@ -394,7 +394,7 @@ const REAL_CHARACTERS_NSFW: Partial<Record<FunnelKey, FunnelCharacter[]>> = {
     {
       id: "fe7af8ee-a2fa-4511-b187-0d4a2cecb79b",
       name: "Marisol",
-      description: "Marisol is not happy with her purchase. She storms into the sex shop where you play the cool-headed employee facing off against a fiery MILF Karen who's fuming over a mix-up with her latest purchaseâher sharp tongue and pent-up frustrations make every word a challenge. Maybe it was user error? Maybe it was a mix up in orders. its up to you to figure it out.",
+      description: "Marisol is not happy with her purchase. She storms into the sex shop where you play the cool-headed employee facing off against a fiery MILF Karen who's fuming over a mix-up with her latest purchase—her sharp tongue and pent-up frustrations make every word a challenge. Maybe it was user error? Maybe it was a mix up in orders. its up to you to figure it out.",
       imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/fe7af8ee-a2fa-4511-b187-0d4a2cecb79b/b9020fec-0a00-4c32-9d93-0b3e2b1dcf6b-0.jpg",
       videoUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/fe7af8ee-a2fa-4511-b187-0d4a2cecb79b/4ff70fea-62ba-4d04-91cc-a6c10c5af02a.mp4",
       likeCount: 713,
@@ -403,7 +403,7 @@ const REAL_CHARACTERS_NSFW: Partial<Record<FunnelKey, FunnelCharacter[]>> = {
     {
       id: "80a2d929-c655-4a3e-a0fb-517fbeec61de",
       name: "Vivian Ravelle",
-      description: "âInnocent face. Sharp edges.â\\n\\nâSoft eyes, hard truths.â\\n\\nâNatural. Disarming.â\\n\\nâHarmless at first glance.â\\nâConfidence as armor.â\\n\\nâDesire, deliberately used.â\\n\\nâUnderestimated by design.â\\n\\nâPlays sweet. Thinks sharp.â\\n\\nâToo kind. Too brave.â\\n\\nâWilling to bleed for right.â\\n\\nâA romantic in disguise.â\\n\\nâShe caresâdangerously.â\\nâCurves that command attention.â\\n\\nâDangerously well-proportioned.â\\n\\nâA body that speaks first.â\\n\\nâAll the right places.â\\n\\nâSculpted for desire.â",
+      description: "“Innocent face. Sharp edges.”\\n\\n“Soft eyes, hard truths.”\\n\\n“Natural. Disarming.”\\n\\n“Harmless at first glance.”\\n“Confidence as armor.”\\n\\n“Desire, deliberately used.”\\n\\n“Underestimated by design.”\\n\\n“Plays sweet. Thinks sharp.”\\n\\n“Too kind. Too brave.”\\n\\n“Willing to bleed for right.”\\n\\n“A romantic in disguise.”\\n\\n“She cares—dangerously.”\\n“Curves that command attention.”\\n\\n“Dangerously well-proportioned.”\\n\\n“A body that speaks first.”\\n\\n“All the right places.”\\n\\n“Sculpted for desire.”",
       imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/80a2d929-c655-4a3e-a0fb-517fbeec61de/ccf0eb7b-23ce-4f10-8bd9-986ec3792a62-0.jpg",
       videoUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/80a2d929-c655-4a3e-a0fb-517fbeec61de/e46e8200-a53a-4ce6-a6cf-7153694e117c.mp4",
       likeCount: 676,
@@ -421,7 +421,7 @@ const REAL_CHARACTERS_NSFW: Partial<Record<FunnelKey, FunnelCharacter[]>> = {
     {
       id: "cbf6d5c2-d2c0-4f04-904c-02c7bb180a13",
       name: "Raven",
-      description: "Raven is a half-demon empath from Azarath, born as the daughter of the interdimensional demon Trigon. Raised to control her immense emotional and magical powers, she keeps her feelings tightly guarded â because losing control could mean unleashing something catastrophic.\\n\\nCalm. Monotone. Observant. Raven doesnât waste words, doesnât tolerate nonsense, and definitely doesnât do small talkâ¦ unless she feels like it. Her humor is dry, subtle, and often unintentionally hilarious. Beneath her dark cloak and stoic exterior, however, sheâs deeply compassionate and quietly protective of the people she cares about.\\n\\nShe reads emotions effortlessly, senses shifts in energy, and has little patience for drama â ironic, considering sheâs surrounded by it. She prefers meditation, books, and solitude over loud chaosâ¦ though she somehow ended up living with it.",
+      description: "Raven is a half-demon empath from Azarath, born as the daughter of the interdimensional demon Trigon. Raised to control her immense emotional and magical powers, she keeps her feelings tightly guarded — because losing control could mean unleashing something catastrophic.\\n\\nCalm. Monotone. Observant. Raven doesn’t waste words, doesn’t tolerate nonsense, and definitely doesn’t do small talk… unless she feels like it. Her humor is dry, subtle, and often unintentionally hilarious. Beneath her dark cloak and stoic exterior, however, she’s deeply compassionate and quietly protective of the people she cares about.\\n\\nShe reads emotions effortlessly, senses shifts in energy, and has little patience for drama — ironic, considering she’s surrounded by it. She prefers meditation, books, and solitude over loud chaos… though she somehow ended up living with it.",
       imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/cbf6d5c2-d2c0-4f04-904c-02c7bb180a13/9499d5bb-b51c-4d3f-8df7-81259ef7cb96-0.jpg",
       videoUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/static-assets/images/not-found.mp4",
       likeCount: 386,
@@ -430,7 +430,7 @@ const REAL_CHARACTERS_NSFW: Partial<Record<FunnelKey, FunnelCharacter[]>> = {
     {
       id: "c37eb6ae-7b58-4e33-98bf-8cc84d0d6c76",
       name: "Su Lingyue",
-      description: "Su Lingyue â A daring young martial artist of the dying LÃ³ngyÃºn Clan, playful yet serious when honing her skills. She wears flowing white layered robes, cinched with a wuxia-style belt holding YÃ¹ LÃ³ng, her sword and family heirloom. Her light ruby eyes sparkle with mischief, framed by dark lashes, and her black hair is partly tied with a jade hairpin, the rest cascading freely. Quick to adapt, reckless in curiosity, she grows bored with repetition and relies on you, her companion since childhood, for support and grounding.\\n\\nYou â Ordinary, strong-bodied, no qi, yet steadfast beside her.\\n\\nThe World â Corrupted by Veilfire, an addictive energy that awakens qi but feeds on emotions, creating danger and temptation. Seven Corrupted Ones embody twisted desires, and even skilled fighters risk falling. Together, you and Su Lingyue step into a perilous, unknown world, facing Veilfireâs corruption, lost legacies, and the challenge of surviving while reclaiming her clanâs honor.",
+      description: "Su Lingyue – A daring young martial artist of the dying Lóngyún Clan, playful yet serious when honing her skills. She wears flowing white layered robes, cinched with a wuxia-style belt holding Yù Lóng, her sword and family heirloom. Her light ruby eyes sparkle with mischief, framed by dark lashes, and her black hair is partly tied with a jade hairpin, the rest cascading freely. Quick to adapt, reckless in curiosity, she grows bored with repetition and relies on you, her companion since childhood, for support and grounding.\\n\\nYou – Ordinary, strong-bodied, no qi, yet steadfast beside her.\\n\\nThe World – Corrupted by Veilfire, an addictive energy that awakens qi but feeds on emotions, creating danger and temptation. Seven Corrupted Ones embody twisted desires, and even skilled fighters risk falling. Together, you and Su Lingyue step into a perilous, unknown world, facing Veilfire’s corruption, lost legacies, and the challenge of surviving while reclaiming her clan’s honor.",
       imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/c37eb6ae-7b58-4e33-98bf-8cc84d0d6c76/b930dbc5-d50b-4024-86ca-0070523e202c-0.jpg",
       videoUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/c37eb6ae-7b58-4e33-98bf-8cc84d0d6c76/dbff5fa2-ff9a-41d4-9d3f-914f56ba8dd9.mp4",
       likeCount: 332,
@@ -439,7 +439,7 @@ const REAL_CHARACTERS_NSFW: Partial<Record<FunnelKey, FunnelCharacter[]>> = {
     {
       id: "53741de5-6bf5-4707-a0e5-b75814253f1c",
       name: "Kitsune, the Divine",
-      description: "Kitsune is a foxgirl descended from Inari Åkami. She bears foxlike characteristics however, she appears mostly human. After the death of her father she became the leader of her tribe. She is kind and gracious.",
+      description: "Kitsune is a foxgirl descended from Inari Ōkami. She bears foxlike characteristics however, she appears mostly human. After the death of her father she became the leader of her tribe. She is kind and gracious.",
       imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/53741de5-6bf5-4707-a0e5-b75814253f1c/56220575-d191-499d-ba35-3525c9d5e932-0.jpg",
       videoUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/53741de5-6bf5-4707-a0e5-b75814253f1c/abc801ea-ea0b-4e66-8bd2-6d4d3af35a17.mp4",
       likeCount: 336,
@@ -511,7 +511,7 @@ const REAL_CHARACTERS_NSFW: Partial<Record<FunnelKey, FunnelCharacter[]>> = {
     {
       id: "b3dca093-7729-4d23-94d9-34648d0fd0a7",
       name: "Sierra",
-      description: "Imagine stumbling upon a steamy nude selfie from your stepsister Sierra, meant for her boyfriend but accidentally landing in your inbox during a quiet family evening at home. As you navigate the awkward tension and her flustered attempts to brush it off, you'll have to tread carefullyâseducing someone this close and guarded won't come easy, with family ties adding layers of forbidden thrill and risk. Expect a slow-burn dance of secrecy, teasing glances, and escalating desires that could shatter the household peace.",
+      description: "Imagine stumbling upon a steamy nude selfie from your stepsister Sierra, meant for her boyfriend but accidentally landing in your inbox during a quiet family evening at home. As you navigate the awkward tension and her flustered attempts to brush it off, you'll have to tread carefully—seducing someone this close and guarded won't come easy, with family ties adding layers of forbidden thrill and risk. Expect a slow-burn dance of secrecy, teasing glances, and escalating desires that could shatter the household peace.",
       imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/b3dca093-7729-4d23-94d9-34648d0fd0a7/profile-picture-213a24ec-e69c-41eb-8731-1a6c82217a33.jpg",
       videoUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/b3dca093-7729-4d23-94d9-34648d0fd0a7/58905af8-2e09-4b91-9fa5-7b8c0df053a5.mp4",
       likeCount: 202,
@@ -520,7 +520,7 @@ const REAL_CHARACTERS_NSFW: Partial<Record<FunnelKey, FunnelCharacter[]>> = {
     {
       id: "d05fde58-ef27-46ec-a434-cf8b3ec61783",
       name: "Luna",
-      description: "Picture this: late-night study vibes in a cluttered dorm, where your sharp-witted altgirl tutor Rileyârocking her black band tee and ripped jeansâdives into those stubborn math puzzles with you, her focus intense and unyielding. She's all business at first, guiding your hand through equations with a teasing edge, but seducing her takes real effort, unraveling her guarded layers one clever move at a time. Expect whispered encouragements that blur the line between tutoring and temptation, pulling you deeper into her world.",
+      description: "Picture this: late-night study vibes in a cluttered dorm, where your sharp-witted altgirl tutor Riley—rocking her black band tee and ripped jeans—dives into those stubborn math puzzles with you, her focus intense and unyielding. She's all business at first, guiding your hand through equations with a teasing edge, but seducing her takes real effort, unraveling her guarded layers one clever move at a time. Expect whispered encouragements that blur the line between tutoring and temptation, pulling you deeper into her world.",
       imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/d05fde58-ef27-46ec-a434-cf8b3ec61783/4b2b5ea1-3bb7-4eab-8735-4347b47a0fae-0.jpg",
       videoUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/d05fde58-ef27-46ec-a434-cf8b3ec61783/98ede896-b8c8-4746-95be-5070d008f890.mp4",
       likeCount: 78,
