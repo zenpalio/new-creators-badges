@@ -2,7 +2,7 @@ import { BookOpen, MessageCircle, Sparkles, Star, User } from "lucide-react";
 import type { HeroSlide } from "../components/explore/CinematicHero";
 
 export type FunnelAudience = "her" | "him" | "gay";
-export type FunnelMode = "sfw" | "nsfw";
+export type FunnelMode = "anime" | "real";
 export type FunnelKey = `${FunnelAudience}-${FunnelMode}`;
 
 export interface FunnelCharacter {
@@ -71,9 +71,9 @@ const PLACEHOLDER_GAY_NAMES = [
 ];
 
 const placeholderDescription = (mode: FunnelMode) =>
-  mode === "nsfw"
-    ? "Unfiltered, uncensored, and waiting for you. Tap in and start the chat."
-    : "Flirty, playful and ready to talk. Tap in and start the chat.";
+  mode === "anime"
+    ? "Anime-style companion. Flirty, playful and ready to talk."
+    : "Photoreal companion. Flirty, playful and ready to talk.";
 
 function buildCharacters(
   audience: FunnelAudience,
@@ -97,21 +97,19 @@ function buildHeroSlides(
   accent: string,
   pool: string[],
 ): HeroSlide[] {
-  const isNsfw = mode === "nsfw";
+  const isAnime = mode === "anime";
   const subject =
-    audience === "her" ? "AI girls"
-    : audience === "him" ? "AI guys"
-    : "AI gay companions";
+    audience === "her" ? (isAnime ? "anime girls" : "AI girls")
+    : audience === "him" ? (isAnime ? "anime guys" : "AI guys")
+    : (isAnime ? "anime gay companions" : "gay AI companions");
 
   return [
     {
-      name: isNsfw ? `Unfiltered ${subject}` : `Meet your ${subject}`,
-      tagline: isNsfw ? "No limits. No filters. Just chat." : "Flirty, playful, addictive conversations.",
-      description: isNsfw
-        ? "Step inside the unfiltered side of the platform. Real-time chat, voice, and visuals — uncensored."
-        : "Pick a companion, start chatting in seconds. Free to try, instant replies, always on.",
+      name: `Meet your ${subject}`,
+      tagline: isAnime ? "Stylized, dreamy, addictive conversations." : "Photoreal, flirty, addictive conversations.",
+      description: "Pick a companion, start chatting in seconds. Free to try, instant replies, always on.",
       imageUrl: pool[0],
-      tags: isNsfw ? ["18+", "Uncensored", "Trending"] : ["Free to chat", "Trending", "New"],
+      tags: [isAnime ? "Anime" : "Photoreal", "Trending", "New"],
       meta: { messages: "12.4K", likes: "8.9K" },
       data: {},
       accent,
@@ -189,14 +187,14 @@ function buildVariant(audience: FunnelAudience, mode: FunnelMode): FunnelVariant
     : audience === "him" ? "AI Guys"
     : "Gay AI";
 
-  const modeLabel = mode === "nsfw" ? "Unfiltered" : "Flirty Chat";
+  const modeLabel = mode === "anime" ? "Anime" : "Photoreal";
 
   return {
     key: `${audience}-${mode}` as FunnelKey,
     audience,
     mode,
     pageTitle: `${audienceLabel} — ${modeLabel}`,
-    sectionTitle: mode === "nsfw" ? "Pick your unfiltered companion" : "Pick someone to chat with",
+    sectionTitle: `Pick your ${modeLabel.toLowerCase()} companion`,
     accent,
     heroSlides: buildHeroSlides(audience, mode, accent, pool),
     characters: buildCharacters(audience, mode, names, pool),
@@ -204,12 +202,12 @@ function buildVariant(audience: FunnelAudience, mode: FunnelMode): FunnelVariant
 }
 
 export const FUNNEL_VARIANTS: Record<FunnelKey, FunnelVariant> = {
-  "her-sfw": buildVariant("her", "sfw"),
-  "her-nsfw": buildVariant("her", "nsfw"),
-  "him-sfw": buildVariant("him", "sfw"),
-  "him-nsfw": buildVariant("him", "nsfw"),
-  "gay-sfw": buildVariant("gay", "sfw"),
-  "gay-nsfw": buildVariant("gay", "nsfw"),
+  "her-anime": buildVariant("her", "anime"),
+  "her-real": buildVariant("her", "real"),
+  "him-anime": buildVariant("him", "anime"),
+  "him-real": buildVariant("him", "real"),
+  "gay-anime": buildVariant("gay", "anime"),
+  "gay-real": buildVariant("gay", "real"),
 };
 
 export function getFunnelVariant(audience: string, mode: string): FunnelVariant | null {

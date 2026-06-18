@@ -24,15 +24,15 @@ function buildBanners(variant: FunnelVariant): FunnelBanner[] {
   const accent = variant.audience === "her" ? "320 70% 55%"
     : variant.audience === "him" ? "213 100% 50%"
     : "281 85% 62%";
-  const isNsfw = variant.mode === "nsfw";
+  const isAnime = variant.mode === "anime";
 
   return [
     {
-      eyebrow: isNsfw ? "Unfiltered" : "Featured",
-      title: isNsfw ? "Chat without limits" : "Find your match",
-      description: isNsfw
-        ? "Real-time chat, voice and visuals — uncensored and always on."
-        : "Pick a companion and start chatting in seconds. Free to try.",
+      eyebrow: isAnime ? "Anime" : "Photoreal",
+      title: "Find your match",
+      description: isAnime
+        ? "Stylized anime companions — pick one and start chatting in seconds."
+        : "Photoreal companions — pick one and start chatting in seconds.",
       cta: "Start chatting",
       bg: storyCreatorBg,
       accentHsl: accent,
