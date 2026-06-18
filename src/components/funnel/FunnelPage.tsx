@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties, type ComponentType, type MouseEvent } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import { ArrowRight, BookOpen, Flame, Sparkles, ImageIcon } from "lucide-react";
 import LikeButton from "../explore/LikeButton";
 import CreateYourOwnDialog from "./CreateYourOwnDialog";
@@ -241,6 +241,30 @@ export default function FunnelPage({ audience, mode, safety = "sfw" }: FunnelPag
         <div className="relative z-10 flex w-full flex-col gap-6 px-4 pb-16 pt-6 md:px-8 lg:px-12">
           {/* Top banners */}
           <HeroBanners banners={banners} />
+
+          {/* Mode toggle: Anime ↔ Realistic (preserves audience + safety) */}
+          <div className="flex justify-center">
+            <div role="tablist" aria-label="Switch style" className="inline-flex rounded-full border border-white/10 bg-grey-dark-1-v2/70 p-1 backdrop-blur-sm">
+              {(["anime", "real"] as const).map((m) => {
+                const active = mode === m;
+                return (
+                  <Link
+                    key={m}
+                    to={`/exp/${audience}/${m}/${safety}`}
+                    role="tab"
+                    aria-selected={active}
+                    className={`rounded-full px-5 py-1.5 text-sm font-medium transition-colors ${
+                      active
+                        ? "bg-primary-v2 text-white shadow"
+                        : "text-foreground-v2/70 hover:text-foreground-v2"
+                    }`}
+                  >
+                    {m === "anime" ? "Anime" : "Realistic"}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
 
           {/* Characters grid (~20) */}
           <section
