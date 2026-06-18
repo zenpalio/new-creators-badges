@@ -216,7 +216,8 @@ export default function FunnelPage({ audience, mode }: FunnelPageProps) {
             {variant.characters.map((c) => (
               <a
                 key={c.id}
-                href={`/chat/${c.id}`}
+                href={c.externalUrl ?? `/chat/${c.id}`}
+                {...(c.externalUrl ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                 aria-label={c.name}
                 className="group relative block w-full overflow-hidden rounded-2xl bg-grey-dark-1-v2"
               >

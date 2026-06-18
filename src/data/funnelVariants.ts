@@ -12,6 +12,8 @@ export interface FunnelCharacter {
   imageUrl: string;
   messageCount?: number | string;
   likeCount?: number | string;
+  /** If set, card links here instead of /chat/:id */
+  externalUrl?: string;
 }
 
 export interface FunnelVariant {
@@ -181,6 +183,7 @@ const REAL_CHARACTERS: Partial<Record<FunnelKey, FunnelCharacter[]>> = {
       imageUrl:
         "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/312cbefa-1fba-4e8c-ab33-3e75505c90f1/52c23d52-e22b-4cd3-9943-7f272804e6cd.jpg",
       likeCount: 977,
+      externalUrl: "https://mybabes.ai/babes/312cbefa-1fba-4e8c-ab33-3e75505c90f1",
     },
   ],
 };
