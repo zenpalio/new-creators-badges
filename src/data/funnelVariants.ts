@@ -170,6 +170,21 @@ function buildHeroSlides(
   ];
 }
 
+// ---- Real scraped characters (prepended to placeholder grid) ----
+const REAL_CHARACTERS: Partial<Record<FunnelKey, FunnelCharacter[]>> = {
+  "her-anime": [
+    {
+      id: "312cbefa-1fba-4e8c-ab33-3e75505c90f1",
+      name: "Ami",
+      description:
+        "Imagine stumbling upon your step-sister in a vulnerable moment, her eyes wide with panic as she pleads for your silence to keep it from your parents—now she's caught in your web, her usual guarded walls making every flirtation a thrilling challenge to break through.",
+      imageUrl:
+        "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/312cbefa-1fba-4e8c-ab33-3e75505c90f1/52c23d52-e22b-4cd3-9943-7f272804e6cd.jpg",
+      likeCount: 977,
+    },
+  ],
+};
+
 function buildVariant(audience: FunnelAudience, mode: FunnelMode): FunnelVariant {
   const accent =
     audience === "her" ? "hsl(320 70% 55%)"
