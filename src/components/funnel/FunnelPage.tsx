@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties, type ComponentType, type MouseEvent } from "react";
 import { Navigate } from "react-router-dom";
-import { ArrowRight, BookOpen, Sparkles, ImageIcon } from "lucide-react";
+import { ArrowRight, BookOpen, Flame, Sparkles, ImageIcon } from "lucide-react";
 import LikeButton from "../explore/LikeButton";
 import { getFunnelVariant, type FunnelAudience, type FunnelMode, type FunnelKey, type FunnelVariant } from "../../data/funnelVariants";
 
@@ -201,6 +201,14 @@ export default function FunnelPage({ audience, mode }: FunnelPageProps) {
   const banners = buildBanners(variant);
   const toggleLiked = (id: string) => setLikedMap((m) => ({ ...m, [id]: !m[id] }));
 
+  const trendingIds = new Set(
+    [...variant.characters]
+      .filter((c) => typeof c.likeCount === "number")
+      .sort((a, b) => (b.likeCount as number) - (a.likeCount as number))
+      .slice(0, 3)
+      .map((c) => c.id),
+  );
+
   return (
     <div className="relative flex min-h-svh w-full overflow-x-hidden bg-background-v2 font-onest text-foreground-v2">
       <main className="relative flex w-full flex-1 flex-col">
@@ -230,6 +238,14 @@ export default function FunnelPage({ audience, mode }: FunnelPageProps) {
                     className="absolute inset-0 z-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-2/3 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+
+                  {trendingIds.has(c.id) && (
+                    <div className="absolute top-2 left-2 z-[3] inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-pink-500 to-orange-400 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white shadow-md">
+                      <Flame className="h-3 w-3" />
+                      Top trending
+                    </div>
+                  )}
+
                   <div className="absolute top-2 right-2 z-[3]">
                     <LikeButton
                       variant="video"
