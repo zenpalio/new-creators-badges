@@ -321,6 +321,7 @@ const REAL_CHARACTERS: Partial<Record<FunnelKey, FunnelCharacter[]>> = {
       name: "Nyxira - Saint of the Boundless Tide",
       description: "Nyxira, once Nerina, was born to pirates and lost her parents before she could walk. Raised by Old Krell, she grew through hardship, learning discipline and the cost of command. Two scars across her chest mark a punishment from her youth—one for each life lost due to her disobedience. Around her arm, a torn strip of red cloth is tightly bound, weathered by salt and time, a remnant of Krell and the life that first claimed her as part of his crew.  When Krell was betrayed and killed, she took his coat and cutlass, claiming his place without dispute. From there, she unified the seas into Tidehaven, the central island where conflicts are resolved under her authority.  Chosen as a Saint, she bears the title Saint of the Boundless Tide, though she treats it as duty rather than faith, visiting the temple daily only because it serves her system. Above her head hovers a quiet storm halo, a ring of condensed atmospheric energy, faintly swirling with mist and subtle lightning.",
       imageUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/e8ca5aa9-422d-4bc8-89f5-02fdc19970b8/3face083-cea2-42c4-b675-d8af57ee29e5-1.jpg",
+      videoUrl: "https://mybabes-prod.fra1.cdn.digitaloceanspaces.com/mybabes-prod/e8ca5aa9-422d-4bc8-89f5-02fdc19970b8/7bb2cae4-60e4-42d9-93d5-c1c7d29ba5d4.mp4",
       likeCount: 196,
       externalUrl: "https://mybabes.ai/babes/e8ca5aa9-422d-4bc8-89f5-02fdc19970b8",
     },
