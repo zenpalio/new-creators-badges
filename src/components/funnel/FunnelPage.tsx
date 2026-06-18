@@ -230,7 +230,7 @@ export default function FunnelPage({ audience, mode }: FunnelPageProps) {
                   />
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-2/3 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                   <div className="absolute bottom-2 right-2 z-[3]">
-                    <LikeButton variant="video" liked={!!likedMap[c.id]} onClick={(e: React.MouseEvent) => { e.preventDefault(); toggleLiked(c.id); }}>
+                    <LikeButton variant="video" liked={!!likedMap[c.id]} onClick={(e: MouseEvent<HTMLButtonElement>) => { e.preventDefault(); toggleLiked(c.id); }}>
                       <span>{c.likeCount ?? 0}</span>
                     </LikeButton>
                   </div>
