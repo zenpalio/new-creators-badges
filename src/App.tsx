@@ -9,16 +9,8 @@ import Explore from "./pages/Explore.tsx";
 import ExploreKling from "./pages/ExploreKling.tsx";
 import Gallery from "./pages/Gallery.tsx";
 import EventDetail from "./pages/EventDetail.tsx";
-import PopNsfwHer from "./pages/PopNsfwHer.tsx";
-import PopNsfwGay from "./pages/PopNsfwGay.tsx";
-import PopNsfwGay2 from "./pages/PopNsfwGay2.tsx";
-import PopSfwHimReal from "./pages/PopSfwHimReal.tsx";
-import PopSfwHimAnime from "./pages/PopSfwHimAnime.tsx";
-import PopSfwGay from "./pages/PopSfwGay.tsx";
-import PopSfwGayAnime from "./pages/PopSfwGayAnime.tsx";
-import PopSfwHerReal from "./pages/PopSfwHerReal.tsx";
-import PopSfwHerAnime from "./pages/PopSfwHerAnime.tsx";
 import NotFound from "./pages/NotFound.tsx";
+
 
 const queryClient = new QueryClient();
 
@@ -36,11 +28,8 @@ const App = () => (
           <Route path="/badges" element={<Profile />} />
           <Route path="/creators" element={<Creators />} />
 
-
-          
-
-          
           <Route path="/pop/nsfw-her" element={<PopNsfwHer />} />
+
           <Route path="/pop/nsfw-gay" element={<PopNsfwGay />} />
           <Route path="/pop/nsfw-him" element={<PopNsfwGay2 />} />
           <Route path="/pop/sfw-him-anime" element={<PopSfwHimAnime />} />
