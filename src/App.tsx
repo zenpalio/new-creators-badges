@@ -41,6 +41,7 @@ const App = () => (
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/badges" element={<Profile />} />
           <Route path="/creators" element={<Creators />} />
+          <Route path="/pricing" element={<Pricing />} />
 
           {/* SFW funnels */}
           <Route path="/exp/her/anime/sfw" element={<ExpHerAnime />} />
