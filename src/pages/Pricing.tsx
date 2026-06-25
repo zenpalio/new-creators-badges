@@ -96,10 +96,10 @@ const compareRows: { group: string; rows: Row[] }[] = [
 ];
 
 const tokenPacks = [
-  { tokens: "100", price: "€9.99", badge: null, was: null, bonus: null, coins: 1, images: "100", videos: "20" },
-  { tokens: "200", price: "€17.99", badge: "Save 10%", was: null, bonus: null, coins: 2, images: "200", videos: "40" },
-  { tokens: "500", price: "€39.99", badge: "Save 20%", was: null, bonus: null, coins: 3, images: "500", videos: "100" },
-  { tokens: "1,200", price: "€79.99", badge: "Best value", was: "Was 1,000 tokens", bonus: "+200 bonus tokens", coins: 4, images: "1,200", videos: "240" },
+  { tokens: "100", price: "€9.99", wasPrice: null, save: null, badge: null, bonus: null, images: "100", videos: "20", perToken: "€0.10" },
+  { tokens: "200", price: "€17.99", wasPrice: "€19.98", save: "Save 10%", badge: null, bonus: null, images: "200", videos: "40", perToken: "€0.09" },
+  { tokens: "500", price: "€39.99", wasPrice: "€49.95", save: "Save 20%", badge: "Popular", bonus: null, images: "500", videos: "100", perToken: "€0.08" },
+  { tokens: "1,200", price: "€79.99", wasPrice: "€119.88", save: "Save 33%", badge: "Best value", bonus: "+200 bonus tokens", images: "1,200", videos: "240", perToken: "€0.07" },
 ];
 
 const tokenPerks = [
@@ -333,70 +333,90 @@ const Pricing = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-              {tokenPacks.map((t) => (
-                <div
-                  key={t.tokens}
-                  className={cn(
-                    "group relative rounded-2xl border p-6 flex flex-col transition-colors",
-                    t.badge === "Best value"
-                      ? "border-primary-v2/40 bg-gradient-to-b from-primary-v2/[0.06] to-transparent"
-                      : "border-border-v2/60 bg-grey-dark-1-v2/30 hover:border-primary-v2/30"
-                  )}
-                >
-                  {t.badge && (
-                    <span className={cn(
-                      "absolute -top-2.5 left-6 text-[10px] font-semibold tracking-[0.16em] uppercase px-2.5 py-1 rounded-full",
-                      t.badge === "Best value"
-                        ? "bg-primary-v2 text-primary-v2-foreground"
-                        : "bg-foreground-v2 text-background-v2"
-                    )}>
-                      {t.badge}
-                    </span>
-                  )}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {tokenPacks.map((t) => {
+                const isBest = t.badge === "Best value";
+                const isPopular = t.badge === "Popular";
+                const isFeatured = isBest || isPopular;
+                return (
+                  <button
+                    key={t.tokens}
+                    type="button"
+                    className={cn(
+                      "group relative text-left rounded-2xl border p-6 flex flex-col transition-all duration-300 cursor-pointer hover:-translate-y-1",
+                      isBest
+                        ? "border-primary-v2/60 bg-gradient-to-b from-primary-v2/[0.10] to-transparent shadow-[0_0_40px_-12px_hsl(213_100%_50%/0.5)] hover:shadow-[0_0_60px_-8px_hsl(213_100%_50%/0.7)] hover:border-primary-v2"
+                        : "border-border-v2/60 bg-grey-dark-1-v2/30 hover:border-primary-v2/40 hover:bg-grey-dark-1-v2/50 hover:shadow-[0_0_30px_-10px_hsl(213_100%_50%/0.3)]"
+                    )}
+                  >
+                    {t.badge && (
+                      <span className={cn(
+                        "absolute -top-2.5 left-6 text-[10px] font-semibold tracking-[0.16em] uppercase px-2.5 py-1 rounded-full shadow-lg",
+                        isBest
+                          ? "bg-primary-v2 text-primary-v2-foreground shadow-primary-v2/40"
+                          : "bg-foreground-v2 text-background-v2"
+                      )}>
+                        {t.badge}
+                      </span>
+                    )}
 
-                  {/* Token icon */}
-                  <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[hsl(20_100%_55%/0.3)] to-[hsl(40_100%_55%/0.1)] border border-[hsl(20_100%_55%/0.5)] shadow-[0_0_20px_-4px_hsl(20_100%_55%/0.6)]">
-                    <Flame className="h-5 w-5 text-[hsl(20_100%_60%)]" strokeWidth={2.5} fill="hsl(20 100% 60% / 0.2)" />
-                  </div>
-
-                  {t.was && (
-                    <span className="text-[10px] line-through text-grey-light-4-v2">{t.was}</span>
-                  )}
-                  <div className="flex items-baseline gap-1.5">
-                    <span className="text-4xl font-light tracking-tight">{t.tokens}</span>
-                    <span className="text-xs text-grey-light-4-v2">tokens</span>
-                  </div>
-                  {t.bonus && (
-                    <span className="mt-1 text-[11px] font-medium text-primary-v2">{t.bonus}</span>
-                  )}
-
-                  {/* What you can generate */}
-                  <div className="mt-5 space-y-2 pt-4 border-t border-border-v2/40">
-                    <div className="flex items-center gap-2 text-[12px] text-grey-light-2-v2">
-                      <ImageIcon className="h-3.5 w-3.5 text-grey-light-3-v2 shrink-0" strokeWidth={2} />
-                      <span><span className="font-semibold text-foreground-v2">{t.images}</span> images</span>
+                    {/* Header: icon + savings badge */}
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[hsl(20_100%_55%/0.3)] to-[hsl(40_100%_55%/0.1)] border border-[hsl(20_100%_55%/0.5)] shadow-[0_0_20px_-4px_hsl(20_100%_55%/0.6)]">
+                        <Flame className="h-5 w-5 text-[hsl(20_100%_60%)]" strokeWidth={2.5} fill="hsl(20 100% 60% / 0.2)" />
+                      </div>
+                      {t.save && (
+                        <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-1 rounded-full bg-[hsl(0_85%_60%/0.15)] text-[hsl(0_90%_70%)] border border-[hsl(0_85%_60%/0.3)]">
+                          {t.save}
+                        </span>
+                      )}
                     </div>
-                    <div className="flex items-center gap-2 text-[12px] text-grey-light-2-v2">
-                      <Video className="h-3.5 w-3.5 text-grey-light-3-v2 shrink-0" strokeWidth={2} />
-                      <span><span className="font-semibold text-foreground-v2">{t.videos}</span> videos</span>
-                    </div>
-                  </div>
 
-                  <div className="mt-auto pt-6">
-                    <div className="text-3xl font-light tracking-tight">{t.price}</div>
-                    <div className="text-[11px] text-grey-light-4-v2 mt-0.5">one-time payment</div>
-                    <button className={cn(
-                      "mt-4 w-full inline-flex items-center justify-center gap-2 rounded-full py-2.5 text-xs font-semibold transition-all",
-                      t.badge === "Best value"
-                        ? "bg-primary-v2 text-primary-v2-foreground hover:bg-primary-light-v2"
-                        : "bg-foreground-v2 text-background-v2 hover:opacity-90"
-                    )}>
-                      Buy Tokens
-                    </button>
-                  </div>
-                </div>
-              ))}
+                    {/* Tokens */}
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-4xl font-light tracking-tight">{t.tokens}</span>
+                      <span className="text-xs text-grey-light-4-v2">tokens</span>
+                    </div>
+                    {t.bonus && (
+                      <span className="mt-1 text-[11px] font-medium text-primary-v2">{t.bonus}</span>
+                    )}
+
+                    {/* What you can generate */}
+                    <div className="mt-5 space-y-2 pt-4 border-t border-border-v2/40">
+                      <div className="flex items-center gap-2 text-[12px] text-grey-light-2-v2">
+                        <ImageIcon className="h-3.5 w-3.5 text-grey-light-3-v2 shrink-0" strokeWidth={2} />
+                        <span><span className="font-semibold text-foreground-v2">{t.images}</span> images</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-[12px] text-grey-light-2-v2">
+                        <Video className="h-3.5 w-3.5 text-grey-light-3-v2 shrink-0" strokeWidth={2} />
+                        <span><span className="font-semibold text-foreground-v2">{t.videos}</span> videos</span>
+                      </div>
+                    </div>
+
+                    {/* Price */}
+                    <div className="mt-auto pt-6">
+                      <div className="flex items-baseline gap-2 flex-wrap">
+                        <span className="text-3xl font-light tracking-tight">{t.price}</span>
+                        {t.wasPrice && (
+                          <span className="text-sm text-grey-light-4-v2 line-through">{t.wasPrice}</span>
+                        )}
+                      </div>
+                      <div className="text-[11px] text-grey-light-4-v2 mt-0.5">
+                        {t.perToken} per token · one-time
+                      </div>
+                      <div className={cn(
+                        "mt-4 w-full inline-flex items-center justify-center gap-1.5 rounded-full py-2.5 text-xs font-semibold transition-all group-hover:scale-[1.02]",
+                        isFeatured
+                          ? "bg-primary-v2 text-primary-v2-foreground group-hover:bg-primary-light-v2 shadow-lg shadow-primary-v2/30"
+                          : "bg-foreground-v2 text-background-v2 group-hover:opacity-90"
+                      )}>
+                        Buy Tokens
+                        <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
 
             {/* What you get */}
