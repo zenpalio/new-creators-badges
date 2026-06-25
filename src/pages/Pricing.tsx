@@ -299,7 +299,19 @@ const Pricing = () => {
               </div>
             </div>
 
+            {/* Live activity pulse */}
+            <div className="flex justify-center mb-6">
+              <div className="inline-flex items-center gap-2 text-[11px] text-grey-light-3-v2">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-[hsl(140_70%_55%)] opacity-75 animate-ping" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-[hsl(140_70%_55%)]" />
+                </span>
+                <span><span className="font-semibold text-foreground-v2">347 creators</span> upgraded this week</span>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
               {plans.map((p) => {
                 const pricing = p[billing];
                 return (
