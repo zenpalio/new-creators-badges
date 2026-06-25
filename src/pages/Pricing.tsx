@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Check, Minus, ArrowUpRight, Sparkles, Image as ImageIcon, Video } from "lucide-react";
+import { Check, Minus, ArrowUpRight, Coins, Image as ImageIcon, Video } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
