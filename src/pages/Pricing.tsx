@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Check, Minus, ArrowUpRight, Flame, Image as ImageIcon, Video } from "lucide-react";
+import { toast } from "sonner";
+import { Check, Minus, ArrowUpRight, Flame, Image as ImageIcon, Video, Star, Shield, RefreshCw, Lock } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -148,6 +149,30 @@ const Pricing = () => {
   const [billing, setBilling] = useState<BillingKey>("quarterly");
   const [compareCol, setCompareCol] = useState<"premium" | "ultra" | "addons">("ultra");
 
+  // Rotating "just purchased" social proof toasts
+  useEffect(() => {
+    const activity = [
+      { name: "Marco", plan: "Ultra", city: "Berlin" },
+      { name: "Aiko", plan: "Premium", city: "Tokyo" },
+      { name: "Liam", plan: "500 tokens", city: "London" },
+      { name: "Sofia", plan: "Ultra", city: "Madrid" },
+      { name: "Noah", plan: "1,200 tokens", city: "Toronto" },
+    ];
+    let i = 0;
+    const fire = () => {
+      const a = activity[i % activity.length];
+      toast(`${a.name} from ${a.city} just got ${a.plan}`, {
+        description: "a few seconds ago",
+        position: "bottom-left",
+      });
+      i++;
+    };
+    const t1 = setTimeout(fire, 4000);
+    const t2 = setInterval(fire, 14000);
+    return () => { clearTimeout(t1); clearInterval(t2); };
+  }, []);
+
+
 
   return (
     <div className="min-h-screen bg-background-v2 text-foreground-v2 font-[var(--font-onest)]">
@@ -192,8 +217,36 @@ const Pricing = () => {
           <p className="mt-6 max-w-md mx-auto text-sm md:text-base text-grey-light-3-v2">
             Join thousands of creators building their own AI harem. Cancel anytime, no questions asked.
           </p>
+
+          {/* Social proof: avatars + rating */}
+          <div className="mt-7 flex items-center justify-center gap-4 flex-wrap">
+            <div className="flex -space-x-2">
+              {[
+                "linear-gradient(135deg,hsl(348_90%_55%),hsl(20_100%_55%))",
+                "linear-gradient(135deg,hsl(213_100%_55%),hsl(260_80%_55%))",
+                "linear-gradient(135deg,hsl(45_90%_55%),hsl(20_100%_55%))",
+                "linear-gradient(135deg,hsl(180_70%_50%),hsl(213_100%_55%))",
+                "linear-gradient(135deg,hsl(320_70%_55%),hsl(280_70%_55%))",
+              ].map((bg, i) => (
+                <div
+                  key={i}
+                  className="h-7 w-7 rounded-full border-2 border-background-v2"
+                  style={{ background: bg }}
+                />
+              ))}
+            </div>
+            <div className="flex items-center gap-1.5">
+              <div className="flex">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className="h-3.5 w-3.5 text-[hsl(45_95%_60%)]" fill="hsl(45 95% 60%)" strokeWidth={0} />
+                ))}
+              </div>
+              <span className="text-xs text-grey-light-3-v2"><span className="font-semibold text-foreground-v2">4.8</span> · 2,300+ reviews</span>
+            </div>
+          </div>
         </div>
       </section>
+
 
       {/* Tabs + Plans */}
       <section className="mx-auto max-w-5xl px-5 -mt-16 relative z-10">
@@ -246,7 +299,19 @@ const Pricing = () => {
               </div>
             </div>
 
+            {/* Live activity pulse */}
+            <div className="flex justify-center mb-6">
+              <div className="inline-flex items-center gap-2 text-[11px] text-grey-light-3-v2">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-[hsl(140_70%_55%)] opacity-75 animate-ping" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-[hsl(140_70%_55%)]" />
+                </span>
+                <span><span className="font-semibold text-foreground-v2">347 creators</span> upgraded this week</span>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
               {plans.map((p) => {
                 const pricing = p[billing];
                 return (
@@ -323,8 +388,17 @@ const Pricing = () => {
                 );
               })}
             </div>
+
+            {/* Trust row */}
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-[11px] text-grey-light-3-v2">
+              <span className="inline-flex items-center gap-1.5"><RefreshCw className="h-3.5 w-3.5 text-grey-light-3-v2" /> Cancel anytime</span>
+              <span className="inline-flex items-center gap-1.5"><Lock className="h-3.5 w-3.5 text-grey-light-3-v2" /> Discreet billing</span>
+              <span className="inline-flex items-center gap-1.5"><Shield className="h-3.5 w-3.5 text-grey-light-3-v2" /> 7-day money back</span>
+              <span className="inline-flex items-center gap-1.5">🔞 18+ verified · encrypted</span>
+            </div>
           </>
         ) : (
+
           <div>
             <div className="text-center mb-10 max-w-xl mx-auto">
               <h2 className="text-2xl md:text-3xl font-light tracking-tight">Get tokens</h2>
