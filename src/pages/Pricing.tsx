@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Check, Minus, ChevronDown, ArrowUpRight, Sparkles } from "lucide-react";
+import { Check, Minus, ArrowUpRight } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -8,6 +8,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
+import heroImage from "@/assets/pricing-hero.jpg";
 
 type TabKey = "subscriptions" | "addons";
 
@@ -17,10 +18,10 @@ const plans = [
     name: "Premium",
     tagline: "Deeper interactions, faster generation, priority access.",
     price: "€14.99",
-    cadence: "/month",
+    cadence: "/mo",
     note: "Billed monthly · Money-back guarantee",
-    badge: "QUARTERLY · 40% OFF",
     cta: "Go Premium",
+    highlight: false,
     features: [
       "Up to 500 monthly tokens",
       "Unlimited Chat & Roleplay",
@@ -35,10 +36,10 @@ const plans = [
     name: "Ultra",
     tagline: "For creators who generate frequently with premium performance.",
     price: "€29.99",
-    cadence: "/month",
+    cadence: "/mo",
     note: "Billed monthly · +400 token bonus",
-    badge: "MOST POWERFUL",
     cta: "Go Ultra",
+    highlight: true,
     features: [
       "Up to 900 monthly tokens",
       "Unlimited Chat with long memory",
@@ -69,8 +70,8 @@ const compareRows: { group: string; rows: Row[] }[] = [
     rows: [
       { label: "Concurrent video generations", premium: "1×", ultra: "2×", addons: "1×" },
       { label: "Concurrent image generations", premium: "5×", ultra: "10×", addons: "5×" },
-      { label: "Messages on Plus models (10× memory)", premium: "0.1 / msg", ultra: "Unlimited", addons: "0.1 / msg" },
-      { label: "Messages on base models", premium: "Unlimited", ultra: "Unlimited", addons: "0.1 / msg" },
+      { label: "Plus models (10× memory)", premium: "0.1 / msg", ultra: "Unlimited", addons: "0.1 / msg" },
+      { label: "Base models", premium: "Unlimited", ultra: "Unlimited", addons: "0.1 / msg" },
       { label: "Image generation", premium: "1 token", ultra: "1 token", addons: "1 token" },
       { label: "Audio message", premium: "3 tokens", ultra: "3 tokens", addons: "3 tokens" },
       { label: "3s video", premium: "5 tokens", ultra: "5 tokens", addons: "5 tokens" },
@@ -83,8 +84,8 @@ const compareRows: { group: string; rows: Row[] }[] = [
       { label: "In-Chat videos", premium: true, ultra: true, addons: true },
       { label: "In-Chat images", premium: true, ultra: true, addons: true },
       { label: "2k image resolution", premium: true, ultra: true, addons: true },
-      { label: "All image models unlocked", premium: true, ultra: true, addons: true },
-      { label: "All chat models unlocked", premium: true, ultra: true, addons: true },
+      { label: "All image models", premium: true, ultra: true, addons: true },
+      { label: "All chat models", premium: true, ultra: true, addons: true },
       { label: "Mods", premium: true, ultra: true, addons: true },
     ],
   },
@@ -92,7 +93,7 @@ const compareRows: { group: string; rows: Row[] }[] = [
 
 const addons = [
   { name: "Token Pack 100", price: "€4.99", desc: "One-time top-up. Never expires." },
-  { name: "Token Pack 500", price: "€19.99", desc: "Best for occasional creators. +5% bonus." },
+  { name: "Token Pack 500", price: "€19.99", desc: "For occasional creators. +5% bonus." },
   { name: "Token Pack 1500", price: "€49.99", desc: "Power pack. +15% bonus tokens." },
   { name: "Gift Card", price: "from €10", desc: "Send tokens to a friend. Redeemable anytime." },
 ];
@@ -100,7 +101,7 @@ const addons = [
 const faqs = [
   {
     q: "How do I cancel my subscription?",
-    a: "Go to Profile → Settings → Subscription → Cancel subscription. Fill out the short cancellation form and you'll keep access until the end of your current billing period.",
+    a: "Go to Profile → Settings → Subscription → Cancel subscription. You'll keep access until the end of your current billing period.",
   },
   {
     q: "Why was my credit card declined?",
@@ -108,7 +109,7 @@ const faqs = [
   },
   {
     q: "Can I get a refund if I don't like the service?",
-    a: "If you experience a technical issue or an error with your purchase, contact our support team. Refunds are handled individually according to our refund policy and payment provider rules.",
+    a: "If you experience a technical issue or an error with your purchase, contact our support team. Refunds are handled individually according to our refund policy.",
   },
   {
     q: "Can I use all features if I cancel subscription?",
@@ -122,14 +123,10 @@ const faqs = [
 
 const Cell = ({ value }: { value: string | boolean }) => {
   if (value === true)
-    return (
-      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary-v2/15 text-primary-v2">
-        <Check className="h-3.5 w-3.5" strokeWidth={3} />
-      </span>
-    );
+    return <Check className="h-4 w-4 text-primary-v2 mx-auto" strokeWidth={2.5} />;
   if (value === false || value === "—")
-    return <Minus className="h-4 w-4 text-grey-light-4-v2" />;
-  return <span className="text-sm font-medium text-foreground-v2">{value}</span>;
+    return <Minus className="h-4 w-4 text-grey-light-4-v2 mx-auto" />;
+  return <span className="text-sm text-foreground-v2">{value}</span>;
 };
 
 const Pricing = () => {
@@ -138,118 +135,134 @@ const Pricing = () => {
 
   return (
     <div className="min-h-screen bg-background-v2 text-foreground-v2 font-[var(--font-onest)]">
+      {/* Local animation keyframes */}
+      <style>{`
+        @keyframes heroFloat {
+          0%, 100% { transform: scale(1.05) translate3d(0,0,0); }
+          50% { transform: scale(1.08) translate3d(0,-12px,0); }
+        }
+        @keyframes glowPulse {
+          0%, 100% { opacity: 0.35; }
+          50% { opacity: 0.6; }
+        }
+        .hero-img { animation: heroFloat 14s ease-in-out infinite; }
+        .hero-glow { animation: glowPulse 6s ease-in-out infinite; }
+      `}</style>
+
       {/* Top bar */}
-      <header className="sticky top-0 z-30 border-b border-border-v2/40 bg-background-v2/80 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-          <Link to="/" className="text-base font-extrabold tracking-tight">
+      <header className="sticky top-0 z-30 border-b border-border-v2/30 bg-background-v2/70 backdrop-blur-md">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-4">
+          <Link to="/" className="text-sm font-bold tracking-tight">
             mybabes<span className="text-primary-v2">.ai</span>
           </Link>
           <Link
             to="/"
-            className="text-xs font-medium text-grey-light-3-v2 hover:text-foreground-v2 transition-colors"
+            className="text-xs text-grey-light-4-v2 hover:text-foreground-v2 transition-colors"
           >
             ← Back to app
           </Link>
         </div>
       </header>
 
-      {/* Hero — editorial */}
-      <section className="mx-auto max-w-6xl px-5 pt-16 pb-10 md:pt-24 md:pb-16">
-        <div className="grid grid-cols-12 gap-6 items-end">
-          <div className="col-span-12 md:col-span-8">
-            <div className="inline-flex items-center gap-2 rounded-full border border-border-v2 px-3 py-1 text-[11px] tracking-[0.18em] text-grey-light-3-v2 uppercase">
-              <Sparkles className="h-3 w-3 text-primary-v2" />
-              AI Companion App of 2025
-            </div>
-            <h1 className="mt-6 text-5xl md:text-7xl lg:text-8xl font-black leading-[0.92] tracking-tight">
-              Pricing,
-              <br />
-              <span className="text-grey-light-4-v2 italic font-light">built for </span>
-              <span className="text-primary-v2">creators.</span>
-            </h1>
-          </div>
-          <div className="col-span-12 md:col-span-4 md:pb-4">
-            <p className="text-sm md:text-base text-grey-light-3-v2 max-w-sm">
-              Join thousands of creators building their own AI harem. Cancel anytime,
-              keep access until the end of your billing cycle.
-            </p>
-          </div>
+      {/* Hero with animated image */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src={heroImage}
+            alt="AI companion characters"
+            className="hero-img w-full h-full object-cover object-center will-change-transform"
+          />
+          {/* Vignette + bottom fade */}
+          <div className="absolute inset-0 bg-gradient-to-b from-background-v2/60 via-background-v2/40 to-background-v2" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background-v2/70 via-transparent to-background-v2/70" />
+          {/* Blue glow */}
+          <div className="hero-glow absolute -bottom-32 left-1/2 -translate-x-1/2 h-72 w-[60%] rounded-full blur-[120px] bg-primary-v2/40" />
         </div>
 
-        {/* Tabs */}
-        <div className="mt-12 flex items-center gap-1 border-b border-border-v2/60">
-          {(["subscriptions", "addons"] as TabKey[]).map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={cn(
-                "relative px-5 py-3 text-sm font-medium capitalize transition-colors",
-                tab === t ? "text-foreground-v2" : "text-grey-light-4-v2 hover:text-grey-light-2-v2"
-              )}
-            >
-              {t === "addons" ? "Add-ons" : "Subscriptions"}
-              {tab === t && (
-                <span className="absolute inset-x-3 -bottom-px h-0.5 bg-primary-v2" />
-              )}
-            </button>
-          ))}
-          <span className="ml-auto hidden md:inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-grey-light-4-v2">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary-v2 animate-pulse" />
-            Quarterly billing · 40% off
+        <div className="relative mx-auto max-w-5xl px-5 pt-24 pb-32 md:pt-32 md:pb-40 text-center">
+          <span className="inline-block text-[11px] tracking-[0.22em] uppercase text-grey-light-3-v2">
+            Pricing
           </span>
+          <h1 className="mt-5 text-4xl md:text-6xl font-light tracking-tight leading-[1.05]">
+            One subscription.<br />
+            <span className="text-primary-v2">Every</span> companion.
+          </h1>
+          <p className="mt-6 max-w-md mx-auto text-sm md:text-base text-grey-light-3-v2">
+            Join thousands of creators building their own AI harem. Cancel anytime, no questions asked.
+          </p>
         </div>
       </section>
 
-      {/* Plans / Add-ons */}
-      <section className="mx-auto max-w-6xl px-5 pb-20">
+      {/* Tabs + Plans */}
+      <section className="mx-auto max-w-5xl px-5 -mt-16 relative z-10">
+        <div className="flex justify-center mb-10">
+          <div className="inline-flex rounded-full border border-border-v2/60 bg-background-v2/80 backdrop-blur p-1">
+            {(["subscriptions", "addons"] as TabKey[]).map((t) => (
+              <button
+                key={t}
+                onClick={() => setTab(t)}
+                className={cn(
+                  "px-5 py-2 text-xs font-medium rounded-full capitalize transition-colors",
+                  tab === t
+                    ? "bg-foreground-v2 text-background-v2"
+                    : "text-grey-light-3-v2 hover:text-foreground-v2"
+                )}
+              >
+                {t === "addons" ? "Add-ons" : "Subscriptions"}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {tab === "subscriptions" ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-border-v2/60 border border-border-v2/60 rounded-2xl overflow-hidden">
-            {plans.map((p, idx) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {plans.map((p) => (
               <article
                 key={p.id}
                 className={cn(
-                  "relative bg-background-v2 p-8 md:p-10 flex flex-col",
-                  idx === 1 && "bg-grey-dark-1-v2"
+                  "relative rounded-2xl border p-8 md:p-10 flex flex-col transition-colors",
+                  p.highlight
+                    ? "border-primary-v2/40 bg-gradient-to-b from-primary-v2/[0.06] to-transparent"
+                    : "border-border-v2/60 bg-grey-dark-1-v2/30"
                 )}
               >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <div className="text-[10px] tracking-[0.22em] uppercase text-primary-v2 font-bold">
-                      {p.badge}
-                    </div>
-                    <h2 className="mt-3 text-4xl md:text-5xl font-black">{p.name}</h2>
-                  </div>
-                  <div className="text-right text-[10px] tracking-[0.18em] uppercase text-grey-light-4-v2">
-                    Plan 0{idx + 1}
-                  </div>
-                </div>
+                {p.highlight && (
+                  <span className="absolute -top-2.5 left-8 text-[10px] font-semibold tracking-[0.18em] uppercase bg-primary-v2 text-primary-v2-foreground px-2.5 py-1 rounded-full">
+                    Most popular
+                  </span>
+                )}
 
-                <p className="mt-4 text-sm text-grey-light-3-v2 max-w-xs">{p.tagline}</p>
+                <h2 className="text-xl font-semibold">{p.name}</h2>
+                <p className="mt-2 text-sm text-grey-light-4-v2 max-w-xs">{p.tagline}</p>
 
-                <div className="mt-8 flex items-baseline gap-2">
-                  <span className="text-5xl md:text-6xl font-black tracking-tight">{p.price}</span>
+                <div className="mt-8 flex items-baseline gap-1.5">
+                  <span className="text-5xl font-light tracking-tight">{p.price}</span>
                   <span className="text-sm text-grey-light-4-v2">{p.cadence}</span>
                 </div>
-                <p className="mt-1 text-xs text-grey-light-4-v2">{p.note}</p>
+                <p className="mt-1.5 text-xs text-grey-light-4-v2">{p.note}</p>
 
                 <button
                   className={cn(
-                    "mt-8 group inline-flex items-center justify-between gap-3 rounded-full px-6 py-4 text-sm font-bold transition-colors",
-                    idx === 1
+                    "mt-7 group inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-all",
+                    p.highlight
                       ? "bg-primary-v2 text-primary-v2-foreground hover:bg-primary-light-v2"
-                      : "bg-foreground-v2 text-background-v2 hover:bg-grey-light-1-v2"
+                      : "bg-foreground-v2 text-background-v2 hover:opacity-90"
                   )}
                 >
                   {p.cta}
                   <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </button>
 
-                <ul className="mt-10 space-y-3 border-t border-border-v2/60 pt-6">
-                  {p.features.map((f, i) => (
+                <ul className="mt-8 space-y-3 pt-6 border-t border-border-v2/40">
+                  {p.features.map((f) => (
                     <li key={f} className="flex items-start gap-3 text-sm text-grey-light-2-v2">
-                      <span className="mt-1 w-4 text-[10px] font-mono text-grey-light-4-v2">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
+                      <Check
+                        className={cn(
+                          "h-4 w-4 mt-0.5 shrink-0",
+                          p.highlight ? "text-primary-v2" : "text-grey-light-3-v2"
+                        )}
+                        strokeWidth={2.5}
+                      />
                       <span>{f}</span>
                     </li>
                   ))}
@@ -258,18 +271,18 @@ const Pricing = () => {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {addons.map((a) => (
               <div
                 key={a.name}
-                className="group rounded-2xl border border-border-v2/60 bg-grey-dark-1-v2 p-6 hover:border-primary-v2/50 transition-colors flex flex-col"
+                className="group rounded-2xl border border-border-v2/60 bg-grey-dark-1-v2/30 p-6 hover:border-primary-v2/40 transition-colors flex flex-col"
               >
-                <h3 className="text-lg font-bold">{a.name}</h3>
+                <h3 className="text-base font-semibold">{a.name}</h3>
                 <p className="mt-2 text-xs text-grey-light-4-v2 flex-1">{a.desc}</p>
                 <div className="mt-6 flex items-end justify-between">
-                  <span className="text-2xl font-black">{a.price}</span>
-                  <button className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary-v2 text-primary-v2-foreground hover:bg-primary-light-v2 transition-colors">
-                    <ArrowUpRight className="h-4 w-4" />
+                  <span className="text-2xl font-light">{a.price}</span>
+                  <button className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-foreground-v2 text-background-v2 hover:bg-primary-v2 hover:text-primary-v2-foreground transition-colors">
+                    <ArrowUpRight className="h-3.5 w-3.5" />
                   </button>
                 </div>
               </div>
@@ -279,21 +292,26 @@ const Pricing = () => {
       </section>
 
       {/* Compare */}
-      <section className="mx-auto max-w-6xl px-5 pb-20">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
-          <h2 className="text-3xl md:text-5xl font-black tracking-tight max-w-xl">
-            Compare features<span className="text-primary-v2">.</span>
-          </h2>
-          <div className="inline-flex rounded-full border border-border-v2 p-1 self-start md:self-auto">
+      <section className="mx-auto max-w-5xl px-5 pt-28 pb-20">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+          <div>
+            <span className="text-[11px] tracking-[0.22em] uppercase text-grey-light-4-v2">
+              Compare
+            </span>
+            <h2 className="mt-3 text-3xl md:text-4xl font-light tracking-tight">
+              Features, side by side.
+            </h2>
+          </div>
+          <div className="inline-flex rounded-full border border-border-v2/60 p-1 self-start md:self-auto md:hidden">
             {(["premium", "ultra", "addons"] as const).map((c) => (
               <button
                 key={c}
                 onClick={() => setCompareCol(c)}
                 className={cn(
-                  "px-4 py-1.5 text-xs font-semibold rounded-full capitalize transition-colors",
+                  "px-4 py-1.5 text-xs font-medium rounded-full capitalize transition-colors",
                   compareCol === c
-                    ? "bg-primary-v2 text-primary-v2-foreground"
-                    : "text-grey-light-3-v2 hover:text-foreground-v2"
+                    ? "bg-foreground-v2 text-background-v2"
+                    : "text-grey-light-3-v2"
                 )}
               >
                 {c === "addons" ? "Add-ons" : c}
@@ -302,9 +320,9 @@ const Pricing = () => {
           </div>
         </div>
 
-        {/* Desktop table */}
-        <div className="hidden md:block rounded-2xl border border-border-v2/60 overflow-hidden">
-          <div className="grid grid-cols-[1.5fr_1fr_1fr_1fr] bg-grey-dark-1-v2 px-6 py-4 text-[10px] tracking-[0.18em] uppercase text-grey-light-4-v2 border-b border-border-v2/60">
+        {/* Desktop */}
+        <div className="hidden md:block">
+          <div className="grid grid-cols-[1.6fr_1fr_1fr_1fr] px-6 py-4 text-[11px] tracking-[0.18em] uppercase text-grey-light-4-v2 border-b border-border-v2/60">
             <div>Feature</div>
             <div className="text-center">Premium</div>
             <div className="text-center text-primary-v2">Ultra</div>
@@ -312,13 +330,13 @@ const Pricing = () => {
           </div>
           {compareRows.map((g) => (
             <div key={g.group}>
-              <div className="px-6 py-3 text-xs font-bold uppercase tracking-wider text-grey-light-2-v2 bg-background-v2 border-b border-border-v2/40">
+              <div className="px-6 pt-8 pb-3 text-xs font-medium text-grey-light-3-v2">
                 {g.group}
               </div>
               {g.rows.map((r) => (
                 <div
                   key={r.label}
-                  className="grid grid-cols-[1.5fr_1fr_1fr_1fr] items-center px-6 py-4 border-b border-border-v2/30 last:border-0 hover:bg-grey-dark-1-v2/40 transition-colors"
+                  className="grid grid-cols-[1.6fr_1fr_1fr_1fr] items-center px-6 py-3.5 border-t border-border-v2/30"
                 >
                   <div className="text-sm text-grey-light-2-v2">{r.label}</div>
                   <div className="text-center"><Cell value={r.premium} /></div>
@@ -330,15 +348,15 @@ const Pricing = () => {
           ))}
         </div>
 
-        {/* Mobile single-column */}
-        <div className="md:hidden rounded-2xl border border-border-v2/60 overflow-hidden">
+        {/* Mobile */}
+        <div className="md:hidden">
           {compareRows.map((g) => (
-            <div key={g.group}>
-              <div className="px-5 py-3 text-[11px] font-bold uppercase tracking-wider text-grey-light-2-v2 bg-grey-dark-1-v2">
+            <div key={g.group} className="mb-6">
+              <div className="px-1 py-2 text-xs font-medium text-grey-light-3-v2">
                 {g.group}
               </div>
               {g.rows.map((r) => (
-                <div key={r.label} className="flex items-center justify-between px-5 py-3 border-b border-border-v2/30 last:border-0">
+                <div key={r.label} className="flex items-center justify-between px-1 py-3 border-t border-border-v2/30">
                   <span className="text-sm text-grey-light-2-v2 pr-4">{r.label}</span>
                   <Cell value={r[compareCol]} />
                 </div>
@@ -349,13 +367,14 @@ const Pricing = () => {
       </section>
 
       {/* FAQ */}
-      <section className="mx-auto max-w-6xl px-5 pb-20">
-        <div className="grid grid-cols-12 gap-6">
+      <section className="mx-auto max-w-5xl px-5 pb-24">
+        <div className="grid grid-cols-12 gap-8">
           <div className="col-span-12 md:col-span-4">
-            <h2 className="text-3xl md:text-5xl font-black tracking-tight sticky top-24">
-              Questions,
-              <br />
-              <span className="text-grey-light-4-v2 italic font-light">answered.</span>
+            <span className="text-[11px] tracking-[0.22em] uppercase text-grey-light-4-v2">
+              FAQ
+            </span>
+            <h2 className="mt-3 text-3xl md:text-4xl font-light tracking-tight sticky top-24">
+              Questions,<br />answered.
             </h2>
           </div>
           <div className="col-span-12 md:col-span-8">
@@ -364,17 +383,12 @@ const Pricing = () => {
                 <AccordionItem
                   key={f.q}
                   value={`item-${i}`}
-                  className="border-b border-border-v2/60"
+                  className="border-b border-border-v2/40"
                 >
-                  <AccordionTrigger className="py-6 text-left text-base md:text-lg font-semibold hover:no-underline hover:text-primary-v2 [&[data-state=open]]:text-primary-v2">
-                    <span className="flex items-baseline gap-4">
-                      <span className="text-[10px] font-mono text-grey-light-4-v2">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      {f.q}
-                    </span>
+                  <AccordionTrigger className="py-5 text-left text-sm md:text-base font-medium hover:no-underline">
+                    {f.q}
                   </AccordionTrigger>
-                  <AccordionContent className="text-sm text-grey-light-3-v2 leading-relaxed pl-10 pb-6">
+                  <AccordionContent className="text-sm text-grey-light-4-v2 leading-relaxed pb-5">
                     {f.a}
                   </AccordionContent>
                 </AccordionItem>
@@ -385,21 +399,21 @@ const Pricing = () => {
       </section>
 
       {/* Footer CTA */}
-      <section className="border-t border-border-v2/60">
-        <div className="mx-auto max-w-6xl px-5 py-16 md:py-24 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+      <section className="border-t border-border-v2/40">
+        <div className="mx-auto max-w-5xl px-5 py-16 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div>
-            <h3 className="text-3xl md:text-4xl font-black tracking-tight">
+            <h3 className="text-2xl md:text-3xl font-light tracking-tight">
               Still have a question?
             </h3>
-            <p className="mt-2 text-sm text-grey-light-3-v2 max-w-md">
-              Contact our support team or join our Discord community for more information.
+            <p className="mt-2 text-sm text-grey-light-4-v2 max-w-md">
+              Contact our support team or join our Discord community.
             </p>
           </div>
           <div className="flex gap-3">
-            <button className="inline-flex items-center gap-2 rounded-full bg-foreground-v2 text-background-v2 px-6 py-3 text-sm font-bold hover:bg-grey-light-1-v2 transition-colors">
-              Contact support <ArrowUpRight className="h-4 w-4" />
+            <button className="inline-flex items-center gap-2 rounded-full bg-foreground-v2 text-background-v2 px-5 py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity">
+              Contact support
             </button>
-            <button className="inline-flex items-center gap-2 rounded-full border border-border-v2 px-6 py-3 text-sm font-bold hover:border-primary-v2 hover:text-primary-v2 transition-colors">
+            <button className="inline-flex items-center gap-2 rounded-full border border-border-v2 px-5 py-2.5 text-sm font-medium hover:border-primary-v2 hover:text-primary-v2 transition-colors">
               Join Discord
             </button>
           </div>
