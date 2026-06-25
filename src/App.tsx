@@ -21,6 +21,7 @@ import ExpHimAnimeNsfw from "./pages/ExpHimAnimeNsfw.tsx";
 import ExpHimRealNsfw from "./pages/ExpHimRealNsfw.tsx";
 import ExpGayAnimeNsfw from "./pages/ExpGayAnimeNsfw.tsx";
 import ExpGayRealNsfw from "./pages/ExpGayRealNsfw.tsx";
+import Pricing from "./pages/Pricing.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/badges" element={<Profile />} />
           <Route path="/creators" element={<Creators />} />
+          <Route path="/pricing" element={<Pricing />} />
 
           {/* SFW funnels */}
           <Route path="/exp/her/anime/sfw" element={<ExpHerAnime />} />
