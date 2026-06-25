@@ -149,6 +149,30 @@ const Pricing = () => {
   const [billing, setBilling] = useState<BillingKey>("quarterly");
   const [compareCol, setCompareCol] = useState<"premium" | "ultra" | "addons">("ultra");
 
+  // Rotating "just purchased" social proof toasts
+  useEffect(() => {
+    const activity = [
+      { name: "Marco", plan: "Ultra", city: "Berlin" },
+      { name: "Aiko", plan: "Premium", city: "Tokyo" },
+      { name: "Liam", plan: "500 tokens", city: "London" },
+      { name: "Sofia", plan: "Ultra", city: "Madrid" },
+      { name: "Noah", plan: "1,200 tokens", city: "Toronto" },
+    ];
+    let i = 0;
+    const fire = () => {
+      const a = activity[i % activity.length];
+      toast(`${a.name} from ${a.city} just got ${a.plan}`, {
+        description: "a few seconds ago",
+        position: "bottom-left",
+      });
+      i++;
+    };
+    const t1 = setTimeout(fire, 4000);
+    const t2 = setInterval(fire, 14000);
+    return () => { clearTimeout(t1); clearInterval(t2); };
+  }, []);
+
+
 
   return (
     <div className="min-h-screen bg-background-v2 text-foreground-v2 font-[var(--font-onest)]">
