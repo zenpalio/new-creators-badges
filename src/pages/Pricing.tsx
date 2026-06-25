@@ -357,7 +357,7 @@ const Pricing = () => {
 
                   {/* Token icon */}
                   <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary-v2/30 to-primary-v2/5 border border-primary-v2/40 shadow-[0_0_20px_-4px_hsl(213_100%_50%/0.5)]">
-                    <Sparkles className="h-5 w-5 text-primary-v2" strokeWidth={2.5} />
+                    <Coins className="h-5 w-5 text-primary-v2" strokeWidth={2.5} />
                   </div>
 
                   {t.was && (
