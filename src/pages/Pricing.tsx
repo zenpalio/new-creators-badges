@@ -12,14 +12,15 @@ import heroImage from "@/assets/pricing-hero.jpg";
 
 type TabKey = "subscriptions" | "addons";
 
+type BillingKey = "monthly" | "quarterly";
+
 const plans = [
   {
     id: "premium",
     name: "Premium",
     tagline: "Deeper interactions, faster generation, priority access.",
-    price: "€14.99",
-    cadence: "/mo",
-    note: "Billed monthly · Money-back guarantee",
+    monthly: { price: "€14.99", note: "Billed monthly · Money-back guarantee" },
+    quarterly: { price: "€8.99", note: "€26.97 billed every 3 months · Save 40%" },
     cta: "Go Premium",
     highlight: false,
     features: [
@@ -35,9 +36,8 @@ const plans = [
     id: "ultra",
     name: "Ultra",
     tagline: "For creators who generate frequently with premium performance.",
-    price: "€29.99",
-    cadence: "/mo",
-    note: "Billed monthly · +400 token bonus",
+    monthly: { price: "€29.99", note: "Billed monthly · +400 token bonus" },
+    quarterly: { price: "€17.99", note: "€53.97 billed every 3 months · +400 token bonus" },
     cta: "Go Ultra",
     highlight: true,
     features: [
@@ -50,6 +50,7 @@ const plans = [
     ],
   },
 ];
+
 
 type Row = { label: string; premium: string | boolean; ultra: string | boolean; addons: string | boolean };
 
@@ -91,12 +92,22 @@ const compareRows: { group: string; rows: Row[] }[] = [
   },
 ];
 
-const addons = [
-  { name: "Token Pack 100", price: "€4.99", desc: "One-time top-up. Never expires." },
-  { name: "Token Pack 500", price: "€19.99", desc: "For occasional creators. +5% bonus." },
-  { name: "Token Pack 1500", price: "€49.99", desc: "Power pack. +15% bonus tokens." },
-  { name: "Gift Card", price: "from €10", desc: "Send tokens to a friend. Redeemable anytime." },
+const tokenPacks = [
+  { tokens: "100", price: "€9.99", badge: null, was: null, bonus: null, coins: 1 },
+  { tokens: "200", price: "€17.99", badge: "Save 10%", was: null, bonus: null, coins: 2 },
+  { tokens: "500", price: "€39.99", badge: "Save 20%", was: null, bonus: null, coins: 3 },
+  { tokens: "1,200", price: "€79.99", badge: "Best value", was: "Was 1,000 tokens", bonus: "+200 bonus tokens", coins: 4 },
 ];
+
+const tokenPerks = [
+  "Create Unlimited AI Babes",
+  "Tokens never expire",
+  "Generate images for 1 token",
+  "Voice messages for 3 tokens",
+  "Generate videos for 5 tokens",
+  "Create and unlock spicy stories",
+];
+
 
 const faqs = [
   {
@@ -131,7 +142,9 @@ const Cell = ({ value }: { value: string | boolean }) => {
 
 const Pricing = () => {
   const [tab, setTab] = useState<TabKey>("subscriptions");
+  const [billing, setBilling] = useState<BillingKey>("quarterly");
   const [compareCol, setCompareCol] = useState<"premium" | "ultra" | "addons">("ultra");
+
 
   return (
     <div className="min-h-screen bg-background-v2 text-foreground-v2 font-[var(--font-onest)]">
@@ -215,81 +228,178 @@ const Pricing = () => {
         </div>
 
         {tab === "subscriptions" ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {plans.map((p) => (
-              <article
-                key={p.id}
-                className={cn(
-                  "relative rounded-2xl border p-8 md:p-10 flex flex-col transition-colors",
-                  p.highlight
-                    ? "border-primary-v2/40 bg-gradient-to-b from-primary-v2/[0.06] to-transparent"
-                    : "border-border-v2/60 bg-grey-dark-1-v2/30"
-                )}
-              >
-                {p.highlight && (
-                  <span className="absolute -top-2.5 left-8 text-[10px] font-semibold tracking-[0.18em] uppercase bg-primary-v2 text-primary-v2-foreground px-2.5 py-1 rounded-full">
-                    Most popular
-                  </span>
-                )}
+          <>
+            {/* Billing toggle */}
+            <div className="flex justify-center mb-8">
+              <div className="inline-flex items-center gap-2 rounded-full border border-border-v2/60 bg-grey-dark-1-v2/40 p-1">
+                {(["monthly", "quarterly"] as BillingKey[]).map((b) => (
+                  <button
+                    key={b}
+                    onClick={() => setBilling(b)}
+                    className={cn(
+                      "px-4 py-1.5 text-xs font-medium rounded-full capitalize transition-colors flex items-center gap-2",
+                      billing === b
+                        ? "bg-primary-v2 text-primary-v2-foreground"
+                        : "text-grey-light-3-v2 hover:text-foreground-v2"
+                    )}
+                  >
+                    {b === "quarterly" ? "3 months" : "Monthly"}
+                    {b === "quarterly" && (
+                      <span className={cn(
+                        "text-[9px] font-bold tracking-wider px-1.5 py-0.5 rounded-full",
+                        billing === "quarterly"
+                          ? "bg-primary-v2-foreground/20 text-primary-v2-foreground"
+                          : "bg-primary-v2/15 text-primary-v2"
+                      )}>40% OFF</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
 
-                <h2 className="text-xl font-semibold">{p.name}</h2>
-                <p className="mt-2 text-sm text-grey-light-4-v2 max-w-xs">{p.tagline}</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {plans.map((p) => {
+                const pricing = p[billing];
+                return (
+                  <article
+                    key={p.id}
+                    className={cn(
+                      "relative rounded-2xl border p-8 md:p-10 flex flex-col transition-colors",
+                      p.highlight
+                        ? "border-primary-v2/40 bg-gradient-to-b from-primary-v2/[0.06] to-transparent"
+                        : "border-border-v2/60 bg-grey-dark-1-v2/30"
+                    )}
+                  >
+                    {p.highlight && (
+                      <span className="absolute -top-2.5 left-8 text-[10px] font-semibold tracking-[0.18em] uppercase bg-primary-v2 text-primary-v2-foreground px-2.5 py-1 rounded-full">
+                        Most popular
+                      </span>
+                    )}
 
-                <div className="mt-8 flex items-baseline gap-1.5">
-                  <span className="text-5xl font-light tracking-tight">{p.price}</span>
-                  <span className="text-sm text-grey-light-4-v2">{p.cadence}</span>
-                </div>
-                <p className="mt-1.5 text-xs text-grey-light-4-v2">{p.note}</p>
+                    <h2 className="text-xl font-semibold">{p.name}</h2>
+                    <p className="mt-2 text-sm text-grey-light-4-v2 max-w-xs">{p.tagline}</p>
 
-                <button
+                    <div className="mt-8 flex items-baseline gap-1.5">
+                      <span className="text-5xl font-light tracking-tight">{pricing.price}</span>
+                      <span className="text-sm text-grey-light-4-v2">/mo</span>
+                    </div>
+                    <p className="mt-1.5 text-xs text-grey-light-4-v2">{pricing.note}</p>
+
+                    <button
+                      className={cn(
+                        "mt-7 group inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-all",
+                        p.highlight
+                          ? "bg-primary-v2 text-primary-v2-foreground hover:bg-primary-light-v2"
+                          : "bg-foreground-v2 text-background-v2 hover:opacity-90"
+                      )}
+                    >
+                      {p.cta}
+                      <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </button>
+
+                    <ul className="mt-8 space-y-3 pt-6 border-t border-border-v2/40">
+                      {p.features.map((f) => (
+                        <li key={f} className="flex items-start gap-3 text-sm text-grey-light-2-v2">
+                          <Check
+                            className={cn(
+                              "h-4 w-4 mt-0.5 shrink-0",
+                              p.highlight ? "text-primary-v2" : "text-grey-light-3-v2"
+                            )}
+                            strokeWidth={2.5}
+                          />
+                          <span>{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </article>
+                );
+              })}
+            </div>
+          </>
+        ) : (
+          <div>
+            <div className="text-center mb-10 max-w-xl mx-auto">
+              <h2 className="text-2xl md:text-3xl font-light tracking-tight">Get tokens</h2>
+              <p className="mt-3 text-sm text-grey-light-4-v2">
+                Buy tokens as a one-off purchase. No commitment, no expiration date.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+              {tokenPacks.map((t) => (
+                <div
+                  key={t.tokens}
                   className={cn(
-                    "mt-7 group inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-all",
-                    p.highlight
-                      ? "bg-primary-v2 text-primary-v2-foreground hover:bg-primary-light-v2"
-                      : "bg-foreground-v2 text-background-v2 hover:opacity-90"
+                    "group relative rounded-2xl border p-6 flex flex-col transition-colors",
+                    t.badge === "Best value"
+                      ? "border-primary-v2/40 bg-gradient-to-b from-primary-v2/[0.06] to-transparent"
+                      : "border-border-v2/60 bg-grey-dark-1-v2/30 hover:border-primary-v2/30"
                   )}
                 >
-                  {p.cta}
-                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </button>
+                  {t.badge && (
+                    <span className={cn(
+                      "absolute -top-2.5 left-6 text-[10px] font-semibold tracking-[0.16em] uppercase px-2.5 py-1 rounded-full",
+                      t.badge === "Best value"
+                        ? "bg-primary-v2 text-primary-v2-foreground"
+                        : "bg-foreground-v2 text-background-v2"
+                    )}>
+                      {t.badge}
+                    </span>
+                  )}
 
-                <ul className="mt-8 space-y-3 pt-6 border-t border-border-v2/40">
-                  {p.features.map((f) => (
-                    <li key={f} className="flex items-start gap-3 text-sm text-grey-light-2-v2">
-                      <Check
-                        className={cn(
-                          "h-4 w-4 mt-0.5 shrink-0",
-                          p.highlight ? "text-primary-v2" : "text-grey-light-3-v2"
-                        )}
-                        strokeWidth={2.5}
+                  {/* Coin stack */}
+                  <div className="flex gap-0.5 mb-4">
+                    {Array.from({ length: t.coins }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="h-5 w-5 rounded-full bg-gradient-to-br from-accent-yellow-v2 to-[hsl(35_90%_45%)] border border-background-v2 -ml-1 first:ml-0 shadow-sm"
                       />
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {addons.map((a) => (
-              <div
-                key={a.name}
-                className="group rounded-2xl border border-border-v2/60 bg-grey-dark-1-v2/30 p-6 hover:border-primary-v2/40 transition-colors flex flex-col"
-              >
-                <h3 className="text-base font-semibold">{a.name}</h3>
-                <p className="mt-2 text-xs text-grey-light-4-v2 flex-1">{a.desc}</p>
-                <div className="mt-6 flex items-end justify-between">
-                  <span className="text-2xl font-light">{a.price}</span>
-                  <button className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-foreground-v2 text-background-v2 hover:bg-primary-v2 hover:text-primary-v2-foreground transition-colors">
-                    <ArrowUpRight className="h-3.5 w-3.5" />
-                  </button>
+                    ))}
+                  </div>
+
+                  {t.was && (
+                    <span className="text-[10px] line-through text-grey-light-4-v2">{t.was}</span>
+                  )}
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-3xl font-light tracking-tight">{t.tokens}</span>
+                    <span className="text-xs text-grey-light-4-v2">tokens</span>
+                  </div>
+                  {t.bonus && (
+                    <span className="mt-1 text-[11px] font-medium text-primary-v2">{t.bonus}</span>
+                  )}
+
+                  <div className="mt-auto pt-6">
+                    <div className="text-xl font-semibold">{t.price}</div>
+                    <div className="text-[11px] text-grey-light-4-v2">one-time payment</div>
+                    <button className={cn(
+                      "mt-4 w-full inline-flex items-center justify-center gap-2 rounded-full py-2.5 text-xs font-semibold transition-all",
+                      t.badge === "Best value"
+                        ? "bg-primary-v2 text-primary-v2-foreground hover:bg-primary-light-v2"
+                        : "bg-foreground-v2 text-background-v2 hover:opacity-90"
+                    )}>
+                      Buy Tokens
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            {/* What you get */}
+            <div className="mt-12 rounded-2xl border border-border-v2/60 bg-grey-dark-1-v2/30 p-8">
+              <h3 className="text-sm font-semibold tracking-wider uppercase text-grey-light-3-v2">What you get</h3>
+              <ul className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {tokenPerks.map((perk) => (
+                  <li key={perk} className="flex items-center gap-3 text-sm text-grey-light-2-v2">
+                    <Check className="h-4 w-4 text-primary-v2 shrink-0" strokeWidth={2.5} />
+                    {perk}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         )}
       </section>
+
 
       {/* Compare */}
       <section className="mx-auto max-w-5xl px-5 pt-28 pb-20">
