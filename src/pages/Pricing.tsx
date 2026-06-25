@@ -8,7 +8,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
-import heroImage from "@/assets/pricing-hero.jpg";
+import heroAsset from "@/assets/pricing-hero.jpeg.asset.json";
+const heroImage = heroAsset.url;
 
 type TabKey = "subscriptions" | "addons";
 
