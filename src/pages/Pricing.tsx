@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Check, Minus, ArrowUpRight, Coins, Image as ImageIcon, Video } from "lucide-react";
+import { Check, Minus, ArrowUpRight, Flame, Image as ImageIcon, Video } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -356,8 +356,8 @@ const Pricing = () => {
                   )}
 
                   {/* Token icon */}
-                  <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary-v2/30 to-primary-v2/5 border border-primary-v2/40 shadow-[0_0_20px_-4px_hsl(213_100%_50%/0.5)]">
-                    <Coins className="h-5 w-5 text-primary-v2" strokeWidth={2.5} />
+                  <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[hsl(20_100%_55%/0.3)] to-[hsl(40_100%_55%/0.1)] border border-[hsl(20_100%_55%/0.5)] shadow-[0_0_20px_-4px_hsl(20_100%_55%/0.6)]">
+                    <Flame className="h-5 w-5 text-[hsl(20_100%_60%)]" strokeWidth={2.5} fill="hsl(20 100% 60% / 0.2)" />
                   </div>
 
                   {t.was && (
