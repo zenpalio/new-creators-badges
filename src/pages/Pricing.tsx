@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Check, Minus, ArrowUpRight, Flame, Image as ImageIcon, Video, Sparkles } from "lucide-react";
+import { Check, Minus, ArrowUpRight, Flame, Image as ImageIcon, Video } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -333,56 +333,84 @@ const Pricing = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border-v2/40 rounded-2xl overflow-hidden border border-border-v2/40">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {tokenPacks.map((t) => {
                 const isBest = t.badge === "Best value";
+                const isPopular = t.badge === "Popular";
+                const isFeatured = isBest || isPopular;
                 return (
                   <button
                     key={t.tokens}
                     type="button"
                     className={cn(
-                      "group relative text-left p-7 flex flex-col transition-colors duration-200 cursor-pointer",
+                      "group relative text-left rounded-2xl border p-6 flex flex-col transition-all duration-300 cursor-pointer hover:-translate-y-1",
                       isBest
-                        ? "bg-grey-dark-1-v2/80 hover:bg-grey-dark-1-v2"
-                        : "bg-background-v2 hover:bg-grey-dark-1-v2/40"
+                        ? "border-primary-v2/60 bg-gradient-to-b from-primary-v2/[0.10] to-transparent shadow-[0_0_40px_-12px_hsl(213_100%_50%/0.5)] hover:shadow-[0_0_60px_-8px_hsl(213_100%_50%/0.7)] hover:border-primary-v2"
+                        : "border-border-v2/60 bg-grey-dark-1-v2/30 hover:border-primary-v2/40 hover:bg-grey-dark-1-v2/50 hover:shadow-[0_0_30px_-10px_hsl(213_100%_50%/0.3)]"
                     )}
                   >
-                    {/* Tiny meta row */}
-                    <div className="flex items-center justify-between text-[10px] tracking-[0.18em] uppercase text-grey-light-4-v2 mb-8">
-                      <span>{isBest ? "Best value" : "Tokens"}</span>
+                    {t.badge && (
+                      <span className={cn(
+                        "absolute -top-2.5 left-6 text-[10px] font-semibold tracking-[0.16em] uppercase px-2.5 py-1 rounded-full shadow-lg",
+                        isBest
+                          ? "bg-primary-v2 text-primary-v2-foreground shadow-primary-v2/40"
+                          : "bg-foreground-v2 text-background-v2"
+                      )}>
+                        {t.badge}
+                      </span>
+                    )}
+
+                    {/* Header: icon + savings badge */}
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[hsl(348_90%_55%/0.35)] to-[hsl(330_85%_45%/0.1)] border border-[hsl(348_90%_60%/0.55)] shadow-[0_0_22px_-4px_hsl(348_90%_55%/0.7)]">
+                        <Flame className="h-5 w-5 text-[hsl(350_95%_65%)]" strokeWidth={2.5} fill="hsl(350 95% 60% / 0.3)" />
+                      </div>
                       {t.save && (
-                        <span className="text-[hsl(350_95%_70%)]">{t.save}</span>
+                        <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-1 rounded-full bg-[hsl(0_85%_60%/0.15)] text-[hsl(0_90%_70%)] border border-[hsl(0_85%_60%/0.3)]">
+                          {t.save}
+                        </span>
                       )}
                     </div>
 
-                    {/* Big number */}
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-5xl font-light tracking-tight tabular-nums">{t.tokens}</span>
+                    {/* Tokens */}
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-4xl font-light tracking-tight">{t.tokens}</span>
+                      <span className="text-xs text-grey-light-4-v2">tokens</span>
                     </div>
-                    <span className="mt-1 text-xs text-grey-light-4-v2">tokens</span>
                     {t.bonus && (
-                      <span className="mt-1 text-[11px] text-primary-v2">{t.bonus}</span>
+                      <span className="mt-1 text-[11px] font-medium text-primary-v2">{t.bonus}</span>
                     )}
 
-                    {/* Inclusions */}
-                    <div className="mt-8 space-y-1.5 text-[12px] text-grey-light-3-v2">
-                      <div><span className="text-foreground-v2">{t.images}</span> images</div>
-                      <div><span className="text-foreground-v2">{t.videos}</span> videos</div>
+                    {/* What you can generate */}
+                    <div className="mt-5 space-y-2 pt-4 border-t border-border-v2/40">
+                      <div className="flex items-center gap-2 text-[12px] text-grey-light-2-v2">
+                        <ImageIcon className="h-3.5 w-3.5 text-grey-light-3-v2 shrink-0" strokeWidth={2} />
+                        <span><span className="font-semibold text-foreground-v2">{t.images}</span> images</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-[12px] text-grey-light-2-v2">
+                        <Video className="h-3.5 w-3.5 text-grey-light-3-v2 shrink-0" strokeWidth={2} />
+                        <span><span className="font-semibold text-foreground-v2">{t.videos}</span> videos</span>
+                      </div>
                     </div>
 
-                    {/* Price + CTA */}
-                    <div className="mt-10 pt-5 border-t border-border-v2/40">
+                    {/* Price */}
+                    <div className="mt-auto pt-6">
                       <div className="flex items-baseline gap-2 flex-wrap">
-                        <span className="text-xl font-medium tracking-tight">{t.price}</span>
+                        <span className="text-3xl font-light tracking-tight">{t.price}</span>
                         {t.wasPrice && (
-                          <span className="text-xs text-grey-light-4-v2 line-through">{t.wasPrice}</span>
+                          <span className="text-sm text-grey-light-4-v2 line-through">{t.wasPrice}</span>
                         )}
                       </div>
+                      <div className="text-[11px] text-grey-light-4-v2 mt-0.5">
+                        {t.perToken} per token · one-time
+                      </div>
                       <div className={cn(
-                        "mt-4 inline-flex items-center gap-1.5 text-xs font-medium transition-all",
-                        isBest ? "text-primary-v2" : "text-foreground-v2 group-hover:text-primary-v2"
+                        "mt-4 w-full inline-flex items-center justify-center gap-1.5 rounded-full py-2.5 text-xs font-semibold transition-all group-hover:scale-[1.02]",
+                        isFeatured
+                          ? "bg-primary-v2 text-primary-v2-foreground group-hover:bg-primary-light-v2 shadow-lg shadow-primary-v2/30"
+                          : "bg-foreground-v2 text-background-v2 group-hover:opacity-90"
                       )}>
-                        Purchase
+                        Buy Tokens
                         <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                       </div>
                     </div>
