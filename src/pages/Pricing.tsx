@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import heroAsset from "@/assets/pricing-hero.jpeg.asset.json";
+import testimonialBanner from "@/assets/testimonial-banner.jpg";
 const heroImage = heroAsset.url;
 
 type TabKey = "subscriptions" | "addons";
