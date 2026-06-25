@@ -142,7 +142,9 @@ const Cell = ({ value }: { value: string | boolean }) => {
 
 const Pricing = () => {
   const [tab, setTab] = useState<TabKey>("subscriptions");
+  const [billing, setBilling] = useState<BillingKey>("quarterly");
   const [compareCol, setCompareCol] = useState<"premium" | "ultra" | "addons">("ultra");
+
 
   return (
     <div className="min-h-screen bg-background-v2 text-foreground-v2 font-[var(--font-onest)]">
