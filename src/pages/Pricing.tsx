@@ -92,12 +92,22 @@ const compareRows: { group: string; rows: Row[] }[] = [
   },
 ];
 
-const addons = [
-  { name: "Token Pack 100", price: "€4.99", desc: "One-time top-up. Never expires." },
-  { name: "Token Pack 500", price: "€19.99", desc: "For occasional creators. +5% bonus." },
-  { name: "Token Pack 1500", price: "€49.99", desc: "Power pack. +15% bonus tokens." },
-  { name: "Gift Card", price: "from €10", desc: "Send tokens to a friend. Redeemable anytime." },
+const tokenPacks = [
+  { tokens: "100", price: "€9.99", badge: null, was: null, bonus: null, coins: 1 },
+  { tokens: "200", price: "€17.99", badge: "Save 10%", was: null, bonus: null, coins: 2 },
+  { tokens: "500", price: "€39.99", badge: "Save 20%", was: null, bonus: null, coins: 3 },
+  { tokens: "1,200", price: "€79.99", badge: "Best value", was: "Was 1,000 tokens", bonus: "+200 bonus tokens", coins: 4 },
 ];
+
+const tokenPerks = [
+  "Create Unlimited AI Babes",
+  "Tokens never expire",
+  "Generate images for 1 token",
+  "Voice messages for 3 tokens",
+  "Generate videos for 5 tokens",
+  "Create and unlock spicy stories",
+];
+
 
 const faqs = [
   {
