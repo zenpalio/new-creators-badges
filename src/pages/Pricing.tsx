@@ -96,10 +96,10 @@ const compareRows: { group: string; rows: Row[] }[] = [
 ];
 
 const tokenPacks = [
-  { tokens: "100", price: "€9.99", badge: null, was: null, bonus: null, coins: 1, images: "100", videos: "20" },
-  { tokens: "200", price: "€17.99", badge: "Save 10%", was: null, bonus: null, coins: 2, images: "200", videos: "40" },
-  { tokens: "500", price: "€39.99", badge: "Save 20%", was: null, bonus: null, coins: 3, images: "500", videos: "100" },
-  { tokens: "1,200", price: "€79.99", badge: "Best value", was: "Was 1,000 tokens", bonus: "+200 bonus tokens", coins: 4, images: "1,200", videos: "240" },
+  { tokens: "100", price: "€9.99", wasPrice: null, save: null, badge: null, bonus: null, images: "100", videos: "20", perToken: "€0.10" },
+  { tokens: "200", price: "€17.99", wasPrice: "€19.98", save: "Save 10%", badge: null, bonus: null, images: "200", videos: "40", perToken: "€0.09" },
+  { tokens: "500", price: "€39.99", wasPrice: "€49.95", save: "Save 20%", badge: "Popular", bonus: null, images: "500", videos: "100", perToken: "€0.08" },
+  { tokens: "1,200", price: "€79.99", wasPrice: "€119.88", save: "Save 33%", badge: "Best value", bonus: "+200 bonus tokens", images: "1,200", videos: "240", perToken: "€0.07" },
 ];
 
 const tokenPerks = [
