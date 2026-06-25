@@ -12,14 +12,15 @@ import heroImage from "@/assets/pricing-hero.jpg";
 
 type TabKey = "subscriptions" | "addons";
 
+type BillingKey = "monthly" | "quarterly";
+
 const plans = [
   {
     id: "premium",
     name: "Premium",
     tagline: "Deeper interactions, faster generation, priority access.",
-    price: "€14.99",
-    cadence: "/mo",
-    note: "Billed monthly · Money-back guarantee",
+    monthly: { price: "€14.99", note: "Billed monthly · Money-back guarantee" },
+    quarterly: { price: "€8.99", note: "€26.97 billed every 3 months · Save 40%" },
     cta: "Go Premium",
     highlight: false,
     features: [
@@ -35,9 +36,8 @@ const plans = [
     id: "ultra",
     name: "Ultra",
     tagline: "For creators who generate frequently with premium performance.",
-    price: "€29.99",
-    cadence: "/mo",
-    note: "Billed monthly · +400 token bonus",
+    monthly: { price: "€29.99", note: "Billed monthly · +400 token bonus" },
+    quarterly: { price: "€17.99", note: "€53.97 billed every 3 months · +400 token bonus" },
     cta: "Go Ultra",
     highlight: true,
     features: [
@@ -50,6 +50,7 @@ const plans = [
     ],
   },
 ];
+
 
 type Row = { label: string; premium: string | boolean; ultra: string | boolean; addons: string | boolean };
 
