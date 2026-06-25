@@ -388,8 +388,17 @@ const Pricing = () => {
                 );
               })}
             </div>
+
+            {/* Trust row */}
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-[11px] text-grey-light-3-v2">
+              <span className="inline-flex items-center gap-1.5"><RefreshCw className="h-3.5 w-3.5 text-grey-light-3-v2" /> Cancel anytime</span>
+              <span className="inline-flex items-center gap-1.5"><Lock className="h-3.5 w-3.5 text-grey-light-3-v2" /> Discreet billing</span>
+              <span className="inline-flex items-center gap-1.5"><Shield className="h-3.5 w-3.5 text-grey-light-3-v2" /> 7-day money back</span>
+              <span className="inline-flex items-center gap-1.5">🔞 18+ verified · encrypted</span>
+            </div>
           </>
         ) : (
+
           <div>
             <div className="text-center mb-10 max-w-xl mx-auto">
               <h2 className="text-2xl md:text-3xl font-light tracking-tight">Get tokens</h2>
