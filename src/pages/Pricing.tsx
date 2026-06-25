@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import { Check, Minus, ArrowUpRight, Flame, Image as ImageIcon, Video, Star, Shield, RefreshCw, Lock } from "lucide-react";
+import { Check, Minus, ArrowUpRight, Flame, Image as ImageIcon, Video, Star, Shield, RefreshCw, Lock, Quote, Award, TrendingUp } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -510,54 +510,124 @@ const Pricing = () => {
         )}
       </section>
 
-      {/* Awards / Press testimonial banner */}
-      <section className="relative w-full overflow-hidden">
-        <div className="relative w-full h-[460px] md:h-[520px] lg:h-[580px]">
-          <img
-            src={testimonialBanner}
-            alt="Award-winning AI companion experience"
-            width={1920}
-            height={1024}
-            loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-          {/* Layered gradients for legibility */}
-          <div className="absolute inset-0 bg-gradient-to-t from-background-v2 via-background-v2/60 to-background-v2/30" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background-v2/80 via-transparent to-background-v2/80" />
+      {/* Awards / Press editorial spread */}
+      <section className="relative w-full overflow-hidden border-y border-border-v2/40 bg-gradient-to-b from-grey-dark-1-v2/60 via-background-v2 to-background-v2 mt-24">
+        {/* Ambient glow blobs */}
+        <div aria-hidden className="pointer-events-none absolute -top-40 -left-40 h-[420px] w-[420px] rounded-full bg-[hsl(350_95%_55%/0.18)] blur-[120px]" />
+        <div aria-hidden className="pointer-events-none absolute -bottom-40 -right-40 h-[420px] w-[420px] rounded-full bg-[hsl(213_100%_50%/0.18)] blur-[120px]" />
 
-          {/* Content */}
-          <div className="relative h-full mx-auto max-w-5xl px-5 flex flex-col items-center justify-center text-center">
-            {/* Eyebrow chip */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-[hsl(45_90%_60%/0.35)] bg-[hsl(45_85%_50%/0.08)] px-3.5 py-1.5 backdrop-blur-sm">
-              <Star className="h-3.5 w-3.5 text-[hsl(45_95%_65%)]" fill="hsl(45 95% 65%)" strokeWidth={0} />
-              <span className="text-[10px] font-semibold tracking-[0.22em] uppercase text-[hsl(45_95%_75%)]">
-                Award · 2025
-              </span>
+        {/* Press marquee strip (top) */}
+        <div className="relative border-b border-border-v2/40 bg-background-v2/40 backdrop-blur-sm">
+          <div className="mx-auto max-w-6xl px-5 py-4 flex items-center gap-6 overflow-hidden">
+            <span className="text-[10px] tracking-[0.28em] uppercase text-grey-light-4-v2 shrink-0">As featured in</span>
+            <div className="flex items-center gap-8 md:gap-12 text-[13px] md:text-sm font-serif italic text-grey-light-3-v2/80 overflow-hidden whitespace-nowrap">
+              <span>AI After Dark</span>
+              <span className="text-grey-light-4-v2/40">✦</span>
+              <span className="font-sans not-italic font-bold tracking-tight">NSFW WEEKLY</span>
+              <span className="text-grey-light-4-v2/40">✦</span>
+              <span className="font-mono uppercase text-xs tracking-widest">/r/AIcompanions</span>
+              <span className="text-grey-light-4-v2/40">✦</span>
+              <span>The Spicy Review</span>
+              <span className="text-grey-light-4-v2/40">✦</span>
+              <span className="font-sans not-italic font-light tracking-[0.3em] uppercase text-xs">PRODUCT HUNT</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="relative mx-auto max-w-6xl px-5 py-16 md:py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+
+            {/* LEFT — Cinematic portrait with award medallion */}
+            <div className="lg:col-span-5 relative">
+              <div className="relative aspect-[4/5] rounded-2xl overflow-hidden border border-border-v2/60 shadow-2xl shadow-[hsl(350_95%_55%/0.15)]">
+                <img
+                  src={testimonialBanner}
+                  alt="Award-winning AI companion experience"
+                  width={1280}
+                  height={1600}
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background-v2/90 via-background-v2/10 to-transparent" />
+
+                {/* Floating award medallion */}
+                <div className="absolute top-5 left-5 flex items-center gap-2.5 rounded-full bg-background-v2/70 backdrop-blur-md border border-[hsl(45_90%_60%/0.4)] px-3 py-1.5">
+                  <Award className="h-3.5 w-3.5 text-[hsl(45_95%_65%)]" strokeWidth={2.5} />
+                  <span className="text-[10px] font-semibold tracking-[0.18em] uppercase text-[hsl(45_95%_80%)]">Editor's Choice '25</span>
+                </div>
+
+                {/* Bottom rating chip */}
+                <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-1.5">
+                    {[0,1,2,3,4].map((i) => (
+                      <Star key={i} className="h-4 w-4 text-[hsl(45_95%_65%)]" fill="hsl(45 95% 65%)" strokeWidth={0} />
+                    ))}
+                  </div>
+                  <span className="text-[11px] tracking-wider uppercase text-grey-light-2-v2 font-medium">4.8 / 5</span>
+                </div>
+              </div>
+
+              {/* Decorative tag behind image */}
+              <div aria-hidden className="absolute -z-10 -bottom-4 -right-4 h-full w-full rounded-2xl border border-primary-v2/30" />
             </div>
 
-            {/* Headline */}
-            <h2 className="mt-6 text-3xl md:text-5xl lg:text-6xl font-light tracking-tight max-w-3xl leading-[1.05]">
-              <span className="block text-foreground-v2">Best AI Companion App</span>
-              <span className="mt-3 block text-grey-light-3-v2 text-xl md:text-2xl lg:text-3xl font-light tracking-wide">
-                — AI After Dark
-              </span>
-            </h2>
+            {/* RIGHT — Editorial quote spread */}
+            <div className="lg:col-span-7">
+              {/* Eyebrow */}
+              <div className="flex items-center gap-3">
+                <span className="h-px w-10 bg-[hsl(45_95%_65%)]" />
+                <span className="text-[10px] font-semibold tracking-[0.28em] uppercase text-[hsl(45_95%_75%)]">
+                  Award · 2025
+                </span>
+              </div>
 
-            <p className="mt-6 max-w-xl text-sm md:text-base text-grey-light-3-v2 leading-relaxed">
-              "The most intimate, expressive AI experience we've tested this year.
-              A new standard for adult creativity."
-            </p>
+              {/* Headline — editorial serif treatment */}
+              <h2 className="mt-5 font-light tracking-tight leading-[0.95]">
+                <span className="block text-4xl md:text-5xl lg:text-6xl text-foreground-v2">Best AI</span>
+                <span className="block text-4xl md:text-5xl lg:text-6xl italic font-extralight bg-gradient-to-r from-[hsl(350_95%_72%)] via-foreground-v2 to-[hsl(213_100%_70%)] bg-clip-text text-transparent">
+                  Companion App
+                </span>
+                <span className="mt-4 block text-[11px] tracking-[0.32em] uppercase text-grey-light-4-v2">
+                  Awarded by <span className="text-foreground-v2 font-semibold">AI After Dark</span>
+                </span>
+              </h2>
 
-            {/* Press / award row */}
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-4 text-[10px] tracking-[0.22em] uppercase text-grey-light-4-v2">
-              <span className="inline-flex items-center gap-2">
-                <Star className="h-3 w-3 text-[hsl(45_95%_65%)]" fill="hsl(45 95% 65%)" strokeWidth={0} />
-                AI After Dark
-              </span>
-              <span className="h-3 w-px bg-border-v2/60 hidden sm:block" />
-              <span>Editor's Pick · NSFW Weekly</span>
-              <span className="h-3 w-px bg-border-v2/60 hidden sm:block" />
-              <span>4.8 ★ · 2,300+ reviews</span>
+              {/* Big pull quote */}
+              <figure className="mt-8 relative">
+                <Quote className="absolute -top-3 -left-1 h-10 w-10 text-[hsl(350_95%_55%/0.25)]" strokeWidth={1.5} fill="currentColor" />
+                <blockquote className="relative pl-6 border-l-2 border-[hsl(350_95%_55%/0.4)]">
+                  <p className="text-lg md:text-xl lg:text-2xl font-light leading-snug text-foreground-v2/95">
+                    The most <em className="not-italic text-[hsl(350_95%_72%)]">intimate</em>, expressive AI experience we've tested all year — a new standard for adult creativity.
+                  </p>
+                  <figcaption className="mt-5 flex items-center gap-3 text-xs text-grey-light-3-v2">
+                    <span className="h-8 w-8 rounded-full bg-gradient-to-br from-[hsl(350_95%_55%)] to-[hsl(213_100%_50%)]" />
+                    <div>
+                      <div className="font-semibold text-foreground-v2 tracking-wide">Mira Chen</div>
+                      <div className="text-[10px] tracking-[0.18em] uppercase text-grey-light-4-v2">Lead Reviewer · AI After Dark</div>
+                    </div>
+                  </figcaption>
+                </blockquote>
+              </figure>
+
+              {/* Stat strip */}
+              <div className="mt-10 grid grid-cols-3 gap-4 border-t border-border-v2/40 pt-7">
+                <div>
+                  <div className="text-2xl md:text-3xl font-light tracking-tight text-foreground-v2">12K+</div>
+                  <div className="mt-1 text-[10px] tracking-[0.2em] uppercase text-grey-light-4-v2">Active creators</div>
+                </div>
+                <div>
+                  <div className="text-2xl md:text-3xl font-light tracking-tight text-foreground-v2 inline-flex items-center gap-1.5">
+                    4.8<Star className="h-4 w-4 text-[hsl(45_95%_65%)]" fill="hsl(45 95% 65%)" strokeWidth={0} />
+                  </div>
+                  <div className="mt-1 text-[10px] tracking-[0.2em] uppercase text-grey-light-4-v2">2,300+ reviews</div>
+                </div>
+                <div>
+                  <div className="text-2xl md:text-3xl font-light tracking-tight text-foreground-v2 inline-flex items-center gap-1.5">
+                    #1<TrendingUp className="h-4 w-4 text-[hsl(140_70%_55%)]" strokeWidth={2.5} />
+                  </div>
+                  <div className="mt-1 text-[10px] tracking-[0.2em] uppercase text-grey-light-4-v2">In its category</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -565,6 +635,7 @@ const Pricing = () => {
 
       {/* Compare */}
       <section className="mx-auto max-w-5xl px-5 pt-28 pb-20">
+
 
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
           <div>
