@@ -169,7 +169,7 @@ const Pricing = () => {
           <img
             src={heroImage}
             alt="AI companion characters"
-            className="hero-img w-full h-full object-cover object-center will-change-transform"
+            className="hero-img w-full h-full object-cover object-top will-change-transform"
           />
           {/* Vignette + bottom fade */}
           <div className="absolute inset-0 bg-gradient-to-b from-background-v2/60 via-background-v2/40 to-background-v2" />
