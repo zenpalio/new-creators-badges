@@ -217,8 +217,36 @@ const Pricing = () => {
           <p className="mt-6 max-w-md mx-auto text-sm md:text-base text-grey-light-3-v2">
             Join thousands of creators building their own AI harem. Cancel anytime, no questions asked.
           </p>
+
+          {/* Social proof: avatars + rating */}
+          <div className="mt-7 flex items-center justify-center gap-4 flex-wrap">
+            <div className="flex -space-x-2">
+              {[
+                "linear-gradient(135deg,hsl(348_90%_55%),hsl(20_100%_55%))",
+                "linear-gradient(135deg,hsl(213_100%_55%),hsl(260_80%_55%))",
+                "linear-gradient(135deg,hsl(45_90%_55%),hsl(20_100%_55%))",
+                "linear-gradient(135deg,hsl(180_70%_50%),hsl(213_100%_55%))",
+                "linear-gradient(135deg,hsl(320_70%_55%),hsl(280_70%_55%))",
+              ].map((bg, i) => (
+                <div
+                  key={i}
+                  className="h-7 w-7 rounded-full border-2 border-background-v2"
+                  style={{ background: bg }}
+                />
+              ))}
+            </div>
+            <div className="flex items-center gap-1.5">
+              <div className="flex">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className="h-3.5 w-3.5 text-[hsl(45_95%_60%)]" fill="hsl(45 95% 60%)" strokeWidth={0} />
+                ))}
+              </div>
+              <span className="text-xs text-grey-light-3-v2"><span className="font-semibold text-foreground-v2">4.8</span> · 2,300+ reviews</span>
+            </div>
+          </div>
         </div>
       </section>
+
 
       {/* Tabs + Plans */}
       <section className="mx-auto max-w-5xl px-5 -mt-16 relative z-10">
