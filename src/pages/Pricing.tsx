@@ -362,8 +362,8 @@ const Pricing = () => {
 
                     {/* Header: icon + savings badge */}
                     <div className="flex items-start justify-between mb-4">
-                      <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[hsl(20_100%_55%/0.3)] to-[hsl(40_100%_55%/0.1)] border border-[hsl(20_100%_55%/0.5)] shadow-[0_0_20px_-4px_hsl(20_100%_55%/0.6)]">
-                        <Flame className="h-5 w-5 text-[hsl(20_100%_60%)]" strokeWidth={2.5} fill="hsl(20 100% 60% / 0.2)" />
+                      <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[hsl(348_90%_55%/0.35)] to-[hsl(330_85%_45%/0.1)] border border-[hsl(348_90%_60%/0.55)] shadow-[0_0_22px_-4px_hsl(348_90%_55%/0.7)]">
+                        <Flame className="h-5 w-5 text-[hsl(350_95%_65%)]" strokeWidth={2.5} fill="hsl(350 95% 60% / 0.3)" />
                       </div>
                       {t.save && (
                         <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-1 rounded-full bg-[hsl(0_85%_60%/0.15)] text-[hsl(0_90%_70%)] border border-[hsl(0_85%_60%/0.3)]">
