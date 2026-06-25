@@ -355,30 +355,37 @@ const Pricing = () => {
                     </span>
                   )}
 
-                  {/* Coin stack */}
-                  <div className="flex gap-0.5 mb-4">
-                    {Array.from({ length: t.coins }).map((_, i) => (
-                      <div
-                        key={i}
-                        className="h-5 w-5 rounded-full bg-gradient-to-br from-accent-yellow-v2 to-[hsl(35_90%_45%)] border border-background-v2 -ml-1 first:ml-0 shadow-sm"
-                      />
-                    ))}
+                  {/* Token icon */}
+                  <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary-v2/30 to-primary-v2/5 border border-primary-v2/40 shadow-[0_0_20px_-4px_hsl(213_100%_50%/0.5)]">
+                    <Sparkles className="h-5 w-5 text-primary-v2" strokeWidth={2.5} />
                   </div>
 
                   {t.was && (
                     <span className="text-[10px] line-through text-grey-light-4-v2">{t.was}</span>
                   )}
                   <div className="flex items-baseline gap-1.5">
-                    <span className="text-3xl font-light tracking-tight">{t.tokens}</span>
+                    <span className="text-4xl font-light tracking-tight">{t.tokens}</span>
                     <span className="text-xs text-grey-light-4-v2">tokens</span>
                   </div>
                   {t.bonus && (
                     <span className="mt-1 text-[11px] font-medium text-primary-v2">{t.bonus}</span>
                   )}
 
+                  {/* What you can generate */}
+                  <div className="mt-5 space-y-2 pt-4 border-t border-border-v2/40">
+                    <div className="flex items-center gap-2 text-[12px] text-grey-light-2-v2">
+                      <ImageIcon className="h-3.5 w-3.5 text-grey-light-3-v2 shrink-0" strokeWidth={2} />
+                      <span><span className="font-semibold text-foreground-v2">{t.images}</span> images</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-[12px] text-grey-light-2-v2">
+                      <Video className="h-3.5 w-3.5 text-grey-light-3-v2 shrink-0" strokeWidth={2} />
+                      <span><span className="font-semibold text-foreground-v2">{t.videos}</span> videos</span>
+                    </div>
+                  </div>
+
                   <div className="mt-auto pt-6">
-                    <div className="text-xl font-semibold">{t.price}</div>
-                    <div className="text-[11px] text-grey-light-4-v2">one-time payment</div>
+                    <div className="text-3xl font-light tracking-tight">{t.price}</div>
+                    <div className="text-[11px] text-grey-light-4-v2 mt-0.5">one-time payment</div>
                     <button className={cn(
                       "mt-4 w-full inline-flex items-center justify-center gap-2 rounded-full py-2.5 text-xs font-semibold transition-all",
                       t.badge === "Best value"
