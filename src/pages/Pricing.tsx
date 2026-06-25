@@ -333,85 +333,68 @@ const Pricing = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
               {tokenPacks.map((t) => {
                 const isBest = t.badge === "Best value";
-                const isPopular = t.badge === "Popular";
-                const isFeatured = isBest || isPopular;
                 return (
                   <button
                     key={t.tokens}
                     type="button"
                     className={cn(
-                      "group relative text-left rounded-2xl border p-6 flex flex-col transition-all duration-300 cursor-pointer hover:-translate-y-1",
+                      "group relative text-left rounded-2xl p-5 flex flex-col transition-all duration-300 cursor-pointer hover:-translate-y-1",
                       isBest
-                        ? "border-primary-v2/60 bg-gradient-to-b from-primary-v2/[0.10] to-transparent shadow-[0_0_40px_-12px_hsl(213_100%_50%/0.5)] hover:shadow-[0_0_60px_-8px_hsl(213_100%_50%/0.7)] hover:border-primary-v2"
-                        : "border-border-v2/60 bg-grey-dark-1-v2/30 hover:border-primary-v2/40 hover:bg-grey-dark-1-v2/50 hover:shadow-[0_0_30px_-10px_hsl(213_100%_50%/0.3)]"
+                        ? "bg-grey-dark-1-v2/60 ring-2 ring-primary-v2 shadow-[0_0_50px_-10px_hsl(213_100%_50%/0.7)] hover:shadow-[0_0_70px_-8px_hsl(213_100%_50%/0.9)]"
+                        : "bg-grey-dark-1-v2/40 border border-border-v2/60 hover:border-primary-v2/40 hover:bg-grey-dark-1-v2/60"
                     )}
                   >
-                    {t.badge && (
-                      <span className={cn(
-                        "absolute -top-2.5 left-6 text-[10px] font-semibold tracking-[0.16em] uppercase px-2.5 py-1 rounded-full shadow-lg",
-                        isBest
-                          ? "bg-primary-v2 text-primary-v2-foreground shadow-primary-v2/40"
-                          : "bg-foreground-v2 text-background-v2"
-                      )}>
-                        {t.badge}
-                      </span>
+                    {isBest && (
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 bg-primary-v2 text-primary-v2-foreground text-[10px] font-bold tracking-[0.16em] uppercase px-3 py-1 rounded-full shadow-lg shadow-primary-v2/40 whitespace-nowrap">
+                        <Sparkles className="h-3 w-3" strokeWidth={2.5} />
+                        Recommended
+                      </div>
                     )}
 
-                    {/* Header: icon + savings badge */}
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[hsl(348_90%_55%/0.35)] to-[hsl(330_85%_45%/0.1)] border border-[hsl(348_90%_60%/0.55)] shadow-[0_0_22px_-4px_hsl(348_90%_55%/0.7)]">
-                        <Flame className="h-5 w-5 text-[hsl(350_95%_65%)]" strokeWidth={2.5} fill="hsl(350 95% 60% / 0.3)" />
-                      </div>
-                      {t.save && (
-                        <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-1 rounded-full bg-[hsl(0_85%_60%/0.15)] text-[hsl(0_90%_70%)] border border-[hsl(0_85%_60%/0.3)]">
-                          {t.save}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Tokens */}
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="text-4xl font-light tracking-tight">{t.tokens}</span>
-                      <span className="text-xs text-grey-light-4-v2">tokens</span>
-                    </div>
+                    {/* Title */}
+                    <h3 className="text-xl font-bold tracking-tight uppercase">
+                      {t.tokens} <span className="text-grey-light-3-v2 font-semibold">Tokens</span>
+                    </h3>
                     {t.bonus && (
                       <span className="mt-1 text-[11px] font-medium text-primary-v2">{t.bonus}</span>
                     )}
 
-                    {/* What you can generate */}
-                    <div className="mt-5 space-y-2 pt-4 border-t border-border-v2/40">
-                      <div className="flex items-center gap-2 text-[12px] text-grey-light-2-v2">
-                        <ImageIcon className="h-3.5 w-3.5 text-grey-light-3-v2 shrink-0" strokeWidth={2} />
-                        <span><span className="font-semibold text-foreground-v2">{t.images}</span> images</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-[12px] text-grey-light-2-v2">
-                        <Video className="h-3.5 w-3.5 text-grey-light-3-v2 shrink-0" strokeWidth={2} />
-                        <span><span className="font-semibold text-foreground-v2">{t.videos}</span> videos</span>
-                      </div>
+                    {/* Bracketed feature list */}
+                    <div className="mt-4 flex gap-2 pl-1">
+                      <div className="w-px bg-grey-light-4-v2/40 flex-shrink-0 my-1" />
+                      <ul className="space-y-1.5 text-[12px] text-grey-light-3-v2">
+                        <li><span className="font-semibold text-foreground-v2">{t.images}</span> spicy images</li>
+                        <li><span className="font-semibold text-foreground-v2">{t.videos}</span> AI videos</li>
+                      </ul>
                     </div>
 
-                    {/* Price */}
-                    <div className="mt-auto pt-6">
+                    {/* Price box */}
+                    <div className={cn(
+                      "mt-5 rounded-xl p-4",
+                      isBest ? "bg-background-v2/60" : "bg-background-v2/40"
+                    )}>
                       <div className="flex items-baseline gap-2 flex-wrap">
-                        <span className="text-3xl font-light tracking-tight">{t.price}</span>
                         {t.wasPrice && (
-                          <span className="text-sm text-grey-light-4-v2 line-through">{t.wasPrice}</span>
+                          <span className="text-lg font-bold text-[hsl(350_95%_65%)] line-through decoration-[1.5px]">
+                            {t.wasPrice}
+                          </span>
                         )}
+                        <span className="text-3xl font-bold tracking-tight text-foreground-v2">{t.price}</span>
                       </div>
-                      <div className="text-[11px] text-grey-light-4-v2 mt-0.5">
-                        {t.perToken} per token · one-time
-                      </div>
+                      {t.save && (
+                        <div className="mt-1 text-[11px] font-semibold text-[hsl(350_95%_65%)] uppercase tracking-wider">
+                          {t.save}
+                        </div>
+                      )}
+
                       <div className={cn(
-                        "mt-4 w-full inline-flex items-center justify-center gap-1.5 rounded-full py-2.5 text-xs font-semibold transition-all group-hover:scale-[1.02]",
-                        isFeatured
-                          ? "bg-primary-v2 text-primary-v2-foreground group-hover:bg-primary-light-v2 shadow-lg shadow-primary-v2/30"
-                          : "bg-foreground-v2 text-background-v2 group-hover:opacity-90"
+                        "mt-3 w-full inline-flex items-center justify-center gap-1.5 rounded-full py-2.5 text-xs font-semibold transition-all group-hover:scale-[1.02]",
+                        "bg-foreground-v2 text-background-v2 group-hover:opacity-90"
                       )}>
-                        Buy Tokens
-                        <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                        Purchase
                       </div>
                     </div>
                   </button>
