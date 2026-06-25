@@ -253,40 +253,59 @@ const Pricing = () => {
                   <article
                     key={p.id}
                     className={cn(
-                      "relative rounded-2xl border p-8 md:p-10 flex flex-col transition-colors",
+                      "group relative rounded-2xl border p-8 md:p-10 flex flex-col transition-all duration-300 hover:-translate-y-1 cursor-pointer",
                       p.highlight
-                        ? "border-primary-v2/40 bg-gradient-to-b from-primary-v2/[0.06] to-transparent"
-                        : "border-border-v2/60 bg-grey-dark-1-v2/30"
+                        ? "border-primary-v2/50 bg-gradient-to-b from-primary-v2/[0.08] to-transparent shadow-[0_0_40px_-12px_hsl(213_100%_50%/0.4)] hover:shadow-[0_0_60px_-8px_hsl(213_100%_50%/0.6)] hover:border-primary-v2/80"
+                        : "border-border-v2/60 bg-grey-dark-1-v2/30 hover:border-foreground-v2/40 hover:bg-grey-dark-1-v2/50"
                     )}
                   >
                     {p.highlight && (
-                      <span className="absolute -top-2.5 left-8 text-[10px] font-semibold tracking-[0.18em] uppercase bg-primary-v2 text-primary-v2-foreground px-2.5 py-1 rounded-full">
+                      <span className="absolute -top-2.5 left-8 text-[10px] font-semibold tracking-[0.18em] uppercase bg-primary-v2 text-primary-v2-foreground px-2.5 py-1 rounded-full shadow-lg shadow-primary-v2/30">
                         Most popular
                       </span>
                     )}
 
-                    <h2 className="text-xl font-semibold">{p.name}</h2>
+                    <div className="flex items-center justify-between gap-3">
+                      <h2 className="text-xl font-semibold">{p.name}</h2>
+                      {pricing.saveLabel && (
+                        <span className={cn(
+                          "text-[10px] font-bold tracking-wider uppercase px-2 py-1 rounded-full whitespace-nowrap",
+                          p.highlight
+                            ? "bg-primary-v2/20 text-primary-v2"
+                            : "bg-accent-yellow-v2/15 text-accent-yellow-v2"
+                        )}>
+                          {pricing.saveLabel}
+                        </span>
+                      )}
+                    </div>
                     <p className="mt-2 text-sm text-grey-light-4-v2 max-w-xs">{p.tagline}</p>
 
-                    <div className="mt-8 flex items-baseline gap-1.5">
+                    <div className="mt-8 flex items-baseline gap-2 flex-wrap">
                       <span className="text-5xl font-light tracking-tight">{pricing.price}</span>
                       <span className="text-sm text-grey-light-4-v2">/mo</span>
+                      {pricing.originalPrice && (
+                        <span className="text-base text-grey-light-4-v2 line-through ml-1">{pricing.originalPrice}</span>
+                      )}
                     </div>
                     <p className="mt-1.5 text-xs text-grey-light-4-v2">{pricing.note}</p>
 
                     <button
                       className={cn(
-                        "mt-7 group inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-all",
+                        "mt-7 group/btn inline-flex items-center justify-center gap-2 rounded-full px-5 py-3.5 text-sm font-semibold transition-all",
                         p.highlight
-                          ? "bg-primary-v2 text-primary-v2-foreground hover:bg-primary-light-v2"
-                          : "bg-foreground-v2 text-background-v2 hover:opacity-90"
+                          ? "bg-primary-v2 text-primary-v2-foreground hover:bg-primary-light-v2 shadow-lg shadow-primary-v2/30 hover:shadow-xl hover:shadow-primary-v2/50 hover:scale-[1.02]"
+                          : "bg-foreground-v2 text-background-v2 hover:opacity-90 hover:scale-[1.02]"
                       )}
                     >
                       {p.cta}
-                      <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      <ArrowUpRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
                     </button>
 
-                    <ul className="mt-8 space-y-3 pt-6 border-t border-border-v2/40">
+                    <p className="mt-3 text-center text-[11px] text-grey-light-4-v2">
+                      {p.socialProof} · Cancel anytime
+                    </p>
+
+                    <ul className="mt-6 space-y-3 pt-6 border-t border-border-v2/40">
                       {p.features.map((f) => (
                         <li key={f} className="flex items-start gap-3 text-sm text-grey-light-2-v2">
                           <Check
