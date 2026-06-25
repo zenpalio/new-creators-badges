@@ -333,7 +333,7 @@ const Pricing = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border-v2/40 rounded-2xl overflow-hidden border border-border-v2/40">
               {tokenPacks.map((t) => {
                 const isBest = t.badge === "Best value";
                 return (
@@ -341,60 +341,49 @@ const Pricing = () => {
                     key={t.tokens}
                     type="button"
                     className={cn(
-                      "group relative text-left rounded-2xl p-5 flex flex-col transition-all duration-300 cursor-pointer hover:-translate-y-1",
+                      "group relative text-left p-7 flex flex-col transition-colors duration-200 cursor-pointer",
                       isBest
-                        ? "bg-grey-dark-1-v2/60 ring-2 ring-primary-v2 shadow-[0_0_50px_-10px_hsl(213_100%_50%/0.7)] hover:shadow-[0_0_70px_-8px_hsl(213_100%_50%/0.9)]"
-                        : "bg-grey-dark-1-v2/40 border border-border-v2/60 hover:border-primary-v2/40 hover:bg-grey-dark-1-v2/60"
+                        ? "bg-grey-dark-1-v2/80 hover:bg-grey-dark-1-v2"
+                        : "bg-background-v2 hover:bg-grey-dark-1-v2/40"
                     )}
                   >
-                    {isBest && (
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 bg-primary-v2 text-primary-v2-foreground text-[10px] font-bold tracking-[0.16em] uppercase px-3 py-1 rounded-full shadow-lg shadow-primary-v2/40 whitespace-nowrap">
-                        <Sparkles className="h-3 w-3" strokeWidth={2.5} />
-                        Recommended
-                      </div>
-                    )}
-
-                    {/* Title */}
-                    <h3 className="text-xl font-bold tracking-tight uppercase">
-                      {t.tokens} <span className="text-grey-light-3-v2 font-semibold">Tokens</span>
-                    </h3>
-                    {t.bonus && (
-                      <span className="mt-1 text-[11px] font-medium text-primary-v2">{t.bonus}</span>
-                    )}
-
-                    {/* Bracketed feature list */}
-                    <div className="mt-4 flex gap-2 pl-1">
-                      <div className="w-px bg-grey-light-4-v2/40 flex-shrink-0 my-1" />
-                      <ul className="space-y-1.5 text-[12px] text-grey-light-3-v2">
-                        <li><span className="font-semibold text-foreground-v2">{t.images}</span> spicy images</li>
-                        <li><span className="font-semibold text-foreground-v2">{t.videos}</span> AI videos</li>
-                      </ul>
+                    {/* Tiny meta row */}
+                    <div className="flex items-center justify-between text-[10px] tracking-[0.18em] uppercase text-grey-light-4-v2 mb-8">
+                      <span>{isBest ? "Best value" : "Tokens"}</span>
+                      {t.save && (
+                        <span className="text-[hsl(350_95%_70%)]">{t.save}</span>
+                      )}
                     </div>
 
-                    {/* Price box */}
-                    <div className={cn(
-                      "mt-5 rounded-xl p-4",
-                      isBest ? "bg-background-v2/60" : "bg-background-v2/40"
-                    )}>
-                      <div className="flex items-baseline gap-2 flex-wrap">
-                        {t.wasPrice && (
-                          <span className="text-lg font-bold text-[hsl(350_95%_65%)] line-through decoration-[1.5px]">
-                            {t.wasPrice}
-                          </span>
-                        )}
-                        <span className="text-3xl font-bold tracking-tight text-foreground-v2">{t.price}</span>
-                      </div>
-                      {t.save && (
-                        <div className="mt-1 text-[11px] font-semibold text-[hsl(350_95%_65%)] uppercase tracking-wider">
-                          {t.save}
-                        </div>
-                      )}
+                    {/* Big number */}
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-5xl font-light tracking-tight tabular-nums">{t.tokens}</span>
+                    </div>
+                    <span className="mt-1 text-xs text-grey-light-4-v2">tokens</span>
+                    {t.bonus && (
+                      <span className="mt-1 text-[11px] text-primary-v2">{t.bonus}</span>
+                    )}
 
+                    {/* Inclusions */}
+                    <div className="mt-8 space-y-1.5 text-[12px] text-grey-light-3-v2">
+                      <div><span className="text-foreground-v2">{t.images}</span> images</div>
+                      <div><span className="text-foreground-v2">{t.videos}</span> videos</div>
+                    </div>
+
+                    {/* Price + CTA */}
+                    <div className="mt-10 pt-5 border-t border-border-v2/40">
+                      <div className="flex items-baseline gap-2 flex-wrap">
+                        <span className="text-xl font-medium tracking-tight">{t.price}</span>
+                        {t.wasPrice && (
+                          <span className="text-xs text-grey-light-4-v2 line-through">{t.wasPrice}</span>
+                        )}
+                      </div>
                       <div className={cn(
-                        "mt-3 w-full inline-flex items-center justify-center gap-1.5 rounded-full py-2.5 text-xs font-semibold transition-all group-hover:scale-[1.02]",
-                        "bg-foreground-v2 text-background-v2 group-hover:opacity-90"
+                        "mt-4 inline-flex items-center gap-1.5 text-xs font-medium transition-all",
+                        isBest ? "text-primary-v2" : "text-foreground-v2 group-hover:text-primary-v2"
                       )}>
                         Purchase
+                        <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                       </div>
                     </div>
                   </button>
