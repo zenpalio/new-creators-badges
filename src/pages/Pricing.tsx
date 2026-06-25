@@ -162,20 +162,6 @@ const Pricing = () => {
         .hero-glow { animation: glowPulse 6s ease-in-out infinite; }
       `}</style>
 
-      {/* Top bar */}
-      <header className="sticky top-0 z-30 border-b border-border-v2/30 bg-background-v2/70 backdrop-blur-md">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-4">
-          <Link to="/" className="text-sm font-bold tracking-tight">
-            mybabes<span className="text-primary-v2">.ai</span>
-          </Link>
-          <Link
-            to="/"
-            className="text-xs text-grey-light-4-v2 hover:text-foreground-v2 transition-colors"
-          >
-            ← Back to app
-          </Link>
-        </div>
-      </header>
 
       {/* Hero with animated image */}
       <section className="relative overflow-hidden">
