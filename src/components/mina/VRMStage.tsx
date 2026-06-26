@@ -3,6 +3,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader.js";
 import { VRM, VRMLoaderPlugin, VRMUtils, VRMExpressionPresetName } from "@pixiv/three-vrm";
 import {
   VRMAnimationLoaderPlugin,
@@ -10,6 +11,87 @@ import {
   type VRMAnimation,
 } from "@pixiv/three-vrm-animation";
 import { RotateCw, Shirt, RefreshCw, Film, Upload, Square } from "lucide-react";
+
+// Mixamo bone name → VRM humanoid bone name
+const MIXAMO_TO_VRM: Record<string, string> = {
+  mixamorigHips: "hips",
+  mixamorigSpine: "spine",
+  mixamorigSpine1: "chest",
+  mixamorigSpine2: "upperChest",
+  mixamorigNeck: "neck",
+  mixamorigHead: "head",
+  mixamorigLeftShoulder: "leftShoulder",
+  mixamorigLeftArm: "leftUpperArm",
+  mixamorigLeftForeArm: "leftLowerArm",
+  mixamorigLeftHand: "leftHand",
+  mixamorigRightShoulder: "rightShoulder",
+  mixamorigRightArm: "rightUpperArm",
+  mixamorigRightForeArm: "rightLowerArm",
+  mixamorigRightHand: "rightHand",
+  mixamorigLeftUpLeg: "leftUpperLeg",
+  mixamorigLeftLeg: "leftLowerLeg",
+  mixamorigLeftFoot: "leftFoot",
+  mixamorigLeftToeBase: "leftToes",
+  mixamorigRightUpLeg: "rightUpperLeg",
+  mixamorigRightLeg: "rightLowerLeg",
+  mixamorigRightFoot: "rightFoot",
+  mixamorigRightToeBase: "rightToes",
+};
+
+// Retarget a Mixamo FBX clip onto a VRM humanoid rig.
+// Adapted from the official pixiv three-vrm Mixamo example.
+function retargetMixamoClip(asset: THREE.Group, vrm: VRM): THREE.AnimationClip | null {
+  const srcClip = asset.animations?.[0];
+  if (!srcClip) return null;
+  const tracks: THREE.KeyframeTrack[] = [];
+  const restRotInv = new THREE.Quaternion();
+  const parentRestRot = new THREE.Quaternion();
+  const _q = new THREE.Quaternion();
+  const _v = new THREE.Vector3();
+
+  const motionHipsNode = asset.getObjectByName("mixamorigHips");
+  const vrmHipsNode = vrm.humanoid?.getNormalizedBoneNode("hips");
+  if (!motionHipsNode || !vrmHipsNode) return null;
+  const motionHipsHeight = motionHipsNode.position.y;
+  const vrmHipsY = vrmHipsNode.getWorldPosition(_v).y;
+  const vrmRootY = vrm.scene.getWorldPosition(_v).y;
+  const vrmHipsHeight = Math.abs(vrmHipsY - vrmRootY);
+  const hipsScale = motionHipsHeight > 0 ? vrmHipsHeight / motionHipsHeight : 0.01;
+  const isVRM0 = (vrm.meta as any)?.metaVersion === "0";
+
+  for (const track of srcClip.tracks) {
+    const [mixName, propName] = track.name.split(".");
+    const vrmBoneName = MIXAMO_TO_VRM[mixName];
+    if (!vrmBoneName) continue;
+    const vrmNode = vrm.humanoid?.getNormalizedBoneNode(vrmBoneName as any);
+    if (!vrmNode) continue;
+    const mixNode = asset.getObjectByName(mixName);
+    if (!mixNode) continue;
+
+    mixNode.getWorldQuaternion(restRotInv).invert();
+    mixNode.parent?.getWorldQuaternion(parentRestRot);
+
+    if (track instanceof THREE.QuaternionKeyframeTrack) {
+      const values = track.values.slice();
+      for (let i = 0; i < values.length; i += 4) {
+        _q.fromArray(values, i);
+        _q.premultiply(parentRestRot).multiply(restRotInv);
+        if (isVRM0) { _q.x = -_q.x; _q.z = -_q.z; }
+        _q.toArray(values, i);
+      }
+      tracks.push(new THREE.QuaternionKeyframeTrack(`${vrmNode.name}.${propName}`, track.times as any, values as any));
+    } else if (track instanceof THREE.VectorKeyframeTrack) {
+      const values = track.values.slice();
+      for (let i = 0; i < values.length; i += 3) {
+        values[i] *= hipsScale * (isVRM0 ? -1 : 1);
+        values[i + 1] *= hipsScale;
+        values[i + 2] *= hipsScale * (isVRM0 ? -1 : 1);
+      }
+      tracks.push(new THREE.VectorKeyframeTrack(`${vrmNode.name}.${propName}`, track.times as any, values as any));
+    }
+  }
+  return new THREE.AnimationClip("mixamoRetarget", srcClip.duration, tracks);
+}
 
 export type VrmSentiment =
   | "neutral"
@@ -77,6 +159,7 @@ function VRMModel({
   meshVisibility,
   viewPreset,
   vrmaUrl,
+  animKind,
   onAnimEnd,
 }: {
   url: string;
@@ -92,6 +175,7 @@ function VRMModel({
   meshVisibility: Record<string, boolean>;
   viewPreset: ViewPreset;
   vrmaUrl: string | null;
+  animKind: "vrma" | "fbx" | null;
   onAnimEnd: () => void;
 }) {
   const [vrm, setVrm] = useState<VRM | null>(null);
@@ -292,33 +376,48 @@ function VRMModel({
       return;
     }
     let cancelled = false;
-    const loader = new GLTFLoader();
-    loader.register((parser) => new VRMAnimationLoaderPlugin(parser));
-    loader.load(
-      vrmaUrl,
-      (gltf) => {
-        if (cancelled) return;
-        const vrmAnims = (gltf.userData as any).vrmAnimations as VRMAnimation[] | undefined;
-        if (!vrmAnims || vrmAnims.length === 0) {
-          console.warn("[VRMA] No animations in file");
-          onAnimEnd();
-          return;
-        }
-        const clip = createVRMAnimationClip(vrmAnims[0], vrm as any);
-        if (actionRef.current) actionRef.current.fadeOut(0.25);
-        const action = mixer.clipAction(clip);
-        action.reset().fadeIn(0.25).play();
-        actionRef.current = action;
-        setAnimPlaying(true);
-      },
-      undefined,
-      (err) => {
-        console.error("[VRMA] load failed", err);
-        onAnimEnd();
-      },
-    );
+    const playClip = (clip: THREE.AnimationClip) => {
+      if (actionRef.current) actionRef.current.fadeOut(0.25);
+      const action = mixer.clipAction(clip);
+      action.reset().fadeIn(0.25).play();
+      actionRef.current = action;
+      setAnimPlaying(true);
+    };
+    if (animKind === "fbx") {
+      const fbxLoader = new FBXLoader();
+      fbxLoader.load(
+        vrmaUrl,
+        (asset) => {
+          if (cancelled) return;
+          const clip = retargetMixamoClip(asset, vrm);
+          if (!clip) { console.warn("[FBX] retarget failed — no Mixamo rig or animation"); onAnimEnd(); return; }
+          playClip(clip);
+        },
+        undefined,
+        (err) => { console.error("[FBX] load failed", err); onAnimEnd(); },
+      );
+    } else {
+      const loader = new GLTFLoader();
+      loader.register((parser) => new VRMAnimationLoaderPlugin(parser));
+      loader.load(
+        vrmaUrl,
+        (gltf) => {
+          if (cancelled) return;
+          const vrmAnims = (gltf.userData as any).vrmAnimations as VRMAnimation[] | undefined;
+          if (!vrmAnims || vrmAnims.length === 0) {
+            console.warn("[VRMA] No animations in file");
+            onAnimEnd();
+            return;
+          }
+          const clip = createVRMAnimationClip(vrmAnims[0], vrm as any);
+          playClip(clip);
+        },
+        undefined,
+        (err) => { console.error("[VRMA] load failed", err); onAnimEnd(); },
+      );
+    }
     return () => { cancelled = true; };
-  }, [vrm, vrmaUrl, onAnimEnd]);
+  }, [vrm, vrmaUrl, animKind, onAnimEnd]);
 
 
   // Re-frame when preset changes
@@ -453,15 +552,19 @@ const VRMStage = ({
   const [viewPreset, setViewPreset] = useState<ViewPreset>("full");
   const [vrmaUrl, setVrmaUrl] = useState<string | null>(null);
   const [vrmaName, setVrmaName] = useState<string | null>(null);
+  const [animKind, setAnimKind] = useState<"vrma" | "fbx" | null>(null);
   const vrmaFileRef = useRef<HTMLInputElement | null>(null);
   const handleAnimEnd = useCallback(() => {
     setVrmaUrl((prev) => { if (prev) URL.revokeObjectURL(prev); return null; });
     setVrmaName(null);
+    setAnimKind(null);
   }, []);
   const handlePickVrma = (file: File) => {
     if (vrmaUrl) URL.revokeObjectURL(vrmaUrl);
+    const isFbx = /\.fbx$/i.test(file.name);
     setVrmaUrl(URL.createObjectURL(file));
-    setVrmaName(file.name.replace(/\.vrma$/i, ""));
+    setVrmaName(file.name.replace(/\.(vrma|fbx|glb)$/i, ""));
+    setAnimKind(isFbx ? "fbx" : "vrma");
   };
 
 
@@ -518,6 +621,7 @@ const VRMStage = ({
               meshVisibility={meshVis}
               viewPreset={viewPreset}
               vrmaUrl={vrmaUrl}
+              animKind={animKind}
               onAnimEnd={handleAnimEnd}
             />
           </group>
@@ -620,7 +724,7 @@ const VRMStage = ({
         <input
           ref={vrmaFileRef}
           type="file"
-          accept=".vrma,.glb"
+          accept=".vrma,.glb,.fbx"
           className="hidden"
           onChange={(e) => {
             const f = e.target.files?.[0];
@@ -646,9 +750,9 @@ const VRMStage = ({
           <button
             onClick={(e) => { e.stopPropagation(); vrmaFileRef.current?.click(); }}
             className="h-9 px-3 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl text-white/80 hover:bg-white/15 transition flex items-center gap-1.5 text-[11px]"
-            title="Load .vrma animation"
+            title="Load .vrma or Mixamo .fbx"
           >
-            <Upload className="w-3 h-3" /> Load .vrma
+            <Upload className="w-3 h-3" /> Load anim
           </button>
         )}
       </div>
