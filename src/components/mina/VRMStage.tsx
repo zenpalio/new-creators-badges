@@ -232,20 +232,11 @@ function VRMModel({
           center: frameCenter,
           min: new THREE.Vector3(frameCenter.x - frameWidth * 0.5, bodyMinY, frameCenter.z - size.z * 0.5),
           focus: {
-            full: bodyMinY + bodyHeight * 0.42,
-            upper: nChest?.y ?? bodyMinY + bodyHeight * 0.62,
-            face: nHead?.y ?? bodyMinY + bodyHeight * 0.84,
+            full: bodyMinY + bodyHeight * 0.28,
+            upper: bodyMinY + bodyHeight * 0.5,
+            face: bodyMinY + bodyHeight * 0.72,
           },
         };
-        console.debug("[VRM frame]", {
-          rawMinY: rawBox.min.y,
-          rawMaxY: rawBox.max.y,
-          bodyMinY,
-          bodyHeadY,
-          bodyHeight,
-          frameCenterY: frameCenter.y,
-          hipsRestY: v.humanoid?.getNormalizedBoneNode("hips")?.position.y ?? 0,
-        });
         hipsRestYRef.current = v.humanoid?.getNormalizedBoneNode("hips")?.position.y ?? 0;
 
         // Mixer for VRMA clips
