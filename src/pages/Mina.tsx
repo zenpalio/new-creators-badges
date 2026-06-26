@@ -6,6 +6,7 @@ import ChatComposer from "@/components/mina/ChatComposer";
 import GiftDrawer from "@/components/mina/GiftDrawer";
 import CallModal from "@/components/mina/CallModal";
 import SceneControls, { BACKGROUNDS, MODELS, type SceneSettings } from "@/components/mina/SceneControls";
+import StatsPanel from "@/components/mina/StatsPanel";
 
 const Mina = () => {
   const [mouth, setMouth] = useState(0);
@@ -97,6 +98,7 @@ const Mina = () => {
       </div>
 
       <SceneControls open={sceneOpen} onClose={() => setSceneOpen(false)} settings={scene} onChange={setScene} />
+      <StatsPanel stats={state.stats} />
 
       {/* Chat */}
       <div className="absolute left-1/2 -translate-x-1/2 bottom-6 z-20 w-[min(680px,calc(100%-2rem))]">

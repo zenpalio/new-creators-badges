@@ -203,15 +203,22 @@ export type Database = {
       user_companion: {
         Row: {
           affection: number
+          arousal: number
+          calm: number
           chat_xp_today: number
+          comfort: number
           companion_id: string
           created_at: string
           current_outfit: string
+          energy: number
           free_call_seconds_today: number
+          hunger: number
+          joy: number
           last_chat_xp_date: string | null
           last_free_call_date: string | null
           last_visit_at: string | null
           mood: string
+          stats_updated_at: string
           streak_days: number
           unlocked_tiers: string[]
           updated_at: string
@@ -219,15 +226,22 @@ export type Database = {
         }
         Insert: {
           affection?: number
+          arousal?: number
+          calm?: number
           chat_xp_today?: number
+          comfort?: number
           companion_id: string
           created_at?: string
           current_outfit?: string
+          energy?: number
           free_call_seconds_today?: number
+          hunger?: number
+          joy?: number
           last_chat_xp_date?: string | null
           last_free_call_date?: string | null
           last_visit_at?: string | null
           mood?: string
+          stats_updated_at?: string
           streak_days?: number
           unlocked_tiers?: string[]
           updated_at?: string
@@ -235,15 +249,22 @@ export type Database = {
         }
         Update: {
           affection?: number
+          arousal?: number
+          calm?: number
           chat_xp_today?: number
+          comfort?: number
           companion_id?: string
           created_at?: string
           current_outfit?: string
+          energy?: number
           free_call_seconds_today?: number
+          hunger?: number
+          joy?: number
           last_chat_xp_date?: string | null
           last_free_call_date?: string | null
           last_visit_at?: string | null
           mood?: string
+          stats_updated_at?: string
           streak_days?: number
           unlocked_tiers?: string[]
           updated_at?: string
@@ -300,15 +321,22 @@ export type Database = {
         Args: { _companion_slug: string }
         Returns: {
           affection: number
+          arousal: number
+          calm: number
           chat_xp_today: number
+          comfort: number
           companion_id: string
           created_at: string
           current_outfit: string
+          energy: number
           free_call_seconds_today: number
+          hunger: number
+          joy: number
           last_chat_xp_date: string | null
           last_free_call_date: string | null
           last_visit_at: string | null
           mood: string
+          stats_updated_at: string
           streak_days: number
           unlocked_tiers: string[]
           updated_at: string
@@ -334,19 +362,66 @@ export type Database = {
           tokens_balance: number
         }[]
       }
-      purchase_gift: {
-        Args: { _companion_slug: string; _gift_id: string }
+      nudge_companion_stats: {
+        Args: {
+          _arousal?: number
+          _calm?: number
+          _comfort?: number
+          _companion_slug: string
+          _energy?: number
+          _hunger?: number
+          _joy?: number
+        }
         Returns: {
           affection: number
+          arousal: number
+          calm: number
           chat_xp_today: number
+          comfort: number
           companion_id: string
           created_at: string
           current_outfit: string
+          energy: number
           free_call_seconds_today: number
+          hunger: number
+          joy: number
           last_chat_xp_date: string | null
           last_free_call_date: string | null
           last_visit_at: string | null
           mood: string
+          stats_updated_at: string
+          streak_days: number
+          unlocked_tiers: string[]
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "user_companion"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      purchase_gift: {
+        Args: { _companion_slug: string; _gift_id: string }
+        Returns: {
+          affection: number
+          arousal: number
+          calm: number
+          chat_xp_today: number
+          comfort: number
+          companion_id: string
+          created_at: string
+          current_outfit: string
+          energy: number
+          free_call_seconds_today: number
+          hunger: number
+          joy: number
+          last_chat_xp_date: string | null
+          last_free_call_date: string | null
+          last_visit_at: string | null
+          mood: string
+          stats_updated_at: string
           streak_days: number
           unlocked_tiers: string[]
           updated_at: string
@@ -363,15 +438,54 @@ export type Database = {
         Args: { _companion_slug: string }
         Returns: {
           affection: number
+          arousal: number
+          calm: number
           chat_xp_today: number
+          comfort: number
           companion_id: string
           created_at: string
           current_outfit: string
+          energy: number
           free_call_seconds_today: number
+          hunger: number
+          joy: number
           last_chat_xp_date: string | null
           last_free_call_date: string | null
           last_visit_at: string | null
           mood: string
+          stats_updated_at: string
+          streak_days: number
+          unlocked_tiers: string[]
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "user_companion"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      tick_companion_stats: {
+        Args: { _companion_slug: string }
+        Returns: {
+          affection: number
+          arousal: number
+          calm: number
+          chat_xp_today: number
+          comfort: number
+          companion_id: string
+          created_at: string
+          current_outfit: string
+          energy: number
+          free_call_seconds_today: number
+          hunger: number
+          joy: number
+          last_chat_xp_date: string | null
+          last_free_call_date: string | null
+          last_visit_at: string | null
+          mood: string
+          stats_updated_at: string
           streak_days: number
           unlocked_tiers: string[]
           updated_at: string
