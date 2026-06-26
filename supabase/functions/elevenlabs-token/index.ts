@@ -20,9 +20,8 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_ANON_KEY")!,
       { global: { headers: { Authorization: authHeader } } },
     );
-    const { data: userRes } = await supabase.auth.getUser();
-    const user = userRes?.user;
-    if (!user) return new Response(JSON.stringify({ error: "unauthenticated" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    const { data: userRes } = await supabase.auth.getUser().catch(() => ({ data: { user: null } } as any));
+    const user = userRes?.user ?? null;
 
     const { slug = "mina", intimate = false } = await req.json().catch(() => ({}));
 
@@ -33,14 +32,16 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: "agent_not_configured", message: "Mina's ElevenLabs agent hasn't been created yet. Create one in the ElevenLabs dashboard and save the agent_id to the companions table." }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    const { data: bond } = await supabase
-      .from("user_companion")
-      .select("*")
-      .eq("user_id", user.id)
-      .eq("companion_id", comp.id)
-      .maybeSingle();
+    const { data: bond } = user
+      ? await supabase
+          .from("user_companion")
+          .select("*")
+          .eq("user_id", user.id)
+          .eq("companion_id", comp.id)
+          .maybeSingle()
+      : { data: null as any };
 
-    const affection = bond?.affection ?? 0;
+    const affection = bond?.affection ?? (user ? 0 : 45);
     const tier = affection >= 70 ? "obsessed" : affection >= 40 ? "lover" : affection >= 20 ? "crush" : "stranger";
 
     // Mint WebRTC token
