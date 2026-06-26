@@ -22,6 +22,10 @@ import lookingAroundAnim from "@/assets/looking-around.fbx.asset.json";
 import relievedSighAnim from "@/assets/relieved-sigh.fbx.asset.json";
 import shoulderRubAnim from "@/assets/shoulder-rubbing.fbx.asset.json";
 import blowKissAnim from "@/assets/blow-a-kiss.fbx.asset.json";
+import happyAnim from "@/assets/happy.fbx.asset.json";
+import excitedAnim from "@/assets/excited.fbx.asset.json";
+import angryAnim from "@/assets/angry.fbx.asset.json";
+
 
 const DEFAULT_ANIM = { url: standingPose.url, name: "Standing", kind: "fbx" as const };
 
