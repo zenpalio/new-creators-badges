@@ -262,6 +262,57 @@ const Live2DStage = ({
         </div>
       )}
 
+      {debug && status === "ready" && (
+        <div className="absolute top-3 left-3 z-20 max-w-[260px] rounded-xl bg-black/55 backdrop-blur border border-white/10 p-3 text-xs text-white/90 space-y-2">
+          <div className="font-semibold text-white/70 uppercase tracking-wider text-[10px]">Animations</div>
+          {Object.keys(motions).length === 0 && (
+            <div className="text-white/50">No motion groups</div>
+          )}
+          {Object.entries(motions).map(([group, count]) => (
+            <div key={group} className="space-y-1">
+              <div className="text-white/60">{group} ({count})</div>
+              <div className="flex flex-wrap gap-1">
+                {Array.from({ length: count }).map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => {
+                      try { modelRef.current?.motion(group, i, 3); } catch {}
+                    }}
+                    className="px-2 py-1 rounded-md bg-white/10 hover:bg-white/20 transition"
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+          {expressions.length > 0 && (
+            <div className="space-y-1 pt-1 border-t border-white/10">
+              <div className="text-white/60">Expression</div>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => {
+                    const next = (expIdx - 1 + expressions.length) % expressions.length;
+                    setExpIdx(next);
+                    try { modelRef.current?.expression(expressions[next]); } catch {}
+                  }}
+                  className="px-2 py-1 rounded-md bg-white/10 hover:bg-white/20 transition"
+                >‹</button>
+                <span className="flex-1 text-center text-white/80">{expressions[expIdx]}</span>
+                <button
+                  onClick={() => {
+                    const next = (expIdx + 1) % expressions.length;
+                    setExpIdx(next);
+                    try { modelRef.current?.expression(expressions[next]); } catch {}
+                  }}
+                  className="px-2 py-1 rounded-md bg-white/10 hover:bg-white/20 transition"
+                >›</button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       <style>{`
         @keyframes minaIdle {
           0%   { translate: 0 0; }
