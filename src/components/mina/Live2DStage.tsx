@@ -39,6 +39,7 @@ const loadCubismCore = () => {
 
 const Live2DStage = ({
   mouthOpen = 0,
+  speaking = false,
   rotation = 0,
   scale = 1,
   mirror = false,
