@@ -6,12 +6,15 @@ import bgBeach from "@/assets/bg-beach.jpg";
 import bgCity from "@/assets/bg-city.jpg";
 import bgCafe from "@/assets/bg-cafe.jpg";
 
+export type RendererKind = "live2d" | "vrm";
+
 export interface SceneSettings {
   rotation: number;
   scale: number;
   mirror: boolean;
   backgroundId: string;
   modelId: string;
+  renderer: RendererKind;
 }
 
 export interface ModelOption {
@@ -139,6 +142,26 @@ const SceneControls = ({ open, onClose, settings, onChange }: Props) => {
         </button>
       </div>
 
+      {/* Renderer */}
+      <div className="mb-4">
+        <label className="text-xs text-white/60 mb-2 block">Renderer</label>
+        <div className="grid grid-cols-2 gap-2">
+          {(["live2d", "vrm"] as const).map((r) => {
+            const active = settings.renderer === r;
+            return (
+              <button
+                key={r}
+                onClick={() => update({ renderer: r })}
+                className={`h-9 rounded-lg border border-white/10 text-xs transition ${
+                  active ? "bg-white text-[hsl(220_25%_10%)]" : "bg-white/[0.06] hover:bg-white/[0.12] text-white/80"
+                }`}
+              >
+                {r === "live2d" ? "Live2D (2D)" : "VRM (3D)"}
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
       {/* Backgrounds */}
       <div>
