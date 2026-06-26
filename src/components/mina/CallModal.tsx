@@ -122,8 +122,12 @@ const CallModalInner = ({ open, onClose, onMouthLevel, onTick }: Props) => {
           <X className="w-3.5 h-3.5" />
         </button>
 
-        <div className="w-24 h-24 mx-auto rounded-full bg-white/[0.06] backdrop-blur-xl border border-white/15 flex items-center justify-center mb-5 relative">
-          <span className="text-4xl">💋</span>
+        <div className="w-24 h-24 mx-auto rounded-full overflow-hidden bg-white/[0.06] backdrop-blur-xl border border-white/15 mb-5 relative">
+          <img
+            src={minaCharacter}
+            alt="Mina"
+            className="w-full h-full object-cover"
+          />
           {status === "live" && (
             <>
               <span className="absolute inset-0 rounded-full ring-2 ring-white/40 animate-ping" />
@@ -131,6 +135,7 @@ const CallModalInner = ({ open, onClose, onMouthLevel, onTick }: Props) => {
             </>
           )}
         </div>
+
 
         <h3 className="text-lg font-medium text-white/95">Mina</h3>
         <p className="text-xs text-white/50 mb-5">
