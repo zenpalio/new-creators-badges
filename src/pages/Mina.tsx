@@ -30,6 +30,7 @@ const Mina = () => {
   // Reaction FX
   const [fxTrigger, setFxTrigger] = useState(0);
   const [fxSentiment, setFxSentiment] = useState<Sentiment>("neutral");
+  const [fxDeltas, setFxDeltas] = useState<Reaction["deltas"]>({});
   const [affectionPulse, setAffectionPulse] = useState<"up" | "down" | null>(null);
 
   const handleReaction = (r: Reaction) => {
@@ -45,6 +46,7 @@ const Mina = () => {
       setAffectionPulse(d.affection > 0 ? "up" : "down");
       window.setTimeout(() => setAffectionPulse(null), 900);
     }
+    setFxDeltas(d);
     setFxSentiment(r.sentiment);
     setFxTrigger((n) => n + 1);
   };
@@ -79,7 +81,7 @@ const Mina = () => {
       />
 
       {/* Reaction effects over character */}
-      <ReactionFX trigger={fxTrigger} sentiment={fxSentiment} />
+      <ReactionFX trigger={fxTrigger} sentiment={fxSentiment} deltas={fxDeltas} />
 
       {/* Top-right glass control cluster */}
       <div className="absolute top-5 right-5 z-30 flex items-center gap-2">
