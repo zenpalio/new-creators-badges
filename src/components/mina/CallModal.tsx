@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Phone, PhoneOff, X } from "lucide-react";
-import { useConversation } from "@elevenlabs/react";
+import { useConversation, ConversationProvider } from "@elevenlabs/react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
