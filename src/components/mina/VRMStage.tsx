@@ -1,10 +1,20 @@
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { VRM, VRMLoaderPlugin, VRMUtils, VRMExpressionPresetName } from "@pixiv/three-vrm";
 import { RotateCw, Shirt, RefreshCw } from "lucide-react";
+
+export type VrmSentiment =
+  | "neutral"
+  | "love"
+  | "happy"
+  | "playful"
+  | "sad"
+  | "angry"
+  | "surprised"
+  | "intimate";
 
 interface Props {
   mouthOpen?: number;
@@ -13,6 +23,10 @@ interface Props {
   scale?: number;
   mirror?: boolean;
   modelUrl: string;
+  /** Drives reactive expressions (smile / pout / blush etc.) */
+  sentiment?: VrmSentiment;
+  /** Increment to trigger a one-shot reaction (head turn + expression pop) */
+  reactTrigger?: number;
 }
 
 interface MeshInfo {
@@ -20,11 +34,25 @@ interface MeshInfo {
   visible: boolean;
 }
 
+const EXPR_MAP: Record<VrmSentiment, Partial<Record<string, number>>> = {
+  neutral:   { happy: 0.05, angry: 0, sad: 0, surprised: 0, relaxed: 0.15 },
+  love:      { happy: 0.85, relaxed: 0.5, angry: 0, sad: 0, surprised: 0 },
+  happy:     { happy: 0.7, relaxed: 0.3, angry: 0, sad: 0 },
+  playful:   { happy: 0.55, surprised: 0.2, relaxed: 0.2, angry: 0, sad: 0 },
+  sad:       { sad: 0.7, relaxed: 0.1, happy: 0, angry: 0, surprised: 0 },
+  angry:     { angry: 0.7, sad: 0.1, happy: 0, surprised: 0, relaxed: 0 },
+  surprised: { surprised: 0.8, happy: 0.2, angry: 0, sad: 0, relaxed: 0 },
+  intimate:  { happy: 0.4, relaxed: 0.6, surprised: 0.15, angry: 0, sad: 0 },
+};
+
 function VRMModel({
   url,
   mouthRef,
   speaking,
   spin,
+  sentiment,
+  reactTrigger,
+  pointerRef,
   onMeshes,
   meshVisibility,
 }: {
@@ -32,12 +60,24 @@ function VRMModel({
   mouthRef: React.MutableRefObject<number>;
   speaking: boolean;
   spin: number;
+  sentiment: VrmSentiment;
+  reactTrigger: number;
+  pointerRef: React.MutableRefObject<{ x: number; y: number; active: boolean }>;
   onMeshes: (m: MeshInfo[]) => void;
   meshVisibility: Record<string, boolean>;
 }) {
   const [vrm, setVrm] = useState<VRM | null>(null);
   const blinkRef = useRef({ next: 2 + Math.random() * 3, t: 0, closing: 0 });
-  const { camera } = useThree();
+  const tiltRef = useRef({ next: 5 + Math.random() * 6, t: 0, amount: 0, dir: 1 });
+  const exprRef = useRef<Record<string, number>>({});
+  const reactRef = useRef({ last: 0, intensity: 0 });
+  const lookTargetRef = useRef(new THREE.Object3D());
+  const { camera, scene } = useThree();
+
+  useEffect(() => {
+    scene.add(lookTargetRef.current);
+    return () => { scene.remove(lookTargetRef.current); };
+  }, [scene]);
 
   useEffect(() => {
     let cancelled = false;
@@ -69,12 +109,9 @@ function VRMModel({
       undefined,
       (err) => console.error("[VRM] load failed", err),
     );
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [url, onMeshes]);
 
-  // Apply mesh visibility toggles
   useEffect(() => {
     if (!vrm) return;
     vrm.scene.traverse((obj: any) => {
@@ -85,60 +122,136 @@ function VRMModel({
     });
   }, [vrm, meshVisibility]);
 
+  // One-shot reaction on trigger change
+  useEffect(() => {
+    if (reactTrigger > reactRef.current.last) {
+      reactRef.current.last = reactTrigger;
+      reactRef.current.intensity = 1;
+    }
+  }, [reactTrigger]);
+
   useFrame((_, dt) => {
     if (!vrm) return;
     vrm.update(dt);
 
-    // Spin (turn-around) target — smoothly approach
+    // Smooth turn-around target
     const target = Math.PI + spin;
     vrm.scene.rotation.y += (target - vrm.scene.rotation.y) * Math.min(1, dt * 6);
 
+    const t = performance.now() / 1000;
     const em = vrm.expressionManager;
-    if (em) {
-      const m = Math.max(0, Math.min(1, mouthRef.current));
-      em.setValue(VRMExpressionPresetName.Aa, m);
 
+    // Lip-sync + blink + expressions
+    if (em) {
+      em.setValue(VRMExpressionPresetName.Aa, Math.max(0, Math.min(1, mouthRef.current)));
+
+      // Blink
       const b = blinkRef.current;
       b.t += dt;
       if (b.closing > 0) {
         b.closing -= dt * 6;
-        const val = Math.max(0, Math.sin(Math.max(0, b.closing) * Math.PI));
-        em.setValue(VRMExpressionPresetName.Blink, val);
+        em.setValue(VRMExpressionPresetName.Blink, Math.max(0, Math.sin(Math.max(0, b.closing) * Math.PI)));
       } else {
         em.setValue(VRMExpressionPresetName.Blink, 0);
-        if (b.t > b.next) {
-          b.closing = 1;
-          b.t = 0;
-          b.next = 2.5 + Math.random() * 3.5;
-        }
+        if (b.t > b.next) { b.closing = 1; b.t = 0; b.next = 2.5 + Math.random() * 3.5; }
+      }
+
+      // Reactive expression — smoothly lerp toward sentiment targets
+      const targets = EXPR_MAP[sentiment] ?? {};
+      const reactBoost = reactRef.current.intensity;
+      reactRef.current.intensity = Math.max(0, reactBoost - dt * 1.4);
+      const keys = ["happy", "angry", "sad", "surprised", "relaxed"] as const;
+      for (const k of keys) {
+        const goal = (targets[k] ?? 0) + (k === "happy" || k === "surprised" ? reactBoost * 0.4 : 0);
+        const cur = exprRef.current[k] ?? 0;
+        const next = cur + (goal - cur) * Math.min(1, dt * 2.5);
+        exprRef.current[k] = next;
+        try { em.setValue(k, next); } catch {}
       }
     }
 
-    if (vrm.lookAt) vrm.lookAt.target = camera;
+    // Pointer-driven look target (fallback to camera)
+    const p = pointerRef.current;
+    if (p.active) {
+      // Convert NDC into a world point ~2m in front of camera
+      const ndc = new THREE.Vector3(p.x, p.y, 0.5).unproject(camera);
+      lookTargetRef.current.position.copy(ndc);
+      if (vrm.lookAt) vrm.lookAt.target = lookTargetRef.current;
+    } else if (vrm.lookAt) {
+      vrm.lookAt.target = camera;
+    }
 
-    const t = performance.now() / 1000;
-    const head = vrm.humanoid?.getNormalizedBoneNode("head");
-    const chest = vrm.humanoid?.getNormalizedBoneNode("chest") ?? vrm.humanoid?.getNormalizedBoneNode("spine");
+    // Procedural idle: breathing on spine, weight shift on hips, arm sway,
+    // occasional head tilt + glance, "talking" head bob while speaking
+    const hum = vrm.humanoid;
+    const head = hum?.getNormalizedBoneNode("head");
+    const neck = hum?.getNormalizedBoneNode("neck");
+    const chest = hum?.getNormalizedBoneNode("chest") ?? hum?.getNormalizedBoneNode("spine");
+    const spine = hum?.getNormalizedBoneNode("spine");
+    const hips = hum?.getNormalizedBoneNode("hips");
+    const lUpper = hum?.getNormalizedBoneNode("leftUpperArm");
+    const rUpper = hum?.getNormalizedBoneNode("rightUpperArm");
+    const lLower = hum?.getNormalizedBoneNode("leftLowerArm");
+    const rLower = hum?.getNormalizedBoneNode("rightLowerArm");
+
+    // Head tilt scheduler
+    const tilt = tiltRef.current;
+    tilt.t += dt;
+    if (tilt.t > tilt.next) {
+      tilt.amount = 0.12 + Math.random() * 0.1;
+      tilt.dir = Math.random() < 0.5 ? -1 : 1;
+      tilt.next = tilt.t + 6 + Math.random() * 6;
+    }
+    const tiltDecay = Math.max(0, 1 - (tilt.t % (tilt.next || 1)) / 2.5);
+    const tiltZ = tilt.amount * tilt.dir * tiltDecay;
+
+    const talk = speaking ? 1 : 0;
     if (head) {
-      head.rotation.x = Math.sin(t * 1.2) * 0.03 + (speaking ? Math.sin(t * 6) * 0.02 : 0);
-      head.rotation.y = Math.sin(t * 0.8) * 0.05;
+      head.rotation.x = Math.sin(t * 1.2) * 0.03 + talk * Math.sin(t * 7) * 0.04;
+      head.rotation.y = Math.sin(t * 0.8) * 0.05 + talk * Math.sin(t * 3.3) * 0.05;
+      head.rotation.z = tiltZ + reactRef.current.intensity * 0.1 * Math.sin(t * 9);
+    }
+    if (neck) {
+      neck.rotation.x = Math.sin(t * 1.2 + 0.3) * 0.015;
     }
     if (chest) {
-      chest.rotation.x = Math.sin(t * 1.6) * 0.015;
+      chest.rotation.x = Math.sin(t * 1.8) * 0.02 + talk * Math.sin(t * 6) * 0.01;
     }
+    if (spine) {
+      spine.rotation.x = Math.sin(t * 1.8 + 0.4) * 0.012;
+    }
+    if (hips) {
+      hips.rotation.y = Math.sin(t * 0.45) * 0.04; // weight shift
+      hips.position.y = Math.sin(t * 1.8) * 0.005; // subtle breathing rise
+    }
+    if (lUpper) lUpper.rotation.z = Math.sin(t * 0.9) * 0.04 + 0.02;
+    if (rUpper) rUpper.rotation.z = -Math.sin(t * 0.9 + 0.4) * 0.04 - 0.02;
+    if (lLower) lLower.rotation.y = Math.sin(t * 1.1) * 0.05;
+    if (rLower) rLower.rotation.y = -Math.sin(t * 1.1 + 0.3) * 0.05;
   });
 
   if (!vrm) return null;
   return <primitive object={vrm.scene} />;
 }
 
-const VRMStage = ({ mouthOpen = 0, speaking = false, rotation = 0, scale = 1, mirror = false, modelUrl }: Props) => {
+const VRMStage = ({
+  mouthOpen = 0,
+  speaking = false,
+  rotation = 0,
+  scale = 1,
+  mirror = false,
+  modelUrl,
+  sentiment = "neutral",
+  reactTrigger = 0,
+}: Props) => {
   const mouthRef = useRef(0);
-  useEffect(() => {
-    mouthRef.current = mouthOpen;
-  }, [mouthOpen]);
+  useEffect(() => { mouthRef.current = mouthOpen; }, [mouthOpen]);
 
+  const pointerRef = useRef({ x: 0, y: 0, active: false });
   const [spin, setSpin] = useState(0);
+  const [localReact, setLocalReact] = useState(0);
+  const reactCombined = reactTrigger + localReact;
+
   const [meshes, setMeshes] = useState<MeshInfo[]>([]);
   const [meshVis, setMeshVis] = useState<Record<string, boolean>>({});
   const [outfitOpen, setOutfitOpen] = useState(false);
@@ -151,19 +264,26 @@ const VRMStage = ({ mouthOpen = 0, speaking = false, rotation = 0, scale = 1, mi
     [rotation, scale, mirror],
   );
 
-  const toggleMesh = (name: string) => {
+  const toggleMesh = (name: string) =>
     setMeshVis((prev) => ({ ...prev, [name]: prev[name] === undefined ? false : !prev[name] }));
-  };
   const resetMeshes = () => setMeshVis({});
 
-  // Heuristic: hide "essential" meshes (body/face/hair) from the outfit list
-  const outfitMeshes = useMemo(
-    () => meshes.filter((m) => !/^$/.test(m.name)),
-    [meshes],
-  );
+  const handlePointerMove = useCallback((e: React.PointerEvent) => {
+    const r = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    pointerRef.current.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+    pointerRef.current.y = -(((e.clientY - r.top) / r.height) * 2 - 1);
+    pointerRef.current.active = true;
+  }, []);
+  const handlePointerLeave = useCallback(() => { pointerRef.current.active = false; }, []);
+  const handleStageClick = useCallback(() => { setLocalReact((n) => n + 1); }, []);
 
   return (
-    <div className="absolute inset-0">
+    <div
+      className="absolute inset-0"
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+      onClick={handleStageClick}
+    >
       <Canvas
         camera={{ position: [0, 1.4, 1.8], fov: 30 }}
         gl={{ alpha: true, antialias: true, preserveDrawingBuffer: false }}
@@ -179,6 +299,9 @@ const VRMStage = ({ mouthOpen = 0, speaking = false, rotation = 0, scale = 1, mi
               mouthRef={mouthRef}
               speaking={speaking}
               spin={spin}
+              sentiment={sentiment}
+              reactTrigger={reactCombined}
+              pointerRef={pointerRef}
               onMeshes={setMeshes}
               meshVisibility={meshVis}
             />
@@ -197,17 +320,16 @@ const VRMStage = ({ mouthOpen = 0, speaking = false, rotation = 0, scale = 1, mi
         />
       </Canvas>
 
-      {/* Floating controls overlay */}
       <div className="absolute left-3 sm:left-5 top-32 z-20 flex flex-col items-start gap-2 pointer-events-none">
         <button
-          onClick={() => setSpin((s) => s + Math.PI)}
+          onClick={(e) => { e.stopPropagation(); setSpin((s) => s + Math.PI); }}
           className="pointer-events-auto h-9 w-9 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4)] text-white/80 hover:bg-white/15 transition flex items-center justify-center"
           title="Turn around"
         >
           <RotateCw className="w-4 h-4" />
         </button>
         <button
-          onClick={() => setOutfitOpen((v) => !v)}
+          onClick={(e) => { e.stopPropagation(); setOutfitOpen((v) => !v); }}
           className={`pointer-events-auto h-9 w-9 rounded-full border border-white/15 backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4)] transition flex items-center justify-center ${
             outfitOpen ? "bg-white text-[hsl(220_25%_10%)]" : "bg-white/[0.08] text-white/80 hover:bg-white/15"
           }`}
@@ -217,19 +339,18 @@ const VRMStage = ({ mouthOpen = 0, speaking = false, rotation = 0, scale = 1, mi
         </button>
 
         {outfitOpen && (
-          <div className="pointer-events-auto w-[230px] max-h-[55vh] overflow-y-auto rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.45)] p-3 text-xs text-white/90 space-y-1.5 ring-1 ring-inset ring-white/10 animate-fade-in">
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="pointer-events-auto w-[230px] max-h-[55vh] overflow-y-auto rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.45)] p-3 text-xs text-white/90 space-y-1.5 ring-1 ring-inset ring-white/10 animate-fade-in"
+          >
             <div className="flex items-center justify-between mb-1">
               <span className="font-semibold text-white/70 uppercase tracking-wider text-[10px]">Outfit pieces</span>
-              <button
-                onClick={resetMeshes}
-                className="text-white/60 hover:text-white flex items-center gap-1 text-[10px]"
-                title="Reset all"
-              >
+              <button onClick={resetMeshes} className="text-white/60 hover:text-white flex items-center gap-1 text-[10px]">
                 <RefreshCw className="w-3 h-3" /> reset
               </button>
             </div>
-            {outfitMeshes.length === 0 && <div className="text-white/50">Loading…</div>}
-            {outfitMeshes.map((m) => {
+            {meshes.length === 0 && <div className="text-white/50">Loading…</div>}
+            {meshes.map((m) => {
               const on = meshVis[m.name] !== false;
               return (
                 <button

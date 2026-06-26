@@ -81,6 +81,8 @@ const Mina = () => {
           scale={scene.scale * 1.0}
           mirror={scene.mirror}
           modelUrl={minaVrm.url}
+          sentiment={fxSentiment as any}
+          reactTrigger={fxTrigger}
         />
       ) : (
         <Live2DStage
