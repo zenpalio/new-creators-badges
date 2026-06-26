@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Phone, Sparkles, Settings2 } from "lucide-react";
+import { Phone, Drama, Settings2 } from "lucide-react";
 import { useCompanion, tierFromAffection, type MoodStats } from "@/hooks/useCompanion";
 import Live2DStage from "@/components/mina/Live2DStage";
 import VRMStage from "@/components/mina/VRMStage";
@@ -142,7 +142,7 @@ const Mina = () => {
           className="h-10 sm:h-11 rounded-2xl bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] text-white/90 hover:bg-white/[0.12] transition flex items-center justify-center gap-2 text-[12px] font-semibold"
           title="Activities, roleplay & gifts"
         >
-          <Sparkles className="w-4 h-4" />
+          <Drama className="w-4 h-4" />
           Spend time together
         </button>
       </div>
