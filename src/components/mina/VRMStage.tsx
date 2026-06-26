@@ -322,9 +322,11 @@ function VRMModel({
           center: frameCenter,
           min: new THREE.Vector3(frameCenter.x - frameWidth * 0.5, bodyMinY, frameCenter.z - size.z * 0.5),
           focus: {
-            full: bodyMinY + bodyHeight * 0.28,
-            upper: bodyMinY + bodyHeight * 0.5,
-            face: bodyMinY + bodyHeight * 0.72,
+            full: bodyMinY + bodyHeight * 0.5,
+            // Upper body: chest-ish, midway between hips and head
+            upper: (nHips?.y ?? bodyMinY + bodyHeight * 0.55) * 0.4 + bodyHeadY * 0.6,
+            // Face: actual head bone y, nudged slightly up to center on the face, not the neck
+            face: bodyHeadY + (topOfHeadY - bodyHeadY) * 0.35,
           },
         };
         hipsRestYRef.current = v.humanoid?.getNormalizedBoneNode("hips")?.position.y ?? 0;
