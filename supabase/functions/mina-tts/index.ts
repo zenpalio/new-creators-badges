@@ -1,6 +1,8 @@
 // deno-lint-ignore-file no-explicit-any
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 
+const DEFAULT_VOICE_ID = "TmK7x2BFDD7TOVlR69J2";
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
@@ -13,30 +15,37 @@ Deno.serve(async (req) => {
       });
     }
 
-    const apiKey = Deno.env.get("LOVABLE_API_KEY");
+    const apiKey = Deno.env.get("ELEVENLABS_API_KEY");
     if (!apiKey) {
-      return new Response(JSON.stringify({ error: "LOVABLE_API_KEY missing" }), {
+      return new Response(JSON.stringify({ error: "ELEVENLABS_API_KEY missing" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const upstream = await fetch("https://ai.gateway.lovable.dev/v1/audio/speech", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
+    const voiceId = voice || DEFAULT_VOICE_ID;
+
+    const upstream = await fetch(
+      `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`,
+      {
+        method: "POST",
+        headers: {
+          "xi-api-key": apiKey,
+          "Content-Type": "application/json",
+          Accept: "audio/mpeg",
+        },
+        body: JSON.stringify({
+          text: text.slice(0, 1200),
+          model_id: "eleven_turbo_v2_5",
+          voice_settings: {
+            stability: 0.4,
+            similarity_boost: 0.85,
+            style: 0.55,
+            use_speaker_boost: true,
+          },
+        }),
       },
-      body: JSON.stringify({
-        model: "openai/gpt-4o-mini-tts",
-        input: text.slice(0, 1200),
-        voice: voice || "shimmer",
-        response_format: "mp3",
-        speed: 1.1,
-        instructions:
-          "Perform as a Japanese-style anime girl (genki idol / VTuber energy). High-pitched, light, airy voice with bright cheerful sparkle and an upward sing-song lilt at the end of phrases. Add small kawaii inflections, soft giggles, and an excited, playful, slightly flirty tone. Speak briskly and expressively, like dubbing a manga/anime heroine — never deep, monotone, or mature.",
-      }),
-    });
+    );
 
     if (!upstream.ok) {
       const msg = await upstream.text().catch(() => "");
