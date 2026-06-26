@@ -81,7 +81,7 @@ const Mina = () => {
       />
 
       {/* Reaction effects over character */}
-      <ReactionFX trigger={fxTrigger} sentiment={fxSentiment} />
+      <ReactionFX trigger={fxTrigger} sentiment={fxSentiment} deltas={fxDeltas} />
 
       {/* Top-right glass control cluster */}
       <div className="absolute top-5 right-5 z-30 flex items-center gap-2">
