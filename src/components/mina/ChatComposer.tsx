@@ -126,11 +126,11 @@ const ChatComposer = ({ onAfterReply, onMouthLevel, onSpeakingChange, onReaction
     }
   };
 
-  const send = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const m = text.trim();
+  const send = async (e?: React.FormEvent, override?: string) => {
+    e?.preventDefault();
+    const m = (override ?? text).trim();
     if (!m || sending) return;
-    setText("");
+    if (!override) setText("");
     setMsgs((p) => [...p, { role: "user", content: m }]);
     setSending(true);
     let reply = "...";
