@@ -11,7 +11,7 @@ interface Props {
   onTick: () => void;
 }
 
-const CallModal = ({ open, onClose, onMouthLevel, onTick }: Props) => {
+const CallModalInner = ({ open, onClose, onMouthLevel, onTick }: Props) => {
   const [status, setStatus] = useState<"idle" | "connecting" | "live" | "ended">("idle");
   const [seconds, setSeconds] = useState(0);
   const [freeLeft, setFreeLeft] = useState<number | null>(null);
