@@ -73,15 +73,26 @@ const Mina = () => {
       )}
 
       {/* Character */}
-      <Live2DStage
-        mouthOpen={mouth}
-        speaking={speaking}
-        rotation={scene.rotation}
-        scale={scene.scale}
-        mirror={scene.mirror}
-        modelUrl={model.url}
-        debug
-      />
+      {scene.renderer === "vrm" ? (
+        <VRMStage
+          mouthOpen={mouth}
+          speaking={speaking}
+          rotation={scene.rotation}
+          scale={scene.scale * 1.0}
+          mirror={scene.mirror}
+          modelUrl={minaVrm.url}
+        />
+      ) : (
+        <Live2DStage
+          mouthOpen={mouth}
+          speaking={speaking}
+          rotation={scene.rotation}
+          scale={scene.scale}
+          mirror={scene.mirror}
+          modelUrl={model.url}
+          debug
+        />
+      )}
 
       {/* Reaction effects over character */}
       <ReactionFX trigger={fxTrigger} sentiment={fxSentiment} deltas={fxDeltas} />
