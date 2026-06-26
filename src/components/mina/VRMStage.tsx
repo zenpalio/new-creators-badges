@@ -747,77 +747,7 @@ const VRMStage = ({
       )}
 
 
-      <div className="absolute left-3 sm:left-5 top-32 z-20 flex flex-col items-start gap-2 pointer-events-none">
-        <button
-          onClick={(e) => { e.stopPropagation(); setSpin((s) => s + Math.PI); }}
-          className="pointer-events-auto h-9 w-9 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4)] text-white/80 hover:bg-white/15 transition flex items-center justify-center"
-          title="Turn around"
-        >
-          <RotateCw className="w-4 h-4" />
-        </button>
-        <button
-          onClick={(e) => { e.stopPropagation(); setOutfitOpen((v) => !v); }}
-          className={`pointer-events-auto h-9 w-9 rounded-full border border-white/15 backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4)] transition flex items-center justify-center ${
-            outfitOpen ? "bg-white text-[hsl(220_25%_10%)]" : "bg-white/[0.08] text-white/80 hover:bg-white/15"
-          }`}
-          title="Outfit pieces"
-        >
-          <Shirt className="w-4 h-4" />
-        </button>
 
-        {outfitOpen && (
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="pointer-events-auto w-[230px] max-h-[55vh] overflow-y-auto rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.45)] p-3 text-xs text-white/90 space-y-1.5 ring-1 ring-inset ring-white/10 animate-fade-in"
-          >
-            <div className="flex items-center justify-between mb-1">
-              <span className="font-semibold text-white/70 uppercase tracking-wider text-[10px]">Outfit pieces</span>
-              <button onClick={resetMeshes} className="text-white/60 hover:text-white flex items-center gap-1 text-[10px]">
-                <RefreshCw className="w-3 h-3" /> reset
-              </button>
-            </div>
-            {meshes.length === 0 && <div className="text-white/50">Loading…</div>}
-            {meshes.map((m) => {
-              const on = meshVis[m.name] !== false;
-              return (
-                <button
-                  key={m.name}
-                  onClick={() => toggleMesh(m.name)}
-                  className={`w-full text-left px-2 py-1.5 rounded-md border border-white/10 transition ${
-                    on ? "bg-white/10 hover:bg-white/20 text-white" : "bg-white/[0.02] text-white/40 line-through"
-                  }`}
-                  title={m.name}
-                >
-                  <span className="truncate block">{m.name}</span>
-                </button>
-              );
-            })}
-          </div>
-        )}
-      </div>
-
-      {/* View preset switcher */}
-      <div className="absolute right-3 sm:right-5 top-32 z-20 pointer-events-auto flex flex-col gap-1.5 rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4)] p-1.5">
-        {(["full", "upper", "face", "back"] as ViewPreset[]).map((p) => (
-          <button
-            key={p}
-            onClick={(e) => {
-              e.stopPropagation();
-              setViewPreset(p);
-              setSpin(p === "back" ? Math.PI : 0);
-              setReframeNonce((n) => n + 1);
-            }}
-            className={`px-3 py-1.5 rounded-lg text-[11px] uppercase tracking-wider transition ${
-              viewPreset === p
-                ? "bg-white text-[hsl(220_25%_10%)]"
-                : "text-white/70 hover:bg-white/10"
-            }`}
-            title={`${p} view`}
-          >
-            {p === "full" ? "Full" : p === "upper" ? "Upper" : p === "face" ? "Face" : "Back"}
-          </button>
-        ))}
-      </div>
 
       {/* VRMA animation controls */}
       <div className="absolute right-3 sm:right-5 bottom-5 z-20 pointer-events-auto flex items-center gap-2">
