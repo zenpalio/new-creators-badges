@@ -81,7 +81,7 @@ function VRMModel({
   const reactRef = useRef({ last: 0, intensity: 0 });
   const lookTargetRef = useRef(new THREE.Object3D());
   const bboxRef = useRef<{ size: THREE.Vector3; center: THREE.Vector3; min: THREE.Vector3 } | null>(null);
-  const { camera, scene, controls } = useThree() as any;
+  const { camera, scene, get } = useThree() as any;
 
   // Re-frame the camera based on current preset and the model's bbox
   const applyView = useCallback((preset: ViewPreset) => {
