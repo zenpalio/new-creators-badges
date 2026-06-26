@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { Send } from "lucide-react";
+import { Send, Volume2, VolumeX } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Msg { role: "user" | "assistant"; content: string; }
 
@@ -11,18 +12,52 @@ const MOCK_REPLIES = [
   "That made me smile.",
 ];
 
+const VOICE_KEY = "mina.voiceOn";
+
 const ChatComposer = ({ onAfterReply }: { onAfterReply?: () => void }) => {
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
+  const [voiceOn, setVoiceOn] = useState(() => {
+    try { return localStorage.getItem(VOICE_KEY) === "1"; } catch { return false; }
+  });
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [msgs, sending]);
 
   useEffect(() => { inputRef.current?.focus(); }, []);
+
+  useEffect(() => {
+    try { localStorage.setItem(VOICE_KEY, voiceOn ? "1" : "0"); } catch {}
+    if (!voiceOn && audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+  }, [voiceOn]);
+
+  const speak = async (line: string) => {
+    try {
+      const { data, error } = await supabase.functions.invoke("mina-tts", {
+        body: { text: line },
+      });
+      if (error) throw error;
+      // edge function returns audio/mpeg blob via invoke
+      const blob = data instanceof Blob ? data : new Blob([data], { type: "audio/mpeg" });
+      const url = URL.createObjectURL(blob);
+      // stop any previous line
+      if (audioRef.current) { try { audioRef.current.pause(); } catch {} }
+      const audio = new Audio(url);
+      audioRef.current = audio;
+      audio.onended = () => URL.revokeObjectURL(url);
+      await audio.play().catch(() => {});
+    } catch (e) {
+      console.error("[tts] failed", e);
+    }
+  };
 
   const send = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,12 +71,13 @@ const ChatComposer = ({ onAfterReply }: { onAfterReply?: () => void }) => {
     setMsgs((p) => [...p, { role: "assistant", content: reply }]);
     setSending(false);
     onAfterReply?.();
+    if (voiceOn) void speak(reply);
     setTimeout(() => inputRef.current?.focus(), 50);
   };
 
   return (
     <div className="flex flex-col gap-3">
-      {/* Transcript — floats above input, transparent surface */}
+      {/* Transcript */}
       {(msgs.length > 0 || sending) && (
         <div
           ref={scrollRef}
@@ -75,8 +111,20 @@ const ChatComposer = ({ onAfterReply }: { onAfterReply?: () => void }) => {
       {/* Composer — glass pill */}
       <form
         onSubmit={send}
-        className="flex items-center gap-2 pl-5 pr-2 h-14 rounded-full bg-white/[0.07] backdrop-blur-xl border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.4)]"
+        className="flex items-center gap-2 pl-3 pr-2 h-14 rounded-full bg-white/[0.07] backdrop-blur-xl border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.4)]"
       >
+        <button
+          type="button"
+          onClick={() => setVoiceOn((v) => !v)}
+          title={voiceOn ? "Voice replies on" : "Voice replies off"}
+          className={`w-10 h-10 rounded-full flex items-center justify-center border transition shrink-0 ${
+            voiceOn
+              ? "bg-white text-[hsl(220_25%_10%)] border-white"
+              : "bg-white/[0.06] hover:bg-white/[0.12] text-white/70 border-white/10"
+          }`}
+        >
+          {voiceOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+        </button>
         <input
           ref={inputRef}
           value={text}
@@ -88,7 +136,7 @@ const ChatComposer = ({ onAfterReply }: { onAfterReply?: () => void }) => {
         <button
           type="submit"
           disabled={sending || !text.trim()}
-          className="w-10 h-10 rounded-full bg-white text-[hsl(220_25%_10%)] flex items-center justify-center disabled:opacity-30 hover:scale-105 transition"
+          className="w-10 h-10 rounded-full bg-white text-[hsl(220_25%_10%)] flex items-center justify-center disabled:opacity-30 hover:scale-105 transition shrink-0"
         >
           <Send className="w-4 h-4" />
         </button>
