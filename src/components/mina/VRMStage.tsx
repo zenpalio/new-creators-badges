@@ -670,10 +670,12 @@ const VRMStage = ({
     if (!reactTrigger || reactTrigger === reactAnimRef.current) return;
     reactAnimRef.current = reactTrigger;
     if (speaking) return; // don't interrupt talking
+    const s = String(sentiment);
     let pick: { url: string; name: string } | null = null;
-    if (sentiment === "love") pick = { url: excitedAnim.url, name: "Excited" };
-    else if (sentiment === "like") pick = { url: happyAnim.url, name: "Happy" };
-    else if (sentiment === "hate" || sentiment === "dislike") pick = { url: angryAnim.url, name: "Angry" };
+    if (s === "love") pick = { url: excitedAnim.url, name: "Excited" };
+    else if (s === "like" || s === "happy") pick = { url: happyAnim.url, name: "Happy" };
+    else if (s === "hate" || s === "dislike" || s === "angry") pick = { url: angryAnim.url, name: "Angry" };
+
     if (pick) {
       autoTalkingRef.current = false;
       playPreset(pick.url, pick.name, "fbx");
