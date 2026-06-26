@@ -65,6 +65,8 @@ function VRMModel({
   onError,
   meshVisibility,
   viewPreset,
+  vrmaUrl,
+  onAnimEnd,
 }: {
   url: string;
   mouthRef: React.MutableRefObject<number>;
@@ -78,6 +80,8 @@ function VRMModel({
   onError: (msg: string | null) => void;
   meshVisibility: Record<string, boolean>;
   viewPreset: ViewPreset;
+  vrmaUrl: string | null;
+  onAnimEnd: () => void;
 }) {
   const [vrm, setVrm] = useState<VRM | null>(null);
   const blinkRef = useRef({ next: 2 + Math.random() * 3, t: 0, closing: 0 });
@@ -86,7 +90,11 @@ function VRMModel({
   const reactRef = useRef({ last: 0, intensity: 0 });
   const lookTargetRef = useRef(new THREE.Object3D());
   const bboxRef = useRef<{ size: THREE.Vector3; center: THREE.Vector3; min: THREE.Vector3 } | null>(null);
+  const mixerRef = useRef<THREE.AnimationMixer | null>(null);
+  const actionRef = useRef<THREE.AnimationAction | null>(null);
+  const [animPlaying, setAnimPlaying] = useState(false);
   const { camera, scene, get } = useThree() as any;
+
 
   // Re-frame the camera based on current preset and the model's bbox
   const applyView = useCallback((preset: ViewPreset) => {
