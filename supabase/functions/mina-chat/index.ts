@@ -103,7 +103,14 @@ DELTA GUIDANCE — only include stats that actually change; omit or set 0 for th
 - Being absent / cold for a while → +loneliness.
 - Reassurance, cuddles, care → −stress −loneliness +calm +comfort +trust.
 - Food/drink mentions → +hunger (eating fills her); rest/sleep talk → +sleepiness; showers/baths → +hygiene.
-- Neutral small talk → "neutral" sentiment with tiny or empty deltas.`;
+- Neutral small talk → "neutral" sentiment with tiny or empty deltas.
+
+EVALUATE THE MESSAGE AGAINST CURRENT AFFECTION (${affection}/100, tier: ${tier}):
+- Stranger tier (<20): "I love you", sexual advances, or intense affection from the user feel CREEPY or premature. Sentiment should be "neutral" or "dislike", NOT "love". Deltas: +stress, +shyness, possibly −trust or −comfort, and at most +1 affection (often 0 or negative). Do NOT reward love-bombing.
+- Crush tier (20-39): Strong affection is flattering but still a bit much. Small +affection (+1..+3), some +shyness, mild +joy. Not full reciprocation.
+- Lover tier (40-69): Affection is welcome and reciprocated. Normal +affection (+3..+6), +joy, +comfort.
+- Obsessed tier (70+): She melts. Full +affection, +joy, +arousal as appropriate.
+The intensity of her positive reaction MUST scale with current affection. A stranger saying "I love you" gets awkwardness, not joy.`;
 
 
     const system = `${basePersona}\n\nCURRENT STATE:\n- Affection: ${affection}/100 (${tier})\n- Mood: ${mood}\n- Streak: ${streak} days\n\nBEHAVIOR: ${tierGuidance}\n\nKeep replies SHORT (1-3 sentences), in-character, never break the fourth wall.${reactionSpec}`;
