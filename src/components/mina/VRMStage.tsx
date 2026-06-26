@@ -39,6 +39,17 @@ interface MeshInfo {
   visible: boolean;
 }
 
+interface CharacterFrame {
+  size: THREE.Vector3;
+  center: THREE.Vector3;
+  min: THREE.Vector3;
+  focus: {
+    full: number;
+    upper: number;
+    face: number;
+  };
+}
+
 const EXPR_MAP: Record<VrmSentiment, Partial<Record<string, number>>> = {
   neutral:   { happy: 0.05, angry: 0, sad: 0, surprised: 0, relaxed: 0.15 },
   love:      { happy: 0.85, relaxed: 0.5, angry: 0, sad: 0, surprised: 0 },
@@ -89,7 +100,8 @@ function VRMModel({
   const exprRef = useRef<Record<string, number>>({});
   const reactRef = useRef({ last: 0, intensity: 0 });
   const lookTargetRef = useRef(new THREE.Object3D());
-  const bboxRef = useRef<{ size: THREE.Vector3; center: THREE.Vector3; min: THREE.Vector3 } | null>(null);
+  const bboxRef = useRef<CharacterFrame | null>(null);
+  const hipsRestYRef = useRef(0);
   const mixerRef = useRef<THREE.AnimationMixer | null>(null);
   const actionRef = useRef<THREE.AnimationAction | null>(null);
   const [animPlaying, setAnimPlaying] = useState(false);
@@ -101,27 +113,33 @@ function VRMModel({
     const b = bboxRef.current;
     if (!b) return;
     const fovRad = ((camera as any).fov * Math.PI) / 180;
+    const aspect = Math.max(0.1, (camera as any).aspect || 1);
     const fullH = b.size.y;
     let frameH: number;
     let focusY: number;
+    let frameW = b.size.x * 1.15;
     if (preset === "face") {
-      frameH = fullH * 0.28;
-      focusY = b.min.y + fullH * 0.92;
+      frameH = fullH * 0.32;
+      focusY = b.focus.face;
+      frameW = b.size.x * 0.45;
     } else if (preset === "upper") {
-      frameH = fullH * 0.55;
-      focusY = b.min.y + fullH * 0.78;
+      frameH = fullH * 0.7;
+      focusY = b.focus.upper;
+      frameW = b.size.x * 0.75;
     } else {
-      // full body — pad 10%
-      frameH = fullH * 1.1;
-      focusY = b.min.y + fullH * 0.5;
+      // full body — center on the humanoid, not the imported scene bounds
+      frameH = fullH * 1.15;
+      focusY = b.focus.full;
     }
-    const distance = (frameH / 2) / Math.tan(fovRad / 2) * 1.05;
-    camera.position.set(b.center.x, focusY, distance);
-    camera.lookAt(b.center.x, focusY, 0);
+    const verticalDistance = (frameH / 2) / Math.tan(fovRad / 2);
+    const horizontalDistance = (frameW / 2) / (Math.tan(fovRad / 2) * aspect);
+    const distance = Math.max(verticalDistance, horizontalDistance) * 1.05;
+    camera.position.set(b.center.x, focusY, b.center.z + distance);
+    camera.lookAt(b.center.x, focusY, b.center.z);
     (camera as any).updateProjectionMatrix?.();
     const controls = get().controls as any;
     if (controls?.target) {
-      controls.target.set(b.center.x, focusY, 0);
+      controls.target.set(b.center.x, focusY, b.center.z);
       controls.update?.();
     }
   }, [camera, get]);
@@ -159,14 +177,64 @@ function VRMModel({
           }
         });
         v.scene.rotation.y = Math.PI;
+        v.scene.updateMatrixWorld(true);
 
-        // Measure and store bbox, then apply current view preset
+        // Normalize from humanoid bones, not mesh bounds. VRM outfits/accessory
+        // bounds can be far outside the visible body and pull framing down.
+        const getBoneWorld = (name: Parameters<VRM["humanoid"]["getNormalizedBoneNode"]>[0]) => {
+          const node = v.humanoid?.getNormalizedBoneNode(name);
+          return node ? node.getWorldPosition(new THREE.Vector3()) : null;
+        };
+        const rawBox = new THREE.Box3().setFromObject(v.scene);
+        const rawCenter = new THREE.Vector3();
+        rawBox.getCenter(rawCenter);
+        const hips = getBoneWorld("hips");
+        const head = getBoneWorld("head");
+        const leftFoot = getBoneWorld("leftFoot") ?? getBoneWorld("leftToes");
+        const rightFoot = getBoneWorld("rightFoot") ?? getBoneWorld("rightToes");
+        const bodyCenterX = hips?.x ?? head?.x ?? rawCenter.x;
+        const bodyCenterZ = hips?.z ?? head?.z ?? rawCenter.z;
+        const footY = leftFoot || rightFoot
+          ? Math.min(leftFoot?.y ?? Number.POSITIVE_INFINITY, rightFoot?.y ?? Number.POSITIVE_INFINITY)
+          : rawBox.min.y;
+        v.scene.position.x -= bodyCenterX;
+        v.scene.position.y -= footY;
+        v.scene.position.z -= bodyCenterZ;
+        v.scene.position.y += 0.22;
+        v.scene.updateMatrixWorld(true);
+
+        // Measure a body frame from the normalized skeleton, then apply preset.
         const box = new THREE.Box3().setFromObject(v.scene);
         const size = new THREE.Vector3();
-        const center = new THREE.Vector3();
         box.getSize(size);
-        box.getCenter(center);
-        bboxRef.current = { size, center, min: box.min.clone() };
+        const nHips = getBoneWorld("hips");
+        const nHead = getBoneWorld("head");
+        const nLeftFoot = getBoneWorld("leftFoot") ?? getBoneWorld("leftToes");
+        const nRightFoot = getBoneWorld("rightFoot") ?? getBoneWorld("rightToes");
+        const bodyMinY = nLeftFoot || nRightFoot
+          ? Math.min(nLeftFoot?.y ?? Number.POSITIVE_INFINITY, nRightFoot?.y ?? Number.POSITIVE_INFINITY)
+          : box.min.y;
+        const bodyHeadY = nHead?.y ?? box.max.y;
+        const bodyHeight = THREE.MathUtils.clamp(bodyHeadY - bodyMinY, 1.25, 1.95);
+        const frameHeight = bodyHeight;
+        const shoulderSpan = (() => {
+          const l = getBoneWorld("leftUpperArm") ?? getBoneWorld("leftShoulder");
+          const r = getBoneWorld("rightUpperArm") ?? getBoneWorld("rightShoulder");
+          return l && r ? Math.abs(l.x - r.x) * 2.2 : bodyHeight * 0.45;
+        })();
+        const frameWidth = Math.max(shoulderSpan, bodyHeight * 0.42);
+        const frameCenter = new THREE.Vector3(nHips?.x ?? 0, bodyMinY + frameHeight * 0.5, nHips?.z ?? 0);
+        bboxRef.current = {
+          size: new THREE.Vector3(frameWidth, frameHeight, Math.max(size.z, bodyHeight * 0.35)),
+          center: frameCenter,
+          min: new THREE.Vector3(frameCenter.x - frameWidth * 0.5, bodyMinY, frameCenter.z - size.z * 0.5),
+          focus: {
+            full: bodyMinY + bodyHeight * 0.28,
+            upper: bodyMinY + bodyHeight * 0.5,
+            face: bodyMinY + bodyHeight * 0.72,
+          },
+        };
+        hipsRestYRef.current = v.humanoid?.getNormalizedBoneNode("hips")?.position.y ?? 0;
 
         // Mixer for VRMA clips
         mixerRef.current = new THREE.AnimationMixer(v.scene);
@@ -346,7 +414,7 @@ function VRMModel({
       if (spine) spine.rotation.x = Math.sin(t * 1.8 + 0.4) * 0.012;
       if (hips) {
         hips.rotation.y = Math.sin(t * 0.45) * 0.04;
-        hips.position.y = Math.sin(t * 1.8) * 0.005;
+        hips.position.y = hipsRestYRef.current + Math.sin(t * 1.8) * 0.005;
       }
       if (lUpper) lUpper.rotation.z = Math.sin(t * 0.9) * 0.04 + 0.02;
       if (rUpper) rUpper.rotation.z = -Math.sin(t * 0.9 + 0.4) * 0.04 - 0.02;
@@ -455,7 +523,7 @@ const VRMStage = ({
           </group>
         </Suspense>
         <OrbitControls
-          enablePan
+          enablePan={false}
           enableZoom
           enableRotate
           minDistance={0.4}
