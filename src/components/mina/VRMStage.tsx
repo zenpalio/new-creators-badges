@@ -101,27 +101,33 @@ function VRMModel({
     const b = bboxRef.current;
     if (!b) return;
     const fovRad = ((camera as any).fov * Math.PI) / 180;
+    const aspect = Math.max(0.1, (camera as any).aspect || 1);
     const fullH = b.size.y;
     let frameH: number;
     let focusY: number;
+    let frameW = b.size.x * 1.15;
     if (preset === "face") {
       frameH = fullH * 0.28;
       focusY = b.min.y + fullH * 0.92;
+      frameW = b.size.x * 0.45;
     } else if (preset === "upper") {
       frameH = fullH * 0.55;
       focusY = b.min.y + fullH * 0.78;
+      frameW = b.size.x * 0.75;
     } else {
       // full body — pad 10%
       frameH = fullH * 1.1;
       focusY = b.min.y + fullH * 0.5;
     }
-    const distance = (frameH / 2) / Math.tan(fovRad / 2) * 1.05;
-    camera.position.set(b.center.x, focusY, distance);
-    camera.lookAt(b.center.x, focusY, 0);
+    const verticalDistance = (frameH / 2) / Math.tan(fovRad / 2);
+    const horizontalDistance = (frameW / 2) / (Math.tan(fovRad / 2) * aspect);
+    const distance = Math.max(verticalDistance, horizontalDistance) * 1.05;
+    camera.position.set(b.center.x, focusY, b.center.z + distance);
+    camera.lookAt(b.center.x, focusY, b.center.z);
     (camera as any).updateProjectionMatrix?.();
     const controls = get().controls as any;
     if (controls?.target) {
-      controls.target.set(b.center.x, focusY, 0);
+      controls.target.set(b.center.x, focusY, b.center.z);
       controls.update?.();
     }
   }, [camera, get]);
@@ -159,8 +165,19 @@ function VRMModel({
           }
         });
         v.scene.rotation.y = Math.PI;
+        v.scene.updateMatrixWorld(true);
 
-        // Measure and store bbox, then apply current view preset
+        // Normalize the imported VRM around the world origin so the camera and
+        // controls always frame the character from the actual visual center.
+        const rawBox = new THREE.Box3().setFromObject(v.scene);
+        const rawCenter = new THREE.Vector3();
+        rawBox.getCenter(rawCenter);
+        v.scene.position.x -= rawCenter.x;
+        v.scene.position.y -= rawBox.min.y;
+        v.scene.position.z -= rawCenter.z;
+        v.scene.updateMatrixWorld(true);
+
+        // Measure and store normalized bbox, then apply current view preset
         const box = new THREE.Box3().setFromObject(v.scene);
         const size = new THREE.Vector3();
         const center = new THREE.Vector3();
@@ -455,7 +472,7 @@ const VRMStage = ({
           </group>
         </Suspense>
         <OrbitControls
-          enablePan
+          enablePan={false}
           enableZoom
           enableRotate
           minDistance={0.4}
