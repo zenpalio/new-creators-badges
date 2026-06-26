@@ -9,6 +9,7 @@ import GiftDrawer from "@/components/mina/GiftDrawer";
 import CallModal from "@/components/mina/CallModal";
 import SceneControls, { BACKGROUNDS, MODELS, type SceneSettings } from "@/components/mina/SceneControls";
 import StatsPanel from "@/components/mina/StatsPanel";
+import SfxToggle from "@/components/mina/SfxToggle";
 import ReactionFX from "@/components/mina/ReactionFX";
 import AmbientSounds from "@/components/mina/AmbientSounds";
 
@@ -158,6 +159,11 @@ const Mina = () => {
 
       <SceneControls open={sceneOpen} onClose={() => setSceneOpen(false)} settings={scene} onChange={setScene} />
       <StatsPanel stats={state.stats} affection={state.affection} pulseTrigger={fxTrigger} pulseDeltas={fxDeltas as any} />
+
+      {/* Sound toggle — bottom-left */}
+      <div className="absolute bottom-5 left-3 sm:left-5 z-30">
+        <SfxToggle />
+      </div>
 
       {/* Chat */}
       <div className="absolute left-1/2 -translate-x-1/2 bottom-6 z-20 w-[min(680px,calc(100%-2rem))]">

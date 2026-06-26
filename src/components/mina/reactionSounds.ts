@@ -126,7 +126,21 @@ export function playAngryRoar() {
 
 import type { Sentiment } from "./ChatComposer";
 
+export const SFX_STORAGE_KEY = "mina:sfx-enabled";
+
+export function isSfxEnabled(): boolean {
+  if (typeof window === "undefined") return true;
+  return window.localStorage.getItem(SFX_STORAGE_KEY) !== "0";
+}
+
+export function setSfxEnabled(enabled: boolean) {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(SFX_STORAGE_KEY, enabled ? "1" : "0");
+  window.dispatchEvent(new CustomEvent("mina:sfx-changed", { detail: { enabled } }));
+}
+
 export function playReactionSound(sentiment: Sentiment) {
+  if (!isSfxEnabled()) return;
   switch (sentiment) {
     case "love":
     case "like":
@@ -140,3 +154,4 @@ export function playReactionSound(sentiment: Sentiment) {
       playPlumbobDing();
   }
 }
+
