@@ -383,6 +383,19 @@ const VRMStage = ({
   const [loadPct, setLoadPct] = useState(0);
   const [loadErr, setLoadErr] = useState<string | null>(null);
   const [viewPreset, setViewPreset] = useState<ViewPreset>("full");
+  const [vrmaUrl, setVrmaUrl] = useState<string | null>(null);
+  const [vrmaName, setVrmaName] = useState<string | null>(null);
+  const vrmaFileRef = useRef<HTMLInputElement | null>(null);
+  const handleAnimEnd = useCallback(() => {
+    setVrmaUrl((prev) => { if (prev) URL.revokeObjectURL(prev); return null; });
+    setVrmaName(null);
+  }, []);
+  const handlePickVrma = (file: File) => {
+    if (vrmaUrl) URL.revokeObjectURL(vrmaUrl);
+    setVrmaUrl(URL.createObjectURL(file));
+    setVrmaName(file.name.replace(/\.vrma$/i, ""));
+  };
+
 
 
   const groupTransform = useMemo(
