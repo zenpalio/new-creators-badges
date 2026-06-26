@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Phone, Gift, Settings2 } from "lucide-react";
 import { useCompanion, tierFromAffection, type MoodStats } from "@/hooks/useCompanion";
 import Live2DStage from "@/components/mina/Live2DStage";
+import VRMStage from "@/components/mina/VRMStage";
+import minaVrm from "@/assets/mina.vrm.asset.json";
 import ChatComposer, { type Reaction, type Sentiment } from "@/components/mina/ChatComposer";
 import GiftDrawer from "@/components/mina/GiftDrawer";
 import CallModal from "@/components/mina/CallModal";
@@ -21,6 +23,7 @@ const Mina = () => {
     mirror: false,
     backgroundId: "midnight",
     modelId: "hiyori",
+    renderer: "live2d",
   });
   const { state, refresh, patch, nudgeStats } = useCompanion("mina");
   const tier = tierFromAffection(state.affection);
@@ -70,15 +73,26 @@ const Mina = () => {
       )}
 
       {/* Character */}
-      <Live2DStage
-        mouthOpen={mouth}
-        speaking={speaking}
-        rotation={scene.rotation}
-        scale={scene.scale}
-        mirror={scene.mirror}
-        modelUrl={model.url}
-        debug
-      />
+      {scene.renderer === "vrm" ? (
+        <VRMStage
+          mouthOpen={mouth}
+          speaking={speaking}
+          rotation={scene.rotation}
+          scale={scene.scale * 1.0}
+          mirror={scene.mirror}
+          modelUrl={minaVrm.url}
+        />
+      ) : (
+        <Live2DStage
+          mouthOpen={mouth}
+          speaking={speaking}
+          rotation={scene.rotation}
+          scale={scene.scale}
+          mirror={scene.mirror}
+          modelUrl={model.url}
+          debug
+        />
+      )}
 
       {/* Reaction effects over character */}
       <ReactionFX trigger={fxTrigger} sentiment={fxSentiment} deltas={fxDeltas} />
