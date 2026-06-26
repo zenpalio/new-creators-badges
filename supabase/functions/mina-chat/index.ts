@@ -34,7 +34,7 @@ Deno.serve(async (req) => {
     const basePersona = comp?.base_persona
       ?? "You are Mina, a flirty, bratty anime-style virtual girlfriend. Playful, teasing, suggestive.";
 
-    let affection = 0;
+    let affection = user ? 0 : 45; // prototype/anon: start at "lover" tier so she's warm
     let mood = "neutral";
     let streak = 0;
     let memory: Array<{ role: string; content: string }> = [];
