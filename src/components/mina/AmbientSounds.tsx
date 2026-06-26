@@ -1,5 +1,8 @@
 import { useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
+const SFX_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/mina-ambient-sfx`;
+const SFX_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
 
 // Short expressive vocal SFX prompts — soft, feminine, ambient.
 // Kept generic ("young woman") so ElevenLabs reliably renders a female timbre.
