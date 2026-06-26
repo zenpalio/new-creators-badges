@@ -42,11 +42,10 @@ const StatsPanel = ({ stats }: Props) => {
         <button
           onClick={() => setOpen(true)}
           aria-label="Show vitals"
-          className="flex items-center gap-2 rounded-full bg-white/[0.07] backdrop-blur-2xl border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.4)] px-3 py-2 hover:bg-white/[0.12] transition-colors"
+          title={`Vitals · ${avg}`}
+          className="h-9 w-9 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4)] text-white/80 hover:bg-white/15 transition flex items-center justify-center"
         >
-          <Activity className="w-3.5 h-3.5 text-white/80" />
-          <span className="text-[11px] text-white/75 font-medium">Vitals</span>
-          <span className="text-[10px] tabular-nums text-white/45">{avg}</span>
+          <Activity className="w-4 h-4" />
         </button>
       )}
 
