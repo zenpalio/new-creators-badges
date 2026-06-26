@@ -77,8 +77,10 @@ function VRMModel({
   const [vrm, setVrm] = useState<VRM | null>(null);
   const blinkRef = useRef({ next: 2 + Math.random() * 3, t: 0, closing: 0 });
   const tiltRef = useRef({ next: 5 + Math.random() * 6, t: 0, amount: 0, dir: 1 });
-  const bboxRef = useRef<{ min: THREE.Vector3; max: THREE.Vector3; size: THREE.Vector3; center: THREE.Vector3 } | null>(null);
-  const { camera, scene } = useThree();
+  const exprRef = useRef<Record<string, number>>({});
+  const reactRef = useRef({ last: 0, intensity: 0 });
+  const lookTargetRef = useRef(new THREE.Object3D());
+
 
 
   useEffect(() => {
