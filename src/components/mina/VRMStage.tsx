@@ -237,6 +237,15 @@ function VRMModel({
             face: nHead?.y ?? bodyMinY + bodyHeight * 0.84,
           },
         };
+        console.debug("[VRM frame]", {
+          rawMinY: rawBox.min.y,
+          rawMaxY: rawBox.max.y,
+          bodyMinY,
+          bodyHeadY,
+          bodyHeight,
+          frameCenterY: frameCenter.y,
+          hipsRestY: v.humanoid?.getNormalizedBoneNode("hips")?.position.y ?? 0,
+        });
         hipsRestYRef.current = v.humanoid?.getNormalizedBoneNode("hips")?.position.y ?? 0;
 
         // Mixer for VRMA clips
