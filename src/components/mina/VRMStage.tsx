@@ -13,6 +13,9 @@ import {
 import { RotateCw, Shirt, RefreshCw, Film, Upload, Square } from "lucide-react";
 import kneelingIdle from "@/assets/kneeling-idle.fbx.asset.json";
 import talkingAnim from "@/assets/talking.fbx.asset.json";
+import standingPose from "@/assets/standing-pose.fbx.asset.json";
+
+const DEFAULT_ANIM = { url: standingPose.url, name: "Standing", kind: "fbx" as const };
 
 // Mixamo bone name → VRM humanoid bone name
 const MIXAMO_TO_VRM: Record<string, string> = {
