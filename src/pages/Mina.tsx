@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Phone, Gift, Settings2 } from "lucide-react";
+import { Phone, Gift, Settings2, Sparkles, Coins } from "lucide-react";
 import { useCompanion, tierFromAffection, type MoodStats } from "@/hooks/useCompanion";
 import Live2DStage from "@/components/mina/Live2DStage";
 import VRMStage from "@/components/mina/VRMStage";
