@@ -660,6 +660,7 @@ const VRMStage = ({
               onError={setLoadErr}
               meshVisibility={meshVis}
               viewPreset={viewPreset}
+              reframeNonce={reframeNonce}
               vrmaUrl={vrmaUrl}
               animKind={animKind}
               onAnimEnd={handleAnimEnd}
