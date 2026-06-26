@@ -37,7 +37,7 @@ const StatsPanel = ({ stats }: Props) => {
   );
 
   return (
-    <div className="absolute top-20 left-3 sm:left-5 z-30 animate-fade-in">
+    <div className="absolute top-5 left-3 sm:left-5 z-30 animate-fade-in">
       {!open && (
         <button
           onClick={() => setOpen(true)}
