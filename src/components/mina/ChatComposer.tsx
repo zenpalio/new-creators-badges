@@ -13,7 +13,7 @@ export type Sentiment = "love" | "like" | "neutral" | "dislike" | "hate";
 export interface Reaction {
   sentiment: Sentiment;
   emotion?: string;
-  deltas?: Partial<Record<"affection" | "joy" | "arousal" | "comfort" | "calm" | "energy" | "hunger", number>>;
+  deltas?: Partial<Record<"affection" | "hunger" | "energy" | "sleepiness" | "hygiene" | "comfort" | "calm" | "joy" | "trust" | "shyness" | "jealousy" | "loneliness" | "stress" | "arousal" | "lust" | "wetness" | "obedience" | "dominance", number>>;
 }
 
 interface Props {
