@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Sentiment } from "./ChatComposer";
+import { playReactionSound } from "./reactionSounds";
 
 type StatKey = "affection" | "joy" | "arousal" | "comfort" | "calm" | "energy" | "hunger";
 
@@ -131,6 +132,7 @@ const ReactionFX = ({ trigger, sentiment, deltas }: Props) => {
       bannerEmoji: pool[0],
     };
     setBursts((p) => [...p, b]);
+    try { playReactionSound(sentiment); } catch {}
     const t = window.setTimeout(() => {
       setBursts((p) => p.filter((x) => x.id !== b.id));
     }, 3600);
