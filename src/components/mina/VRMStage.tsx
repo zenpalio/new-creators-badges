@@ -159,6 +159,7 @@ function VRMModel({
   meshVisibility,
   viewPreset,
   vrmaUrl,
+  animKind,
   onAnimEnd,
 }: {
   url: string;
@@ -174,6 +175,7 @@ function VRMModel({
   meshVisibility: Record<string, boolean>;
   viewPreset: ViewPreset;
   vrmaUrl: string | null;
+  animKind: "vrma" | "fbx" | null;
   onAnimEnd: () => void;
 }) {
   const [vrm, setVrm] = useState<VRM | null>(null);
