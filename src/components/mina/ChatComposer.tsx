@@ -149,6 +149,7 @@ const ChatComposer = ({ onAfterReply, onMouthLevel, onSpeakingChange, onReaction
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data?.error || `chat ${res.status}`);
       reply = data.reply ?? "...";
+      if (data.reaction) onReaction?.(data.reaction as Reaction);
     } catch (err: any) {
       console.error("[mina-chat] failed", err);
       reply = `Mmh… ${err?.message || "something got tangled"}. Try again?`;
