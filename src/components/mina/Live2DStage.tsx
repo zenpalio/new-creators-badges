@@ -192,7 +192,7 @@ const Live2DStage = ({
         onPointerCancel={endDrag}
         onWheel={onWheel}
         style={{
-          transform: `translate(${pan.x}px, ${pan.y}px) rotate(${rotation}deg) scale(${totalScale}) scaleX(${mirror ? -1 : 1})`,
+          transform: `translate(${pan.x}px, ${pan.y}px) rotateY(${rotation}deg) scale(${totalScale}) scaleX(${mirror ? -1 : 1})`,
           transformOrigin: "center center",
           transition: dragRef.current ? "none" : "transform 200ms ease-out",
         }}
