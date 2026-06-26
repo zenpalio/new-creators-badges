@@ -43,6 +43,11 @@ interface CharacterFrame {
   size: THREE.Vector3;
   center: THREE.Vector3;
   min: THREE.Vector3;
+  focus: {
+    full: number;
+    upper: number;
+    face: number;
+  };
 }
 
 const EXPR_MAP: Record<VrmSentiment, Partial<Record<string, number>>> = {
@@ -114,16 +119,16 @@ function VRMModel({
     let frameW = b.size.x * 1.15;
     if (preset === "face") {
       frameH = fullH * 0.32;
-      focusY = b.min.y + fullH * 0.82;
+      focusY = b.focus.face;
       frameW = b.size.x * 0.45;
     } else if (preset === "upper") {
       frameH = fullH * 0.7;
-      focusY = b.min.y + fullH * 0.66;
+      focusY = b.focus.upper;
       frameW = b.size.x * 0.75;
     } else {
       // full body — center on the humanoid, not the imported scene bounds
       frameH = fullH * 1.15;
-      focusY = b.min.y + fullH * 0.48;
+      focusY = b.focus.full;
     }
     const verticalDistance = (frameH / 2) / Math.tan(fovRad / 2);
     const horizontalDistance = (frameW / 2) / (Math.tan(fovRad / 2) * aspect);
@@ -194,6 +199,7 @@ function VRMModel({
         v.scene.position.x -= bodyCenterX;
         v.scene.position.y -= footY;
         v.scene.position.z -= bodyCenterZ;
+        v.scene.position.y += 0.22;
         v.scene.updateMatrixWorld(true);
 
         // Measure a body frame from the normalized skeleton, then apply preset.
@@ -204,6 +210,7 @@ function VRMModel({
         box.getCenter(center);
         const nHips = getBoneWorld("hips");
         const nHead = getBoneWorld("head");
+        const nChest = getBoneWorld("chest") ?? getBoneWorld("spine") ?? nHips;
         const nLeftFoot = getBoneWorld("leftFoot") ?? getBoneWorld("leftToes");
         const nRightFoot = getBoneWorld("rightFoot") ?? getBoneWorld("rightToes");
         const bodyMinY = nLeftFoot || nRightFoot
@@ -223,6 +230,11 @@ function VRMModel({
           size: new THREE.Vector3(frameWidth, frameHeight, Math.max(size.z, bodyHeight * 0.35)),
           center: frameCenter,
           min: new THREE.Vector3(frameCenter.x - frameWidth * 0.5, bodyMinY, frameCenter.z - size.z * 0.5),
+          focus: {
+            full: bodyMinY + bodyHeight * 0.42,
+            upper: nChest?.y ?? bodyMinY + bodyHeight * 0.62,
+            face: nHead?.y ?? bodyMinY + bodyHeight * 0.84,
+          },
         };
 
         // Mixer for VRMA clips
