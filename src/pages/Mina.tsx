@@ -140,10 +140,10 @@ const Mina = () => {
         <button
           onClick={() => setGiftOpen(true)}
           className="h-10 sm:h-11 rounded-2xl bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] text-white/90 hover:bg-white/[0.12] transition flex items-center justify-center gap-2 text-[12px] font-semibold"
-          title="Send a gift"
+          title="Activities, roleplay & gifts"
         >
           <Gift className="w-4 h-4" />
-          Gifts
+          Activity
           <span className="text-[10px] text-white/45 tabular-nums ml-1 flex items-center gap-1">
             · {state.tokens_balance} 🪙
           </span>
