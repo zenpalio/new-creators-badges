@@ -13,9 +13,11 @@ interface Props {
   onAfterReply?: () => void;
   /** Receives a 0–1 lip-sync amplitude while Mina is speaking. */
   onMouthLevel?: (v: number) => void;
+  /** Fires true when audio playback starts, false when it stops. */
+  onSpeakingChange?: (speaking: boolean) => void;
 }
 
-const ChatComposer = ({ onAfterReply, onMouthLevel }: Props) => {
+const ChatComposer = ({ onAfterReply, onMouthLevel, onSpeakingChange }: Props) => {
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
@@ -47,6 +49,7 @@ const ChatComposer = ({ onAfterReply, onMouthLevel }: Props) => {
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
     rafRef.current = null;
     onMouthLevel?.(0);
+    onSpeakingChange?.(false);
   };
 
   const speak = async (line: string) => {
@@ -83,6 +86,7 @@ const ChatComposer = ({ onAfterReply, onMouthLevel }: Props) => {
       analyser.connect(ctx.destination);
       src.start();
       sourceRef.current = src;
+      onSpeakingChange?.(true);
 
       const data = new Uint8Array(analyser.frequencyBinCount);
       const tick = () => {

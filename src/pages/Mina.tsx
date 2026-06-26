@@ -10,6 +10,7 @@ import StatsPanel from "@/components/mina/StatsPanel";
 
 const Mina = () => {
   const [mouth, setMouth] = useState(0);
+  const [speaking, setSpeaking] = useState(false);
   const [giftOpen, setGiftOpen] = useState(false);
   const [callOpen, setCallOpen] = useState(false);
   const [sceneOpen, setSceneOpen] = useState(false);
@@ -45,6 +46,7 @@ const Mina = () => {
       {/* Character */}
       <Live2DStage
         mouthOpen={mouth}
+        speaking={speaking}
         rotation={scene.rotation}
         scale={scene.scale}
         mirror={scene.mirror}
@@ -101,7 +103,7 @@ const Mina = () => {
 
       {/* Chat */}
       <div className="absolute left-1/2 -translate-x-1/2 bottom-6 z-20 w-[min(680px,calc(100%-2rem))]">
-        <ChatComposer onAfterReply={refresh} onMouthLevel={setMouth} />
+        <ChatComposer onAfterReply={refresh} onMouthLevel={setMouth} onSpeakingChange={setSpeaking} />
       </div>
 
       <GiftDrawer open={giftOpen} onClose={() => setGiftOpen(false)} balance={state.tokens_balance} onPurchased={refresh} />

@@ -3,6 +3,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 interface Props {
   /** 0–1; drives mouth open parameter while speaking */
   mouthOpen?: number;
+  /** When true, plays a talking body motion and loops gentle gestures */
+  speaking?: boolean;
   /** degrees, -45..45 */
   rotation?: number;
   /** 0.5..1.5 */
@@ -37,6 +39,7 @@ const loadCubismCore = () => {
 
 const Live2DStage = ({
   mouthOpen = 0,
+  speaking = false,
   rotation = 0,
   scale = 1,
   mirror = false,
@@ -169,6 +172,29 @@ const Live2DStage = ({
       modelRef.current = null;
     };
   }, [modelUrl]);
+
+  // Trigger body motions while speaking; loop gentle gestures every ~5s.
+  useEffect(() => {
+    if (status !== "ready" || !speaking) return;
+    const groups = Object.entries(motions).filter(([, c]) => c > 0);
+    if (!groups.length) return;
+    // Prefer talk/tap/gesture groups, fall back to any non-Idle, then Idle.
+    const pick = () => {
+      const preferred = groups.find(([g]) => /talk|tap|gesture|body/i.test(g))
+        ?? groups.find(([g]) => !/idle/i.test(g))
+        ?? groups[0];
+      const [group, count] = preferred;
+      const idx = Math.floor(Math.random() * count);
+      try { modelRef.current?.motion(group, idx, 3); } catch {}
+    };
+    pick();
+    const id = setInterval(pick, 5200);
+    return () => {
+      clearInterval(id);
+      try { modelRef.current?.motion("Idle"); } catch {}
+    };
+  }, [speaking, status, motions]);
+
 
   // Drag-to-pan + wheel-to-zoom
   const [pan, setPan] = useState({ x: 0, y: 0 });
