@@ -306,7 +306,9 @@ function VRMModel({
           ? Math.min(nLeftFoot?.y ?? Number.POSITIVE_INFINITY, nRightFoot?.y ?? Number.POSITIVE_INFINITY)
           : box.min.y;
         const bodyHeadY = nHead?.y ?? box.max.y;
-        const bodyHeight = THREE.MathUtils.clamp(bodyHeadY - bodyMinY, 1.25, 1.95);
+        // Approximate top of head/hair from raw bounding box, fall back to head bone + offset
+        const topOfHeadY = Math.max(box.max.y, bodyHeadY + 0.18);
+        const bodyHeight = THREE.MathUtils.clamp(topOfHeadY - bodyMinY, 1.25, 2.05);
         const frameHeight = bodyHeight;
         const shoulderSpan = (() => {
           const l = getBoneWorld("leftUpperArm") ?? getBoneWorld("leftShoulder");
