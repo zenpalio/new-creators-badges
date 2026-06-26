@@ -654,9 +654,12 @@ const VRMStage = ({
           </group>
         </Suspense>
         <OrbitControls
-          enablePan={false}
+          enablePan
+          screenSpacePanning
           enableZoom
           enableRotate
+          mouseButtons={{ LEFT: THREE.MOUSE.PAN, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE }}
+          touches={{ ONE: THREE.TOUCH.PAN, TWO: THREE.TOUCH.DOLLY_ROTATE }}
           minDistance={0.4}
           maxDistance={8}
           minPolarAngle={Math.PI * 0.05}
