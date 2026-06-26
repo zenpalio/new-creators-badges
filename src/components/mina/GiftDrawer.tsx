@@ -267,7 +267,7 @@ const GiftDrawer = ({
 
         {/* ── ACTIVITIES ── */}
         {tab === "activities" && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 overflow-y-auto pr-1 -mr-1">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 overflow-y-auto overflow-x-hidden px-1 py-1">
             {ACTIVITIES.map((a) => {
               const locked = affection < a.minAffection;
               return (
