@@ -724,7 +724,7 @@ const VRMStage = ({
         <input
           ref={vrmaFileRef}
           type="file"
-          accept=".vrma,.glb"
+          accept=".vrma,.glb,.fbx"
           className="hidden"
           onChange={(e) => {
             const f = e.target.files?.[0];
