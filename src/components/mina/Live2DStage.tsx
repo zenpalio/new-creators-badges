@@ -53,6 +53,7 @@ const Live2DStage = ({
   const [motions, setMotions] = useState<Record<string, number>>({});
   const [expressions, setExpressions] = useState<string[]>([]);
   const [expIdx, setExpIdx] = useState(0);
+  const [debugOpen, setDebugOpen] = useState(false);
 
   // Keep latest mouthOpen in a ref for the ticker
   useEffect(() => {
@@ -263,55 +264,62 @@ const Live2DStage = ({
       )}
 
       {debug && status === "ready" && (
-        <div className="absolute bottom-4 left-4 z-20 w-[240px] rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.45)] p-3 text-xs text-white/90 space-y-2 ring-1 ring-inset ring-white/10">
-          <div className="font-semibold text-white/70 uppercase tracking-wider text-[10px]">Animations</div>
-          {Object.keys(motions).length === 0 && (
-            <div className="text-white/50">No motion groups</div>
-          )}
-          {Object.entries(motions).map(([group, count]) => (
-            <div key={group} className="space-y-1">
-              <div className="text-white/60">{group} ({count})</div>
-              <div className="flex flex-wrap gap-1">
-                {Array.from({ length: count }).map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => {
-                      try { modelRef.current?.motion(group, i, 3); } catch {}
-                    }}
-                    className="px-2 py-1 rounded-md bg-white/10 hover:bg-white/20 transition"
-                  >
-                    {i + 1}
-                  </button>
-                ))}
-              </div>
+        <div className="absolute bottom-4 left-4 z-20 flex flex-col items-start gap-2">
+          {debugOpen && (
+            <div className="w-[200px] sm:w-[230px] max-h-[45vh] overflow-y-auto rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.45)] p-3 text-xs text-white/90 space-y-2 ring-1 ring-inset ring-white/10 animate-fade-in">
+              <div className="font-semibold text-white/70 uppercase tracking-wider text-[10px]">Animations</div>
+              {Object.entries(motions).map(([group, count]) => (
+                <div key={group} className="space-y-1">
+                  <div className="text-white/60">{group} ({count})</div>
+                  <div className="flex flex-wrap gap-1">
+                    {Array.from({ length: count }).map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => { try { modelRef.current?.motion(group, i, 3); } catch {} }}
+                        className="px-2 py-1 rounded-md bg-white/10 hover:bg-white/20 transition"
+                      >
+                        {i + 1}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+              {expressions.length > 0 && (
+                <div className="space-y-1 pt-1 border-t border-white/10">
+                  <div className="text-white/60">Expression</div>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => {
+                        const next = (expIdx - 1 + expressions.length) % expressions.length;
+                        setExpIdx(next);
+                        try { modelRef.current?.expression(expressions[next]); } catch {}
+                      }}
+                      className="px-2 py-1 rounded-md bg-white/10 hover:bg-white/20 transition"
+                    >‹</button>
+                    <span className="flex-1 text-center text-white/80 truncate">{expressions[expIdx]}</span>
+                    <button
+                      onClick={() => {
+                        const next = (expIdx + 1) % expressions.length;
+                        setExpIdx(next);
+                        try { modelRef.current?.expression(expressions[next]); } catch {}
+                      }}
+                      className="px-2 py-1 rounded-md bg-white/10 hover:bg-white/20 transition"
+                    >›</button>
+                  </div>
+                </div>
+              )}
             </div>
-          ))}
-          {expressions.length > 0 && (
-            <div className="space-y-1 pt-1 border-t border-white/10">
-              <div className="text-white/60">Expression</div>
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={() => {
-                    const next = (expIdx - 1 + expressions.length) % expressions.length;
-                    setExpIdx(next);
-                    try { modelRef.current?.expression(expressions[next]); } catch {}
-                  }}
-                  className="px-2 py-1 rounded-md bg-white/10 hover:bg-white/20 transition"
-                >‹</button>
-                <span className="flex-1 text-center text-white/80">{expressions[expIdx]}</span>
-                <button
-                  onClick={() => {
-                    const next = (expIdx + 1) % expressions.length;
-                    setExpIdx(next);
-                    try { modelRef.current?.expression(expressions[next]); } catch {}
-                  }}
-                  className="px-2 py-1 rounded-md bg-white/10 hover:bg-white/20 transition"
-                >›</button>
-              </div>
-            </div>
           )}
+          <button
+            onClick={() => setDebugOpen((v) => !v)}
+            aria-label="Toggle animation tester"
+            className="h-9 w-9 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4)] text-white/80 hover:bg-white/15 transition flex items-center justify-center text-base"
+          >
+            {debugOpen ? "×" : "✦"}
+          </button>
         </div>
       )}
+
 
       <style>{`
         @keyframes minaIdle {
