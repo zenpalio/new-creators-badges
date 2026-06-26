@@ -216,7 +216,7 @@ function VRMModel({
       focusY = b.focus.upper;
       frameW = b.size.x * 0.75;
     } else {
-      // full body — center on the humanoid, not the imported scene bounds
+      // full body & back — center on the humanoid
       frameH = fullH * 1.15;
       focusY = b.focus.full;
     }
