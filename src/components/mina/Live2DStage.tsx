@@ -263,7 +263,7 @@ const Live2DStage = ({
       )}
 
       {debug && status === "ready" && (
-        <div className="absolute top-3 left-3 z-20 max-w-[260px] rounded-xl bg-black/55 backdrop-blur border border-white/10 p-3 text-xs text-white/90 space-y-2">
+        <div className="absolute bottom-4 left-4 z-20 w-[240px] rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.45)] p-3 text-xs text-white/90 space-y-2 ring-1 ring-inset ring-white/10">
           <div className="font-semibold text-white/70 uppercase tracking-wider text-[10px]">Animations</div>
           {Object.keys(motions).length === 0 && (
             <div className="text-white/50">No motion groups</div>
