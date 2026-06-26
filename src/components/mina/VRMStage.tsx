@@ -101,6 +101,7 @@ function VRMModel({
   const reactRef = useRef({ last: 0, intensity: 0 });
   const lookTargetRef = useRef(new THREE.Object3D());
   const bboxRef = useRef<CharacterFrame | null>(null);
+  const hipsRestYRef = useRef(0);
   const mixerRef = useRef<THREE.AnimationMixer | null>(null);
   const actionRef = useRef<THREE.AnimationAction | null>(null);
   const [animPlaying, setAnimPlaying] = useState(false);
@@ -236,6 +237,7 @@ function VRMModel({
             face: nHead?.y ?? bodyMinY + bodyHeight * 0.84,
           },
         };
+        hipsRestYRef.current = v.humanoid?.getNormalizedBoneNode("hips")?.position.y ?? 0;
 
         // Mixer for VRMA clips
         mixerRef.current = new THREE.AnimationMixer(v.scene);
@@ -415,7 +417,7 @@ function VRMModel({
       if (spine) spine.rotation.x = Math.sin(t * 1.8 + 0.4) * 0.012;
       if (hips) {
         hips.rotation.y = Math.sin(t * 0.45) * 0.04;
-        hips.position.y = Math.sin(t * 1.8) * 0.005;
+        hips.position.y = hipsRestYRef.current + Math.sin(t * 1.8) * 0.005;
       }
       if (lUpper) lUpper.rotation.z = Math.sin(t * 0.9) * 0.04 + 0.02;
       if (rUpper) rUpper.rotation.z = -Math.sin(t * 0.9 + 0.4) * 0.04 - 0.02;
