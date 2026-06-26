@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Phone, Gift, Settings2 } from "lucide-react";
-import { useCompanion, tierFromAffection } from "@/hooks/useCompanion";
+import { useCompanion, tierFromAffection, type MoodStats } from "@/hooks/useCompanion";
 import Live2DStage from "@/components/mina/Live2DStage";
-import ChatComposer from "@/components/mina/ChatComposer";
+import ChatComposer, { type Reaction, type Sentiment } from "@/components/mina/ChatComposer";
 import GiftDrawer from "@/components/mina/GiftDrawer";
 import CallModal from "@/components/mina/CallModal";
 import SceneControls, { BACKGROUNDS, MODELS, type SceneSettings } from "@/components/mina/SceneControls";
 import StatsPanel from "@/components/mina/StatsPanel";
+import ReactionFX from "@/components/mina/ReactionFX";
 
 const Mina = () => {
   const [mouth, setMouth] = useState(0);
@@ -21,10 +22,33 @@ const Mina = () => {
     backgroundId: "midnight",
     modelId: "hiyori",
   });
-  const { state, refresh } = useCompanion("mina");
+  const { state, refresh, patch, nudgeStats } = useCompanion("mina");
   const tier = tierFromAffection(state.affection);
   const bg = BACKGROUNDS.find((b) => b.id === scene.backgroundId) ?? BACKGROUNDS[0];
   const model = MODELS.find((m) => m.id === scene.modelId) ?? MODELS[0];
+
+  // Reaction FX
+  const [fxTrigger, setFxTrigger] = useState(0);
+  const [fxSentiment, setFxSentiment] = useState<Sentiment>("neutral");
+  const [affectionPulse, setAffectionPulse] = useState<"up" | "down" | null>(null);
+
+  const handleReaction = (r: Reaction) => {
+    const d = r.deltas ?? {};
+    const stat: Partial<MoodStats> = {};
+    (["joy", "arousal", "comfort", "calm", "energy", "hunger"] as (keyof MoodStats)[]).forEach((k) => {
+      if (typeof (d as any)[k] === "number") stat[k] = (d as any)[k];
+    });
+    if (Object.keys(stat).length) nudgeStats(stat);
+    if (typeof d.affection === "number" && d.affection !== 0) {
+      const next = Math.max(0, Math.min(100, state.affection + d.affection));
+      patch({ affection: next });
+      setAffectionPulse(d.affection > 0 ? "up" : "down");
+      window.setTimeout(() => setAffectionPulse(null), 900);
+    }
+    setFxSentiment(r.sentiment);
+    setFxTrigger((n) => n + 1);
+  };
+
 
   return (
     <div className="min-h-screen w-full relative overflow-hidden bg-[hsl(220_20%_6%)]">
