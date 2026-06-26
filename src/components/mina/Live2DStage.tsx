@@ -53,6 +53,7 @@ const Live2DStage = ({
   const [motions, setMotions] = useState<Record<string, number>>({});
   const [expressions, setExpressions] = useState<string[]>([]);
   const [expIdx, setExpIdx] = useState(0);
+  const [debugOpen, setDebugOpen] = useState(false);
 
   // Keep latest mouthOpen in a ref for the ticker
   useEffect(() => {
