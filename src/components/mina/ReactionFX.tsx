@@ -244,36 +244,7 @@ const ReactionFX = ({ trigger, sentiment, deltas }: Props) => {
               </div>
             )}
 
-            {/* Stat delta chips with bounce */}
-            <div className="absolute left-1/2 top-[16%] -translate-x-1/2 flex flex-col items-center gap-1.5">
-              {b.chips.map((c, i) => {
-                const pos = c.val > 0;
-                return (
-                  <div
-                    key={c.key}
-                    className="mina-chip flex items-center gap-1.5 pl-2 pr-3 h-9 rounded-full bg-black/55 backdrop-blur-xl border-2 shadow-[0_8px_24px_rgba(0,0,0,0.6)]"
-                    style={{
-                      animationDelay: `${i * 130 + 120}ms`,
-                      borderColor: pos ? "hsl(140 85% 60%)" : "hsl(0 85% 62%)",
-                      boxShadow: `0 0 22px ${pos ? "hsl(140 85% 60% / 0.55)" : "hsl(0 85% 62% / 0.55)"}, 0 8px 24px rgba(0,0,0,0.6)`,
-                    }}
-                  >
-                    <span className="text-base leading-none">{STAT_ICON[c.key]}</span>
-                    <span
-                      className={`text-base font-extrabold tabular-nums ${pos ? "text-emerald-200" : "text-rose-200"}`}
-                      style={{ textShadow: pos
-                        ? "0 0 14px hsl(140 90% 60% / 0.9)"
-                        : "0 0 14px hsl(0 90% 60% / 0.9)" }}
-                    >
-                      {pos ? "+" : ""}{c.val}
-                    </span>
-                    <span className="text-[10px] uppercase tracking-wider text-white/75 capitalize">
-                      {c.key}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
+            {/* Stat deltas are now rendered next to vitals in StatsPanel */}
           </div>
         );
       })}
