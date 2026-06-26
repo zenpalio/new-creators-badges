@@ -78,6 +78,9 @@ const Mina = () => {
         debug
       />
 
+      {/* Reaction effects over character */}
+      <ReactionFX trigger={fxTrigger} sentiment={fxSentiment} />
+
       {/* Top-right glass control cluster */}
       <div className="absolute top-5 right-5 z-30 flex items-center gap-2">
         <div className="hidden sm:flex items-center gap-3 px-4 h-11 rounded-full bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)]">
