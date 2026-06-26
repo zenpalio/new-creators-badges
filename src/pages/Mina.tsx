@@ -1,26 +1,39 @@
 import { useState } from "react";
-import { Phone, Gift } from "lucide-react";
+import { Phone, Gift, Settings2 } from "lucide-react";
 import { useCompanion, tierFromAffection } from "@/hooks/useCompanion";
 import Live2DStage from "@/components/mina/Live2DStage";
 import ChatComposer from "@/components/mina/ChatComposer";
 import GiftDrawer from "@/components/mina/GiftDrawer";
 import CallModal from "@/components/mina/CallModal";
+import SceneControls, { BACKGROUNDS, type SceneSettings } from "@/components/mina/SceneControls";
 
 const Mina = () => {
   const [mouth, setMouth] = useState(0);
   const [giftOpen, setGiftOpen] = useState(false);
   const [callOpen, setCallOpen] = useState(false);
+  const [sceneOpen, setSceneOpen] = useState(false);
+  const [scene, setScene] = useState<SceneSettings>({
+    rotation: 0,
+    scale: 1,
+    mirror: false,
+    backgroundId: "midnight",
+  });
   const { state, refresh } = useCompanion("mina");
   const tier = tierFromAffection(state.affection);
+  const bg = BACKGROUNDS.find((b) => b.id === scene.backgroundId) ?? BACKGROUNDS[0];
 
   return (
     <div className="min-h-screen w-full relative overflow-hidden bg-[hsl(220_20%_6%)]">
-      {/* Ambient backdrop */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[hsl(225_25%_8%)] via-[hsl(230_28%_10%)] to-[hsl(220_25%_5%)]" />
-      <div className="absolute inset-0 opacity-60 bg-[radial-gradient(circle_at_50%_30%,hsl(230_60%_25%/0.45),transparent_65%),radial-gradient(circle_at_50%_100%,hsl(260_50%_20%/0.4),transparent_60%)]" />
+      {/* Ambient backdrop — driven by scene preset */}
+      <div className="absolute inset-0 transition-[background] duration-500" style={{ background: bg.css }} />
 
-      {/* Character — full size, centered */}
-      <Live2DStage mouthOpen={mouth} />
+      {/* Character */}
+      <Live2DStage
+        mouthOpen={mouth}
+        rotation={scene.rotation}
+        scale={scene.scale}
+        mirror={scene.mirror}
+      />
 
       {/* Top-right glass control cluster */}
       <div className="absolute top-5 right-5 z-30 flex items-center gap-2">
@@ -57,9 +70,20 @@ const Mina = () => {
         >
           <Gift className="w-4 h-4" />
         </button>
+        <button
+          onClick={() => setSceneOpen((v) => !v)}
+          className={`w-11 h-11 rounded-full backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] flex items-center justify-center transition ${
+            sceneOpen ? "bg-white text-[hsl(220_25%_10%)]" : "bg-white/[0.06] text-white/90 hover:bg-white/[0.12] hover:scale-105"
+          }`}
+          title="Scene settings"
+        >
+          <Settings2 className="w-4 h-4" />
+        </button>
       </div>
 
-      {/* Chat — centered bottom strip */}
+      <SceneControls open={sceneOpen} onClose={() => setSceneOpen(false)} settings={scene} onChange={setScene} />
+
+      {/* Chat */}
       <div className="absolute left-1/2 -translate-x-1/2 bottom-6 z-20 w-[min(680px,calc(100%-2rem))]">
         <ChatComposer onAfterReply={refresh} />
       </div>

@@ -4,15 +4,14 @@ import minaImg from "@/assets/mina-character.png";
 interface Props {
   /** 0–1; subtle mouth/head bounce while speaking */
   mouthOpen?: number;
-  expression?: string | null;
+  /** degrees, -45..45 */
+  rotation?: number;
+  /** 0.5..1.5 */
+  scale?: number;
+  mirror?: boolean;
 }
 
-/**
- * Animated VTuber stage. Uses a high-quality portrait with
- * idle breathing + sway + speak bounce. Reliable replacement
- * for the Live2D runtime which has incompatibilities with Pixi v7.
- */
-const Live2DStage = ({ mouthOpen = 0 }: Props) => {
+const Live2DStage = ({ mouthOpen = 0, rotation = 0, scale = 1, mirror = false }: Props) => {
   const [blink, setBlink] = useState(false);
 
   useEffect(() => {
@@ -33,33 +32,42 @@ const Live2DStage = ({ mouthOpen = 0 }: Props) => {
       {/* Soft floor glow */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[70%] h-48 rounded-[50%] bg-[radial-gradient(ellipse_at_center,hsl(230_60%_40%/0.35),transparent_70%)] blur-2xl" />
 
+      {/* Outer wrapper: user controls (rotation/scale/mirror) */}
       <div
-        className="relative h-[100vh] aspect-[7/10] mina-idle"
+        className="relative h-[100vh] aspect-[7/10] transition-transform duration-300 ease-out"
         style={{
-          transform: speaking ? "translateY(-2px) scale(1.005)" : undefined,
-          transition: "transform 120ms ease-out",
+          transform: `rotate(${rotation}deg) scale(${scale}) scaleX(${mirror ? -1 : 1})`,
+          transformOrigin: "bottom center",
         }}
       >
-        <img
-          src={minaImg}
-          alt="Mina"
-          className="w-full h-full object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.6)] select-none"
-          draggable={false}
-        />
-        {/* Blink overlay — thin dark line across eye region */}
+        {/* Inner wrapper: idle breathing + speak bounce */}
         <div
-          className="absolute left-0 right-0 mx-auto pointer-events-none transition-opacity duration-100"
+          className="relative w-full h-full mina-idle"
           style={{
-            top: "32%",
-            height: "3.5%",
-            width: "44%",
-            background:
-              "linear-gradient(to bottom, transparent, rgba(20,10,15,0.85), transparent)",
-            borderRadius: "40%",
-            opacity: blink ? 0.95 : 0,
-            filter: "blur(1px)",
+            transform: speaking ? "translateY(-2px) scale(1.005)" : undefined,
+            transition: "transform 120ms ease-out",
           }}
-        />
+        >
+          <img
+            src={minaImg}
+            alt="Mina"
+            className="w-full h-full object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.6)] select-none"
+            draggable={false}
+          />
+          {/* Blink overlay */}
+          <div
+            className="absolute left-0 right-0 mx-auto pointer-events-none transition-opacity duration-100"
+            style={{
+              top: "32%",
+              height: "3.5%",
+              width: "44%",
+              background: "linear-gradient(to bottom, transparent, rgba(20,10,15,0.85), transparent)",
+              borderRadius: "40%",
+              opacity: blink ? 0.95 : 0,
+              filter: "blur(1px)",
+            }}
+          />
+        </div>
       </div>
 
       <style>{`
