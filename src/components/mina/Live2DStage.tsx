@@ -29,12 +29,12 @@ const Live2DStage = ({ mouthOpen = 0 }: Props) => {
   const speaking = mouthOpen > 0.05;
 
   return (
-    <div className="absolute inset-0 flex items-end justify-center overflow-hidden">
+    <div className="absolute inset-0 flex items-end justify-center overflow-hidden pointer-events-none">
       {/* Soft floor glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-40 rounded-[50%] bg-[radial-gradient(ellipse_at_center,hsl(350_95%_55%/0.35),transparent_70%)] blur-2xl pointer-events-none" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[70%] h-48 rounded-[50%] bg-[radial-gradient(ellipse_at_center,hsl(230_60%_40%/0.35),transparent_70%)] blur-2xl" />
 
       <div
-        className="relative h-[92%] max-h-[820px] aspect-[7/10] mina-idle"
+        className="relative h-[100vh] aspect-[7/10] mina-idle"
         style={{
           transform: speaking ? "translateY(-2px) scale(1.005)" : undefined,
           transition: "transform 120ms ease-out",

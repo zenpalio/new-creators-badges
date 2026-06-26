@@ -1,37 +1,28 @@
 import { useState, useRef, useEffect } from "react";
 import { Send } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
 
 interface Msg { role: "user" | "assistant"; content: string; }
+
+const MOCK_REPLIES = [
+  "Mm, tell me more~",
+  "I was just thinking about you.",
+  "You always know what to say.",
+  "Stay a little longer?",
+  "That made me smile.",
+];
 
 const ChatComposer = ({ onAfterReply }: { onAfterReply?: () => void }) => {
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [msgs]);
+  }, [msgs, sending]);
 
-  // Load recent history
-  useEffect(() => {
-    (async () => {
-      const { data: u } = await supabase.auth.getUser();
-      if (!u.user) return;
-      const { data: comp } = await supabase.from("companions").select("id").eq("slug", "mina").maybeSingle();
-      if (!comp) return;
-      const { data } = await supabase
-        .from("chat_messages")
-        .select("role, content")
-        .eq("user_id", u.user.id)
-        .eq("companion_id", comp.id)
-        .order("created_at", { ascending: false })
-        .limit(20);
-      if (data) setMsgs(data.reverse() as Msg[]);
-    })();
-  }, []);
+  useEffect(() => { inputRef.current?.focus(); }, []);
 
   const send = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,63 +31,64 @@ const ChatComposer = ({ onAfterReply }: { onAfterReply?: () => void }) => {
     setText("");
     setMsgs((p) => [...p, { role: "user", content: m }]);
     setSending(true);
-    try {
-      const { data, error } = await supabase.functions.invoke("mina-chat", { body: { slug: "mina", message: m } });
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
-      setMsgs((p) => [...p, { role: "assistant", content: data.reply }]);
-      onAfterReply?.();
-    } catch (err: any) {
-      toast.error(err.message ?? "Mina is silent…");
-    } finally {
-      setSending(false);
-    }
+    await new Promise((r) => setTimeout(r, 800 + Math.random() * 600));
+    const reply = MOCK_REPLIES[Math.floor(Math.random() * MOCK_REPLIES.length)];
+    setMsgs((p) => [...p, { role: "assistant", content: reply }]);
+    setSending(false);
+    onAfterReply?.();
+    setTimeout(() => inputRef.current?.focus(), 50);
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 py-2 space-y-2 scrollbar-hide">
-        {msgs.length === 0 && (
-          <div className="text-center text-xs text-muted-v2-foreground/70 py-8">
-            Say something to Mina…
-          </div>
-        )}
-        {msgs.map((m, i) => (
-          <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
-            <div className={`max-w-[80%] px-3 py-2 rounded-2xl text-sm ${
-              m.role === "user"
-                ? "bg-primary-v2 text-primary-v2-foreground rounded-br-sm"
-                : "bg-background-v2/80 backdrop-blur-md text-foreground-v2 border border-border-v2/40 rounded-bl-sm"
-            }`}>
-              {m.content}
+    <div className="flex flex-col gap-3">
+      {/* Transcript — floats above input, transparent surface */}
+      {(msgs.length > 0 || sending) && (
+        <div
+          ref={scrollRef}
+          className="max-h-[28vh] overflow-y-auto scrollbar-hide flex flex-col gap-2 px-1"
+        >
+          {msgs.map((m, i) => (
+            <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+              {m.role === "user" ? (
+                <div className="max-w-[75%] px-4 py-2 rounded-2xl rounded-br-md text-sm bg-white/90 text-[hsl(220_25%_10%)] shadow-lg">
+                  {m.content}
+                </div>
+              ) : (
+                <div className="max-w-[80%] text-sm text-white/95 leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+                  {m.content}
+                </div>
+              )}
             </div>
-          </div>
-        ))}
-        {sending && (
-          <div className="flex justify-start">
-            <div className="bg-background-v2/80 backdrop-blur-md border border-border-v2/40 rounded-2xl rounded-bl-sm px-3 py-2">
-              <span className="inline-flex gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
-                <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" style={{ animationDelay: "0.15s" }} />
-                <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" style={{ animationDelay: "0.3s" }} />
+          ))}
+          {sending && (
+            <div className="flex justify-start">
+              <span className="inline-flex gap-1 py-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse" style={{ animationDelay: "0.15s" }} />
+                <span className="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse" style={{ animationDelay: "0.3s" }} />
               </span>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
 
-      <form onSubmit={send} className="flex items-center gap-2 p-2 border-t border-border-v2/40 bg-background-v2/60 backdrop-blur-md">
+      {/* Composer — glass pill */}
+      <form
+        onSubmit={send}
+        className="flex items-center gap-2 pl-5 pr-2 h-14 rounded-full bg-white/[0.07] backdrop-blur-xl border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.4)]"
+      >
         <input
+          ref={inputRef}
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Message Mina…"
-          className="flex-1 bg-muted-v2/60 rounded-full px-4 py-2 text-sm text-foreground-v2 placeholder:text-muted-v2-foreground focus:outline-none focus:ring-2 focus:ring-red-500/40"
+          className="flex-1 bg-transparent text-sm text-white placeholder:text-white/40 focus:outline-none"
           disabled={sending}
         />
         <button
           type="submit"
           disabled={sending || !text.trim()}
-          className="w-9 h-9 rounded-full bg-gradient-to-br from-red-500 to-pink-600 flex items-center justify-center text-white disabled:opacity-40 hover:opacity-90 transition"
+          className="w-10 h-10 rounded-full bg-white text-[hsl(220_25%_10%)] flex items-center justify-center disabled:opacity-30 hover:scale-105 transition"
         >
           <Send className="w-4 h-4" />
         </button>
