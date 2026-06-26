@@ -39,6 +39,12 @@ interface MeshInfo {
   visible: boolean;
 }
 
+interface CharacterFrame {
+  size: THREE.Vector3;
+  center: THREE.Vector3;
+  min: THREE.Vector3;
+}
+
 const EXPR_MAP: Record<VrmSentiment, Partial<Record<string, number>>> = {
   neutral:   { happy: 0.05, angry: 0, sad: 0, surprised: 0, relaxed: 0.15 },
   love:      { happy: 0.85, relaxed: 0.5, angry: 0, sad: 0, surprised: 0 },
@@ -89,7 +95,7 @@ function VRMModel({
   const exprRef = useRef<Record<string, number>>({});
   const reactRef = useRef({ last: 0, intensity: 0 });
   const lookTargetRef = useRef(new THREE.Object3D());
-  const bboxRef = useRef<{ size: THREE.Vector3; center: THREE.Vector3; min: THREE.Vector3 } | null>(null);
+  const bboxRef = useRef<CharacterFrame | null>(null);
   const mixerRef = useRef<THREE.AnimationMixer | null>(null);
   const actionRef = useRef<THREE.AnimationAction | null>(null);
   const [animPlaying, setAnimPlaying] = useState(false);
@@ -167,23 +173,52 @@ function VRMModel({
         v.scene.rotation.y = Math.PI;
         v.scene.updateMatrixWorld(true);
 
-        // Normalize the imported VRM around the world origin so the camera and
-        // controls always frame the character from the actual visual center.
+        // Normalize from humanoid bones, not mesh bounds. VRM outfits/accessory
+        // bounds can be far outside the visible body and pull framing down.
+        const getBoneWorld = (name: Parameters<VRM["humanoid"]["getNormalizedBoneNode"]>[0]) => {
+          const node = v.humanoid?.getNormalizedBoneNode(name);
+          return node ? node.getWorldPosition(new THREE.Vector3()) : null;
+        };
         const rawBox = new THREE.Box3().setFromObject(v.scene);
         const rawCenter = new THREE.Vector3();
         rawBox.getCenter(rawCenter);
-        v.scene.position.x -= rawCenter.x;
-        v.scene.position.y -= rawBox.min.y;
-        v.scene.position.z -= rawCenter.z;
+        const hips = getBoneWorld("hips");
+        const head = getBoneWorld("head");
+        const leftFoot = getBoneWorld("leftFoot") ?? getBoneWorld("leftToes");
+        const rightFoot = getBoneWorld("rightFoot") ?? getBoneWorld("rightToes");
+        const bodyCenterX = hips?.x ?? head?.x ?? rawCenter.x;
+        const bodyCenterZ = hips?.z ?? head?.z ?? rawCenter.z;
+        const footY = Math.min(
+          leftFoot?.y ?? rawBox.min.y,
+          rightFoot?.y ?? rawBox.min.y,
+          rawBox.min.y,
+        );
+        v.scene.position.x -= bodyCenterX;
+        v.scene.position.y -= footY;
+        v.scene.position.z -= bodyCenterZ;
         v.scene.updateMatrixWorld(true);
 
-        // Measure and store normalized bbox, then apply current view preset
+        // Measure a body frame from the normalized skeleton, then apply preset.
         const box = new THREE.Box3().setFromObject(v.scene);
         const size = new THREE.Vector3();
         const center = new THREE.Vector3();
         box.getSize(size);
         box.getCenter(center);
-        bboxRef.current = { size, center, min: box.min.clone() };
+        const nHips = getBoneWorld("hips");
+        const nHead = getBoneWorld("head");
+        const nLeftFoot = getBoneWorld("leftFoot") ?? getBoneWorld("leftToes");
+        const nRightFoot = getBoneWorld("rightFoot") ?? getBoneWorld("rightToes");
+        const bodyMinY = Math.min(nLeftFoot?.y ?? box.min.y, nRightFoot?.y ?? box.min.y, box.min.y);
+        const bodyHeadY = nHead?.y ?? box.max.y;
+        const bodyHeight = Math.max(0.6, bodyHeadY - bodyMinY);
+        const frameHeight = bodyHeight * 1.12;
+        const frameWidth = Math.max(Math.min(size.x, bodyHeight * 0.85), bodyHeight * 0.35);
+        const frameCenter = new THREE.Vector3(nHips?.x ?? 0, bodyMinY + frameHeight * 0.5, nHips?.z ?? 0);
+        bboxRef.current = {
+          size: new THREE.Vector3(frameWidth, frameHeight, Math.max(size.z, bodyHeight * 0.35)),
+          center: frameCenter,
+          min: new THREE.Vector3(frameCenter.x - frameWidth * 0.5, bodyMinY, frameCenter.z - size.z * 0.5),
+        };
 
         // Mixer for VRMA clips
         mixerRef.current = new THREE.AnimationMixer(v.scene);
