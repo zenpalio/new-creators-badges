@@ -832,39 +832,27 @@ const VRMStage = ({
             e.target.value = "";
           }}
         />
-        {vrmaUrl && vrmaUrl !== DEFAULT_ANIM.url ? (
-          <button
-            onClick={(e) => { e.stopPropagation(); handleAnimEnd(); }}
-            className="h-9 px-3 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl text-white/80 hover:bg-white/15 transition flex items-center gap-1.5 text-[11px]"
-            title="Back to default pose"
-          >
-            <Square className="w-3 h-3" /> Stop
-          </button>
-        ) : (
-          <>
-            <button
-              onClick={(e) => { e.stopPropagation(); playPreset(kneelingIdle.url, "Kneeling Idle", "fbx"); }}
-              className="h-9 px-3 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl text-white/80 hover:bg-white/15 transition flex items-center gap-1.5 text-[11px]"
-              title="Play Kneeling Idle"
-            >
-              <Film className="w-3 h-3" /> Kneeling
-            </button>
-            <button
-              onClick={(e) => { e.stopPropagation(); playPreset(talkingAnim.url, "Talking", "fbx"); }}
-              className="h-9 px-3 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl text-white/80 hover:bg-white/15 transition flex items-center gap-1.5 text-[11px]"
-              title="Play Talking"
-            >
-              <Film className="w-3 h-3" /> Talking
-            </button>
-            <button
-              onClick={(e) => { e.stopPropagation(); vrmaFileRef.current?.click(); }}
-              className="h-9 px-3 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl text-white/80 hover:bg-white/15 transition flex items-center gap-1.5 text-[11px]"
-              title="Load .vrma or Mixamo .fbx"
-            >
-              <Upload className="w-3 h-3" /> Load anim
-            </button>
-          </>
-        )}
+        <button
+          onClick={(e) => { e.stopPropagation(); playPreset(kneelingIdle.url, "Kneeling Idle", "fbx"); }}
+          className="h-9 px-3 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl text-white/80 hover:bg-white/15 transition flex items-center gap-1.5 text-[11px]"
+          title="Play Kneeling Idle"
+        >
+          <Film className="w-3 h-3" /> Kneeling
+        </button>
+        <button
+          onClick={(e) => { e.stopPropagation(); playPreset(talkingAnim.url, "Talking", "fbx"); }}
+          className="h-9 px-3 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl text-white/80 hover:bg-white/15 transition flex items-center gap-1.5 text-[11px]"
+          title="Play Talking"
+        >
+          <Film className="w-3 h-3" /> Talking
+        </button>
+        <button
+          onClick={(e) => { e.stopPropagation(); vrmaFileRef.current?.click(); }}
+          className="h-9 px-3 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl text-white/80 hover:bg-white/15 transition flex items-center gap-1.5 text-[11px]"
+          title="Load .vrma or Mixamo .fbx"
+        >
+          <Upload className="w-3 h-3" /> Load anim
+        </button>
       </div>
     </div>
   );
