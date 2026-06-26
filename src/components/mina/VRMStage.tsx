@@ -342,14 +342,13 @@ const VRMStage = ({
           </group>
         </Suspense>
         <OrbitControls
-          target={[0, 1.35, 0]}
           enablePan
           enableZoom
           enableRotate
-          minDistance={0.6}
-          maxDistance={4}
-          minPolarAngle={Math.PI * 0.15}
-          maxPolarAngle={Math.PI * 0.85}
+          minDistance={0.4}
+          maxDistance={8}
+          minPolarAngle={Math.PI * 0.05}
+          maxPolarAngle={Math.PI * 0.95}
           makeDefault
         />
       </Canvas>
