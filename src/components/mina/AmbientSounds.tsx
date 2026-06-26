@@ -58,6 +58,7 @@ const AmbientSounds = ({ speaking = false, volume = 0.35, enabled = true }: Prop
   const lastIdxRef = useRef<number>(-1);
   const speakingRef = useRef(speaking);
   const enabledRef = useRef(enabled);
+  const unlockedRef = useRef(false);
   useEffect(() => { speakingRef.current = speaking; }, [speaking]);
   useEffect(() => { enabledRef.current = enabled; }, [enabled]);
 
@@ -66,6 +67,8 @@ const AmbientSounds = ({ speaking = false, volume = 0.35, enabled = true }: Prop
     let cancelled = false;
     const audio = new Audio();
     audio.volume = Math.max(0, Math.min(1, volume));
+    audio.preload = "auto";
+    (audio as any).playsInline = true;
     audioRef.current = audio;
 
     const pickNext = () => {
@@ -82,8 +85,8 @@ const AmbientSounds = ({ speaking = false, volume = 0.35, enabled = true }: Prop
 
     const playOne = async () => {
       if (cancelled) return;
-      if (speakingRef.current || !enabledRef.current) {
-        schedule(8000);
+      if (!unlockedRef.current || speakingRef.current || !enabledRef.current) {
+        schedule(4000);
         return;
       }
       const prompt = pickNext();
@@ -94,20 +97,50 @@ const AmbientSounds = ({ speaking = false, volume = 0.35, enabled = true }: Prop
         if (speakingRef.current) { schedule(6000); return; }
         audio.src = url;
         audio.currentTime = 0;
-        await audio.play().catch(() => { /* autoplay blocked — try again later */ });
+        try {
+          await audio.play();
+        } catch (err) {
+          // Autoplay still blocked — wait for next gesture.
+          unlockedRef.current = false;
+          console.warn("[ambient-sfx] play blocked", err);
+        }
       } catch (e) {
         console.warn("[ambient-sfx]", e);
       }
-      // Next ambient sound 18–35s later.
       schedule(18000 + Math.random() * 17000);
     };
 
-    // First sound after a brief settle so the page loads quietly.
+    // Unlock on first user gesture (browser autoplay policy). Play a clip
+    // immediately so the user gets instant feedback the system is alive.
+    const unlock = () => {
+      if (unlockedRef.current) return;
+      unlockedRef.current = true;
+      // Prime the element with a silent play() inside the gesture so future
+      // programmatic .play() calls are allowed.
+      try {
+        audio.muted = true;
+        audio.play().then(() => {
+          audio.pause();
+          audio.muted = false;
+          audio.currentTime = 0;
+        }).catch(() => { audio.muted = false; });
+      } catch { audio.muted = false; }
+      schedule(1500);
+    };
+    const opts: AddEventListenerOptions = { once: true, passive: true };
+    window.addEventListener("pointerdown", unlock, opts);
+    window.addEventListener("keydown", unlock, opts);
+    window.addEventListener("touchstart", unlock, opts);
+
+    // In case a gesture has already happened before mount, also try after a delay.
     schedule(6000 + Math.random() * 6000);
 
     return () => {
       cancelled = true;
       if (timerRef.current) window.clearTimeout(timerRef.current);
+      window.removeEventListener("pointerdown", unlock);
+      window.removeEventListener("keydown", unlock);
+      window.removeEventListener("touchstart", unlock);
       try { audio.pause(); } catch {}
       audioRef.current = null;
     };
