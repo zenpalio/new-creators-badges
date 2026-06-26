@@ -182,21 +182,27 @@ const Live2DStage = ({
       {/* Soft floor glow */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[70%] h-48 rounded-[50%] bg-[radial-gradient(ellipse_at_center,hsl(230_60%_40%/0.35),transparent_70%)] blur-2xl pointer-events-none" />
 
-      {/* Interactive stage: drag to pan, wheel to zoom */}
+      {/* Stage canvas — visual only, no pointer events */}
       <div
         ref={hostRef}
-        className="absolute inset-0 mina-idle cursor-grab active:cursor-grabbing touch-none select-none"
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={endDrag}
-        onPointerCancel={endDrag}
-        onWheel={onWheel}
+        className="absolute inset-0 mina-idle pointer-events-none select-none"
         style={{
           transform: `translate(${pan.x}px, ${pan.y}px) rotateY(${rotation}deg) scale(${totalScale}) scaleX(${mirror ? -1 : 1})`,
           transformOrigin: "center center",
           transition: dragRef.current ? "none" : "transform 200ms ease-out",
         }}
       />
+
+      {/* Drag/zoom catcher — small area centered on Mina */}
+      <div
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[42%] h-[70%] cursor-grab active:cursor-grabbing touch-none select-none z-10"
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        onWheel={onWheel}
+      />
+
 
       {status === "loading" && (
         <div className="absolute inset-0 flex items-center justify-center text-sm text-white/60 pointer-events-none">
