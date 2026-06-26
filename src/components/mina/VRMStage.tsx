@@ -555,15 +555,16 @@ const VRMStage = ({
   const [loadPct, setLoadPct] = useState(0);
   const [loadErr, setLoadErr] = useState<string | null>(null);
   const [viewPreset, setViewPreset] = useState<ViewPreset>("full");
-  const [vrmaUrl, setVrmaUrl] = useState<string | null>(null);
-  const [vrmaName, setVrmaName] = useState<string | null>(null);
-  const [animKind, setAnimKind] = useState<"vrma" | "fbx" | null>(null);
+  const [vrmaUrl, setVrmaUrl] = useState<string | null>(DEFAULT_ANIM.url);
+  const [vrmaName, setVrmaName] = useState<string | null>(DEFAULT_ANIM.name);
+  const [animKind, setAnimKind] = useState<"vrma" | "fbx" | null>(DEFAULT_ANIM.kind);
   const vrmaFileRef = useRef<HTMLInputElement | null>(null);
-  const handleAnimEnd = useCallback(() => {
-    setVrmaUrl((prev) => { if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev); return null; });
-    setVrmaName(null);
-    setAnimKind(null);
+  const resetToDefault = useCallback(() => {
+    setVrmaUrl((prev) => { if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev); return DEFAULT_ANIM.url; });
+    setVrmaName(DEFAULT_ANIM.name);
+    setAnimKind(DEFAULT_ANIM.kind);
   }, []);
+  const handleAnimEnd = useCallback(() => { resetToDefault(); }, [resetToDefault]);
   const handlePickVrma = (file: File) => {
     if (vrmaUrl && vrmaUrl.startsWith("blob:")) URL.revokeObjectURL(vrmaUrl);
     const isFbx = /\.fbx$/i.test(file.name);
@@ -579,11 +580,11 @@ const VRMStage = ({
   };
 
   // Auto-play Talking animation while the character is speaking.
-  // Only auto-plays when nothing else is active, and only auto-stops the talking clip.
+  // Only swaps when the default standing pose is active; restores standing when done.
   const autoTalkingRef = useRef(false);
   useEffect(() => {
     if (speaking) {
-      if (!vrmaUrl) {
+      if (vrmaUrl === DEFAULT_ANIM.url) {
         autoTalkingRef.current = true;
         setVrmaUrl(talkingAnim.url);
         setVrmaName("Talking");
@@ -591,11 +592,9 @@ const VRMStage = ({
       }
     } else if (autoTalkingRef.current) {
       autoTalkingRef.current = false;
-      setVrmaUrl((prev) => { if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev); return null; });
-      setVrmaName(null);
-      setAnimKind(null);
+      resetToDefault();
     }
-  }, [speaking, vrmaUrl]);
+  }, [speaking, vrmaUrl, resetToDefault]);
 
 
 
