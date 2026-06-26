@@ -555,16 +555,22 @@ const VRMStage = ({
   const [animKind, setAnimKind] = useState<"vrma" | "fbx" | null>(null);
   const vrmaFileRef = useRef<HTMLInputElement | null>(null);
   const handleAnimEnd = useCallback(() => {
-    setVrmaUrl((prev) => { if (prev) URL.revokeObjectURL(prev); return null; });
+    setVrmaUrl((prev) => { if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev); return null; });
     setVrmaName(null);
     setAnimKind(null);
   }, []);
   const handlePickVrma = (file: File) => {
-    if (vrmaUrl) URL.revokeObjectURL(vrmaUrl);
+    if (vrmaUrl && vrmaUrl.startsWith("blob:")) URL.revokeObjectURL(vrmaUrl);
     const isFbx = /\.fbx$/i.test(file.name);
     setVrmaUrl(URL.createObjectURL(file));
     setVrmaName(file.name.replace(/\.(vrma|fbx|glb)$/i, ""));
     setAnimKind(isFbx ? "fbx" : "vrma");
+  };
+  const playPreset = (url: string, name: string, kind: "vrma" | "fbx") => {
+    if (vrmaUrl && vrmaUrl.startsWith("blob:")) URL.revokeObjectURL(vrmaUrl);
+    setVrmaUrl(url);
+    setVrmaName(name);
+    setAnimKind(kind);
   };
 
 
