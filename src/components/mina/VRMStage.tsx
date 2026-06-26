@@ -148,7 +148,7 @@ const EXPR_MAP: Record<VrmSentiment, Partial<Record<string, number>>> = {
   intimate:  { happy: 0.4, relaxed: 0.6, surprised: 0.15, angry: 0, sad: 0 },
 };
 
-export type ViewPreset = "full" | "upper" | "face";
+export type ViewPreset = "full" | "upper" | "face" | "back";
 
 function VRMModel({
   url,
