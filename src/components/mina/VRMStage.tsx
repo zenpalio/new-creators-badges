@@ -320,6 +320,8 @@ const VRMStage = ({
   const [outfitOpen, setOutfitOpen] = useState(false);
   const [loadPct, setLoadPct] = useState(0);
   const [loadErr, setLoadErr] = useState<string | null>(null);
+  const [viewPreset, setViewPreset] = useState<ViewPreset>("full");
+
 
   const groupTransform = useMemo(
     () => ({
