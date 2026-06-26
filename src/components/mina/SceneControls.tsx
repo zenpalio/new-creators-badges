@@ -139,29 +139,6 @@ const SceneControls = ({ open, onClose, settings, onChange }: Props) => {
         </button>
       </div>
 
-      {/* Character model */}
-      <div className="mb-4">
-        <label className="text-xs text-white/60 mb-2 block">Character</label>
-        <div className="grid grid-cols-2 gap-1.5">
-          {MODELS.map((m) => {
-            const active = settings.modelId === m.id;
-            return (
-              <button
-                key={m.id}
-                onClick={() => update({ modelId: m.id })}
-                className={`h-9 rounded-lg border text-xs transition px-2 text-left ${
-                  active
-                    ? "bg-white text-[hsl(220_25%_10%)] border-white"
-                    : "bg-white/[0.06] hover:bg-white/[0.12] border-white/10 text-white/80"
-                }`}
-                title={m.note}
-              >
-                {m.label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
 
       {/* Backgrounds */}
       <div>
