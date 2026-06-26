@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Phone, Gift } from "lucide-react";
-import { useCompanion } from "@/hooks/useCompanion";
+import { useCompanion, tierFromAffection } from "@/hooks/useCompanion";
 import Live2DStage from "@/components/mina/Live2DStage";
-import AffectionHUD from "@/components/mina/AffectionHUD";
 import ChatComposer from "@/components/mina/ChatComposer";
 import GiftDrawer from "@/components/mina/GiftDrawer";
 import CallModal from "@/components/mina/CallModal";
@@ -12,41 +11,56 @@ const Mina = () => {
   const [giftOpen, setGiftOpen] = useState(false);
   const [callOpen, setCallOpen] = useState(false);
   const { state, refresh } = useCompanion("mina");
+  const tier = tierFromAffection(state.affection);
 
   return (
-    <div className="min-h-screen bg-background-v2 relative overflow-hidden">
+    <div className="min-h-screen w-full relative overflow-hidden bg-[hsl(220_20%_6%)]">
       {/* Ambient backdrop */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[hsl(0,0%,6%)] via-[hsl(350,30%,10%)] to-[hsl(0,0%,4%)]" />
-      <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_30%_20%,hsl(350_95%_55%/0.25),transparent_60%),radial-gradient(circle_at_70%_80%,hsl(213_100%_50%/0.18),transparent_60%)]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[hsl(225_25%_8%)] via-[hsl(230_28%_10%)] to-[hsl(220_25%_5%)]" />
+      <div className="absolute inset-0 opacity-60 bg-[radial-gradient(circle_at_50%_30%,hsl(230_60%_25%/0.45),transparent_65%),radial-gradient(circle_at_50%_100%,hsl(260_50%_20%/0.4),transparent_60%)]" />
 
-      {/* Live2D model — takes the upper area, leaves bottom for chat */}
-      <div className="absolute inset-0 bottom-[40vh] md:bottom-0 md:right-[360px]">
-        <Live2DStage mouthOpen={mouth} />
-      </div>
+      {/* Character — full size, centered */}
+      <Live2DStage mouthOpen={mouth} />
 
-      <AffectionHUD state={state} />
+      {/* Top-right glass control cluster */}
+      <div className="absolute top-5 right-5 z-30 flex items-center gap-2">
+        <div className="hidden sm:flex items-center gap-3 px-4 h-11 rounded-full bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)]">
+          <div className="flex items-center gap-2">
+            <span className="text-xs uppercase tracking-wider text-white/50">Mina</span>
+            <span className="text-xs font-medium text-white capitalize">· {tier}</span>
+          </div>
+          <div className="w-px h-4 bg-white/15" />
+          <div className="flex items-center gap-1.5">
+            <div className="w-16 h-1 rounded-full bg-white/10 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-white/80 to-white/40 transition-all duration-500"
+                style={{ width: `${state.affection}%` }}
+              />
+            </div>
+            <span className="text-[10px] text-white/40 tabular-nums">{state.affection}</span>
+          </div>
+          <div className="w-px h-4 bg-white/15" />
+          <span className="text-xs text-white/70 tabular-nums">{state.tokens_balance} <span className="text-white/40">tokens</span></span>
+        </div>
 
-
-      {/* Action rail */}
-      <div className="absolute right-4 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-3 md:right-[376px]">
         <button
           onClick={() => setCallOpen(true)}
-          className="w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 shadow-lg shadow-green-900/40 flex items-center justify-center text-white hover:scale-105 transition"
+          className="w-11 h-11 rounded-full bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] flex items-center justify-center text-white/90 hover:bg-white/[0.12] hover:scale-105 transition"
           title="Call Mina"
         >
-          <Phone className="w-5 h-5" />
+          <Phone className="w-4 h-4" />
         </button>
         <button
           onClick={() => setGiftOpen(true)}
-          className="w-12 h-12 rounded-full bg-gradient-to-br from-red-500 to-pink-600 shadow-lg shadow-red-900/40 flex items-center justify-center text-white hover:scale-105 transition"
+          className="w-11 h-11 rounded-full bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] flex items-center justify-center text-white/90 hover:bg-white/[0.12] hover:scale-105 transition"
           title="Send a gift"
         >
-          <Gift className="w-5 h-5" />
+          <Gift className="w-4 h-4" />
         </button>
       </div>
 
-      {/* Chat — bottom sheet on mobile, right rail on desktop */}
-      <div className="absolute bottom-0 left-0 right-0 h-[40vh] md:top-0 md:left-auto md:bottom-0 md:right-0 md:w-[360px] md:h-screen z-10 bg-background-v2/40 backdrop-blur-xl border-t md:border-t-0 md:border-l border-border-v2/40 flex flex-col">
+      {/* Chat — centered bottom strip */}
+      <div className="absolute left-1/2 -translate-x-1/2 bottom-6 z-20 w-[min(680px,calc(100%-2rem))]">
         <ChatComposer onAfterReply={refresh} />
       </div>
 
