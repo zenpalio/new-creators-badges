@@ -565,6 +565,7 @@ const VRMStage = ({
   const [loadPct, setLoadPct] = useState(0);
   const [loadErr, setLoadErr] = useState<string | null>(null);
   const [viewPreset, setViewPreset] = useState<ViewPreset>("full");
+  const [reframeNonce, setReframeNonce] = useState(0);
   const [vrmaUrl, setVrmaUrl] = useState<string | null>(DEFAULT_ANIM.url);
   const [vrmaName, setVrmaName] = useState<string | null>(DEFAULT_ANIM.name);
   const [animKind, setAnimKind] = useState<"vrma" | "fbx" | null>(DEFAULT_ANIM.kind);
