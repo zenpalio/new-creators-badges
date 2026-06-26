@@ -11,6 +11,7 @@ import {
   type VRMAnimation,
 } from "@pixiv/three-vrm-animation";
 import { RotateCw, Shirt, RefreshCw, Film, Upload, Square } from "lucide-react";
+import kneelingIdle from "@/assets/kneeling-idle.fbx.asset.json";
 
 // Mixamo bone name → VRM humanoid bone name
 const MIXAMO_TO_VRM: Record<string, string> = {
@@ -555,16 +556,22 @@ const VRMStage = ({
   const [animKind, setAnimKind] = useState<"vrma" | "fbx" | null>(null);
   const vrmaFileRef = useRef<HTMLInputElement | null>(null);
   const handleAnimEnd = useCallback(() => {
-    setVrmaUrl((prev) => { if (prev) URL.revokeObjectURL(prev); return null; });
+    setVrmaUrl((prev) => { if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev); return null; });
     setVrmaName(null);
     setAnimKind(null);
   }, []);
   const handlePickVrma = (file: File) => {
-    if (vrmaUrl) URL.revokeObjectURL(vrmaUrl);
+    if (vrmaUrl && vrmaUrl.startsWith("blob:")) URL.revokeObjectURL(vrmaUrl);
     const isFbx = /\.fbx$/i.test(file.name);
     setVrmaUrl(URL.createObjectURL(file));
     setVrmaName(file.name.replace(/\.(vrma|fbx|glb)$/i, ""));
     setAnimKind(isFbx ? "fbx" : "vrma");
+  };
+  const playPreset = (url: string, name: string, kind: "vrma" | "fbx") => {
+    if (vrmaUrl && vrmaUrl.startsWith("blob:")) URL.revokeObjectURL(vrmaUrl);
+    setVrmaUrl(url);
+    setVrmaName(name);
+    setAnimKind(kind);
   };
 
 
@@ -747,13 +754,22 @@ const VRMStage = ({
             <Square className="w-3 h-3" /> Stop
           </button>
         ) : (
-          <button
-            onClick={(e) => { e.stopPropagation(); vrmaFileRef.current?.click(); }}
-            className="h-9 px-3 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl text-white/80 hover:bg-white/15 transition flex items-center gap-1.5 text-[11px]"
-            title="Load .vrma or Mixamo .fbx"
-          >
-            <Upload className="w-3 h-3" /> Load anim
-          </button>
+          <>
+            <button
+              onClick={(e) => { e.stopPropagation(); playPreset(kneelingIdle.url, "Kneeling Idle", "fbx"); }}
+              className="h-9 px-3 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl text-white/80 hover:bg-white/15 transition flex items-center gap-1.5 text-[11px]"
+              title="Play Kneeling Idle"
+            >
+              <Film className="w-3 h-3" /> Kneeling
+            </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); vrmaFileRef.current?.click(); }}
+              className="h-9 px-3 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl text-white/80 hover:bg-white/15 transition flex items-center gap-1.5 text-[11px]"
+              title="Load .vrma or Mixamo .fbx"
+            >
+              <Upload className="w-3 h-3" /> Load anim
+            </button>
+          </>
         )}
       </div>
     </div>
