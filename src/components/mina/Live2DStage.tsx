@@ -3,6 +3,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 interface Props {
   /** 0–1; drives mouth open parameter while speaking */
   mouthOpen?: number;
+  /** When true, plays a talking body motion and loops gentle gestures */
+  speaking?: boolean;
   /** degrees, -45..45 */
   rotation?: number;
   /** 0.5..1.5 */
