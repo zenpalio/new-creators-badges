@@ -786,7 +786,7 @@ const VRMStage = ({
       />
 
       {/* Animation sidebar — bottom-right, collapsible (drop zone + presets) */}
-      <div className="absolute right-3 sm:right-5 bottom-24 sm:bottom-28 z-20 pointer-events-auto flex flex-col items-end gap-2">
+      <div className="absolute right-3 sm:right-5 bottom-24 sm:bottom-28 z-20 pointer-events-auto flex flex-col-reverse items-end gap-2">
 
         <button
           onClick={(e) => { e.stopPropagation(); setAnimsOpen((v) => !v); }}
