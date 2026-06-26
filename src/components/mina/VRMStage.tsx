@@ -146,28 +146,19 @@ function VRMModel({
         });
         v.scene.rotation.y = Math.PI;
 
-        // Auto-frame: aim camera at the model's vertical center, with a
-        // distance that fits its height in the viewport.
+        // Measure and store bbox, then apply current view preset
         const box = new THREE.Box3().setFromObject(v.scene);
         const size = new THREE.Vector3();
         const center = new THREE.Vector3();
         box.getSize(size);
         box.getCenter(center);
-        const fovRad = ((camera as any).fov * Math.PI) / 180;
-        // frame the upper ~70% of the body (chest-up portrait)
-        const frameHeight = size.y * 0.7;
-        const focusY = box.min.y + size.y * 0.78; // around chest/face
-        const distance = (frameHeight / 2) / Math.tan(fovRad / 2) * 1.05;
-        camera.position.set(center.x, focusY, distance);
-        camera.lookAt(center.x, focusY, 0);
-        if (controls?.target) {
-          controls.target.set(center.x, focusY, 0);
-          controls.update?.();
-        }
+        bboxRef.current = { size, center, min: box.min.clone() };
 
         setVrm(v);
         onProgress(100);
         onMeshes(meshes);
+        // Defer to next tick so controls are mounted
+        requestAnimationFrame(() => applyView(viewPreset));
       },
       (evt) => {
         if (evt.total) onProgress(Math.round((evt.loaded / evt.total) * 100));
