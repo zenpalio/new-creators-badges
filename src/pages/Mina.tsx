@@ -23,7 +23,7 @@ const Mina = () => {
     mirror: false,
     backgroundId: "midnight",
     modelId: "hiyori",
-    renderer: "live2d",
+    renderer: "vrm",
   });
   const { state, refresh, patch, nudgeStats } = useCompanion("mina");
   const tier = tierFromAffection(state.affection);
