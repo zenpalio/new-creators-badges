@@ -10,6 +10,7 @@ import CallModal from "@/components/mina/CallModal";
 import SceneControls, { BACKGROUNDS, MODELS, type SceneSettings } from "@/components/mina/SceneControls";
 import StatsPanel from "@/components/mina/StatsPanel";
 import ReactionFX from "@/components/mina/ReactionFX";
+import AmbientSounds from "@/components/mina/AmbientSounds";
 
 const Mina = () => {
   const [mouth, setMouth] = useState(0);
@@ -98,6 +99,7 @@ const Mina = () => {
 
       {/* Reaction effects over character */}
       <ReactionFX trigger={fxTrigger} sentiment={fxSentiment} deltas={fxDeltas} />
+      <AmbientSounds speaking={speaking || callOpen} volume={0.3} />
 
       {/* Top-right glass control cluster */}
       <div className="absolute top-5 right-5 z-30 flex items-center gap-2">
