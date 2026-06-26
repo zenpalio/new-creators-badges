@@ -90,7 +90,7 @@ const ChatComposer = ({ onAfterReply, onMouthLevel, onSpeakingChange, onReaction
       src.buffer = buffer;
       const analyser = ctx.createAnalyser();
       analyser.fftSize = 1024;
-      analyser.smoothingTimeConstant = 0.6;
+      analyser.smoothingTimeConstant = 0.25;
       src.connect(analyser);
       analyser.connect(ctx.destination);
       src.start();
@@ -98,17 +98,21 @@ const ChatComposer = ({ onAfterReply, onMouthLevel, onSpeakingChange, onReaction
       onSpeakingChange?.(true);
 
       const data = new Uint8Array(analyser.frequencyBinCount);
+      let env = 0;
       const tick = () => {
         analyser.getByteTimeDomainData(data);
-        // Compute peak deviation from 128 (silence) → 0..1
-        let peak = 0;
+        // RMS deviation from 128 → 0..1
+        let sum = 0;
         for (let i = 0; i < data.length; i++) {
-          const v = Math.abs(data[i] - 128);
-          if (v > peak) peak = v;
+          const d = (data[i] - 128) / 128;
+          sum += d * d;
         }
-        // Boost a bit so quiet speech still opens the mouth visibly
-        const level = Math.min(1, (peak / 128) * 2.2);
-        onMouthLevel?.(level);
+        const rms = Math.sqrt(sum / data.length);
+        const target = Math.min(1, rms * 4.5);
+        // Asymmetric envelope: fast attack, slower release for natural mouth motion
+        const k = target > env ? 0.55 : 0.18;
+        env = env + (target - env) * k;
+        onMouthLevel?.(env);
         rafRef.current = requestAnimationFrame(tick);
       };
       rafRef.current = requestAnimationFrame(tick);

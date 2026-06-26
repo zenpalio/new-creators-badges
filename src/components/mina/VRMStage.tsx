@@ -447,7 +447,13 @@ function VRMModel({
 
     // Lip-sync + blink + expressions
     if (em) {
-      em.setValue(VRMExpressionPresetName.Aa, Math.max(0, Math.min(1, mouthRef.current)));
+      const ml = Math.max(0, Math.min(1, mouthRef.current));
+      // Subtle viseme variation driven by audio level + time so the mouth
+      // doesn't look like a single open-close shape.
+      const wob = 0.5 + 0.5 * Math.sin(t * 18);
+      em.setValue(VRMExpressionPresetName.Aa, ml * (0.55 + 0.45 * wob));
+      em.setValue(VRMExpressionPresetName.Ih, ml * 0.35 * (1 - wob));
+      em.setValue(VRMExpressionPresetName.Ou, ml * 0.25 * wob);
 
       // Blink
       const b = blinkRef.current;
