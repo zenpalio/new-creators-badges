@@ -12,6 +12,7 @@ import {
 } from "@pixiv/three-vrm-animation";
 import { RotateCw, Shirt, RefreshCw, Film, Upload, Square } from "lucide-react";
 import kneelingIdle from "@/assets/kneeling-idle.fbx.asset.json";
+import talkingAnim from "@/assets/talking.fbx.asset.json";
 
 // Mixamo bone name → VRM humanoid bone name
 const MIXAMO_TO_VRM: Record<string, string> = {
@@ -574,6 +575,25 @@ const VRMStage = ({
     setAnimKind(kind);
   };
 
+  // Auto-play Talking animation while the character is speaking.
+  // Only auto-plays when nothing else is active, and only auto-stops the talking clip.
+  const autoTalkingRef = useRef(false);
+  useEffect(() => {
+    if (speaking) {
+      if (!vrmaUrl) {
+        autoTalkingRef.current = true;
+        setVrmaUrl(talkingAnim.url);
+        setVrmaName("Talking");
+        setAnimKind("fbx");
+      }
+    } else if (autoTalkingRef.current) {
+      autoTalkingRef.current = false;
+      setVrmaUrl((prev) => { if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev); return null; });
+      setVrmaName(null);
+      setAnimKind(null);
+    }
+  }, [speaking, vrmaUrl]);
+
 
 
   const groupTransform = useMemo(
@@ -761,6 +781,13 @@ const VRMStage = ({
               title="Play Kneeling Idle"
             >
               <Film className="w-3 h-3" /> Kneeling
+            </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); playPreset(talkingAnim.url, "Talking", "fbx"); }}
+              className="h-9 px-3 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl text-white/80 hover:bg-white/15 transition flex items-center gap-1.5 text-[11px]"
+              title="Play Talking"
+            >
+              <Film className="w-3 h-3" /> Talking
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); vrmaFileRef.current?.click(); }}
