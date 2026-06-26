@@ -108,15 +108,15 @@ function VRMModel({
         });
         v.scene.rotation.y = Math.PI;
         setVrm(v);
-        setLoadPct(100);
+        onProgress(100);
         onMeshes(meshes);
       },
       (evt) => {
-        if (evt.total) setLoadPct(Math.round((evt.loaded / evt.total) * 100));
+        if (evt.total) onProgress(Math.round((evt.loaded / evt.total) * 100));
       },
       (err) => {
         console.error("[VRM] load failed", err);
-        setLoadErr(err instanceof Error ? err.message : "Failed to load model");
+        onError(err instanceof Error ? err.message : "Failed to load model");
       },
     );
     return () => { cancelled = true; };
