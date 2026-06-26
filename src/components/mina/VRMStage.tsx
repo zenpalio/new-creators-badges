@@ -115,7 +115,8 @@ const VRMStage = ({ mouthOpen = 0, speaking = false, rotation = 0, scale = 1, mi
   return (
     <div className="absolute inset-0">
       <Canvas
-        camera={{ position: [0, 1.35, 1.6], fov: 28 }}
+        camera={{ position: [0, 1.4, 1.8], fov: 30 }}
+        onCreated={({ camera }) => camera.lookAt(0, 1.35, 0)}
         gl={{ alpha: true, antialias: true, preserveDrawingBuffer: false }}
         dpr={[1, 2]}
       >
