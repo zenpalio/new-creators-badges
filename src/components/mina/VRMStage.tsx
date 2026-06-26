@@ -575,6 +575,25 @@ const VRMStage = ({
     setAnimKind(kind);
   };
 
+  // Auto-play Talking animation while the character is speaking.
+  // Only auto-plays when nothing else is active, and only auto-stops the talking clip.
+  const autoTalkingRef = useRef(false);
+  useEffect(() => {
+    if (speaking) {
+      if (!vrmaUrl) {
+        autoTalkingRef.current = true;
+        setVrmaUrl(talkingAnim.url);
+        setVrmaName("Talking");
+        setAnimKind("fbx");
+      }
+    } else if (autoTalkingRef.current) {
+      autoTalkingRef.current = false;
+      setVrmaUrl((prev) => { if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev); return null; });
+      setVrmaName(null);
+      setAnimKind(null);
+    }
+  }, [speaking, vrmaUrl]);
+
 
 
   const groupTransform = useMemo(
