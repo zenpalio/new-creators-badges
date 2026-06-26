@@ -430,7 +430,7 @@ function VRMModel({
 
 
   // Re-frame when preset changes
-  useEffect(() => { applyView(viewPreset); }, [viewPreset, applyView]);
+  useEffect(() => { applyView(viewPreset); }, [viewPreset, reframeNonce, applyView]);
 
 
   useFrame((_, dt) => {
