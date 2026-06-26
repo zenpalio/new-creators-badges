@@ -13,8 +13,16 @@ const MOCK_REPLIES = [
 ];
 
 const VOICE_KEY = "mina.voiceOn";
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
+const SUPABASE_ANON = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
 
-const ChatComposer = ({ onAfterReply }: { onAfterReply?: () => void }) => {
+interface Props {
+  onAfterReply?: () => void;
+  /** Receives a 0–1 lip-sync amplitude while Mina is speaking. */
+  onMouthLevel?: (v: number) => void;
+}
+
+const ChatComposer = ({ onAfterReply, onMouthLevel }: Props) => {
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
@@ -23,7 +31,9 @@ const ChatComposer = ({ onAfterReply }: { onAfterReply?: () => void }) => {
   });
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const sourceRef = useRef<AudioBufferSourceNode | null>(null);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -33,29 +43,76 @@ const ChatComposer = ({ onAfterReply }: { onAfterReply?: () => void }) => {
 
   useEffect(() => {
     try { localStorage.setItem(VOICE_KEY, voiceOn ? "1" : "0"); } catch {}
-    if (!voiceOn && audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
-    }
+    if (!voiceOn) stopSpeaking();
   }, [voiceOn]);
+
+  useEffect(() => () => stopSpeaking(), []);
+
+  const stopSpeaking = () => {
+    try { sourceRef.current?.stop(); } catch {}
+    sourceRef.current = null;
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = null;
+    onMouthLevel?.(0);
+  };
 
   const speak = async (line: string) => {
     try {
-      const { data, error } = await supabase.functions.invoke("mina-tts", {
-        body: { text: line },
+      // Fetch raw audio bytes directly — supabase.functions.invoke
+      // parses bodies as JSON/text and corrupts binary.
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/mina-tts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${SUPABASE_ANON}`,
+          apikey: SUPABASE_ANON,
+        },
+        body: JSON.stringify({ text: line }),
       });
-      if (error) throw error;
-      // edge function returns audio/mpeg blob via invoke
-      const blob = data instanceof Blob ? data : new Blob([data], { type: "audio/mpeg" });
-      const url = URL.createObjectURL(blob);
-      // stop any previous line
-      if (audioRef.current) { try { audioRef.current.pause(); } catch {} }
-      const audio = new Audio(url);
-      audioRef.current = audio;
-      audio.onended = () => URL.revokeObjectURL(url);
-      await audio.play().catch(() => {});
+      if (!res.ok) throw new Error(`tts ${res.status}: ${await res.text().catch(() => "")}`);
+      const arrayBuf = await res.arrayBuffer();
+
+      if (!audioCtxRef.current) {
+        audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+      }
+      const ctx = audioCtxRef.current;
+      if (ctx.state === "suspended") await ctx.resume().catch(() => {});
+
+      const buffer = await ctx.decodeAudioData(arrayBuf.slice(0));
+
+      stopSpeaking();
+      const src = ctx.createBufferSource();
+      src.buffer = buffer;
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 1024;
+      analyser.smoothingTimeConstant = 0.6;
+      src.connect(analyser);
+      analyser.connect(ctx.destination);
+      src.start();
+      sourceRef.current = src;
+
+      const data = new Uint8Array(analyser.frequencyBinCount);
+      const tick = () => {
+        analyser.getByteTimeDomainData(data);
+        // Compute peak deviation from 128 (silence) → 0..1
+        let peak = 0;
+        for (let i = 0; i < data.length; i++) {
+          const v = Math.abs(data[i] - 128);
+          if (v > peak) peak = v;
+        }
+        // Boost a bit so quiet speech still opens the mouth visibly
+        const level = Math.min(1, (peak / 128) * 2.2);
+        onMouthLevel?.(level);
+        rafRef.current = requestAnimationFrame(tick);
+      };
+      rafRef.current = requestAnimationFrame(tick);
+
+      src.onended = () => {
+        if (sourceRef.current === src) stopSpeaking();
+      };
     } catch (e) {
       console.error("[tts] failed", e);
+      onMouthLevel?.(0);
     }
   };
 
@@ -90,7 +147,6 @@ const ChatComposer = ({ onAfterReply }: { onAfterReply?: () => void }) => {
           }}
         >
           {msgs.slice(-8).map((m, i, arr) => {
-            // Older items toward the top get a touch lower opacity to enhance the void feel
             const age = arr.length - 1 - i;
             const opacity = age <= 2 ? 1 : age <= 4 ? 0.85 : 0.6;
             return (
