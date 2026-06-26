@@ -4,14 +4,6 @@ import { Send, Volume2, VolumeX } from "lucide-react";
 
 interface Msg { role: "user" | "assistant"; content: string; }
 
-const MOCK_REPLIES = [
-  "Mm, tell me more~",
-  "I was just thinking about you.",
-  "You always know what to say.",
-  "Stay a little longer?",
-  "That made me smile.",
-];
-
 const VOICE_KEY = "mina.voiceOn";
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
 const SUPABASE_ANON = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
