@@ -106,11 +106,12 @@ function VRMModel({
     camera.position.set(b.center.x, focusY, distance);
     camera.lookAt(b.center.x, focusY, 0);
     (camera as any).updateProjectionMatrix?.();
+    const controls = get().controls as any;
     if (controls?.target) {
       controls.target.set(b.center.x, focusY, 0);
       controls.update?.();
     }
-  }, [camera, controls]);
+  }, [camera, get]);
 
 
 
