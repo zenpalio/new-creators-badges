@@ -306,7 +306,9 @@ function VRMModel({
           ? Math.min(nLeftFoot?.y ?? Number.POSITIVE_INFINITY, nRightFoot?.y ?? Number.POSITIVE_INFINITY)
           : box.min.y;
         const bodyHeadY = nHead?.y ?? box.max.y;
-        const bodyHeight = THREE.MathUtils.clamp(bodyHeadY - bodyMinY, 1.25, 1.95);
+        // Approximate top of head/hair from raw bounding box, fall back to head bone + offset
+        const topOfHeadY = Math.max(box.max.y, bodyHeadY + 0.18);
+        const bodyHeight = THREE.MathUtils.clamp(topOfHeadY - bodyMinY, 1.25, 2.05);
         const frameHeight = bodyHeight;
         const shoulderSpan = (() => {
           const l = getBoneWorld("leftUpperArm") ?? getBoneWorld("leftShoulder");
@@ -320,9 +322,11 @@ function VRMModel({
           center: frameCenter,
           min: new THREE.Vector3(frameCenter.x - frameWidth * 0.5, bodyMinY, frameCenter.z - size.z * 0.5),
           focus: {
-            full: bodyMinY + bodyHeight * 0.28,
-            upper: bodyMinY + bodyHeight * 0.5,
-            face: bodyMinY + bodyHeight * 0.72,
+            full: bodyMinY + bodyHeight * 0.5,
+            // Upper body: chest-ish, midway between hips and head
+            upper: (nHips?.y ?? bodyMinY + bodyHeight * 0.55) * 0.4 + bodyHeadY * 0.6,
+            // Face: actual head bone y, nudged slightly up to center on the face, not the neck
+            face: bodyHeadY + (topOfHeadY - bodyHeadY) * 0.35,
           },
         };
         hipsRestYRef.current = v.humanoid?.getNormalizedBoneNode("hips")?.position.y ?? 0;
