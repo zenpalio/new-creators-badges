@@ -14,13 +14,376 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      call_log: {
+        Row: {
+          companion_id: string
+          id: string
+          seconds: number
+          started_at: string
+          tokens_spent: number
+          user_id: string
+        }
+        Insert: {
+          companion_id: string
+          id?: string
+          seconds: number
+          started_at?: string
+          tokens_spent: number
+          user_id: string
+        }
+        Update: {
+          companion_id?: string
+          id?: string
+          seconds?: number
+          started_at?: string
+          tokens_spent?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "call_log_companion_id_fkey"
+            columns: ["companion_id"]
+            isOneToOne: false
+            referencedRelation: "companions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_messages: {
+        Row: {
+          companion_id: string
+          content: string
+          created_at: string
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          companion_id: string
+          content: string
+          created_at?: string
+          id?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          companion_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_companion_id_fkey"
+            columns: ["companion_id"]
+            isOneToOne: false
+            referencedRelation: "companions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      companions: {
+        Row: {
+          agent_id: string | null
+          base_persona: string | null
+          created_at: string
+          id: string
+          name: string
+          slug: string
+          voice_id: string | null
+        }
+        Insert: {
+          agent_id?: string | null
+          base_persona?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          slug: string
+          voice_id?: string | null
+        }
+        Update: {
+          agent_id?: string | null
+          base_persona?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          slug?: string
+          voice_id?: string | null
+        }
+        Relationships: []
+      }
+      gift_log: {
+        Row: {
+          at: string
+          companion_id: string
+          gift_id: string
+          id: string
+          tokens_spent: number
+          user_id: string
+        }
+        Insert: {
+          at?: string
+          companion_id: string
+          gift_id: string
+          id?: string
+          tokens_spent: number
+          user_id: string
+        }
+        Update: {
+          at?: string
+          companion_id?: string
+          gift_id?: string
+          id?: string
+          tokens_spent?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gift_log_companion_id_fkey"
+            columns: ["companion_id"]
+            isOneToOne: false
+            referencedRelation: "companions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          tokens_balance: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          tokens_balance?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          tokens_balance?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      unlock_catalog: {
+        Row: {
+          affection_required: number
+          asset_ref: string
+          id: string
+          kind: string
+          label: string
+          tier: string
+        }
+        Insert: {
+          affection_required: number
+          asset_ref: string
+          id?: string
+          kind: string
+          label: string
+          tier: string
+        }
+        Update: {
+          affection_required?: number
+          asset_ref?: string
+          id?: string
+          kind?: string
+          label?: string
+          tier?: string
+        }
+        Relationships: []
+      }
+      user_companion: {
+        Row: {
+          affection: number
+          chat_xp_today: number
+          companion_id: string
+          created_at: string
+          current_outfit: string
+          free_call_seconds_today: number
+          last_chat_xp_date: string | null
+          last_free_call_date: string | null
+          last_visit_at: string | null
+          mood: string
+          streak_days: number
+          unlocked_tiers: string[]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          affection?: number
+          chat_xp_today?: number
+          companion_id: string
+          created_at?: string
+          current_outfit?: string
+          free_call_seconds_today?: number
+          last_chat_xp_date?: string | null
+          last_free_call_date?: string | null
+          last_visit_at?: string | null
+          mood?: string
+          streak_days?: number
+          unlocked_tiers?: string[]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          affection?: number
+          chat_xp_today?: number
+          companion_id?: string
+          created_at?: string
+          current_outfit?: string
+          free_call_seconds_today?: number
+          last_chat_xp_date?: string | null
+          last_free_call_date?: string | null
+          last_visit_at?: string | null
+          mood?: string
+          streak_days?: number
+          unlocked_tiers?: string[]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_companion_companion_id_fkey"
+            columns: ["companion_id"]
+            isOneToOne: false
+            referencedRelation: "companions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      visit_log: {
+        Row: {
+          companion_id: string
+          duration_s: number | null
+          id: string
+          started_at: string
+          user_id: string
+        }
+        Insert: {
+          companion_id: string
+          duration_s?: number | null
+          id?: string
+          started_at?: string
+          user_id: string
+        }
+        Update: {
+          companion_id?: string
+          duration_s?: number | null
+          id?: string
+          started_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "visit_log_companion_id_fkey"
+            columns: ["companion_id"]
+            isOneToOne: false
+            referencedRelation: "companions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      add_chat_xp: {
+        Args: { _companion_slug: string }
+        Returns: {
+          affection: number
+          chat_xp_today: number
+          companion_id: string
+          created_at: string
+          current_outfit: string
+          free_call_seconds_today: number
+          last_chat_xp_date: string | null
+          last_free_call_date: string | null
+          last_visit_at: string | null
+          mood: string
+          streak_days: number
+          unlocked_tiers: string[]
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "user_companion"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      apply_decay: { Args: never; Returns: number }
+      compute_mood: {
+        Args: { _affection: number; _hours_since: number; _streak: number }
+        Returns: string
+      }
+      consume_call_seconds: {
+        Args: { _companion_slug: string; _intimate?: boolean; _seconds: number }
+        Returns: {
+          free_remaining: number
+          stopped: boolean
+          tokens_balance: number
+        }[]
+      }
+      purchase_gift: {
+        Args: { _companion_slug: string; _gift_id: string }
+        Returns: {
+          affection: number
+          chat_xp_today: number
+          companion_id: string
+          created_at: string
+          current_outfit: string
+          free_call_seconds_today: number
+          last_chat_xp_date: string | null
+          last_free_call_date: string | null
+          last_visit_at: string | null
+          mood: string
+          streak_days: number
+          unlocked_tiers: string[]
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "user_companion"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      register_visit: {
+        Args: { _companion_slug: string }
+        Returns: {
+          affection: number
+          chat_xp_today: number
+          companion_id: string
+          created_at: string
+          current_outfit: string
+          free_call_seconds_today: number
+          last_chat_xp_date: string | null
+          last_free_call_date: string | null
+          last_visit_at: string | null
+          mood: string
+          streak_days: number
+          unlocked_tiers: string[]
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "user_companion"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
     }
     Enums: {
       [_ in never]: never
