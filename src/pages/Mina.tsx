@@ -98,6 +98,7 @@ const Mina = () => {
       </div>
 
       <SceneControls open={sceneOpen} onClose={() => setSceneOpen(false)} settings={scene} onChange={setScene} />
+      <StatsPanel stats={state.stats} />
 
       {/* Chat */}
       <div className="absolute left-1/2 -translate-x-1/2 bottom-6 z-20 w-[min(680px,calc(100%-2rem))]">
