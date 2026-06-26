@@ -52,6 +52,17 @@ const ChatComposer = ({ onAfterReply, onMouthLevel, onSpeakingChange, onReaction
 
   useEffect(() => () => stopSpeaking(), []);
 
+  // External injection from Activity/Roleplay drawer
+  useEffect(() => {
+    const onInject = (e: Event) => {
+      const detail = (e as CustomEvent<{ text: string }>).detail;
+      if (detail?.text) void send(undefined, detail.text);
+    };
+    window.addEventListener("mina:inject-message", onInject);
+    return () => window.removeEventListener("mina:inject-message", onInject);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sending, msgs, voiceOn]);
+
   const stopSpeaking = () => {
     try { sourceRef.current?.stop(); } catch {}
     sourceRef.current = null;
@@ -126,11 +137,11 @@ const ChatComposer = ({ onAfterReply, onMouthLevel, onSpeakingChange, onReaction
     }
   };
 
-  const send = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const m = text.trim();
+  const send = async (e?: React.FormEvent, override?: string) => {
+    e?.preventDefault();
+    const m = (override ?? text).trim();
     if (!m || sending) return;
-    setText("");
+    if (!override) setText("");
     setMsgs((p) => [...p, { role: "user", content: m }]);
     setSending(true);
     let reply = "...";
