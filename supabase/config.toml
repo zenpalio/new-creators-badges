@@ -2,3 +2,6 @@ project_id = "hsljippzbyuvbnrssxrp"
 
 [functions.yoti-callback]
 verify_jwt = false
+
+[functions.mina-ambient-sfx]
+verify_jwt = false
