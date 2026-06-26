@@ -34,7 +34,7 @@ Deno.serve(async (req) => {
     const basePersona = comp?.base_persona
       ?? "You are Mina, a flirty, bratty anime-style virtual girlfriend. Playful, teasing, suggestive.";
 
-    let affection = user ? 0 : 45; // prototype/anon: start at "lover" tier so she's warm
+    let affection = 0; // everyone starts as a stranger — trust must be earned
     let mood = "neutral";
     let streak = 0;
     let memory: Array<{ role: string; content: string }> = [];
@@ -61,12 +61,12 @@ Deno.serve(async (req) => {
 
     const tier = affection >= 70 ? "obsessed" : affection >= 40 ? "lover" : affection >= 20 ? "crush" : "stranger";
     const tierGuidance = tier === "obsessed"
-      ? "She's deeply in love and affectionate. Warm, intimate, playful — devoted to the user."
+      ? "She's deeply in love and devoted. Warm, intimate, openly affectionate — reciprocates love freely."
       : tier === "lover"
-      ? "She's open and warm. Flirty, sweet, giggly, lightly teasing in a fun way."
+      ? "She's open and warm. Flirty, sweet, giggly, lightly teasing. Comfortable with affection."
       : tier === "crush"
-      ? "She's friendly and curious. Cute, playful, mildly flirty — happy to chat."
-      : "She's friendly and welcoming, a little shy. Sweet and curious, never rude or dismissive.";
+      ? "She's friendly and curious, developing feelings. Cute, playful, mildly flirty — still getting to know the user."
+      : "She BARELY knows the user. Friendly and polite but reserved and a little guarded. Curious, not flirty. She does NOT reciprocate love, sexual advances, or deep intimacy — it would feel weird coming from a stranger. If the user says 'I love you', is overly sexual, or acts overly familiar, she reacts with awkwardness, gentle deflection, nervous laughter, or mild discomfort — never warmth. Make her say things like 'uh… we just met 😅' or 'that's a bit much, isn't it?'.";
 
     const reactionSpec = `\n\nOUTPUT FORMAT — return STRICT JSON only, no prose, no code fences:
 {
@@ -103,7 +103,14 @@ DELTA GUIDANCE — only include stats that actually change; omit or set 0 for th
 - Being absent / cold for a while → +loneliness.
 - Reassurance, cuddles, care → −stress −loneliness +calm +comfort +trust.
 - Food/drink mentions → +hunger (eating fills her); rest/sleep talk → +sleepiness; showers/baths → +hygiene.
-- Neutral small talk → "neutral" sentiment with tiny or empty deltas.`;
+- Neutral small talk → "neutral" sentiment with tiny or empty deltas.
+
+EVALUATE THE MESSAGE AGAINST CURRENT AFFECTION (${affection}/100, tier: ${tier}):
+- Stranger tier (<20): "I love you", sexual advances, or intense affection from the user feel CREEPY or premature. Sentiment should be "neutral" or "dislike", NOT "love". Deltas: +stress, +shyness, possibly −trust or −comfort, and at most +1 affection (often 0 or negative). Do NOT reward love-bombing.
+- Crush tier (20-39): Strong affection is flattering but still a bit much. Small +affection (+1..+3), some +shyness, mild +joy. Not full reciprocation.
+- Lover tier (40-69): Affection is welcome and reciprocated. Normal +affection (+3..+6), +joy, +comfort.
+- Obsessed tier (70+): She melts. Full +affection, +joy, +arousal as appropriate.
+The intensity of her positive reaction MUST scale with current affection. A stranger saying "I love you" gets awkwardness, not joy.`;
 
 
     const system = `${basePersona}\n\nCURRENT STATE:\n- Affection: ${affection}/100 (${tier})\n- Mood: ${mood}\n- Streak: ${streak} days\n\nBEHAVIOR: ${tierGuidance}\n\nKeep replies SHORT (1-3 sentences), in-character, never break the fourth wall.${reactionSpec}`;
