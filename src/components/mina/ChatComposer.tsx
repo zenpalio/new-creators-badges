@@ -49,6 +49,7 @@ const ChatComposer = ({ onAfterReply, onMouthLevel, onSpeakingChange }: Props) =
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
     rafRef.current = null;
     onMouthLevel?.(0);
+    onSpeakingChange?.(false);
   };
 
   const speak = async (line: string) => {
