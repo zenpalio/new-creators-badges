@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Phone, PhoneOff, X } from "lucide-react";
-import { useConversation } from "@elevenlabs/react";
+import { useConversation, ConversationProvider } from "@elevenlabs/react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -11,7 +11,7 @@ interface Props {
   onTick: () => void;
 }
 
-const CallModal = ({ open, onClose, onMouthLevel, onTick }: Props) => {
+const CallModalInner = ({ open, onClose, onMouthLevel, onTick }: Props) => {
   const [status, setStatus] = useState<"idle" | "connecting" | "live" | "ended">("idle");
   const [seconds, setSeconds] = useState(0);
   const [freeLeft, setFreeLeft] = useState<number | null>(null);
@@ -154,5 +154,11 @@ const CallModal = ({ open, onClose, onMouthLevel, onTick }: Props) => {
     </div>
   );
 };
+
+const CallModal = (props: Props) => (
+  <ConversationProvider>
+    <CallModalInner {...props} />
+  </ConversationProvider>
+);
 
 export default CallModal;
