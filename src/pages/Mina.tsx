@@ -49,6 +49,7 @@ const Mina = () => {
         scale={scene.scale}
         mirror={scene.mirror}
         modelUrl={model.url}
+        debug
       />
 
       {/* Top-right glass control cluster */}
