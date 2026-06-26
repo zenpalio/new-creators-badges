@@ -236,7 +236,7 @@ function VRMModel({
           onAnimEnd();
           return;
         }
-        const clip = createVRMAnimationClip(vrmAnims[0], vrm);
+        const clip = createVRMAnimationClip(vrmAnims[0], vrm as any);
         if (actionRef.current) actionRef.current.fadeOut(0.25);
         const action = mixer.clipAction(clip);
         action.reset().fadeIn(0.25).play();
