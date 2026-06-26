@@ -747,43 +747,68 @@ const VRMStage = ({
       )}
 
 
+      {/* Hidden file input shared by drop zone */}
+      <input
+        ref={vrmaFileRef}
+        type="file"
+        accept=".vrma,.glb,.fbx"
+        className="hidden"
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (f) handlePickVrma(f);
+          e.target.value = "";
+        }}
+      />
 
-
-      {/* VRMA animation controls */}
-      <div className="absolute right-3 sm:right-5 bottom-5 z-20 pointer-events-auto flex items-center gap-2">
-        <input
-          ref={vrmaFileRef}
-          type="file"
-          accept=".vrma,.glb,.fbx"
-          className="hidden"
-          onChange={(e) => {
-            const f = e.target.files?.[0];
-            if (f) handlePickVrma(f);
-            e.target.value = "";
-          }}
-        />
-        <button
-          onClick={(e) => { e.stopPropagation(); playPreset(kneelingIdle.url, "Kneeling Idle", "fbx"); }}
-          className="h-9 px-3 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl text-white/80 hover:bg-white/15 transition flex items-center gap-1.5 text-[11px]"
-          title="Play Kneeling Idle"
-        >
-          <Film className="w-3 h-3" /> Kneeling
-        </button>
-        <button
-          onClick={(e) => { e.stopPropagation(); playPreset(talkingAnim.url, "Talking", "fbx"); }}
-          className="h-9 px-3 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl text-white/80 hover:bg-white/15 transition flex items-center gap-1.5 text-[11px]"
-          title="Play Talking"
-        >
-          <Film className="w-3 h-3" /> Talking
-        </button>
-        <button
-          onClick={(e) => { e.stopPropagation(); vrmaFileRef.current?.click(); }}
-          className="h-9 px-3 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl text-white/80 hover:bg-white/15 transition flex items-center gap-1.5 text-[11px]"
-          title="Load .vrma or Mixamo .fbx"
-        >
-          <Upload className="w-3 h-3" /> Load anim
-        </button>
+      {/* Drop zone — left, just below vitals */}
+      <div
+        onClick={(e) => { e.stopPropagation(); vrmaFileRef.current?.click(); }}
+        onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); e.currentTarget.classList.add("ring-2","ring-white/40"); }}
+        onDragLeave={(e) => { e.currentTarget.classList.remove("ring-2","ring-white/40"); }}
+        onDrop={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          e.currentTarget.classList.remove("ring-2","ring-white/40");
+          const f = e.dataTransfer.files?.[0];
+          if (f) handlePickVrma(f);
+        }}
+        className="absolute left-3 sm:left-5 top-20 z-20 pointer-events-auto w-[150px] h-[60px] rounded-2xl border border-dashed border-white/20 bg-white/[0.04] backdrop-blur-xl hover:bg-white/[0.08] transition flex flex-col items-center justify-center gap-1 text-[10px] text-white/60 cursor-pointer"
+        title="Drop .vrma / .fbx or click to load"
+      >
+        <Upload className="w-3.5 h-3.5" />
+        <span>Drop anim</span>
       </div>
+
+      {/* Animation sidebar — right edge */}
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="absolute right-3 sm:right-5 top-20 bottom-5 z-20 pointer-events-auto w-[130px] rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4)] p-2 flex flex-col gap-1.5 overflow-y-auto"
+      >
+        <div className="text-[10px] uppercase tracking-[0.15em] text-white/45 font-medium px-1 py-1 sticky top-0">
+          Animations
+        </div>
+        {[
+          { url: kneelingIdle.url, name: "Kneeling" },
+          { url: talkingAnim.url, name: "Talking" },
+          ...IDLE_POOL.map((i) => ({ url: i.url, name: i.name })),
+        ].map((a) => {
+          const active = vrmaUrl === a.url;
+          return (
+            <button
+              key={a.url + a.name}
+              onClick={(e) => { e.stopPropagation(); playPreset(a.url, a.name, "fbx"); }}
+              className={`w-full text-left px-2 py-1.5 rounded-md border border-white/10 text-[11px] transition flex items-center gap-1.5 ${
+                active ? "bg-white text-[hsl(220_25%_10%)]" : "bg-white/[0.04] hover:bg-white/[0.12] text-white/80"
+              }`}
+              title={a.name}
+            >
+              <Film className="w-3 h-3 shrink-0" />
+              <span className="truncate">{a.name}</span>
+            </button>
+          );
+        })}
+      </div>
+
     </div>
   );
 };
