@@ -30,9 +30,11 @@ Deno.serve(async (req) => {
       body: JSON.stringify({
         model: "openai/gpt-4o-mini-tts",
         input: text.slice(0, 1200),
-        voice: voice || "coral",
+        voice: voice || "shimmer",
         response_format: "mp3",
-        instructions: "Speak as a cute, youthful anime-style girl. Bright, light, slightly breathy voice with a playful, flirty lilt and a small smile. Soft, warm, and a little teasing — never deep or mature.",
+        speed: 1.1,
+        instructions:
+          "Perform as a Japanese-style anime girl (genki idol / VTuber energy). High-pitched, light, airy voice with bright cheerful sparkle and an upward sing-song lilt at the end of phrases. Add small kawaii inflections, soft giggles, and an excited, playful, slightly flirty tone. Speak briskly and expressively, like dubbing a manga/anime heroine — never deep, monotone, or mature.",
       }),
     });
 
