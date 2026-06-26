@@ -243,7 +243,7 @@ const Live2DStage = ({
 
       {/* Drag/zoom catcher — small area centered on Mina */}
       <div
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[42%] h-[70%] cursor-grab active:cursor-grabbing touch-none select-none z-10"
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[75%] h-[90%] cursor-grab active:cursor-grabbing touch-none select-none z-10"
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={endDrag}
