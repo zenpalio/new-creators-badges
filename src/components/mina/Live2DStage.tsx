@@ -53,14 +53,6 @@ const Live2DStage = ({
   const [motions, setMotions] = useState<Record<string, number>>({});
   const [expressions, setExpressions] = useState<string[]>([]);
   const [expIdx, setExpIdx] = useState(0);
-}: Props) => {
-  const hostRef = useRef<HTMLDivElement>(null);
-  const appRef = useRef<any>(null);
-  const modelRef = useRef<any>(null);
-  const mouthRef = useRef(0);
-  const fittedBoundsRef = useRef({ width: 0, height: 0 });
-  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
-  const [error, setError] = useState<string>("");
 
   // Keep latest mouthOpen in a ref for the ticker
   useEffect(() => {
