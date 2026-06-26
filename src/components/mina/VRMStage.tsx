@@ -376,33 +376,48 @@ function VRMModel({
       return;
     }
     let cancelled = false;
-    const loader = new GLTFLoader();
-    loader.register((parser) => new VRMAnimationLoaderPlugin(parser));
-    loader.load(
-      vrmaUrl,
-      (gltf) => {
-        if (cancelled) return;
-        const vrmAnims = (gltf.userData as any).vrmAnimations as VRMAnimation[] | undefined;
-        if (!vrmAnims || vrmAnims.length === 0) {
-          console.warn("[VRMA] No animations in file");
-          onAnimEnd();
-          return;
-        }
-        const clip = createVRMAnimationClip(vrmAnims[0], vrm as any);
-        if (actionRef.current) actionRef.current.fadeOut(0.25);
-        const action = mixer.clipAction(clip);
-        action.reset().fadeIn(0.25).play();
-        actionRef.current = action;
-        setAnimPlaying(true);
-      },
-      undefined,
-      (err) => {
-        console.error("[VRMA] load failed", err);
-        onAnimEnd();
-      },
-    );
+    const playClip = (clip: THREE.AnimationClip) => {
+      if (actionRef.current) actionRef.current.fadeOut(0.25);
+      const action = mixer.clipAction(clip);
+      action.reset().fadeIn(0.25).play();
+      actionRef.current = action;
+      setAnimPlaying(true);
+    };
+    if (animKind === "fbx") {
+      const fbxLoader = new FBXLoader();
+      fbxLoader.load(
+        vrmaUrl,
+        (asset) => {
+          if (cancelled) return;
+          const clip = retargetMixamoClip(asset, vrm);
+          if (!clip) { console.warn("[FBX] retarget failed — no Mixamo rig or animation"); onAnimEnd(); return; }
+          playClip(clip);
+        },
+        undefined,
+        (err) => { console.error("[FBX] load failed", err); onAnimEnd(); },
+      );
+    } else {
+      const loader = new GLTFLoader();
+      loader.register((parser) => new VRMAnimationLoaderPlugin(parser));
+      loader.load(
+        vrmaUrl,
+        (gltf) => {
+          if (cancelled) return;
+          const vrmAnims = (gltf.userData as any).vrmAnimations as VRMAnimation[] | undefined;
+          if (!vrmAnims || vrmAnims.length === 0) {
+            console.warn("[VRMA] No animations in file");
+            onAnimEnd();
+            return;
+          }
+          const clip = createVRMAnimationClip(vrmAnims[0], vrm as any);
+          playClip(clip);
+        },
+        undefined,
+        (err) => { console.error("[VRMA] load failed", err); onAnimEnd(); },
+      );
+    }
     return () => { cancelled = true; };
-  }, [vrm, vrmaUrl, onAnimEnd]);
+  }, [vrm, vrmaUrl, animKind, onAnimEnd]);
 
 
   // Re-frame when preset changes
