@@ -384,6 +384,8 @@ function VRMModel({
     const playClip = (clip: THREE.AnimationClip) => {
       if (actionRef.current) actionRef.current.fadeOut(0.25);
       const action = mixer.clipAction(clip);
+      action.setLoop(THREE.LoopRepeat, Infinity);
+      action.clampWhenFinished = true;
       action.reset().fadeIn(0.25).play();
       actionRef.current = action;
       setAnimPlaying(true);
