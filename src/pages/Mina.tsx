@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Phone, Gift, LogOut } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
+import { Phone, Gift } from "lucide-react";
 import { useCompanion } from "@/hooks/useCompanion";
 import Live2DStage from "@/components/mina/Live2DStage";
 import AffectionHUD from "@/components/mina/AffectionHUD";
@@ -10,32 +8,10 @@ import GiftDrawer from "@/components/mina/GiftDrawer";
 import CallModal from "@/components/mina/CallModal";
 
 const Mina = () => {
-  const nav = useNavigate();
-  const [authed, setAuthed] = useState<boolean | null>(null);
   const [mouth, setMouth] = useState(0);
   const [giftOpen, setGiftOpen] = useState(false);
   const [callOpen, setCallOpen] = useState(false);
   const { state, refresh } = useCompanion("mina");
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (!data.session) { nav("/mina/auth", { replace: true }); return; }
-      setAuthed(true);
-    });
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      if (!session) nav("/mina/auth", { replace: true });
-    });
-    return () => sub.subscription.unsubscribe();
-  }, [nav]);
-
-  if (!authed || !state) {
-    return <div className="min-h-screen bg-background-v2 flex items-center justify-center text-muted-v2-foreground text-sm">Waking Mina…</div>;
-  }
-
-  const signOut = async () => {
-    await supabase.auth.signOut();
-    nav("/mina/auth", { replace: true });
-  };
 
   return (
     <div className="min-h-screen bg-background-v2 relative overflow-hidden">

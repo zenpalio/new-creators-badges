@@ -1,5 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useCallback, useState } from "react";
 
 export type Tier = "stranger" | "crush" | "lover" | "obsessed";
 
@@ -22,43 +21,30 @@ export function tierFromAffection(a: number): Tier {
   return "stranger";
 }
 
-export function useCompanion(slug: string) {
-  const [state, setState] = useState<CompanionState | null>(null);
-  const [loading, setLoading] = useState(true);
+// Mocked companion state — no backend dependency.
+// We focus purely on the Mina room UX for now.
+const MOCK_INITIAL: CompanionState = {
+  affection: 12,
+  mood: "curious",
+  streak_days: 1,
+  current_outfit: "default",
+  unlocked_tiers: ["stranger"],
+  tokens_balance: 50,
+  free_call_seconds_today: 0,
+  companion_id: "mock-mina",
+  agent_id: null,
+};
+
+export function useCompanion(_slug: string) {
+  const [state, setState] = useState<CompanionState>(MOCK_INITIAL);
 
   const refresh = useCallback(async () => {
-    const { data: u } = await supabase.auth.getUser();
-    if (!u.user) return;
-    const { data: comp } = await supabase.from("companions").select("id, agent_id").eq("slug", slug).maybeSingle();
-    if (!comp) return;
-    const [{ data: bond }, { data: profile }] = await Promise.all([
-      supabase.from("user_companion").select("*").eq("user_id", u.user.id).eq("companion_id", comp.id).maybeSingle(),
-      supabase.from("profiles").select("tokens_balance").eq("user_id", u.user.id).maybeSingle(),
-    ]);
-    if (!bond) return;
-    setState({
-      affection: bond.affection,
-      mood: bond.mood,
-      streak_days: bond.streak_days,
-      current_outfit: bond.current_outfit,
-      unlocked_tiers: bond.unlocked_tiers ?? [],
-      tokens_balance: profile?.tokens_balance ?? 0,
-      free_call_seconds_today: bond.free_call_seconds_today ?? 0,
-      companion_id: comp.id,
-      agent_id: comp.agent_id,
-    });
-    setLoading(false);
-  }, [slug]);
+    // no-op in mock mode
+  }, []);
 
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      // Register visit on mount
-      await supabase.rpc("register_visit", { _companion_slug: slug });
-      if (!cancelled) await refresh();
-    })();
-    return () => { cancelled = true; };
-  }, [slug, refresh]);
+  const patch = useCallback((p: Partial<CompanionState>) => {
+    setState((s) => ({ ...s, ...p }));
+  }, []);
 
-  return { state, loading, refresh };
+  return { state, loading: false, refresh, patch };
 }
