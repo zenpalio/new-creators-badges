@@ -211,6 +211,48 @@ function VRMModel({
     }
   }, [reactTrigger]);
 
+  // Load + play a VRMA animation when vrmaUrl is set; clear when null
+  useEffect(() => {
+    if (!vrm || !mixerRef.current) return;
+    const mixer = mixerRef.current;
+    if (!vrmaUrl) {
+      if (actionRef.current) {
+        actionRef.current.fadeOut(0.3);
+        actionRef.current = null;
+      }
+      setAnimPlaying(false);
+      return;
+    }
+    let cancelled = false;
+    const loader = new GLTFLoader();
+    loader.register((parser) => new VRMAnimationLoaderPlugin(parser));
+    loader.load(
+      vrmaUrl,
+      (gltf) => {
+        if (cancelled) return;
+        const vrmAnims = (gltf.userData as any).vrmAnimations as VRMAnimation[] | undefined;
+        if (!vrmAnims || vrmAnims.length === 0) {
+          console.warn("[VRMA] No animations in file");
+          onAnimEnd();
+          return;
+        }
+        const clip = createVRMAnimationClip(vrmAnims[0], vrm);
+        if (actionRef.current) actionRef.current.fadeOut(0.25);
+        const action = mixer.clipAction(clip);
+        action.reset().fadeIn(0.25).play();
+        actionRef.current = action;
+        setAnimPlaying(true);
+      },
+      undefined,
+      (err) => {
+        console.error("[VRMA] load failed", err);
+        onAnimEnd();
+      },
+    );
+    return () => { cancelled = true; };
+  }, [vrm, vrmaUrl, onAnimEnd]);
+
+
   // Re-frame when preset changes
   useEffect(() => { applyView(viewPreset); }, [viewPreset, applyView]);
 
