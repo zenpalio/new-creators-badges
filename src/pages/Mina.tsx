@@ -131,7 +131,7 @@ const Mina = () => {
       </div>
 
       <SceneControls open={sceneOpen} onClose={() => setSceneOpen(false)} settings={scene} onChange={setScene} />
-      <StatsPanel stats={state.stats} affection={state.affection} pulseTrigger={fxTrigger} pulseDeltas={fxDeltas as any} />
+      <StatsPanel stats={state.stats} affection={state.affection} tier={tier} affectionPulse={affectionPulse} pulseTrigger={fxTrigger} pulseDeltas={fxDeltas as any} />
 
       {/* Sound toggle — bottom-left */}
       <div className="absolute bottom-5 left-3 sm:left-5 z-30">
