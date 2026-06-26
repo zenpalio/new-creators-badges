@@ -100,7 +100,7 @@ const CallModal = ({ open, onClose, onMouthLevel, onTick }: Props) => {
 
   useEffect(() => {
     if (!open) {
-      if (status === "live") conversation.endSession().catch(() => {});
+      if (status === "live") { try { void conversation.endSession(); } catch {} }
       setStatus("idle");
       setSeconds(0);
       tickAccum.current = 0;

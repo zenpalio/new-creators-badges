@@ -22,6 +22,8 @@ import ExpHimRealNsfw from "./pages/ExpHimRealNsfw.tsx";
 import ExpGayAnimeNsfw from "./pages/ExpGayAnimeNsfw.tsx";
 import ExpGayRealNsfw from "./pages/ExpGayRealNsfw.tsx";
 import Pricing from "./pages/Pricing.tsx";
+import Mina from "./pages/Mina.tsx";
+import MinaAuth from "./pages/MinaAuth.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 
@@ -42,6 +44,8 @@ const App = () => (
           <Route path="/badges" element={<Profile />} />
           <Route path="/creators" element={<Creators />} />
           <Route path="/pricing" element={<Pricing />} />
+          <Route path="/mina" element={<Mina />} />
+          <Route path="/mina/auth" element={<MinaAuth />} />
 
           {/* SFW funnels */}
           <Route path="/exp/her/anime/sfw" element={<ExpHerAnime />} />
