@@ -373,6 +373,7 @@ const VRMStage = ({
               onProgress={setLoadPct}
               onError={setLoadErr}
               meshVisibility={meshVis}
+              viewPreset={viewPreset}
             />
           </group>
         </Suspense>
