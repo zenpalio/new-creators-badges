@@ -2,13 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, Activity } from "lucide-react";
 import type { MoodStats } from "@/hooks/useCompanion";
 
-type StatKey = keyof MoodStats;
+type StatKey = keyof MoodStats | "affection";
+type TabId = "body" | "heart" | "desire";
 
 interface Props {
   stats: MoodStats;
-  /** Increments whenever a new reaction arrives. */
+  affection: number;
   pulseTrigger?: number;
-  /** Per-stat deltas that produced the latest pulse. */
   pulseDeltas?: Partial<Record<StatKey, number>>;
 }
 
@@ -17,57 +17,100 @@ type Row = {
   high: string;
   low: string;
   icon: string;
-  invertLabel?: boolean;
+  /** When true, label flips: high value = "low" word (e.g. arousal 90 = "Horny" already feels right; this is for stress/jealousy etc.) */
+  invert?: boolean;
 };
 
-const ROWS: Row[] = [
-  { key: "hunger",  icon: "🍱", high: "Full",      low: "Hungry"  },
-  { key: "energy",  icon: "⚡", high: "Energized", low: "Sleepy"  },
-  { key: "arousal", icon: "🔥", high: "Horny",     low: "Cool",   invertLabel: true },
-  { key: "calm",    icon: "🌿", high: "Calm",      low: "Nervous" },
-  { key: "joy",     icon: "✨", high: "Happy",     low: "Sad"     },
-  { key: "comfort", icon: "🫶", high: "Cozy",      low: "Lonely"  },
+const TABS: { id: TabId; label: string; icon: string; rows: Row[] }[] = [
+  {
+    id: "body",
+    label: "Body",
+    icon: "🌿",
+    rows: [
+      { key: "hunger",     icon: "🍱", high: "Full",       low: "Hungry"   },
+      { key: "energy",     icon: "⚡", high: "Energized",  low: "Drained"  },
+      { key: "sleepiness", icon: "😴", high: "Drowsy",     low: "Wide awake", invert: true },
+      { key: "hygiene",    icon: "🛁", high: "Fresh",      low: "Grimy"    },
+      { key: "comfort",    icon: "🫶", high: "Cozy",       low: "Lonely"   },
+      { key: "calm",       icon: "🌊", high: "Serene",     low: "Nervous"  },
+    ],
+  },
+  {
+    id: "heart",
+    label: "Heart",
+    icon: "💗",
+    rows: [
+      { key: "affection",  icon: "💖", high: "Smitten",    low: "Distant"  },
+      { key: "joy",        icon: "✨", high: "Happy",      low: "Sad"      },
+      { key: "trust",      icon: "🔐", high: "Open",       low: "Guarded"  },
+      { key: "shyness",    icon: "🙈", high: "Blushing",   low: "Bold",     invert: true },
+      { key: "jealousy",   icon: "😤", high: "Seething",   low: "Secure",   invert: true },
+      { key: "loneliness", icon: "🌙", high: "Aching",     low: "Content",  invert: true },
+      { key: "stress",     icon: "🌀", high: "Overwhelmed",low: "Relaxed",  invert: true },
+    ],
+  },
+  {
+    id: "desire",
+    label: "Desire",
+    icon: "🔥",
+    rows: [
+      { key: "arousal",    icon: "🔥", high: "Horny",      low: "Cool"     },
+      { key: "lust",       icon: "🍒", high: "Craving",    low: "Sated"    },
+      { key: "wetness",    icon: "💧", high: "Soaked",     low: "Dry"      },
+      { key: "obedience",  icon: "😈", high: "Compliant",  low: "Bratty"   },
+      { key: "dominance",  icon: "👑", high: "In Control", low: "Yielding" },
+    ],
+  },
 ];
 
-const barColor = (v: number) => {
-  if (v < 25) return "from-rose-400/80 to-rose-300/60";
-  if (v < 55) return "from-amber-300/80 to-amber-200/60";
+const barColor = (v: number, invert?: boolean) => {
+  const score = invert ? 100 - v : v;
+  if (score < 25) return "from-rose-400/80 to-rose-300/60";
+  if (score < 55) return "from-amber-300/80 to-amber-200/60";
   return "from-emerald-300/80 to-emerald-200/60";
 };
 
 const NOISE = 1;
 
-const StatsPanel = ({ stats, pulseTrigger = 0, pulseDeltas }: Props) => {
+const StatsPanel = ({ stats, affection, pulseTrigger = 0, pulseDeltas }: Props) => {
   const [open, setOpen] = useState(false);
+  const [tab, setTab] = useState<TabId>("heart");
   const [activeDeltas, setActiveDeltas] = useState<Partial<Record<StatKey, number>>>({});
   const [pulseId, setPulseId] = useState(0);
   const autoCloseRef = useRef<number | null>(null);
 
-  const avg = Math.round(
-    ROWS.reduce((acc, r) => acc + stats[r.key], 0) / ROWS.length
-  );
+  const getValue = (key: StatKey): number =>
+    key === "affection" ? affection : (stats as any)[key];
 
-  // On a new pulse: surface deltas next to each bar and auto-open the panel briefly.
+  // Auto-switch to the tab containing the strongest delta and surface chips.
   useEffect(() => {
     if (!pulseTrigger || !pulseDeltas) return;
     const filtered: Partial<Record<StatKey, number>> = {};
-    let any = false;
+    let strongestKey: StatKey | null = null;
+    let strongestAbs = 0;
     (Object.keys(pulseDeltas) as StatKey[]).forEach((k) => {
       const v = pulseDeltas[k];
-      if (typeof v === "number" && Math.abs(v) >= NOISE && ROWS.some((r) => r.key === k)) {
+      if (typeof v === "number" && Math.abs(v) >= NOISE) {
         filtered[k] = v;
-        any = true;
+        if (Math.abs(v) > strongestAbs) {
+          strongestAbs = Math.abs(v);
+          strongestKey = k;
+        }
       }
     });
-    if (!any) return;
+    if (!strongestKey) return;
     setActiveDeltas(filtered);
     setPulseId((n) => n + 1);
     setOpen(true);
+    const owner = TABS.find((t) => t.rows.some((r) => r.key === strongestKey));
+    if (owner) setTab(owner.id);
 
     if (autoCloseRef.current) window.clearTimeout(autoCloseRef.current);
-    const clearT = window.setTimeout(() => setActiveDeltas({}), 2200);
+    const clearT = window.setTimeout(() => setActiveDeltas({}), 2400);
     return () => window.clearTimeout(clearT);
   }, [pulseTrigger]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const activeTab = TABS.find((t) => t.id === tab) ?? TABS[1];
 
   return (
     <div className="absolute top-5 left-3 sm:left-5 z-30 animate-fade-in">
@@ -75,7 +118,6 @@ const StatsPanel = ({ stats, pulseTrigger = 0, pulseDeltas }: Props) => {
         <button
           onClick={() => setOpen(true)}
           aria-label="Show vitals"
-          title={`Vitals · ${avg}`}
           className="h-9 w-9 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4)] text-white/80 hover:bg-white/15 transition flex items-center justify-center"
         >
           <Activity className="w-4 h-4" />
@@ -83,9 +125,9 @@ const StatsPanel = ({ stats, pulseTrigger = 0, pulseDeltas }: Props) => {
       )}
 
       {open && (
-        <div className="w-[200px] sm:w-[220px] rounded-2xl bg-white/[0.06] backdrop-blur-2xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] p-3 sm:p-3.5">
-          <div className="flex items-center justify-between mb-3 px-0.5">
-            <span className="text-[10px] uppercase tracking-[0.15em] text-white/45 font-medium">Vitals</span>
+        <div className="w-[230px] sm:w-[250px] rounded-2xl bg-white/[0.06] backdrop-blur-2xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] p-3 sm:p-3.5">
+          <div className="flex items-center justify-between mb-2.5 px-0.5">
+            <span className="text-[10px] uppercase tracking-[0.18em] text-white/45 font-medium">Vitals</span>
             <button
               onClick={() => setOpen(false)}
               aria-label="Hide vitals"
@@ -95,14 +137,34 @@ const StatsPanel = ({ stats, pulseTrigger = 0, pulseDeltas }: Props) => {
             </button>
           </div>
 
+          {/* Tabs */}
+          <div className="flex gap-1 mb-3 p-1 rounded-full bg-white/[0.04] border border-white/5">
+            {TABS.map((t) => {
+              const active = t.id === tab;
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => setTab(t.id)}
+                  className={`flex-1 h-7 rounded-full text-[10px] font-semibold uppercase tracking-wider transition flex items-center justify-center gap-1 ${
+                    active
+                      ? "bg-white/15 text-white shadow-[0_2px_8px_rgba(0,0,0,0.3)]"
+                      : "text-white/45 hover:text-white/75"
+                  }`}
+                >
+                  <span className="text-[11px] leading-none">{t.icon}</span>
+                  {t.label}
+                </button>
+              );
+            })}
+          </div>
+
           <div className="flex flex-col gap-2 sm:gap-2.5">
-            {ROWS.map((r) => {
-              const v = Math.round(stats[r.key]);
-              const label = v >= 50 ? r.high : r.low;
+            {activeTab.rows.map((r) => {
+              const v = Math.round(getValue(r.key));
+              const label = (r.invert ? v < 50 : v >= 50) ? r.high : r.low;
               const delta = activeDeltas[r.key];
               const hasDelta = typeof delta === "number" && Math.abs(delta) >= NOISE;
               const pos = (delta ?? 0) > 0;
-              // Show where the bar came FROM so it visibly fills/drains to current value.
               const prev = hasDelta ? Math.max(0, Math.min(100, v - (delta as number))) : v;
               return (
                 <div key={r.key} className={hasDelta ? "stat-row-pulse" : undefined}>
@@ -135,13 +197,13 @@ const StatsPanel = ({ stats, pulseTrigger = 0, pulseDeltas }: Props) => {
                   <div className="h-1.5 rounded-full bg-white/[0.07] overflow-hidden relative">
                     <div
                       key={hasDelta ? `${pulseId}-bar-${r.key}` : `bar-${r.key}`}
-                      className={`h-full rounded-full bg-gradient-to-r ${barColor(v)} transition-[width] duration-[900ms] ease-out`}
+                      className={`h-full rounded-full bg-gradient-to-r ${barColor(v, r.invert)} transition-[width] duration-[900ms] ease-out`}
                       style={{
                         width: `${v}%`,
                         animation: hasDelta
                           ? `statBarPulse 900ms ease-out, statBarGlow${pos ? "Pos" : "Neg"} 1.2s ease-out`
                           : undefined,
-                        // @ts-ignore — CSS var for keyframe start width
+                        // @ts-ignore
                         ["--from-w" as any]: `${prev}%`,
                         ["--to-w" as any]: `${v}%`,
                       }}
@@ -173,7 +235,7 @@ const StatsPanel = ({ stats, pulseTrigger = 0, pulseDeltas }: Props) => {
               80%  { opacity: 1; transform: translateX(0) scale(1); }
               100% { opacity: 0; transform: translateX(0) scale(0.95); }
             }
-            .stat-delta { animation: statDeltaPop 2.1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+            .stat-delta { animation: statDeltaPop 2.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
             @keyframes statRowFlash {
               0%, 100% { background: transparent; }
               20%      { background: rgba(255,255,255,0.04); }

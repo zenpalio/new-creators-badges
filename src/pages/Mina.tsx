@@ -38,10 +38,11 @@ const Mina = () => {
   const [affectionPulse, setAffectionPulse] = useState<"up" | "down" | null>(null);
 
   const handleReaction = (r: Reaction) => {
-    const d = r.deltas ?? {};
+    const d = (r.deltas ?? {}) as Record<string, number>;
     const stat: Partial<MoodStats> = {};
-    (["joy", "arousal", "comfort", "calm", "energy", "hunger"] as (keyof MoodStats)[]).forEach((k) => {
-      if (typeof (d as any)[k] === "number") stat[k] = (d as any)[k];
+    Object.keys(d).forEach((k) => {
+      if (k === "affection") return;
+      if (typeof d[k] === "number") (stat as any)[k] = d[k];
     });
     if (Object.keys(stat).length) nudgeStats(stat);
     if (typeof d.affection === "number" && d.affection !== 0) {
@@ -50,7 +51,7 @@ const Mina = () => {
       setAffectionPulse(d.affection > 0 ? "up" : "down");
       window.setTimeout(() => setAffectionPulse(null), 900);
     }
-    setFxDeltas(d);
+    setFxDeltas(d as any);
     setFxSentiment(r.sentiment);
     setFxTrigger((n) => n + 1);
   };
@@ -156,7 +157,7 @@ const Mina = () => {
       </div>
 
       <SceneControls open={sceneOpen} onClose={() => setSceneOpen(false)} settings={scene} onChange={setScene} />
-      <StatsPanel stats={state.stats} pulseTrigger={fxTrigger} pulseDeltas={fxDeltas as any} />
+      <StatsPanel stats={state.stats} affection={state.affection} pulseTrigger={fxTrigger} pulseDeltas={fxDeltas as any} />
 
       {/* Chat */}
       <div className="absolute left-1/2 -translate-x-1/2 bottom-6 z-20 w-[min(680px,calc(100%-2rem))]">
