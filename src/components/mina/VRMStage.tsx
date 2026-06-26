@@ -13,6 +13,9 @@ import {
 import { RotateCw, Shirt, RefreshCw, Film, Upload, Square } from "lucide-react";
 import kneelingIdle from "@/assets/kneeling-idle.fbx.asset.json";
 import talkingAnim from "@/assets/talking.fbx.asset.json";
+import standingPose from "@/assets/standing-pose.fbx.asset.json";
+
+const DEFAULT_ANIM = { url: standingPose.url, name: "Standing", kind: "fbx" as const };
 
 // Mixamo bone name → VRM humanoid bone name
 const MIXAMO_TO_VRM: Record<string, string> = {
@@ -552,15 +555,16 @@ const VRMStage = ({
   const [loadPct, setLoadPct] = useState(0);
   const [loadErr, setLoadErr] = useState<string | null>(null);
   const [viewPreset, setViewPreset] = useState<ViewPreset>("full");
-  const [vrmaUrl, setVrmaUrl] = useState<string | null>(null);
-  const [vrmaName, setVrmaName] = useState<string | null>(null);
-  const [animKind, setAnimKind] = useState<"vrma" | "fbx" | null>(null);
+  const [vrmaUrl, setVrmaUrl] = useState<string | null>(DEFAULT_ANIM.url);
+  const [vrmaName, setVrmaName] = useState<string | null>(DEFAULT_ANIM.name);
+  const [animKind, setAnimKind] = useState<"vrma" | "fbx" | null>(DEFAULT_ANIM.kind);
   const vrmaFileRef = useRef<HTMLInputElement | null>(null);
-  const handleAnimEnd = useCallback(() => {
-    setVrmaUrl((prev) => { if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev); return null; });
-    setVrmaName(null);
-    setAnimKind(null);
+  const resetToDefault = useCallback(() => {
+    setVrmaUrl((prev) => { if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev); return DEFAULT_ANIM.url; });
+    setVrmaName(DEFAULT_ANIM.name);
+    setAnimKind(DEFAULT_ANIM.kind);
   }, []);
+  const handleAnimEnd = useCallback(() => { resetToDefault(); }, [resetToDefault]);
   const handlePickVrma = (file: File) => {
     if (vrmaUrl && vrmaUrl.startsWith("blob:")) URL.revokeObjectURL(vrmaUrl);
     const isFbx = /\.fbx$/i.test(file.name);
@@ -576,11 +580,11 @@ const VRMStage = ({
   };
 
   // Auto-play Talking animation while the character is speaking.
-  // Only auto-plays when nothing else is active, and only auto-stops the talking clip.
+  // Only swaps when the default standing pose is active; restores standing when done.
   const autoTalkingRef = useRef(false);
   useEffect(() => {
     if (speaking) {
-      if (!vrmaUrl) {
+      if (vrmaUrl === DEFAULT_ANIM.url) {
         autoTalkingRef.current = true;
         setVrmaUrl(talkingAnim.url);
         setVrmaName("Talking");
@@ -588,11 +592,9 @@ const VRMStage = ({
       }
     } else if (autoTalkingRef.current) {
       autoTalkingRef.current = false;
-      setVrmaUrl((prev) => { if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev); return null; });
-      setVrmaName(null);
-      setAnimKind(null);
+      resetToDefault();
     }
-  }, [speaking, vrmaUrl]);
+  }, [speaking, vrmaUrl, resetToDefault]);
 
 
 
@@ -768,11 +770,11 @@ const VRMStage = ({
             {vrmaName}
           </div>
         )}
-        {vrmaUrl ? (
+        {vrmaUrl && vrmaUrl !== DEFAULT_ANIM.url ? (
           <button
             onClick={(e) => { e.stopPropagation(); handleAnimEnd(); }}
             className="h-9 px-3 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl text-white/80 hover:bg-white/15 transition flex items-center gap-1.5 text-[11px]"
-            title="Stop animation"
+            title="Back to default pose"
           >
             <Square className="w-3 h-3" /> Stop
           </button>
