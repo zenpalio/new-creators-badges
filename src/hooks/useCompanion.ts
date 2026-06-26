@@ -3,12 +3,26 @@ import { useCallback, useEffect, useState } from "react";
 export type Tier = "stranger" | "crush" | "lover" | "obsessed";
 
 export interface MoodStats {
-  hunger: number;   // 0 = starving, 100 = full
-  energy: number;   // 0 = sleepy,   100 = energized
-  arousal: number;  // 0 = cold,     100 = horny
-  calm: number;     // 0 = nervous,  100 = serene
-  joy: number;      // 0 = sad,      100 = happy
-  comfort: number;  // 0 = lonely,   100 = cozy
+  // Body
+  hunger: number;     // 0 = starving, 100 = full
+  energy: number;     // 0 = sleepy,   100 = energized
+  sleepiness: number; // 0 = awake,    100 = drowsy
+  hygiene: number;    // 0 = grimy,    100 = fresh
+  comfort: number;    // 0 = lonely,   100 = cozy
+  calm: number;       // 0 = nervous,  100 = serene
+  // Heart
+  joy: number;        // 0 = sad,      100 = happy
+  trust: number;      // 0 = guarded,  100 = open
+  shyness: number;    // 0 = bold,     100 = blushing mess
+  jealousy: number;   // 0 = secure,   100 = seething
+  loneliness: number; // 0 = content,  100 = aching
+  stress: number;     // 0 = relaxed,  100 = overwhelmed
+  // Desire
+  arousal: number;    // 0 = cold,     100 = horny (right now)
+  lust: number;       // 0 = sated,    100 = craving (slow build)
+  obedience: number;  // 0 = bratty,   100 = compliant
+  dominance: number;  // 0 = submissive,100 = in control
+  wetness: number;    // explicit sub-meter of arousal
 }
 
 export interface CompanionState {
@@ -43,17 +57,28 @@ const MOCK_INITIAL: CompanionState = {
   free_call_seconds_today: 0,
   companion_id: "mock-mina",
   agent_id: null,
-  stats: { hunger: 65, energy: 75, arousal: 28, calm: 70, joy: 62, comfort: 55 },
+  stats: {
+    hunger: 65, energy: 75, sleepiness: 20, hygiene: 80, comfort: 55, calm: 70,
+    joy: 62, trust: 30, shyness: 65, jealousy: 10, loneliness: 35, stress: 25,
+    arousal: 28, lust: 22, obedience: 55, dominance: 45, wetness: 18,
+  },
 };
 
 // Per-minute drift toward "neglected" baselines.
 const DRIFT_PER_MIN: Partial<Record<keyof MoodStats, number>> = {
   hunger: -0.6,
   energy: -0.4,
-  arousal: -0.3,
+  sleepiness: +0.5,
+  hygiene: -0.3,
+  comfort: -0.2,
   calm: +0.25,
   joy: -0.25,
-  comfort: -0.2,
+  trust: -0.05,
+  loneliness: +0.4,
+  stress: +0.15,
+  arousal: -0.3,
+  lust: +0.1,
+  wetness: -0.4,
 };
 
 export function useCompanion(_slug: string) {
