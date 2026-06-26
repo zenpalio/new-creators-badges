@@ -68,7 +68,24 @@ Deno.serve(async (req) => {
       ? "She's friendly and curious. Cute, playful, mildly flirty — happy to chat."
       : "She's friendly and welcoming, a little shy. Sweet and curious, never rude or dismissive.";
 
-    const system = `${basePersona}\n\nCURRENT STATE:\n- Affection: ${affection}/100 (${tier})\n- Mood: ${mood}\n- Streak: ${streak} days\n\nBEHAVIOR: ${tierGuidance}\n\nKeep replies SHORT (1-3 sentences), in-character, never break the fourth wall.`;
+    const reactionSpec = `\n\nOUTPUT FORMAT — return STRICT JSON only, no prose, no code fences:
+{
+  "reply": "<your in-character message, 1-3 sentences>",
+  "sentiment": "<one of: love | like | neutral | dislike | hate>",
+  "emotion": "<one short word: happy, shy, flirty, sad, annoyed, excited, hurt, …>",
+  "deltas": {
+    "affection": <integer -8..+8>,
+    "joy": <integer -15..+15>,
+    "arousal": <integer -15..+15>,
+    "comfort": <integer -15..+15>,
+    "calm": <integer -15..+15>,
+    "energy": <integer -10..+10>,
+    "hunger": <integer -5..+5>
+  }
+}
+Compliments / sweet talk → love/like, positive joy+affection+comfort. Rude or cruel messages → dislike/hate, negative joy+comfort and a small negative affection. Neutral small talk → neutral with tiny deltas.`;
+
+    const system = `${basePersona}\n\nCURRENT STATE:\n- Affection: ${affection}/100 (${tier})\n- Mood: ${mood}\n- Streak: ${streak} days\n\nBEHAVIOR: ${tierGuidance}\n\nKeep replies SHORT (1-3 sentences), in-character, never break the fourth wall.${reactionSpec}`;
 
     const payload = {
       model: "google/gemini-3-flash-preview",
@@ -77,6 +94,7 @@ Deno.serve(async (req) => {
         ...memory.map((m: any) => ({ role: m.role, content: m.content })),
         { role: "user", content: message },
       ],
+      response_format: { type: "json_object" },
     };
 
     const r = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -91,7 +109,20 @@ Deno.serve(async (req) => {
       throw new Error(`AI error ${r.status}: ${t}`);
     }
     const data = await r.json();
-    const reply: string = data.choices?.[0]?.message?.content ?? "...";
+    const raw: string = data.choices?.[0]?.message?.content ?? "{}";
+
+    let reply = "...";
+    const reaction: any = { sentiment: "neutral", emotion: "neutral", deltas: {} };
+    try {
+      const cleaned = raw.trim().replace(/^```(?:json)?\s*/i, "").replace(/```$/i, "").trim();
+      const parsed = JSON.parse(cleaned);
+      if (typeof parsed.reply === "string") reply = parsed.reply;
+      if (parsed.sentiment) reaction.sentiment = String(parsed.sentiment).toLowerCase();
+      if (parsed.emotion) reaction.emotion = String(parsed.emotion).toLowerCase();
+      if (parsed.deltas && typeof parsed.deltas === "object") reaction.deltas = parsed.deltas;
+    } catch {
+      reply = raw;
+    }
 
     if (user && comp) {
       await supabase.from("chat_messages").insert([
@@ -101,7 +132,7 @@ Deno.serve(async (req) => {
       await supabase.rpc("add_chat_xp", { _companion_slug: slug });
     }
 
-    return new Response(JSON.stringify({ reply }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    return new Response(JSON.stringify({ reply, reaction }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (e) {
     return new Response(JSON.stringify({ error: String(e instanceof Error ? e.message : e) }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   }
