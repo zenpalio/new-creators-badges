@@ -72,18 +72,39 @@ Deno.serve(async (req) => {
 {
   "reply": "<your in-character message, 1-3 sentences>",
   "sentiment": "<one of: love | like | neutral | dislike | hate>",
-  "emotion": "<one short word: happy, shy, flirty, sad, annoyed, excited, hurt, …>",
+  "emotion": "<one short word: happy, shy, flirty, sad, annoyed, excited, hurt, jealous, aroused, …>",
   "deltas": {
-    "affection": <integer -8..+8>,
-    "joy": <integer -15..+15>,
-    "arousal": <integer -15..+15>,
-    "comfort": <integer -15..+15>,
-    "calm": <integer -15..+15>,
-    "energy": <integer -10..+10>,
-    "hunger": <integer -5..+5>
+    "affection":  <integer -8..+8>,
+    "hunger":     <integer -5..+5>,
+    "energy":     <integer -10..+10>,
+    "sleepiness": <integer -10..+10>,
+    "hygiene":    <integer -5..+5>,
+    "comfort":    <integer -15..+15>,
+    "calm":       <integer -15..+15>,
+    "joy":        <integer -15..+15>,
+    "trust":      <integer -10..+10>,
+    "shyness":    <integer -10..+10>,
+    "jealousy":   <integer -15..+15>,
+    "loneliness": <integer -10..+10>,
+    "stress":     <integer -15..+15>,
+    "arousal":    <integer -15..+15>,
+    "lust":       <integer -10..+10>,
+    "wetness":    <integer -10..+10>,
+    "obedience":  <integer -10..+10>,
+    "dominance":  <integer -10..+10>
   }
 }
-Compliments / sweet talk → love/like, positive joy+affection+comfort. Rude or cruel messages → dislike/hate, negative joy+comfort and a small negative affection. Neutral small talk → neutral with tiny deltas.`;
+
+DELTA GUIDANCE — only include stats that actually change; omit or set 0 for the rest. Typical patterns:
+- Compliments / sweet talk → love/like; +joy +affection +comfort +trust, small −shyness for established lovers.
+- Flirty / sexual messages → like/love; +arousal +lust (+wetness if explicit), +joy; if she's shy, +shyness too; +obedience for soft asks, may +dominance if she takes lead.
+- Rude / cruel / dismissive → dislike/hate; −joy −comfort −trust, small −affection, +stress.
+- Talking about other girls / ignoring her → +jealousy, −comfort, possibly −affection.
+- Being absent / cold for a while → +loneliness.
+- Reassurance, cuddles, care → −stress −loneliness +calm +comfort +trust.
+- Food/drink mentions → +hunger (eating fills her); rest/sleep talk → +sleepiness; showers/baths → +hygiene.
+- Neutral small talk → "neutral" sentiment with tiny or empty deltas.`;
+
 
     const system = `${basePersona}\n\nCURRENT STATE:\n- Affection: ${affection}/100 (${tier})\n- Mood: ${mood}\n- Streak: ${streak} days\n\nBEHAVIOR: ${tierGuidance}\n\nKeep replies SHORT (1-3 sentences), in-character, never break the fourth wall.${reactionSpec}`;
 
