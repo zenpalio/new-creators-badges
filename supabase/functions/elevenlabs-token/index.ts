@@ -20,9 +20,8 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_ANON_KEY")!,
       { global: { headers: { Authorization: authHeader } } },
     );
-    const { data: userRes } = await supabase.auth.getUser();
-    const user = userRes?.user;
-    if (!user) return new Response(JSON.stringify({ error: "unauthenticated" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    const { data: userRes } = await supabase.auth.getUser().catch(() => ({ data: { user: null } } as any));
+    const user = userRes?.user ?? null;
 
     const { slug = "mina", intimate = false } = await req.json().catch(() => ({}));
 
