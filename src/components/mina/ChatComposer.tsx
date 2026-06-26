@@ -160,8 +160,8 @@ const ChatComposer = ({ onAfterReply, onMouthLevel }: Props) => {
                     {m.content}
                   </div>
                 ) : (
-                  <div className="max-w-[80%] px-4 py-2 rounded-2xl rounded-bl-md text-sm text-white bg-white/[0.08] backdrop-blur-2xl border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.45)] leading-relaxed [-webkit-backdrop-filter:blur(24px)_saturate(140%)] [backdrop-filter:blur(24px)_saturate(140%)]">
-                    <span className="relative z-10">{m.content}</span>
+                  <div className="max-w-[80%] px-4 py-2 rounded-2xl rounded-bl-md text-sm text-white bg-white/[0.10] border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.45)] leading-relaxed [backdrop-filter:blur(28px)_saturate(150%)] [-webkit-backdrop-filter:blur(28px)_saturate(150%)]">
+                    {m.content}
                   </div>
                 )}
               </div>
