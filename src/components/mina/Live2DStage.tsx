@@ -24,7 +24,7 @@ const Live2DStage = ({ modelUrl = DEFAULT_MODEL, mouthOpen = 0 }: Props) => {
     let app: PIXI.Application;
 
     (async () => {
-      const { Live2DModel } = await import("pixi-live2d-display/cubism4");
+      const { Live2DModel } = await import("pixi-live2d-display-lipsyncpatch/cubism4");
       if (disposed || !wrapRef.current) return;
 
       app = new PIXI.Application({
