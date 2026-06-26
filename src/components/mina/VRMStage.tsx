@@ -762,27 +762,8 @@ const VRMStage = ({
         }}
       />
 
-      {/* Drop zone — left, just below vitals */}
-      <div
-        onClick={(e) => { e.stopPropagation(); vrmaFileRef.current?.click(); }}
-        onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); e.currentTarget.classList.add("ring-2","ring-white/40"); }}
-        onDragLeave={(e) => { e.currentTarget.classList.remove("ring-2","ring-white/40"); }}
-        onDrop={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          e.currentTarget.classList.remove("ring-2","ring-white/40");
-          const f = e.dataTransfer.files?.[0];
-          if (f) handlePickVrma(f);
-        }}
-        className="absolute left-3 sm:left-5 top-20 z-20 pointer-events-auto w-[150px] h-[60px] rounded-2xl border border-dashed border-white/20 bg-white/[0.04] backdrop-blur-xl hover:bg-white/[0.08] transition flex flex-col items-center justify-center gap-1 text-[10px] text-white/60 cursor-pointer"
-        title="Drop .vrma / .fbx or click to load"
-      >
-        <Upload className="w-3.5 h-3.5" />
-        <span>Drop anim</span>
-      </div>
-
-      {/* Animation sidebar — left, collapsible */}
-      <div className="absolute left-3 sm:left-5 top-[148px] z-20 pointer-events-auto flex flex-col items-start gap-2">
+      {/* Animation sidebar — left, collapsible (drop zone + presets) */}
+      <div className="absolute left-3 sm:left-5 top-20 z-20 pointer-events-auto flex flex-col items-start gap-2">
         <button
           onClick={(e) => { e.stopPropagation(); setAnimsOpen((v) => !v); }}
           className={`h-9 w-9 rounded-full border border-white/15 backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4)] transition flex items-center justify-center ${
@@ -797,10 +778,29 @@ const VRMStage = ({
         {animsOpen && (
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-[150px] max-h-[55vh] overflow-y-auto rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.45)] p-2 flex flex-col gap-1.5 animate-fade-in"
+            className="w-[170px] max-h-[60vh] overflow-y-auto rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.45)] p-2 flex flex-col gap-2 animate-fade-in"
           >
-            <div className="text-[10px] uppercase tracking-[0.15em] text-white/45 font-medium px-1 pb-1">
-              Animations
+            {/* Drop zone */}
+            <div
+              onClick={(e) => { e.stopPropagation(); vrmaFileRef.current?.click(); }}
+              onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); e.currentTarget.classList.add("ring-2","ring-white/40"); }}
+              onDragLeave={(e) => { e.currentTarget.classList.remove("ring-2","ring-white/40"); }}
+              onDrop={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                e.currentTarget.classList.remove("ring-2","ring-white/40");
+                const f = e.dataTransfer.files?.[0];
+                if (f) handlePickVrma(f);
+              }}
+              className="w-full h-[56px] rounded-lg border border-dashed border-white/20 bg-white/[0.03] hover:bg-white/[0.08] transition flex flex-col items-center justify-center gap-1 text-[10px] text-white/60 cursor-pointer"
+              title="Drop .vrma / .fbx or click to load"
+            >
+              <Upload className="w-3.5 h-3.5" />
+              <span>Drop anim</span>
+            </div>
+
+            <div className="text-[10px] uppercase tracking-[0.15em] text-white/45 font-medium px-1 pt-1">
+              Presets
             </div>
             {[
               { url: kneelingIdle.url, name: "Kneeling" },
@@ -825,6 +825,7 @@ const VRMStage = ({
           </div>
         )}
       </div>
+
 
 
     </div>
