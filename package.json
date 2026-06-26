@@ -21,6 +21,7 @@
     "@elevenlabs/react": "^1.9.0",
     "@fontsource/outfit": "^5.2.8",
     "@hookform/resolvers": "^3.10.0",
+    "@lovable.dev/cloud-auth-js": "^1.1.2",
     "@pixi/constants": "7.4.3",
     "@pixi/core": "7.4.3",
     "@pixi/display": "7.4.3",
