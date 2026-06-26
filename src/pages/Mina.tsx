@@ -3,7 +3,7 @@ import { Phone, Gift, Settings2 } from "lucide-react";
 import { useCompanion, tierFromAffection, type MoodStats } from "@/hooks/useCompanion";
 import Live2DStage from "@/components/mina/Live2DStage";
 import VRMStage from "@/components/mina/VRMStage";
-import minaVrm from "@/assets/mina-outfit.vrm.asset.json";
+import minaVrm from "@/assets/mina-character.vrm.asset.json";
 import ChatComposer, { type Reaction, type Sentiment } from "@/components/mina/ChatComposer";
 import GiftDrawer from "@/components/mina/GiftDrawer";
 import CallModal from "@/components/mina/CallModal";
