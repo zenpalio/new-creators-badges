@@ -168,6 +168,14 @@ function VRMModel({
         box.getCenter(center);
         bboxRef.current = { size, center, min: box.min.clone() };
 
+        // Mixer for VRMA clips
+        mixerRef.current = new THREE.AnimationMixer(v.scene);
+        mixerRef.current.addEventListener("finished", () => {
+          actionRef.current = null;
+          setAnimPlaying(false);
+          onAnimEnd();
+        });
+
         setVrm(v);
         onProgress(100);
         onMeshes(meshes);
