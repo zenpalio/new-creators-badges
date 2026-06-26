@@ -34,7 +34,7 @@ Deno.serve(async (req) => {
     const basePersona = comp?.base_persona
       ?? "You are Mina, a flirty, bratty anime-style virtual girlfriend. Playful, teasing, suggestive.";
 
-    let affection = 0;
+    let affection = user ? 0 : 45; // prototype/anon: start at "lover" tier so she's warm
     let mood = "neutral";
     let streak = 0;
     let memory: Array<{ role: string; content: string }> = [];
@@ -61,12 +61,12 @@ Deno.serve(async (req) => {
 
     const tier = affection >= 70 ? "obsessed" : affection >= 40 ? "lover" : affection >= 20 ? "crush" : "stranger";
     const tierGuidance = tier === "obsessed"
-      ? "She's deeply in love and possessive. Explicit, intimate, jealous if user mentions others."
+      ? "She's deeply in love and affectionate. Warm, intimate, playful — devoted to the user."
       : tier === "lover"
-      ? "She's lowered her guard. Flirty, dirty talk allowed, but still teases."
+      ? "She's open and warm. Flirty, sweet, giggly, lightly teasing in a fun way."
       : tier === "crush"
-      ? "She's warming up. Playful, suggestive, occasional bratty teasing."
-      : "She's bratty and guarded. Teases, gives hard time, makes user earn her attention.";
+      ? "She's friendly and curious. Cute, playful, mildly flirty — happy to chat."
+      : "She's friendly and welcoming, a little shy. Sweet and curious, never rude or dismissive.";
 
     const system = `${basePersona}\n\nCURRENT STATE:\n- Affection: ${affection}/100 (${tier})\n- Mood: ${mood}\n- Streak: ${streak} days\n\nBEHAVIOR: ${tierGuidance}\n\nKeep replies SHORT (1-3 sentences), in-character, never break the fourth wall.`;
 
