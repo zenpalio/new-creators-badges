@@ -9,8 +9,7 @@ import GiftDrawer from "@/components/mina/GiftDrawer";
 import CallModal from "@/components/mina/CallModal";
 import SceneControls, { BACKGROUNDS, MODELS, type SceneSettings } from "@/components/mina/SceneControls";
 import StatsPanel from "@/components/mina/StatsPanel";
-import SfxToggle from "@/components/mina/SfxToggle";
-import AnimationMenu from "@/components/mina/AnimationMenu";
+import AmbientSounds from "@/components/mina/AmbientSounds";
 import ReactionFX from "@/components/mina/ReactionFX";
 import AmbientSounds from "@/components/mina/AmbientSounds";
 
