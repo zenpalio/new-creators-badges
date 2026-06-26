@@ -10,6 +10,8 @@ interface Props {
   mirror?: boolean;
   /** Optional override of model3.json URL */
   modelUrl?: string;
+  /** Show debug panel to trigger motions/expressions */
+  debug?: boolean;
 }
 
 const CUBISM4_CORE = "https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js";
@@ -39,6 +41,7 @@ const Live2DStage = ({
   scale = 1,
   mirror = false,
   modelUrl = DEFAULT_MODEL,
+  debug = false,
 }: Props) => {
   const hostRef = useRef<HTMLDivElement>(null);
   const appRef = useRef<any>(null);
@@ -47,6 +50,9 @@ const Live2DStage = ({
   const fittedBoundsRef = useRef({ width: 0, height: 0 });
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [error, setError] = useState<string>("");
+  const [motions, setMotions] = useState<Record<string, number>>({});
+  const [expressions, setExpressions] = useState<string[]>([]);
+  const [expIdx, setExpIdx] = useState(0);
 
   // Keep latest mouthOpen in a ref for the ticker
   useEffect(() => {
@@ -124,6 +130,16 @@ const Live2DStage = ({
           } catch {}
         };
         app.ticker.add(mouthTick);
+
+        // Discover motion groups and expressions for the debug panel
+        try {
+          const defs = model.internalModel?.motionManager?.definitions ?? {};
+          const counts: Record<string, number> = {};
+          for (const k of Object.keys(defs)) counts[k] = (defs[k] || []).length;
+          setMotions(counts);
+          const expDefs = model.internalModel?.motionManager?.expressionManager?.definitions ?? [];
+          setExpressions(expDefs.map((e: any) => e.Name ?? e.name).filter(Boolean));
+        } catch {}
 
         // Idle motion if available
         try {
@@ -243,6 +259,57 @@ const Live2DStage = ({
       {status === "error" && (
         <div className="absolute inset-x-0 bottom-6 mx-auto max-w-sm rounded-lg bg-white/[0.07] backdrop-blur px-4 py-3 text-xs text-white/80 text-center pointer-events-none">
           Couldn't load Live2D model. {error}
+        </div>
+      )}
+
+      {debug && status === "ready" && (
+        <div className="absolute top-3 left-3 z-20 max-w-[260px] rounded-xl bg-black/55 backdrop-blur border border-white/10 p-3 text-xs text-white/90 space-y-2">
+          <div className="font-semibold text-white/70 uppercase tracking-wider text-[10px]">Animations</div>
+          {Object.keys(motions).length === 0 && (
+            <div className="text-white/50">No motion groups</div>
+          )}
+          {Object.entries(motions).map(([group, count]) => (
+            <div key={group} className="space-y-1">
+              <div className="text-white/60">{group} ({count})</div>
+              <div className="flex flex-wrap gap-1">
+                {Array.from({ length: count }).map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => {
+                      try { modelRef.current?.motion(group, i, 3); } catch {}
+                    }}
+                    className="px-2 py-1 rounded-md bg-white/10 hover:bg-white/20 transition"
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+          {expressions.length > 0 && (
+            <div className="space-y-1 pt-1 border-t border-white/10">
+              <div className="text-white/60">Expression</div>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => {
+                    const next = (expIdx - 1 + expressions.length) % expressions.length;
+                    setExpIdx(next);
+                    try { modelRef.current?.expression(expressions[next]); } catch {}
+                  }}
+                  className="px-2 py-1 rounded-md bg-white/10 hover:bg-white/20 transition"
+                >‹</button>
+                <span className="flex-1 text-center text-white/80">{expressions[expIdx]}</span>
+                <button
+                  onClick={() => {
+                    const next = (expIdx + 1) % expressions.length;
+                    setExpIdx(next);
+                    try { modelRef.current?.expression(expressions[next]); } catch {}
+                  }}
+                  className="px-2 py-1 rounded-md bg-white/10 hover:bg-white/20 transition"
+                >›</button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
