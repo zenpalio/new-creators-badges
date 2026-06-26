@@ -30,9 +30,9 @@ Deno.serve(async (req) => {
       body: JSON.stringify({
         model: "openai/gpt-4o-mini-tts",
         input: text.slice(0, 1200),
-        voice: voice || "shimmer",
+        voice: voice || "coral",
         response_format: "mp3",
-        instructions: "Speak warmly and playfully, like a flirty close friend. Soft, intimate tone.",
+        instructions: "Speak as a cute, youthful anime-style girl. Bright, light, slightly breathy voice with a playful, flirty lilt and a small smile. Soft, warm, and a little teasing — never deep or mature.",
       }),
     });
 
