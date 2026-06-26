@@ -22,6 +22,10 @@ import lookingAroundAnim from "@/assets/looking-around.fbx.asset.json";
 import relievedSighAnim from "@/assets/relieved-sigh.fbx.asset.json";
 import shoulderRubAnim from "@/assets/shoulder-rubbing.fbx.asset.json";
 import blowKissAnim from "@/assets/blow-a-kiss.fbx.asset.json";
+import happyAnim from "@/assets/happy.fbx.asset.json";
+import excitedAnim from "@/assets/excited.fbx.asset.json";
+import angryAnim from "@/assets/angry.fbx.asset.json";
+
 
 const DEFAULT_ANIM = { url: standingPose.url, name: "Standing", kind: "fbx" as const };
 
@@ -659,6 +663,25 @@ const VRMStage = ({
     }, delay);
     return () => window.clearTimeout(t);
   }, [vrmaUrl, speaking, playPreset]);
+
+  // React with a body animation when the user gets a strong sentiment reply.
+  const reactAnimRef = useRef(0);
+  useEffect(() => {
+    if (!reactTrigger || reactTrigger === reactAnimRef.current) return;
+    reactAnimRef.current = reactTrigger;
+    if (speaking) return; // don't interrupt talking
+    const s = String(sentiment);
+    let pick: { url: string; name: string } | null = null;
+    if (s === "love") pick = { url: excitedAnim.url, name: "Excited" };
+    else if (s === "like" || s === "happy") pick = { url: happyAnim.url, name: "Happy" };
+    else if (s === "hate" || s === "dislike" || s === "angry") pick = { url: angryAnim.url, name: "Angry" };
+
+    if (pick) {
+      autoTalkingRef.current = false;
+      playPreset(pick.url, pick.name, "fbx");
+    }
+  }, [reactTrigger, sentiment, speaking, playPreset]);
+
 
 
 
