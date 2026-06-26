@@ -148,7 +148,7 @@ const EXPR_MAP: Record<VrmSentiment, Partial<Record<string, number>>> = {
   intimate:  { happy: 0.4, relaxed: 0.6, surprised: 0.15, angry: 0, sad: 0 },
 };
 
-export type ViewPreset = "full" | "upper" | "face";
+export type ViewPreset = "full" | "upper" | "face" | "back";
 
 function VRMModel({
   url,
@@ -216,7 +216,7 @@ function VRMModel({
       focusY = b.focus.upper;
       frameW = b.size.x * 0.75;
     } else {
-      // full body — center on the humanoid, not the imported scene bounds
+      // full body & back — center on the humanoid
       frameH = fullH * 1.15;
       focusY = b.focus.full;
     }
@@ -743,10 +743,14 @@ const VRMStage = ({
 
       {/* View preset switcher */}
       <div className="absolute right-3 sm:right-5 top-32 z-20 pointer-events-auto flex flex-col gap-1.5 rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4)] p-1.5">
-        {(["full", "upper", "face"] as ViewPreset[]).map((p) => (
+        {(["full", "upper", "face", "back"] as ViewPreset[]).map((p) => (
           <button
             key={p}
-            onClick={(e) => { e.stopPropagation(); setViewPreset(p); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setViewPreset(p);
+              setSpin(p === "back" ? Math.PI : 0);
+            }}
             className={`px-3 py-1.5 rounded-lg text-[11px] uppercase tracking-wider transition ${
               viewPreset === p
                 ? "bg-white text-[hsl(220_25%_10%)]"
@@ -754,7 +758,7 @@ const VRMStage = ({
             }`}
             title={`${p} view`}
           >
-            {p === "full" ? "Full" : p === "upper" ? "Upper" : "Face"}
+            {p === "full" ? "Full" : p === "upper" ? "Upper" : p === "face" ? "Face" : "Back"}
           </button>
         ))}
       </div>
