@@ -151,28 +151,60 @@ const Live2DStage = ({
     };
   }, [modelUrl]);
 
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Soft floor glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[70%] h-48 rounded-[50%] bg-[radial-gradient(ellipse_at_center,hsl(230_60%_40%/0.35),transparent_70%)] blur-2xl" />
+  // Drag-to-pan + wheel-to-zoom
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const dragRef = useRef<{ x: number; y: number; px: number; py: number } | null>(null);
 
-      {/* Wrapper: user controls (rotation/scale/mirror) + subtle idle sway */}
+  const onPointerDown = (e: React.PointerEvent) => {
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    dragRef.current = { x: e.clientX, y: e.clientY, px: pan.x, py: pan.y };
+  };
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!dragRef.current) return;
+    const d = dragRef.current;
+    setPan({ x: d.px + (e.clientX - d.x), y: d.py + (e.clientY - d.y) });
+  };
+  const endDrag = (e: React.PointerEvent) => {
+    try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId); } catch {}
+    dragRef.current = null;
+  };
+  const onWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    const factor = Math.exp(-e.deltaY * 0.0015);
+    setZoom((z) => Math.min(4, Math.max(0.3, z * factor)));
+  };
+
+  const totalScale = scale * zoom;
+
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      {/* Soft floor glow */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[70%] h-48 rounded-[50%] bg-[radial-gradient(ellipse_at_center,hsl(230_60%_40%/0.35),transparent_70%)] blur-2xl pointer-events-none" />
+
+      {/* Interactive stage: drag to pan, wheel to zoom */}
       <div
         ref={hostRef}
-        className="absolute inset-0 mina-idle transition-transform duration-300 ease-out"
+        className="absolute inset-0 mina-idle cursor-grab active:cursor-grabbing touch-none select-none"
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        onWheel={onWheel}
         style={{
-          transform: `rotate(${rotation}deg) scale(${scale}) scaleX(${mirror ? -1 : 1})`,
+          transform: `translate(${pan.x}px, ${pan.y}px) rotate(${rotation}deg) scale(${totalScale}) scaleX(${mirror ? -1 : 1})`,
           transformOrigin: "center center",
+          transition: dragRef.current ? "none" : "transform 200ms ease-out",
         }}
       />
 
       {status === "loading" && (
-        <div className="absolute inset-0 flex items-center justify-center text-sm text-white/60">
+        <div className="absolute inset-0 flex items-center justify-center text-sm text-white/60 pointer-events-none">
           Loading character…
         </div>
       )}
       {status === "error" && (
-        <div className="absolute inset-x-0 bottom-6 mx-auto max-w-sm rounded-lg bg-white/[0.07] backdrop-blur px-4 py-3 text-xs text-white/80 text-center">
+        <div className="absolute inset-x-0 bottom-6 mx-auto max-w-sm rounded-lg bg-white/[0.07] backdrop-blur px-4 py-3 text-xs text-white/80 text-center pointer-events-none">
           Couldn't load Live2D model. {error}
         </div>
       )}
