@@ -105,10 +105,10 @@ const Mina = () => {
       <AmbientSounds speaking={speaking || callOpen} volume={0.3} />
 
       {/* Top-right glass control cluster */}
-      <div className="absolute top-5 right-5 z-30 flex items-center gap-2">
+      <div className="absolute top-3 right-3 sm:top-5 sm:right-5 z-30 flex items-center gap-1.5 sm:gap-2">
         <button
           onClick={() => setCallOpen(true)}
-          className="w-11 h-11 rounded-full bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] flex items-center justify-center text-white/90 hover:bg-white/[0.12] hover:scale-105 transition"
+          className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] flex items-center justify-center text-white/90 hover:bg-white/[0.12] hover:scale-105 transition"
           title="Call Mina"
         >
           <Phone className="w-4 h-4" />
@@ -120,9 +120,10 @@ const Mina = () => {
             setFxTrigger((n) => n + 1);
           }}
         />
+        <SfxToggle />
         <button
           onClick={() => setSceneOpen((v) => !v)}
-          className={`w-11 h-11 rounded-full backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] flex items-center justify-center transition ${
+          className={`w-9 h-9 sm:w-11 sm:h-11 rounded-full backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] flex items-center justify-center transition ${
             sceneOpen ? "bg-white text-[hsl(220_25%_10%)]" : "bg-white/[0.06] text-white/90 hover:bg-white/[0.12] hover:scale-105"
           }`}
           title="Scene settings"
@@ -134,11 +135,11 @@ const Mina = () => {
       <SceneControls open={sceneOpen} onClose={() => setSceneOpen(false)} settings={scene} onChange={setScene} />
 
       {/* Top-left stack: vitals + gift */}
-      <div className="absolute top-5 left-3 sm:left-5 z-30 flex flex-col gap-2 w-[260px] sm:w-[280px]">
+      <div className="absolute top-3 left-3 sm:top-5 sm:left-5 z-30 flex flex-col gap-2 w-[62vw] max-w-[260px] sm:w-[280px] sm:max-w-none">
         <StatsPanel stats={state.stats} affection={state.affection} tier={tier} affectionPulse={affectionPulse} pulseTrigger={fxTrigger} pulseDeltas={fxDeltas as any} />
         <button
           onClick={() => setGiftOpen(true)}
-          className="h-11 rounded-2xl bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] text-white/90 hover:bg-white/[0.12] transition flex items-center justify-center gap-2 text-[12px] font-semibold"
+          className="h-10 sm:h-11 rounded-2xl bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] text-white/90 hover:bg-white/[0.12] transition flex items-center justify-center gap-2 text-[12px] font-semibold"
           title="Send a gift"
         >
           <Gift className="w-4 h-4" />
@@ -147,11 +148,6 @@ const Mina = () => {
             · {state.tokens_balance} 🪙
           </span>
         </button>
-      </div>
-
-      {/* Sound toggle — bottom-left */}
-      <div className="absolute bottom-5 left-3 sm:left-5 z-30">
-        <SfxToggle />
       </div>
 
       {/* Chat */}
