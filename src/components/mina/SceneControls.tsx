@@ -1,4 +1,6 @@
-import { X, RotateCcw, FlipHorizontal2 } from "lucide-react";
+import { X, RotateCcw, FlipHorizontal2, Volume2, VolumeX } from "lucide-react";
+import { useEffect, useState } from "react";
+import { isSfxEnabled, setSfxEnabled } from "./reactionSounds";
 import bgApartment from "@/assets/bg-apartment.jpg";
 import bgPark from "@/assets/bg-park.jpg";
 import bgBedroom from "@/assets/bg-bedroom.jpg";
@@ -75,8 +77,18 @@ interface Props {
 }
 
 const SceneControls = ({ open, onClose, settings, onChange }: Props) => {
+  const [sfx, setSfx] = useState(isSfxEnabled());
+  useEffect(() => {
+    const onChangeSfx = (e: Event) => {
+      const detail = (e as CustomEvent<{ enabled: boolean }>).detail;
+      if (detail) setSfx(detail.enabled);
+    };
+    window.addEventListener("mina:sfx-changed", onChangeSfx);
+    return () => window.removeEventListener("mina:sfx-changed", onChangeSfx);
+  }, []);
   if (!open) return null;
   const update = (patch: Partial<SceneSettings>) => onChange({ ...settings, ...patch });
+  const toggleSfx = () => { const n = !sfx; setSfx(n); setSfxEnabled(n); };
 
   return (
     <div className="absolute top-20 right-5 z-40 w-[300px] rounded-2xl bg-white/[0.07] backdrop-blur-2xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.5)] p-4 animate-scale-in">
@@ -139,6 +151,15 @@ const SceneControls = ({ open, onClose, settings, onChange }: Props) => {
           }`}
         >
           <FlipHorizontal2 className="w-3.5 h-3.5" /> Mirror
+        </button>
+        <button
+          onClick={toggleSfx}
+          title={sfx ? "Reaction sounds: on" : "Reaction sounds: off"}
+          className={`flex-1 h-9 rounded-lg border border-white/10 text-xs flex items-center justify-center gap-1.5 transition ${
+            sfx ? "bg-white/[0.06] hover:bg-white/[0.12] text-white/80" : "bg-white/[0.03] text-white/50"
+          }`}
+        >
+          {sfx ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />} Audio
         </button>
       </div>
 
