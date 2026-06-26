@@ -546,6 +546,44 @@ const VRMStage = ({
           </button>
         ))}
       </div>
+
+      {/* VRMA animation controls */}
+      <div className="absolute right-3 sm:right-5 bottom-5 z-20 pointer-events-auto flex items-center gap-2">
+        <input
+          ref={vrmaFileRef}
+          type="file"
+          accept=".vrma,.glb"
+          className="hidden"
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            if (f) handlePickVrma(f);
+            e.target.value = "";
+          }}
+        />
+        {vrmaName && (
+          <div className="px-3 py-1.5 rounded-full bg-white/[0.08] border border-white/15 backdrop-blur-xl text-[11px] text-white/80 max-w-[160px] truncate">
+            <Film className="inline w-3 h-3 mr-1.5 -mt-0.5" />
+            {vrmaName}
+          </div>
+        )}
+        {vrmaUrl ? (
+          <button
+            onClick={(e) => { e.stopPropagation(); handleAnimEnd(); }}
+            className="h-9 px-3 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl text-white/80 hover:bg-white/15 transition flex items-center gap-1.5 text-[11px]"
+            title="Stop animation"
+          >
+            <Square className="w-3 h-3" /> Stop
+          </button>
+        ) : (
+          <button
+            onClick={(e) => { e.stopPropagation(); vrmaFileRef.current?.click(); }}
+            className="h-9 px-3 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl text-white/80 hover:bg-white/15 transition flex items-center gap-1.5 text-[11px]"
+            title="Load .vrma animation"
+          >
+            <Upload className="w-3 h-3" /> Load .vrma
+          </button>
+        )}
+      </div>
     </div>
   );
 };
