@@ -14,8 +14,39 @@ import { RotateCw, Shirt, RefreshCw, Film, Upload, Square } from "lucide-react";
 import kneelingIdle from "@/assets/kneeling-idle.fbx.asset.json";
 import talkingAnim from "@/assets/talking.fbx.asset.json";
 import standingPose from "@/assets/standing-pose.fbx.asset.json";
+import idleAnim from "@/assets/idle.fbx.asset.json";
+import boredAnim from "@/assets/bored.fbx.asset.json";
+import dizzyIdleAnim from "@/assets/dizzy-idle.fbx.asset.json";
+import lookAroundAnim from "@/assets/look-around.fbx.asset.json";
+import lookingAroundAnim from "@/assets/looking-around.fbx.asset.json";
+import relievedSighAnim from "@/assets/relieved-sigh.fbx.asset.json";
+import shoulderRubAnim from "@/assets/shoulder-rubbing.fbx.asset.json";
+import blowKissAnim from "@/assets/blow-a-kiss.fbx.asset.json";
 
 const DEFAULT_ANIM = { url: standingPose.url, name: "Standing", kind: "fbx" as const };
+
+// Pool of idle animations cycled while the character is not speaking.
+// Higher weight = appears more often. Plain standing gets the highest weight
+// so the character regularly returns to a calm default.
+const IDLE_POOL: { url: string; name: string; kind: "fbx"; weight: number }[] = [
+  { url: standingPose.url, name: "Standing", kind: "fbx", weight: 4 },
+  { url: idleAnim.url, name: "Idle", kind: "fbx", weight: 3 },
+  { url: lookAroundAnim.url, name: "Look Around", kind: "fbx", weight: 2 },
+  { url: lookingAroundAnim.url, name: "Looking Around", kind: "fbx", weight: 2 },
+  { url: boredAnim.url, name: "Bored", kind: "fbx", weight: 1 },
+  { url: dizzyIdleAnim.url, name: "Dizzy", kind: "fbx", weight: 1 },
+  { url: relievedSighAnim.url, name: "Sigh", kind: "fbx", weight: 1 },
+  { url: shoulderRubAnim.url, name: "Shoulder Rub", kind: "fbx", weight: 1 },
+  { url: blowKissAnim.url, name: "Blow Kiss", kind: "fbx", weight: 1 },
+];
+const IDLE_URLS = new Set(IDLE_POOL.map((i) => i.url));
+function pickIdle(currentUrl?: string | null) {
+  const pool = IDLE_POOL.filter((i) => i.url !== currentUrl);
+  const total = pool.reduce((s, i) => s + i.weight, 0);
+  let r = Math.random() * total;
+  for (const i of pool) { r -= i.weight; if (r <= 0) return i; }
+  return pool[0];
+}
 
 // Mixamo bone name → VRM humanoid bone name
 const MIXAMO_TO_VRM: Record<string, string> = {
