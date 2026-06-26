@@ -770,11 +770,11 @@ const VRMStage = ({
             {vrmaName}
           </div>
         )}
-        {vrmaUrl ? (
+        {vrmaUrl && vrmaUrl !== DEFAULT_ANIM.url ? (
           <button
             onClick={(e) => { e.stopPropagation(); handleAnimEnd(); }}
             className="h-9 px-3 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl text-white/80 hover:bg-white/15 transition flex items-center gap-1.5 text-[11px]"
-            title="Stop animation"
+            title="Back to default pose"
           >
             <Square className="w-3 h-3" /> Stop
           </button>
