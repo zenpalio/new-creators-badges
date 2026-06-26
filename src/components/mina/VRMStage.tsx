@@ -189,6 +189,10 @@ function VRMModel({
     }
   }, [reactTrigger]);
 
+  // Re-frame when preset changes
+  useEffect(() => { applyView(viewPreset); }, [viewPreset, applyView]);
+
+
   useFrame((_, dt) => {
     if (!vrm) return;
     vrm.update(dt);
