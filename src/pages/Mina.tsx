@@ -26,14 +26,6 @@ const Mina = () => {
 
       <AffectionHUD state={state} />
 
-      {/* Sign out */}
-      <button
-        onClick={signOut}
-        className="absolute top-4 right-4 z-30 w-9 h-9 rounded-full bg-background-v2/70 backdrop-blur-md border border-border-v2/40 flex items-center justify-center text-muted-v2-foreground hover:text-foreground-v2"
-        title="Sign out"
-      >
-        <LogOut className="w-4 h-4" />
-      </button>
 
       {/* Action rail */}
       <div className="absolute right-4 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-3 md:right-[376px]">
