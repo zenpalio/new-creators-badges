@@ -193,7 +193,7 @@ const ChatComposer = ({ onAfterReply, onMouthLevel, onSpeakingChange, onReaction
                     {m.content}
                   </div>
                 ) : (
-                  <div className="max-w-[80%] px-4 py-2.5 rounded-2xl rounded-bl-md text-sm text-white bg-black/70 border border-white/15 shadow-[0_10px_30px_rgba(0,0,0,0.6)] leading-relaxed backdrop-blur-2xl">
+                  <div className="max-w-[80%] px-4 py-2.5 rounded-2xl rounded-bl-md text-sm text-white bg-white/[0.07] border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.4)] leading-relaxed backdrop-blur-xl">
                     {m.content}
                   </div>
                 )}
