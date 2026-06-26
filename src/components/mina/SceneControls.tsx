@@ -23,7 +23,7 @@ export interface ModelOption {
 
 const SAMPLE = "https://cdn.jsdelivr.net/gh/Live2D/CubismWebSamples@master/Samples/Resources";
 export const MODELS: ModelOption[] = [
-  { id: "mao", label: "Mina", url: `${SAMPLE}/Mao/Mao.model3.json`, note: "Lip-sync + body motions" },
+  { id: "hiyori", label: "Mina", url: `${SAMPLE}/Hiyori/Hiyori.model3.json`, note: "Lip-sync + body motions" },
 ];
 
 export interface BackgroundOption {
