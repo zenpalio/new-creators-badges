@@ -11,6 +11,7 @@ import {
   type VRMAnimation,
 } from "@pixiv/three-vrm-animation";
 import { RotateCw, Shirt, RefreshCw, Film, Upload, Square } from "lucide-react";
+import kneelingIdle from "@/assets/kneeling-idle.fbx.asset.json";
 
 // Mixamo bone name → VRM humanoid bone name
 const MIXAMO_TO_VRM: Record<string, string> = {
