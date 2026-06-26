@@ -86,6 +86,7 @@ const ChatComposer = ({ onAfterReply, onMouthLevel, onSpeakingChange }: Props) =
       analyser.connect(ctx.destination);
       src.start();
       sourceRef.current = src;
+      onSpeakingChange?.(true);
 
       const data = new Uint8Array(analyser.frequencyBinCount);
       const tick = () => {
