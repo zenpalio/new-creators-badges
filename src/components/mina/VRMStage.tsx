@@ -265,6 +265,8 @@ const VRMStage = ({
   const [meshes, setMeshes] = useState<MeshInfo[]>([]);
   const [meshVis, setMeshVis] = useState<Record<string, boolean>>({});
   const [outfitOpen, setOutfitOpen] = useState(false);
+  const [loadPct, setLoadPct] = useState(0);
+  const [loadErr, setLoadErr] = useState<string | null>(null);
 
   const groupTransform = useMemo(
     () => ({
