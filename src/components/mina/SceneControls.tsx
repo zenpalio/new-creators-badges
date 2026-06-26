@@ -23,12 +23,7 @@ export interface ModelOption {
 
 const SAMPLE = "https://cdn.jsdelivr.net/gh/Live2D/CubismWebSamples@master/Samples/Resources";
 export const MODELS: ModelOption[] = [
-  { id: "mao", label: "Mao", url: `${SAMPLE}/Mao/Mao.model3.json`, note: "Mature, expressive" },
-  { id: "hiyori", label: "Hiyori", url: `${SAMPLE}/Hiyori/Hiyori.model3.json`, note: "Cute, full body rotation" },
-  { id: "haru", label: "Haru", url: `${SAMPLE}/Haru/Haru.model3.json`, note: "Default" },
-  { id: "rice", label: "Rice", url: `${SAMPLE}/Rice/Rice.model3.json`, note: "Stylized" },
-  { id: "natori", label: "Natori", url: `${SAMPLE}/Natori/Natori.model3.json`, note: "Male" },
-  { id: "wanko", label: "Wanko", url: `${SAMPLE}/Wanko/Wanko.model3.json`, note: "Puppy" },
+  { id: "mao", label: "Mina", url: `${SAMPLE}/Mao/Mao.model3.json`, note: "Lip-sync + body motions" },
 ];
 
 export interface BackgroundOption {
