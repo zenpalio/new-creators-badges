@@ -754,6 +754,7 @@ const VRMStage = ({
               e.stopPropagation();
               setViewPreset(p);
               setSpin(p === "back" ? Math.PI : 0);
+              setReframeNonce((n) => n + 1);
             }}
             className={`px-3 py-1.5 rounded-lg text-[11px] uppercase tracking-wider transition ${
               viewPreset === p
