@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface Props {
   /** 0–1; drives mouth open parameter while speaking */
@@ -44,6 +44,7 @@ const Live2DStage = ({
   const appRef = useRef<any>(null);
   const modelRef = useRef<any>(null);
   const mouthRef = useRef(0);
+  const fittedBoundsRef = useRef({ width: 0, height: 0 });
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [error, setError] = useState<string>("");
 
@@ -106,6 +107,7 @@ const Live2DStage = ({
           // anchor behaviour varies and silently leaves origin at top-left)
           m.x = (r.width - m.width) / 2;
           m.y = (r.height - m.height) / 2;
+          fittedBoundsRef.current = { width: m.width, height: m.height };
         };
         fit();
         const ro = new ResizeObserver(fit);
@@ -156,6 +158,23 @@ const Live2DStage = ({
   const [zoom, setZoom] = useState(1);
   const dragRef = useRef<{ x: number; y: number; px: number; py: number } | null>(null);
 
+  const clampPan = useCallback((nextPan: { x: number; y: number }, nextZoom = zoom) => {
+    const r = hostRef.current?.getBoundingClientRect();
+    if (!r) return nextPan;
+
+    const total = scale * nextZoom;
+    const characterWidth = fittedBoundsRef.current.width * total;
+    const characterHeight = fittedBoundsRef.current.height * total;
+
+    const maxX = Math.max(0, (r.width - Math.min(characterWidth, r.width)) / 2);
+    const maxY = Math.max(0, (r.height - Math.min(characterHeight, r.height)) / 2);
+
+    return {
+      x: Math.min(maxX, Math.max(-maxX, nextPan.x)),
+      y: Math.min(maxY, Math.max(-maxY, nextPan.y)),
+    };
+  }, [scale, zoom]);
+
   const onPointerDown = (e: React.PointerEvent) => {
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     dragRef.current = { x: e.clientX, y: e.clientY, px: pan.x, py: pan.y };
@@ -163,7 +182,7 @@ const Live2DStage = ({
   const onPointerMove = (e: React.PointerEvent) => {
     if (!dragRef.current) return;
     const d = dragRef.current;
-    setPan({ x: d.px + (e.clientX - d.x), y: d.py + (e.clientY - d.y) });
+    setPan(clampPan({ x: d.px + (e.clientX - d.x), y: d.py + (e.clientY - d.y) }));
   };
   const endDrag = (e: React.PointerEvent) => {
     try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId); } catch {}
@@ -172,8 +191,16 @@ const Live2DStage = ({
   const onWheel = (e: React.WheelEvent) => {
     e.preventDefault();
     const factor = Math.exp(-e.deltaY * 0.0015);
-    setZoom((z) => Math.min(4, Math.max(0.3, z * factor)));
+    setZoom((z) => {
+      const nextZoom = Math.min(4, Math.max(0.3, z * factor));
+      setPan((currentPan) => clampPan(currentPan, nextZoom));
+      return nextZoom;
+    });
   };
+
+  useEffect(() => {
+    setPan((currentPan) => clampPan(currentPan));
+  }, [clampPan, zoom]);
 
   const totalScale = scale * zoom;
 
