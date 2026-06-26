@@ -120,7 +120,13 @@ const ChatComposer = ({ onAfterReply, onMouthLevel }: Props) => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const token = session?.access_token;
-      if (!token) throw new Error("Not signed in");
+      if (!token) {
+        reply = "You need to sign in first to chat with me 💕";
+        setMsgs((p) => [...p, { role: "assistant", content: reply }]);
+        setSending(false);
+        setTimeout(() => { window.location.href = "/mina/auth"; }, 1200);
+        return;
+      }
       const res = await fetch(`${SUPABASE_URL}/functions/v1/mina-chat`, {
         method: "POST",
         headers: {
@@ -133,9 +139,9 @@ const ChatComposer = ({ onAfterReply, onMouthLevel }: Props) => {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data?.error || `chat ${res.status}`);
       reply = data.reply ?? "...";
-    } catch (err) {
+    } catch (err: any) {
       console.error("[mina-chat] failed", err);
-      reply = "Mmh… something got tangled. Try again?";
+      reply = `Mmh… ${err?.message || "something got tangled"}. Try again?`;
     }
     setMsgs((p) => [...p, { role: "assistant", content: reply }]);
     setSending(false);
