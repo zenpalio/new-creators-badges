@@ -120,21 +120,18 @@ const ChatComposer = ({ onAfterReply, onMouthLevel }: Props) => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const token = session?.access_token;
-      if (!token) {
-        reply = "You need to sign in first to chat with me 💕";
-        setMsgs((p) => [...p, { role: "assistant", content: reply }]);
-        setSending(false);
-        setTimeout(() => { window.location.href = "/mina/auth"; }, 1200);
-        return;
-      }
       const res = await fetch(`${SUPABASE_URL}/functions/v1/mina-chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token ?? SUPABASE_ANON}`,
           apikey: SUPABASE_ANON,
         },
-        body: JSON.stringify({ slug: "mina", message: m }),
+        body: JSON.stringify({
+          slug: "mina",
+          message: m,
+          history: msgs.slice(-10).map((x) => ({ role: x.role, content: x.content })),
+        }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data?.error || `chat ${res.status}`);
