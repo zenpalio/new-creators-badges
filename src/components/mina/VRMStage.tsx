@@ -163,6 +163,7 @@ function VRMModel({
   onError,
   meshVisibility,
   viewPreset,
+  reframeNonce,
   vrmaUrl,
   animKind,
   onAnimEnd,
@@ -179,6 +180,7 @@ function VRMModel({
   onError: (msg: string | null) => void;
   meshVisibility: Record<string, boolean>;
   viewPreset: ViewPreset;
+  reframeNonce: number;
   vrmaUrl: string | null;
   animKind: "vrma" | "fbx" | null;
   onAnimEnd: () => void;
@@ -428,7 +430,7 @@ function VRMModel({
 
 
   // Re-frame when preset changes
-  useEffect(() => { applyView(viewPreset); }, [viewPreset, applyView]);
+  useEffect(() => { applyView(viewPreset); }, [viewPreset, reframeNonce, applyView]);
 
 
   useFrame((_, dt) => {
@@ -563,6 +565,7 @@ const VRMStage = ({
   const [loadPct, setLoadPct] = useState(0);
   const [loadErr, setLoadErr] = useState<string | null>(null);
   const [viewPreset, setViewPreset] = useState<ViewPreset>("full");
+  const [reframeNonce, setReframeNonce] = useState(0);
   const [vrmaUrl, setVrmaUrl] = useState<string | null>(DEFAULT_ANIM.url);
   const [vrmaName, setVrmaName] = useState<string | null>(DEFAULT_ANIM.name);
   const [animKind, setAnimKind] = useState<"vrma" | "fbx" | null>(DEFAULT_ANIM.kind);
@@ -657,6 +660,7 @@ const VRMStage = ({
               onError={setLoadErr}
               meshVisibility={meshVis}
               viewPreset={viewPreset}
+              reframeNonce={reframeNonce}
               vrmaUrl={vrmaUrl}
               animKind={animKind}
               onAnimEnd={handleAnimEnd}
@@ -750,6 +754,7 @@ const VRMStage = ({
               e.stopPropagation();
               setViewPreset(p);
               setSpin(p === "back" ? Math.PI : 0);
+              setReframeNonce((n) => n + 1);
             }}
             className={`px-3 py-1.5 rounded-lg text-[11px] uppercase tracking-wider transition ${
               viewPreset === p
