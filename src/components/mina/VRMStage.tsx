@@ -664,6 +664,23 @@ const VRMStage = ({
     return () => window.clearTimeout(t);
   }, [vrmaUrl, speaking, playPreset]);
 
+  // React with a body animation when the user gets a strong sentiment reply.
+  const reactAnimRef = useRef(0);
+  useEffect(() => {
+    if (!reactTrigger || reactTrigger === reactAnimRef.current) return;
+    reactAnimRef.current = reactTrigger;
+    if (speaking) return; // don't interrupt talking
+    let pick: { url: string; name: string } | null = null;
+    if (sentiment === "love") pick = { url: excitedAnim.url, name: "Excited" };
+    else if (sentiment === "like") pick = { url: happyAnim.url, name: "Happy" };
+    else if (sentiment === "hate" || sentiment === "dislike") pick = { url: angryAnim.url, name: "Angry" };
+    if (pick) {
+      autoTalkingRef.current = false;
+      playPreset(pick.url, pick.name, "fbx");
+    }
+  }, [reactTrigger, sentiment, speaking, playPreset]);
+
+
 
 
   const groupTransform = useMemo(
