@@ -103,7 +103,7 @@ const Mina = () => {
 
       {/* Chat */}
       <div className="absolute left-1/2 -translate-x-1/2 bottom-6 z-20 w-[min(680px,calc(100%-2rem))]">
-        <ChatComposer onAfterReply={refresh} />
+        <ChatComposer onAfterReply={refresh} onMouthLevel={setMouth} />
       </div>
 
       <GiftDrawer open={giftOpen} onClose={() => setGiftOpen(false)} balance={state.tokens_balance} onPurchased={refresh} />
