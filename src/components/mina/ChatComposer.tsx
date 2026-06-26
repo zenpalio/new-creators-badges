@@ -9,15 +9,24 @@ const VOICE_KEY = "mina.voiceOn";
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
 const SUPABASE_ANON = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
 
+export type Sentiment = "love" | "like" | "neutral" | "dislike" | "hate";
+export interface Reaction {
+  sentiment: Sentiment;
+  emotion?: string;
+  deltas?: Partial<Record<"affection" | "joy" | "arousal" | "comfort" | "calm" | "energy" | "hunger", number>>;
+}
+
 interface Props {
   onAfterReply?: () => void;
   /** Receives a 0–1 lip-sync amplitude while Mina is speaking. */
   onMouthLevel?: (v: number) => void;
   /** Fires true when audio playback starts, false when it stops. */
   onSpeakingChange?: (speaking: boolean) => void;
+  /** Fires whenever a reply arrives with the model's sentiment + deltas. */
+  onReaction?: (r: Reaction) => void;
 }
 
-const ChatComposer = ({ onAfterReply, onMouthLevel, onSpeakingChange }: Props) => {
+const ChatComposer = ({ onAfterReply, onMouthLevel, onSpeakingChange, onReaction }: Props) => {
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
