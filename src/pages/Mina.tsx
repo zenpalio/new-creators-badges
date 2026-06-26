@@ -46,6 +46,7 @@ const Mina = () => {
       {/* Character */}
       <Live2DStage
         mouthOpen={mouth}
+        speaking={speaking}
         rotation={scene.rotation}
         scale={scene.scale}
         mirror={scene.mirror}
