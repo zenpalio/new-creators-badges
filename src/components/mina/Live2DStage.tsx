@@ -10,6 +10,8 @@ interface Props {
   mirror?: boolean;
   /** Optional override of model3.json URL */
   modelUrl?: string;
+  /** Show debug panel to trigger motions/expressions */
+  debug?: boolean;
 }
 
 const CUBISM4_CORE = "https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js";
