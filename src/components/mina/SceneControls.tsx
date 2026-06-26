@@ -23,12 +23,7 @@ export interface ModelOption {
 
 const SAMPLE = "https://cdn.jsdelivr.net/gh/Live2D/CubismWebSamples@master/Samples/Resources";
 export const MODELS: ModelOption[] = [
-  { id: "mao", label: "Mao", url: `${SAMPLE}/Mao/Mao.model3.json`, note: "Mature, expressive" },
-  { id: "hiyori", label: "Hiyori", url: `${SAMPLE}/Hiyori/Hiyori.model3.json`, note: "Cute, full body rotation" },
-  { id: "haru", label: "Haru", url: `${SAMPLE}/Haru/Haru.model3.json`, note: "Default" },
-  { id: "rice", label: "Rice", url: `${SAMPLE}/Rice/Rice.model3.json`, note: "Stylized" },
-  { id: "natori", label: "Natori", url: `${SAMPLE}/Natori/Natori.model3.json`, note: "Male" },
-  { id: "wanko", label: "Wanko", url: `${SAMPLE}/Wanko/Wanko.model3.json`, note: "Puppy" },
+  { id: "mao", label: "Mina", url: `${SAMPLE}/Mao/Mao.model3.json`, note: "Lip-sync + body motions" },
 ];
 
 export interface BackgroundOption {
@@ -144,29 +139,6 @@ const SceneControls = ({ open, onClose, settings, onChange }: Props) => {
         </button>
       </div>
 
-      {/* Character model */}
-      <div className="mb-4">
-        <label className="text-xs text-white/60 mb-2 block">Character</label>
-        <div className="grid grid-cols-2 gap-1.5">
-          {MODELS.map((m) => {
-            const active = settings.modelId === m.id;
-            return (
-              <button
-                key={m.id}
-                onClick={() => update({ modelId: m.id })}
-                className={`h-9 rounded-lg border text-xs transition px-2 text-left ${
-                  active
-                    ? "bg-white text-[hsl(220_25%_10%)] border-white"
-                    : "bg-white/[0.06] hover:bg-white/[0.12] border-white/10 text-white/80"
-                }`}
-                title={m.note}
-              >
-                {m.label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
 
       {/* Backgrounds */}
       <div>
