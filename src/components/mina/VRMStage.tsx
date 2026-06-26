@@ -611,7 +611,16 @@ const VRMStage = ({
     setVrmaName(DEFAULT_ANIM.name);
     setAnimKind(DEFAULT_ANIM.kind);
   }, []);
-  const handleAnimEnd = useCallback(() => { resetToDefault(); }, [resetToDefault]);
+  const playPreset = useCallback((url: string, name: string, kind: "vrma" | "fbx") => {
+    setVrmaUrl((prev) => { if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev); return url; });
+    setVrmaName(name);
+    setAnimKind(kind);
+  }, []);
+  // When a one-shot finishes, pick a fresh idle instead of always returning to standing.
+  const handleAnimEnd = useCallback(() => {
+    const next = pickIdle(vrmaUrl);
+    playPreset(next.url, next.name, next.kind);
+  }, [vrmaUrl, playPreset]);
   const handlePickVrma = (file: File) => {
     if (vrmaUrl && vrmaUrl.startsWith("blob:")) URL.revokeObjectURL(vrmaUrl);
     const isFbx = /\.fbx$/i.test(file.name);
@@ -619,29 +628,35 @@ const VRMStage = ({
     setVrmaName(file.name.replace(/\.(vrma|fbx|glb)$/i, ""));
     setAnimKind(isFbx ? "fbx" : "vrma");
   };
-  const playPreset = (url: string, name: string, kind: "vrma" | "fbx") => {
-    if (vrmaUrl && vrmaUrl.startsWith("blob:")) URL.revokeObjectURL(vrmaUrl);
-    setVrmaUrl(url);
-    setVrmaName(name);
-    setAnimKind(kind);
-  };
 
   // Auto-play Talking animation while the character is speaking.
-  // Only swaps when the default standing pose is active; restores standing when done.
+  // Swaps from any idle-pool clip; restores idle rotation when done.
   const autoTalkingRef = useRef(false);
   useEffect(() => {
     if (speaking) {
-      if (vrmaUrl === DEFAULT_ANIM.url) {
+      if (vrmaUrl && IDLE_URLS.has(vrmaUrl)) {
         autoTalkingRef.current = true;
-        setVrmaUrl(talkingAnim.url);
-        setVrmaName("Talking");
-        setAnimKind("fbx");
+        playPreset(talkingAnim.url, "Talking", "fbx");
       }
     } else if (autoTalkingRef.current) {
       autoTalkingRef.current = false;
-      resetToDefault();
+      const next = pickIdle(talkingAnim.url);
+      playPreset(next.url, next.name, next.kind);
     }
-  }, [speaking, vrmaUrl, resetToDefault]);
+  }, [speaking, vrmaUrl, playPreset]);
+
+  // Rotate idle animations every 10–18s while not speaking and not playing a
+  // manual / talking clip. Stops cycling if the user picks a non-idle preset.
+  useEffect(() => {
+    if (speaking) return;
+    if (!vrmaUrl || !IDLE_URLS.has(vrmaUrl)) return;
+    const delay = 10000 + Math.random() * 8000;
+    const t = window.setTimeout(() => {
+      const next = pickIdle(vrmaUrl);
+      playPreset(next.url, next.name, next.kind);
+    }, delay);
+    return () => window.clearTimeout(t);
+  }, [vrmaUrl, speaking, playPreset]);
 
 
 
