@@ -5,7 +5,7 @@ import Live2DStage from "@/components/mina/Live2DStage";
 import ChatComposer from "@/components/mina/ChatComposer";
 import GiftDrawer from "@/components/mina/GiftDrawer";
 import CallModal from "@/components/mina/CallModal";
-import SceneControls, { BACKGROUNDS, type SceneSettings } from "@/components/mina/SceneControls";
+import SceneControls, { BACKGROUNDS, MODELS, type SceneSettings } from "@/components/mina/SceneControls";
 
 const Mina = () => {
   const [mouth, setMouth] = useState(0);
@@ -17,10 +17,12 @@ const Mina = () => {
     scale: 1,
     mirror: false,
     backgroundId: "midnight",
+    modelId: "mao",
   });
   const { state, refresh } = useCompanion("mina");
   const tier = tierFromAffection(state.affection);
   const bg = BACKGROUNDS.find((b) => b.id === scene.backgroundId) ?? BACKGROUNDS[0];
+  const model = MODELS.find((m) => m.id === scene.modelId) ?? MODELS[0];
 
   return (
     <div className="min-h-screen w-full relative overflow-hidden bg-[hsl(220_20%_6%)]">
