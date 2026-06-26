@@ -155,4 +155,10 @@ const CallModalInner = ({ open, onClose, onMouthLevel, onTick }: Props) => {
   );
 };
 
+const CallModal = (props: Props) => (
+  <ConversationProvider>
+    <CallModalInner {...props} />
+  </ConversationProvider>
+);
+
 export default CallModal;
