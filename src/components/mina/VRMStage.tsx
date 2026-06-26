@@ -206,12 +206,9 @@ function VRMModel({
         // Measure a body frame from the normalized skeleton, then apply preset.
         const box = new THREE.Box3().setFromObject(v.scene);
         const size = new THREE.Vector3();
-        const center = new THREE.Vector3();
         box.getSize(size);
-        box.getCenter(center);
         const nHips = getBoneWorld("hips");
         const nHead = getBoneWorld("head");
-        const nChest = getBoneWorld("chest") ?? getBoneWorld("spine") ?? nHips;
         const nLeftFoot = getBoneWorld("leftFoot") ?? getBoneWorld("leftToes");
         const nRightFoot = getBoneWorld("rightFoot") ?? getBoneWorld("rightToes");
         const bodyMinY = nLeftFoot || nRightFoot
