@@ -311,53 +311,48 @@ function VRMModel({
       vrm.lookAt.target = camera;
     }
 
-    // Procedural idle: breathing on spine, weight shift on hips, arm sway,
-    // occasional head tilt + glance, "talking" head bob while speaking
-    const hum = vrm.humanoid;
-    const head = hum?.getNormalizedBoneNode("head");
-    const neck = hum?.getNormalizedBoneNode("neck");
-    const chest = hum?.getNormalizedBoneNode("chest") ?? hum?.getNormalizedBoneNode("spine");
-    const spine = hum?.getNormalizedBoneNode("spine");
-    const hips = hum?.getNormalizedBoneNode("hips");
-    const lUpper = hum?.getNormalizedBoneNode("leftUpperArm");
-    const rUpper = hum?.getNormalizedBoneNode("rightUpperArm");
-    const lLower = hum?.getNormalizedBoneNode("leftLowerArm");
-    const rLower = hum?.getNormalizedBoneNode("rightLowerArm");
+    // Procedural idle (skipped when a VRMA clip is driving the body)
+    if (!hasAnim) {
+      const hum = vrm.humanoid;
+      const head = hum?.getNormalizedBoneNode("head");
+      const neck = hum?.getNormalizedBoneNode("neck");
+      const chest = hum?.getNormalizedBoneNode("chest") ?? hum?.getNormalizedBoneNode("spine");
+      const spine = hum?.getNormalizedBoneNode("spine");
+      const hips = hum?.getNormalizedBoneNode("hips");
+      const lUpper = hum?.getNormalizedBoneNode("leftUpperArm");
+      const rUpper = hum?.getNormalizedBoneNode("rightUpperArm");
+      const lLower = hum?.getNormalizedBoneNode("leftLowerArm");
+      const rLower = hum?.getNormalizedBoneNode("rightLowerArm");
 
-    // Head tilt scheduler
-    const tilt = tiltRef.current;
-    tilt.t += dt;
-    if (tilt.t > tilt.next) {
-      tilt.amount = 0.12 + Math.random() * 0.1;
-      tilt.dir = Math.random() < 0.5 ? -1 : 1;
-      tilt.next = tilt.t + 6 + Math.random() * 6;
-    }
-    const tiltDecay = Math.max(0, 1 - (tilt.t % (tilt.next || 1)) / 2.5);
-    const tiltZ = tilt.amount * tilt.dir * tiltDecay;
+      // Head tilt scheduler
+      const tilt = tiltRef.current;
+      tilt.t += dt;
+      if (tilt.t > tilt.next) {
+        tilt.amount = 0.12 + Math.random() * 0.1;
+        tilt.dir = Math.random() < 0.5 ? -1 : 1;
+        tilt.next = tilt.t + 6 + Math.random() * 6;
+      }
+      const tiltDecay = Math.max(0, 1 - (tilt.t % (tilt.next || 1)) / 2.5);
+      const tiltZ = tilt.amount * tilt.dir * tiltDecay;
 
-    const talk = speaking ? 1 : 0;
-    if (head) {
-      head.rotation.x = Math.sin(t * 1.2) * 0.03 + talk * Math.sin(t * 7) * 0.04;
-      head.rotation.y = Math.sin(t * 0.8) * 0.05 + talk * Math.sin(t * 3.3) * 0.05;
-      head.rotation.z = tiltZ + reactRef.current.intensity * 0.1 * Math.sin(t * 9);
+      const talk = speaking ? 1 : 0;
+      if (head) {
+        head.rotation.x = Math.sin(t * 1.2) * 0.03 + talk * Math.sin(t * 7) * 0.04;
+        head.rotation.y = Math.sin(t * 0.8) * 0.05 + talk * Math.sin(t * 3.3) * 0.05;
+        head.rotation.z = tiltZ + reactRef.current.intensity * 0.1 * Math.sin(t * 9);
+      }
+      if (neck) neck.rotation.x = Math.sin(t * 1.2 + 0.3) * 0.015;
+      if (chest) chest.rotation.x = Math.sin(t * 1.8) * 0.02 + talk * Math.sin(t * 6) * 0.01;
+      if (spine) spine.rotation.x = Math.sin(t * 1.8 + 0.4) * 0.012;
+      if (hips) {
+        hips.rotation.y = Math.sin(t * 0.45) * 0.04;
+        hips.position.y = Math.sin(t * 1.8) * 0.005;
+      }
+      if (lUpper) lUpper.rotation.z = Math.sin(t * 0.9) * 0.04 + 0.02;
+      if (rUpper) rUpper.rotation.z = -Math.sin(t * 0.9 + 0.4) * 0.04 - 0.02;
+      if (lLower) lLower.rotation.y = Math.sin(t * 1.1) * 0.05;
+      if (rLower) rLower.rotation.y = -Math.sin(t * 1.1 + 0.3) * 0.05;
     }
-    if (neck) {
-      neck.rotation.x = Math.sin(t * 1.2 + 0.3) * 0.015;
-    }
-    if (chest) {
-      chest.rotation.x = Math.sin(t * 1.8) * 0.02 + talk * Math.sin(t * 6) * 0.01;
-    }
-    if (spine) {
-      spine.rotation.x = Math.sin(t * 1.8 + 0.4) * 0.012;
-    }
-    if (hips) {
-      hips.rotation.y = Math.sin(t * 0.45) * 0.04; // weight shift
-      hips.position.y = Math.sin(t * 1.8) * 0.005; // subtle breathing rise
-    }
-    if (lUpper) lUpper.rotation.z = Math.sin(t * 0.9) * 0.04 + 0.02;
-    if (rUpper) rUpper.rotation.z = -Math.sin(t * 0.9 + 0.4) * 0.04 - 0.02;
-    if (lLower) lLower.rotation.y = Math.sin(t * 1.1) * 0.05;
-    if (rLower) rLower.rotation.y = -Math.sin(t * 1.1 + 0.3) * 0.05;
   });
 
   if (!vrm) return null;
