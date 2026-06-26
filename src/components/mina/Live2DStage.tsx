@@ -264,9 +264,17 @@ const Live2DStage = ({
       )}
 
       {debug && status === "ready" && (
-        <div className="absolute bottom-24 sm:bottom-28 left-4 z-30 flex flex-col items-start gap-2">
+        <div className="absolute top-16 left-3 sm:left-5 z-30 flex flex-col items-start gap-2">
+          <button
+            onClick={() => setDebugOpen((v) => !v)}
+            aria-label="Toggle animation tester"
+            title="Animations"
+            className="h-9 w-9 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4)] text-white/80 hover:bg-white/15 transition flex items-center justify-center text-base"
+          >
+            {debugOpen ? "×" : "✦"}
+          </button>
           {debugOpen && (
-            <div className="w-[200px] sm:w-[230px] max-h-[45vh] overflow-y-auto rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.45)] p-3 text-xs text-white/90 space-y-2 ring-1 ring-inset ring-white/10 animate-fade-in">
+            <div className="w-[200px] sm:w-[230px] max-h-[55vh] overflow-y-auto rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.45)] p-3 text-xs text-white/90 space-y-2 ring-1 ring-inset ring-white/10 animate-fade-in">
               <div className="font-semibold text-white/70 uppercase tracking-wider text-[10px]">Animations</div>
               {Object.entries(motions).map(([group, count]) => (
                 <div key={group} className="space-y-1">
@@ -310,13 +318,6 @@ const Live2DStage = ({
               )}
             </div>
           )}
-          <button
-            onClick={() => setDebugOpen((v) => !v)}
-            aria-label="Toggle animation tester"
-            className="h-9 w-9 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4)] text-white/80 hover:bg-white/15 transition flex items-center justify-center text-base"
-          >
-            {debugOpen ? "×" : "✦"}
-          </button>
         </div>
       )}
 
