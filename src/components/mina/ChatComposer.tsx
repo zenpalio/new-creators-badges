@@ -13,9 +13,11 @@ interface Props {
   onAfterReply?: () => void;
   /** Receives a 0–1 lip-sync amplitude while Mina is speaking. */
   onMouthLevel?: (v: number) => void;
+  /** Fires true when audio playback starts, false when it stops. */
+  onSpeakingChange?: (speaking: boolean) => void;
 }
 
-const ChatComposer = ({ onAfterReply, onMouthLevel }: Props) => {
+const ChatComposer = ({ onAfterReply, onMouthLevel, onSpeakingChange }: Props) => {
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
