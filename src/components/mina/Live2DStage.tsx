@@ -131,6 +131,16 @@ const Live2DStage = ({
         };
         app.ticker.add(mouthTick);
 
+        // Discover motion groups and expressions for the debug panel
+        try {
+          const defs = model.internalModel?.motionManager?.definitions ?? {};
+          const counts: Record<string, number> = {};
+          for (const k of Object.keys(defs)) counts[k] = (defs[k] || []).length;
+          setMotions(counts);
+          const expDefs = model.internalModel?.motionManager?.expressionManager?.definitions ?? [];
+          setExpressions(expDefs.map((e: any) => e.Name ?? e.name).filter(Boolean));
+        } catch {}
+
         // Idle motion if available
         try {
           model.motion("Idle");
