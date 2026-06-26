@@ -42,11 +42,19 @@ async function fetchClip(prompt: string, duration: number): Promise<string> {
   const existing = inflight.get(key);
   if (existing) return existing;
   const p = (async () => {
-    const { data, error } = await supabase.functions.invoke("mina-ambient-sfx", {
-      body: { prompt, duration },
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token ?? SFX_KEY;
+    const r = await fetch(SFX_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: SFX_KEY,
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ prompt, duration }),
     });
-    if (error) throw error;
-    const blob = data instanceof Blob ? data : new Blob([data as ArrayBuffer], { type: "audio/mpeg" });
+    if (!r.ok) throw new Error(`sfx ${r.status}`);
+    const blob = await r.blob();
     const url = URL.createObjectURL(blob);
     blobCache.set(key, url);
     return url;
@@ -54,6 +62,7 @@ async function fetchClip(prompt: string, duration: number): Promise<string> {
   inflight.set(key, p);
   try { return await p; } finally { inflight.delete(key); }
 }
+
 
 const AmbientSounds = ({ speaking = false, volume = 0.35, enabled = true }: Props) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
