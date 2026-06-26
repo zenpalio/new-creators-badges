@@ -142,7 +142,8 @@ const ReactionFX = ({ trigger, sentiment, deltas }: Props) => {
                     left: 0,
                     top: 0,
                     fontSize: `${p.size}px`,
-                    transform: `translate(${p.startX}px, ${p.startY}px)`,
+                    ["--sx" as any]: `${p.startX}px`,
+                    ["--sy" as any]: `${p.startY}px`,
                     ["--dx" as any]: `${p.driftX}px`,
                     ["--dy" as any]: `${p.driftY}px`,
                     ["--rot" as any]: `${p.rotate}deg`,
@@ -151,6 +152,7 @@ const ReactionFX = ({ trigger, sentiment, deltas }: Props) => {
                     filter: `drop-shadow(0 4px 12px ${glow}aa)`,
                   }}
                 >
+
                   {p.emoji}
                 </span>
               ))}
