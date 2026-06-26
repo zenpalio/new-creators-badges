@@ -315,6 +315,8 @@ const VRMStage = ({
               reactTrigger={reactCombined}
               pointerRef={pointerRef}
               onMeshes={setMeshes}
+              onProgress={setLoadPct}
+              onError={setLoadErr}
               meshVisibility={meshVis}
             />
           </group>
