@@ -335,7 +335,7 @@ const GiftDrawer = ({
 
         {/* ── GIFTS ── */}
         {tab === "gifts" && (
-          <div className="flex flex-col gap-3 overflow-hidden">
+          <div className="flex min-h-0 flex-col gap-3">
             <div className="flex gap-1 p-1 rounded-xl bg-white/[0.04] border border-white/5">
               {GIFT_CATS.map((c) => {
                 const active = c.id === giftCat;
@@ -352,7 +352,7 @@ const GiftDrawer = ({
                 );
               })}
             </div>
-            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 overflow-y-auto pr-1 -mr-1">
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 overflow-y-auto overflow-x-hidden px-2 py-2">
               {GIFTS.filter((g) => g.category === giftCat).map((g) => {
                 const afford = balance >= g.cost;
                 const isBusy = busy === g.id;
