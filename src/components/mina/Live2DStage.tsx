@@ -63,11 +63,11 @@ const Live2DStage = ({
         await loadCubismCore();
         if (cancelled) return;
 
-        const PIXI = await import("pixi.js");
+        const PIXI: any = await import("pixi.js");
         // Expose PIXI globally so pixi-live2d-display can find Ticker
         (window as any).PIXI = PIXI;
         const { Live2DModel } = await import("pixi-live2d-display/cubism4");
-        Live2DModel.registerTicker(PIXI.Ticker);
+        (Live2DModel as any).registerTicker(PIXI.Ticker);
 
         if (cancelled || !hostRef.current) return;
 
@@ -79,7 +79,7 @@ const Live2DStage = ({
           antialias: true,
           autoDensity: true,
           resolution: window.devicePixelRatio || 1,
-        });
+        } as any);
         appRef.current = app;
         hostRef.current.appendChild(app.view as HTMLCanvasElement);
 
