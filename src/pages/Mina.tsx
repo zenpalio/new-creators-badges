@@ -69,8 +69,6 @@ const Mina = () => {
             </div>
             <span className="text-[10px] text-white/40 tabular-nums">{state.affection}</span>
           </div>
-          <div className="w-px h-4 bg-white/15" />
-          <span className="text-xs text-white/70 tabular-nums">{state.tokens_balance} <span className="text-white/40">tokens</span></span>
         </div>
 
         <button
