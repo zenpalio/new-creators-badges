@@ -136,17 +136,23 @@ const Live2DStage = ({
         } catch {}
         if (!lipSyncIds.length) lipSyncIds = ["ParamMouthOpenY", "ParamA", "PARAM_MOUTH_OPEN_Y"];
 
-        // Drive mouth parameter each frame
-        mouthTick = () => {
-          try {
-            const core = model.internalModel?.coreModel;
-            if (!core?.setParameterValueById) return;
-            for (const id of lipSyncIds) {
-              try { core.setParameterValueById(id, mouthRef.current); } catch {}
-            }
-          } catch {}
-        };
-        app.ticker.add(mouthTick);
+        // Drive mouth parameter each frame. Hook into the model's own update
+        // so we write the parameter AFTER motions/physics have run; otherwise
+        // an active motion overwrites ParamMouthOpenY and the mouth stays still.
+        const origUpdate = model.update?.bind(model);
+        if (origUpdate) {
+          (model as any).update = (dt: number) => {
+            origUpdate(dt);
+            try {
+              const core = model.internalModel?.coreModel;
+              if (!core?.setParameterValueById) return;
+              const v = mouthRef.current;
+              for (const id of lipSyncIds) {
+                try { core.setParameterValueById(id, v); } catch {}
+              }
+            } catch {}
+          };
+        }
 
         // Discover motion groups and expressions for the debug panel
         try {
