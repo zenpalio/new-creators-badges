@@ -156,17 +156,12 @@ const ChatComposer = ({ onAfterReply, onMouthLevel }: Props) => {
                 style={{ opacity }}
               >
                 {m.role === "user" ? (
-                  <div
-                    className="max-w-[75%] px-4 py-2 rounded-2xl rounded-br-md text-sm bg-white/90 text-[hsl(220_25%_10%)] shadow-[0_6px_20px_rgba(0,0,0,0.35)]"
-                  >
+                  <div className="max-w-[75%] px-4 py-2 rounded-2xl rounded-br-md text-sm bg-white/90 text-[hsl(220_25%_10%)] shadow-lg">
                     {m.content}
                   </div>
                 ) : (
-                  <div
-                    className="max-w-[80%] px-4 py-2 rounded-2xl rounded-bl-md text-sm text-white bg-black/40 backdrop-blur-2xl border border-white/10 shadow-[0_12px_36px_rgba(0,0,0,0.6)] leading-relaxed"
-                    style={{ textShadow: "0 1px 3px rgba(0,0,0,0.85), 0 0 14px rgba(0,0,0,0.5)" }}
-                  >
-                    {m.content}
+                  <div className="max-w-[80%] px-4 py-2 rounded-2xl rounded-bl-md text-sm text-white bg-white/[0.08] backdrop-blur-2xl border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.45)] leading-relaxed [-webkit-backdrop-filter:blur(24px)_saturate(140%)] [backdrop-filter:blur(24px)_saturate(140%)]">
+                    <span className="relative z-10">{m.content}</span>
                   </div>
                 )}
               </div>
