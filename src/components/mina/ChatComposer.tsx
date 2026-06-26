@@ -118,11 +118,14 @@ const ChatComposer = ({ onAfterReply, onMouthLevel }: Props) => {
     setSending(true);
     let reply = "...";
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) throw new Error("Not signed in");
       const res = await fetch(`${SUPABASE_URL}/functions/v1/mina-chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${SUPABASE_ANON}`,
+          Authorization: `Bearer ${token}`,
           apikey: SUPABASE_ANON,
         },
         body: JSON.stringify({ slug: "mina", message: m }),
