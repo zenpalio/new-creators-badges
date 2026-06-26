@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Phone, Gift, Settings2, Sparkles, Coins } from "lucide-react";
+import { Phone, Gift, Settings2 } from "lucide-react";
 import { useCompanion, tierFromAffection, type MoodStats } from "@/hooks/useCompanion";
 import Live2DStage from "@/components/mina/Live2DStage";
 import VRMStage from "@/components/mina/VRMStage";
@@ -139,19 +139,13 @@ const Mina = () => {
         <StatsPanel stats={state.stats} affection={state.affection} tier={tier} affectionPulse={affectionPulse} pulseTrigger={fxTrigger} pulseDeltas={fxDeltas as any} />
         <button
           onClick={() => setGiftOpen(true)}
-          className="group relative h-12 rounded-2xl overflow-hidden border border-white/15 bg-gradient-to-br from-rose-500/25 via-fuchsia-500/15 to-indigo-500/25 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-white/30 hover:shadow-[0_10px_40px_rgba(236,72,153,0.25)] transition-all flex items-center pl-2 pr-2 gap-2"
+          className="h-10 sm:h-11 rounded-2xl bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] text-white/90 hover:bg-white/[0.12] transition flex items-center justify-center gap-2 text-[12px] font-semibold"
           title="Activities, roleplay & gifts"
         >
-          <span className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-          <span className="relative w-8 h-8 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center shrink-0">
-            <Sparkles className="w-4 h-4 text-white" />
-          </span>
-          <span className="relative flex flex-col items-start leading-tight min-w-0 flex-1">
-            <span className="text-[12px] font-semibold text-white">Spend time</span>
-            <span className="text-[8.5px] uppercase tracking-[0.12em] text-white/55 truncate w-full">Play · Roleplay · Gifts</span>
-          </span>
-          <span className="relative flex items-center gap-1 px-1.5 py-0.5 rounded-lg bg-black/35 border border-white/10 text-[10px] font-semibold text-amber-200 tabular-nums shrink-0">
-            <Coins className="w-3 h-3" /> {state.tokens_balance}
+          <Gift className="w-4 h-4" />
+          Activity
+          <span className="text-[10px] text-white/45 tabular-nums ml-1 flex items-center gap-1">
+            · {state.tokens_balance} 🪙
           </span>
         </button>
       </div>
