@@ -1,4 +1,10 @@
 import { X, RotateCcw, FlipHorizontal2 } from "lucide-react";
+import bgApartment from "@/assets/bg-apartment.jpg";
+import bgPark from "@/assets/bg-park.jpg";
+import bgBedroom from "@/assets/bg-bedroom.jpg";
+import bgBeach from "@/assets/bg-beach.jpg";
+import bgCity from "@/assets/bg-city.jpg";
+import bgCafe from "@/assets/bg-cafe.jpg";
 
 export interface SceneSettings {
   rotation: number;
@@ -7,7 +13,24 @@ export interface SceneSettings {
   backgroundId: string;
 }
 
-export const BACKGROUNDS: { id: string; label: string; css: string; swatch: string }[] = [
+export interface BackgroundOption {
+  id: string;
+  label: string;
+  /** CSS background value (gradients) */
+  css?: string;
+  /** Image URL — when set, rendered as cover image */
+  image?: string;
+  /** Swatch for picker */
+  swatch: string;
+}
+
+export const BACKGROUNDS: BackgroundOption[] = [
+  { id: "apartment", label: "Flat", image: bgApartment, swatch: `center/cover url(${bgApartment})` },
+  { id: "park", label: "Park", image: bgPark, swatch: `center/cover url(${bgPark})` },
+  { id: "bedroom", label: "Bedroom", image: bgBedroom, swatch: `center/cover url(${bgBedroom})` },
+  { id: "cafe", label: "Café", image: bgCafe, swatch: `center/cover url(${bgCafe})` },
+  { id: "beach", label: "Beach", image: bgBeach, swatch: `center/cover url(${bgBeach})` },
+  { id: "city", label: "City", image: bgCity, swatch: `center/cover url(${bgCity})` },
   {
     id: "midnight",
     label: "Midnight",
@@ -15,28 +38,10 @@ export const BACKGROUNDS: { id: string; label: string; css: string; swatch: stri
     swatch: "linear-gradient(135deg, hsl(230 60% 25%), hsl(220 25% 5%))",
   },
   {
-    id: "sunset",
-    label: "Sunset",
-    css: "radial-gradient(circle at 50% 30%, hsl(20 80% 35% / 0.55), transparent 65%), radial-gradient(circle at 50% 100%, hsl(340 60% 25% / 0.55), transparent 60%), linear-gradient(to bottom, hsl(15 35% 12%), hsl(330 30% 8%))",
-    swatch: "linear-gradient(135deg, hsl(20 80% 50%), hsl(340 60% 35%))",
-  },
-  {
-    id: "forest",
-    label: "Forest",
-    css: "radial-gradient(circle at 50% 30%, hsl(150 50% 20% / 0.6), transparent 65%), radial-gradient(circle at 50% 100%, hsl(180 50% 15% / 0.5), transparent 60%), linear-gradient(to bottom, hsl(160 30% 8%), hsl(170 30% 4%))",
-    swatch: "linear-gradient(135deg, hsl(150 60% 30%), hsl(170 30% 8%))",
-  },
-  {
     id: "neon",
     label: "Neon",
     css: "radial-gradient(circle at 30% 30%, hsl(280 80% 35% / 0.5), transparent 60%), radial-gradient(circle at 70% 70%, hsl(190 80% 30% / 0.5), transparent 60%), linear-gradient(to bottom, hsl(250 30% 6%), hsl(220 30% 4%))",
     swatch: "linear-gradient(135deg, hsl(280 80% 50%), hsl(190 80% 45%))",
-  },
-  {
-    id: "cream",
-    label: "Cream",
-    css: "radial-gradient(circle at 50% 30%, hsl(30 40% 80% / 0.6), transparent 65%), linear-gradient(to bottom, hsl(35 30% 88%), hsl(25 25% 78%))",
-    swatch: "linear-gradient(135deg, hsl(35 50% 88%), hsl(25 35% 70%))",
   },
   {
     id: "void",

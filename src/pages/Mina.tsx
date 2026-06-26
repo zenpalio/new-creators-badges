@@ -24,8 +24,20 @@ const Mina = () => {
 
   return (
     <div className="min-h-screen w-full relative overflow-hidden bg-[hsl(220_20%_6%)]">
-      {/* Ambient backdrop — driven by scene preset */}
-      <div className="absolute inset-0 transition-[background] duration-500" style={{ background: bg.css }} />
+      {/* Ambient backdrop — image or gradient */}
+      {bg.image ? (
+        <>
+          <img
+            src={bg.image}
+            alt={bg.label}
+            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
+          />
+          {/* darkening vignette so character stays readable */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/60" />
+        </>
+      ) : (
+        <div className="absolute inset-0 transition-[background] duration-500" style={{ background: bg.css }} />
+      )}
 
       {/* Character */}
       <Live2DStage
