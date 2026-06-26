@@ -113,17 +113,17 @@ function VRMModel({
     let focusY: number;
     let frameW = b.size.x * 1.15;
     if (preset === "face") {
-      frameH = fullH * 0.28;
-      focusY = b.min.y + fullH * 0.92;
+      frameH = fullH * 0.32;
+      focusY = b.min.y + fullH * 0.82;
       frameW = b.size.x * 0.45;
     } else if (preset === "upper") {
-      frameH = fullH * 0.55;
-      focusY = b.min.y + fullH * 0.78;
+      frameH = fullH * 0.7;
+      focusY = b.min.y + fullH * 0.66;
       frameW = b.size.x * 0.75;
     } else {
-      // full body — pad 10%
-      frameH = fullH * 1.1;
-      focusY = b.min.y + fullH * 0.5;
+      // full body — center on the humanoid, not the imported scene bounds
+      frameH = fullH * 1.15;
+      focusY = b.min.y + fullH * 0.48;
     }
     const verticalDistance = (frameH / 2) / Math.tan(fovRad / 2);
     const horizontalDistance = (frameW / 2) / (Math.tan(fovRad / 2) * aspect);
@@ -210,8 +210,8 @@ function VRMModel({
           ? Math.min(nLeftFoot?.y ?? Number.POSITIVE_INFINITY, nRightFoot?.y ?? Number.POSITIVE_INFINITY)
           : box.min.y;
         const bodyHeadY = nHead?.y ?? box.max.y;
-        const bodyHeight = Math.max(0.6, bodyHeadY - bodyMinY);
-        const frameHeight = bodyHeight * 1.18;
+        const bodyHeight = THREE.MathUtils.clamp(bodyHeadY - bodyMinY, 1.25, 1.95);
+        const frameHeight = bodyHeight;
         const shoulderSpan = (() => {
           const l = getBoneWorld("leftUpperArm") ?? getBoneWorld("leftShoulder");
           const r = getBoneWorld("rightUpperArm") ?? getBoneWorld("rightShoulder");
