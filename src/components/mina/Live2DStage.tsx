@@ -162,7 +162,7 @@ const Live2DStage = ({
         className="absolute inset-0 mina-idle transition-transform duration-300 ease-out"
         style={{
           transform: `rotate(${rotation}deg) scale(${scale}) scaleX(${mirror ? -1 : 1})`,
-          transformOrigin: "bottom center",
+          transformOrigin: "center center",
         }}
       />
 
