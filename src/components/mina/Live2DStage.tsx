@@ -1,80 +1,77 @@
-import { useEffect, useRef } from "react";
-import * as PIXI from "pixi.js";
-
-// Expose PIXI globally — pixi-live2d-display reads window.PIXI
-(window as any).PIXI = PIXI;
+import { useEffect, useState } from "react";
+import minaImg from "@/assets/mina-character.png";
 
 interface Props {
-  modelUrl?: string;
-  /** 0–1; drives mouth open amount during voice playback */
+  /** 0–1; subtle mouth/head bounce while speaking */
   mouthOpen?: number;
   expression?: string | null;
 }
 
-// Free public Cubism 4 sample (Hiyori) hosted on jsdelivr
-const DEFAULT_MODEL = "https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display@master/test/assets/haru/haru_greeter_t03.model3.json";
-
-const Live2DStage = ({ modelUrl = DEFAULT_MODEL, mouthOpen = 0 }: Props) => {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const modelRef = useRef<any>(null);
-  const appRef = useRef<PIXI.Application | null>(null);
+/**
+ * Animated VTuber stage. Uses a high-quality portrait with
+ * idle breathing + sway + speak bounce. Reliable replacement
+ * for the Live2D runtime which has incompatibilities with Pixi v7.
+ */
+const Live2DStage = ({ mouthOpen = 0 }: Props) => {
+  const [blink, setBlink] = useState(false);
 
   useEffect(() => {
-    let disposed = false;
-    let app: PIXI.Application;
-
-    (async () => {
-      const { Live2DModel } = await import("pixi-live2d-display-lipsyncpatch/cubism4");
-      if (disposed || !wrapRef.current) return;
-
-      app = new PIXI.Application({
-        resizeTo: wrapRef.current,
-        backgroundAlpha: 0,
-        antialias: true,
-      });
-      wrapRef.current.appendChild(app.view as any);
-      appRef.current = app;
-
-      try {
-        const model = await Live2DModel.from(modelUrl, { autoInteract: true });
-        if (disposed) return;
-        app.stage.addChild(model as any);
-
-        const fit = () => {
-          const w = app.renderer.width;
-          const h = app.renderer.height;
-          const scale = Math.min(w / model.width, h / model.height) * 0.95;
-          model.scale.set(scale);
-          model.x = (w - model.width) / 2;
-          model.y = (h - model.height) / 2;
-        };
-        fit();
-        window.addEventListener("resize", fit);
-        modelRef.current = model;
-      } catch (e) {
-        console.error("Live2D load failed", e);
-      }
-    })();
-
-    return () => {
-      disposed = true;
-      try { appRef.current?.destroy(true, { children: true, texture: true, baseTexture: true }); } catch {}
-      appRef.current = null;
-      modelRef.current = null;
+    let t: number;
+    const loop = () => {
+      setBlink(true);
+      window.setTimeout(() => setBlink(false), 140);
+      t = window.setTimeout(loop, 2800 + Math.random() * 2600);
     };
-  }, [modelUrl]);
+    t = window.setTimeout(loop, 1800);
+    return () => window.clearTimeout(t);
+  }, []);
 
-  // Drive mouth open value
-  useEffect(() => {
-    const model = modelRef.current;
-    if (!model) return;
-    try {
-      const core = model.internalModel?.coreModel;
-      core?.setParameterValueById?.("ParamMouthOpenY", mouthOpen);
-    } catch {}
-  }, [mouthOpen]);
+  const speaking = mouthOpen > 0.05;
 
-  return <div ref={wrapRef} className="absolute inset-0" />;
+  return (
+    <div className="absolute inset-0 flex items-end justify-center overflow-hidden">
+      {/* Soft floor glow */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-40 rounded-[50%] bg-[radial-gradient(ellipse_at_center,hsl(350_95%_55%/0.35),transparent_70%)] blur-2xl pointer-events-none" />
+
+      <div
+        className="relative h-[92%] max-h-[820px] aspect-[7/10] mina-idle"
+        style={{
+          transform: speaking ? "translateY(-2px) scale(1.005)" : undefined,
+          transition: "transform 120ms ease-out",
+        }}
+      >
+        <img
+          src={minaImg}
+          alt="Mina"
+          className="w-full h-full object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.6)] select-none"
+          draggable={false}
+        />
+        {/* Blink overlay — thin dark line across eye region */}
+        <div
+          className="absolute left-0 right-0 mx-auto pointer-events-none transition-opacity duration-100"
+          style={{
+            top: "32%",
+            height: "3.5%",
+            width: "44%",
+            background:
+              "linear-gradient(to bottom, transparent, rgba(20,10,15,0.85), transparent)",
+            borderRadius: "40%",
+            opacity: blink ? 0.95 : 0,
+            filter: "blur(1px)",
+          }}
+        />
+      </div>
+
+      <style>{`
+        @keyframes minaIdle {
+          0%   { transform: translateY(0px) rotate(0deg); }
+          50%  { transform: translateY(-6px) rotate(0.4deg); }
+          100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .mina-idle { animation: minaIdle 5.2s ease-in-out infinite; transform-origin: bottom center; }
+      `}</style>
+    </div>
+  );
 };
 
 export default Live2DStage;
