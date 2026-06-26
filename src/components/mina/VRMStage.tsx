@@ -188,11 +188,9 @@ function VRMModel({
         const rightFoot = getBoneWorld("rightFoot") ?? getBoneWorld("rightToes");
         const bodyCenterX = hips?.x ?? head?.x ?? rawCenter.x;
         const bodyCenterZ = hips?.z ?? head?.z ?? rawCenter.z;
-        const footY = Math.min(
-          leftFoot?.y ?? rawBox.min.y,
-          rightFoot?.y ?? rawBox.min.y,
-          rawBox.min.y,
-        );
+        const footY = leftFoot || rightFoot
+          ? Math.min(leftFoot?.y ?? Number.POSITIVE_INFINITY, rightFoot?.y ?? Number.POSITIVE_INFINITY)
+          : rawBox.min.y;
         v.scene.position.x -= bodyCenterX;
         v.scene.position.y -= footY;
         v.scene.position.z -= bodyCenterZ;
@@ -208,11 +206,18 @@ function VRMModel({
         const nHead = getBoneWorld("head");
         const nLeftFoot = getBoneWorld("leftFoot") ?? getBoneWorld("leftToes");
         const nRightFoot = getBoneWorld("rightFoot") ?? getBoneWorld("rightToes");
-        const bodyMinY = Math.min(nLeftFoot?.y ?? box.min.y, nRightFoot?.y ?? box.min.y, box.min.y);
+        const bodyMinY = nLeftFoot || nRightFoot
+          ? Math.min(nLeftFoot?.y ?? Number.POSITIVE_INFINITY, nRightFoot?.y ?? Number.POSITIVE_INFINITY)
+          : box.min.y;
         const bodyHeadY = nHead?.y ?? box.max.y;
         const bodyHeight = Math.max(0.6, bodyHeadY - bodyMinY);
-        const frameHeight = bodyHeight * 1.12;
-        const frameWidth = Math.max(Math.min(size.x, bodyHeight * 0.85), bodyHeight * 0.35);
+        const frameHeight = bodyHeight * 1.18;
+        const shoulderSpan = (() => {
+          const l = getBoneWorld("leftUpperArm") ?? getBoneWorld("leftShoulder");
+          const r = getBoneWorld("rightUpperArm") ?? getBoneWorld("rightShoulder");
+          return l && r ? Math.abs(l.x - r.x) * 2.2 : bodyHeight * 0.45;
+        })();
+        const frameWidth = Math.max(shoulderSpan, bodyHeight * 0.42);
         const frameCenter = new THREE.Vector3(nHips?.x ?? 0, bodyMinY + frameHeight * 0.5, nHips?.z ?? 0);
         bboxRef.current = {
           size: new THREE.Vector3(frameWidth, frameHeight, Math.max(size.z, bodyHeight * 0.35)),
