@@ -4,7 +4,12 @@ import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { VRM, VRMLoaderPlugin, VRMUtils, VRMExpressionPresetName } from "@pixiv/three-vrm";
-import { RotateCw, Shirt, RefreshCw } from "lucide-react";
+import {
+  VRMAnimationLoaderPlugin,
+  createVRMAnimationClip,
+  type VRMAnimation,
+} from "@pixiv/three-vrm-animation";
+import { RotateCw, Shirt, RefreshCw, Film, Upload, Square } from "lucide-react";
 
 export type VrmSentiment =
   | "neutral"
