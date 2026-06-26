@@ -1,0 +1,93 @@
+// Text chat with Mina. Uses Lovable AI Gemini with persona/tier/memory injected.
+// Saves both user + assistant messages and grants chat XP.
+import { createClient } from "npm:@supabase/supabase-js@2.45.0";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
+
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+
+  try {
+    const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+    if (!lovableKey) throw new Error("LOVABLE_API_KEY missing");
+
+    const authHeader = req.headers.get("Authorization") ?? "";
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_ANON_KEY")!,
+      { global: { headers: { Authorization: authHeader } } },
+    );
+    const { data: userRes } = await supabase.auth.getUser();
+    const user = userRes?.user;
+    if (!user) return new Response(JSON.stringify({ error: "unauthenticated" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+
+    const { slug = "mina", message } = await req.json();
+    if (!message || typeof message !== "string") return new Response(JSON.stringify({ error: "message required" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+
+    const { data: comp } = await supabase.from("companions").select("*").eq("slug", slug).maybeSingle();
+    if (!comp) throw new Error("companion not found");
+
+    const { data: bond } = await supabase.from("user_companion").select("*").eq("user_id", user.id).eq("companion_id", comp.id).maybeSingle();
+    const affection = bond?.affection ?? 0;
+    const tier = affection >= 70 ? "obsessed" : affection >= 40 ? "lover" : affection >= 20 ? "crush" : "stranger";
+
+    // Last 10 messages for memory
+    const { data: history } = await supabase
+      .from("chat_messages")
+      .select("role,content")
+      .eq("user_id", user.id)
+      .eq("companion_id", comp.id)
+      .order("created_at", { ascending: false })
+      .limit(10);
+    const memory = (history ?? []).reverse();
+
+    const tierGuidance = tier === "obsessed"
+      ? "She's deeply in love and possessive. Explicit, intimate, jealous if user mentions others."
+      : tier === "lover"
+      ? "She's lowered her guard. Flirty, dirty talk allowed, but still teases."
+      : tier === "crush"
+      ? "She's warming up. Playful, suggestive, occasional bratty teasing."
+      : "She's bratty and guarded. Teases, gives hard time, makes user earn her attention.";
+
+    const system = `${comp.base_persona}\n\nCURRENT STATE:\n- Affection: ${affection}/100 (${tier})\n- Mood: ${bond?.mood ?? "neutral"}\n- Streak: ${bond?.streak_days ?? 0} days\n\nBEHAVIOR: ${tierGuidance}\n\nKeep replies SHORT (1-3 sentences), in-character, never break the fourth wall.`;
+
+    const payload = {
+      model: "google/gemini-3-flash-preview",
+      messages: [
+        { role: "system", content: system },
+        ...memory.map((m: any) => ({ role: m.role, content: m.content })),
+        { role: "user", content: message },
+      ],
+    };
+
+    const r = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${lovableKey}` },
+      body: JSON.stringify(payload),
+    });
+    if (!r.ok) {
+      const t = await r.text();
+      if (r.status === 429) return new Response(JSON.stringify({ error: "Rate limit. Try again in a moment." }), { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      if (r.status === 402) return new Response(JSON.stringify({ error: "AI credits exhausted. Top up in workspace settings." }), { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      throw new Error(`AI error ${r.status}: ${t}`);
+    }
+    const data = await r.json();
+    const reply: string = data.choices?.[0]?.message?.content ?? "...";
+
+    // Save both messages
+    await supabase.from("chat_messages").insert([
+      { user_id: user.id, companion_id: comp.id, role: "user", content: message },
+      { user_id: user.id, companion_id: comp.id, role: "assistant", content: reply },
+    ]);
+
+    // Bump XP
+    await supabase.rpc("add_chat_xp", { _companion_slug: slug });
+
+    return new Response(JSON.stringify({ reply }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+  } catch (e) {
+    return new Response(JSON.stringify({ error: String(e instanceof Error ? e.message : e) }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+  }
+});
