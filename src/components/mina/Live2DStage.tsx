@@ -96,16 +96,15 @@ const Live2DStage = ({
           const r = hostRef.current.getBoundingClientRect();
           appRef.current.renderer.resize(r.width, r.height);
           const m = modelRef.current;
-          const s = Math.min(r.width / m.width, r.height / m.height) * 0.95;
+          try { m.anchor.set(0.5, 0.5); } catch {}
+          // Reset scale before measuring intrinsic size
+          m.scale.set(1);
+          const iw = m.width || 1;
+          const ih = m.height || 1;
+          const s = Math.min(r.width / iw, r.height / ih) * 0.9;
           m.scale.set(s);
           m.x = r.width / 2;
-          m.y = r.height - m.height * s;
-          m.anchor?.set?.(0.5, 0);
-          // anchor may not exist; fall back to manual offset
-          if (!m.anchor) {
-            m.x = (r.width - m.width * s) / 2;
-            m.y = r.height - m.height * s;
-          }
+          m.y = r.height / 2;
         };
         fit();
         const ro = new ResizeObserver(fit);
