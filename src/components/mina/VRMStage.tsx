@@ -4,7 +4,12 @@ import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { VRM, VRMLoaderPlugin, VRMUtils, VRMExpressionPresetName } from "@pixiv/three-vrm";
-import { RotateCw, Shirt, RefreshCw } from "lucide-react";
+import {
+  VRMAnimationLoaderPlugin,
+  createVRMAnimationClip,
+  type VRMAnimation,
+} from "@pixiv/three-vrm-animation";
+import { RotateCw, Shirt, RefreshCw, Film, Upload, Square } from "lucide-react";
 
 export type VrmSentiment =
   | "neutral"
@@ -60,6 +65,8 @@ function VRMModel({
   onError,
   meshVisibility,
   viewPreset,
+  vrmaUrl,
+  onAnimEnd,
 }: {
   url: string;
   mouthRef: React.MutableRefObject<number>;
@@ -73,6 +80,8 @@ function VRMModel({
   onError: (msg: string | null) => void;
   meshVisibility: Record<string, boolean>;
   viewPreset: ViewPreset;
+  vrmaUrl: string | null;
+  onAnimEnd: () => void;
 }) {
   const [vrm, setVrm] = useState<VRM | null>(null);
   const blinkRef = useRef({ next: 2 + Math.random() * 3, t: 0, closing: 0 });
@@ -81,7 +90,11 @@ function VRMModel({
   const reactRef = useRef({ last: 0, intensity: 0 });
   const lookTargetRef = useRef(new THREE.Object3D());
   const bboxRef = useRef<{ size: THREE.Vector3; center: THREE.Vector3; min: THREE.Vector3 } | null>(null);
+  const mixerRef = useRef<THREE.AnimationMixer | null>(null);
+  const actionRef = useRef<THREE.AnimationAction | null>(null);
+  const [animPlaying, setAnimPlaying] = useState(false);
   const { camera, scene, get } = useThree() as any;
+
 
   // Re-frame the camera based on current preset and the model's bbox
   const applyView = useCallback((preset: ViewPreset) => {
@@ -155,6 +168,14 @@ function VRMModel({
         box.getCenter(center);
         bboxRef.current = { size, center, min: box.min.clone() };
 
+        // Mixer for VRMA clips
+        mixerRef.current = new THREE.AnimationMixer(v.scene);
+        mixerRef.current.addEventListener("finished", () => {
+          actionRef.current = null;
+          setAnimPlaying(false);
+          onAnimEnd();
+        });
+
         setVrm(v);
         onProgress(100);
         onMeshes(meshes);
@@ -190,13 +211,58 @@ function VRMModel({
     }
   }, [reactTrigger]);
 
+  // Load + play a VRMA animation when vrmaUrl is set; clear when null
+  useEffect(() => {
+    if (!vrm || !mixerRef.current) return;
+    const mixer = mixerRef.current;
+    if (!vrmaUrl) {
+      if (actionRef.current) {
+        actionRef.current.fadeOut(0.3);
+        actionRef.current = null;
+      }
+      setAnimPlaying(false);
+      return;
+    }
+    let cancelled = false;
+    const loader = new GLTFLoader();
+    loader.register((parser) => new VRMAnimationLoaderPlugin(parser));
+    loader.load(
+      vrmaUrl,
+      (gltf) => {
+        if (cancelled) return;
+        const vrmAnims = (gltf.userData as any).vrmAnimations as VRMAnimation[] | undefined;
+        if (!vrmAnims || vrmAnims.length === 0) {
+          console.warn("[VRMA] No animations in file");
+          onAnimEnd();
+          return;
+        }
+        const clip = createVRMAnimationClip(vrmAnims[0], vrm as any);
+        if (actionRef.current) actionRef.current.fadeOut(0.25);
+        const action = mixer.clipAction(clip);
+        action.reset().fadeIn(0.25).play();
+        actionRef.current = action;
+        setAnimPlaying(true);
+      },
+      undefined,
+      (err) => {
+        console.error("[VRMA] load failed", err);
+        onAnimEnd();
+      },
+    );
+    return () => { cancelled = true; };
+  }, [vrm, vrmaUrl, onAnimEnd]);
+
+
   // Re-frame when preset changes
   useEffect(() => { applyView(viewPreset); }, [viewPreset, applyView]);
 
 
   useFrame((_, dt) => {
     if (!vrm) return;
+    // Tick VRMA mixer BEFORE vrm.update so springs/lookAt run on top
+    mixerRef.current?.update(dt);
     vrm.update(dt);
+    const hasAnim = animPlaying;
 
     // Smooth turn-around target
     const target = Math.PI + spin;
@@ -245,53 +311,48 @@ function VRMModel({
       vrm.lookAt.target = camera;
     }
 
-    // Procedural idle: breathing on spine, weight shift on hips, arm sway,
-    // occasional head tilt + glance, "talking" head bob while speaking
-    const hum = vrm.humanoid;
-    const head = hum?.getNormalizedBoneNode("head");
-    const neck = hum?.getNormalizedBoneNode("neck");
-    const chest = hum?.getNormalizedBoneNode("chest") ?? hum?.getNormalizedBoneNode("spine");
-    const spine = hum?.getNormalizedBoneNode("spine");
-    const hips = hum?.getNormalizedBoneNode("hips");
-    const lUpper = hum?.getNormalizedBoneNode("leftUpperArm");
-    const rUpper = hum?.getNormalizedBoneNode("rightUpperArm");
-    const lLower = hum?.getNormalizedBoneNode("leftLowerArm");
-    const rLower = hum?.getNormalizedBoneNode("rightLowerArm");
+    // Procedural idle (skipped when a VRMA clip is driving the body)
+    if (!hasAnim) {
+      const hum = vrm.humanoid;
+      const head = hum?.getNormalizedBoneNode("head");
+      const neck = hum?.getNormalizedBoneNode("neck");
+      const chest = hum?.getNormalizedBoneNode("chest") ?? hum?.getNormalizedBoneNode("spine");
+      const spine = hum?.getNormalizedBoneNode("spine");
+      const hips = hum?.getNormalizedBoneNode("hips");
+      const lUpper = hum?.getNormalizedBoneNode("leftUpperArm");
+      const rUpper = hum?.getNormalizedBoneNode("rightUpperArm");
+      const lLower = hum?.getNormalizedBoneNode("leftLowerArm");
+      const rLower = hum?.getNormalizedBoneNode("rightLowerArm");
 
-    // Head tilt scheduler
-    const tilt = tiltRef.current;
-    tilt.t += dt;
-    if (tilt.t > tilt.next) {
-      tilt.amount = 0.12 + Math.random() * 0.1;
-      tilt.dir = Math.random() < 0.5 ? -1 : 1;
-      tilt.next = tilt.t + 6 + Math.random() * 6;
-    }
-    const tiltDecay = Math.max(0, 1 - (tilt.t % (tilt.next || 1)) / 2.5);
-    const tiltZ = tilt.amount * tilt.dir * tiltDecay;
+      // Head tilt scheduler
+      const tilt = tiltRef.current;
+      tilt.t += dt;
+      if (tilt.t > tilt.next) {
+        tilt.amount = 0.12 + Math.random() * 0.1;
+        tilt.dir = Math.random() < 0.5 ? -1 : 1;
+        tilt.next = tilt.t + 6 + Math.random() * 6;
+      }
+      const tiltDecay = Math.max(0, 1 - (tilt.t % (tilt.next || 1)) / 2.5);
+      const tiltZ = tilt.amount * tilt.dir * tiltDecay;
 
-    const talk = speaking ? 1 : 0;
-    if (head) {
-      head.rotation.x = Math.sin(t * 1.2) * 0.03 + talk * Math.sin(t * 7) * 0.04;
-      head.rotation.y = Math.sin(t * 0.8) * 0.05 + talk * Math.sin(t * 3.3) * 0.05;
-      head.rotation.z = tiltZ + reactRef.current.intensity * 0.1 * Math.sin(t * 9);
+      const talk = speaking ? 1 : 0;
+      if (head) {
+        head.rotation.x = Math.sin(t * 1.2) * 0.03 + talk * Math.sin(t * 7) * 0.04;
+        head.rotation.y = Math.sin(t * 0.8) * 0.05 + talk * Math.sin(t * 3.3) * 0.05;
+        head.rotation.z = tiltZ + reactRef.current.intensity * 0.1 * Math.sin(t * 9);
+      }
+      if (neck) neck.rotation.x = Math.sin(t * 1.2 + 0.3) * 0.015;
+      if (chest) chest.rotation.x = Math.sin(t * 1.8) * 0.02 + talk * Math.sin(t * 6) * 0.01;
+      if (spine) spine.rotation.x = Math.sin(t * 1.8 + 0.4) * 0.012;
+      if (hips) {
+        hips.rotation.y = Math.sin(t * 0.45) * 0.04;
+        hips.position.y = Math.sin(t * 1.8) * 0.005;
+      }
+      if (lUpper) lUpper.rotation.z = Math.sin(t * 0.9) * 0.04 + 0.02;
+      if (rUpper) rUpper.rotation.z = -Math.sin(t * 0.9 + 0.4) * 0.04 - 0.02;
+      if (lLower) lLower.rotation.y = Math.sin(t * 1.1) * 0.05;
+      if (rLower) rLower.rotation.y = -Math.sin(t * 1.1 + 0.3) * 0.05;
     }
-    if (neck) {
-      neck.rotation.x = Math.sin(t * 1.2 + 0.3) * 0.015;
-    }
-    if (chest) {
-      chest.rotation.x = Math.sin(t * 1.8) * 0.02 + talk * Math.sin(t * 6) * 0.01;
-    }
-    if (spine) {
-      spine.rotation.x = Math.sin(t * 1.8 + 0.4) * 0.012;
-    }
-    if (hips) {
-      hips.rotation.y = Math.sin(t * 0.45) * 0.04; // weight shift
-      hips.position.y = Math.sin(t * 1.8) * 0.005; // subtle breathing rise
-    }
-    if (lUpper) lUpper.rotation.z = Math.sin(t * 0.9) * 0.04 + 0.02;
-    if (rUpper) rUpper.rotation.z = -Math.sin(t * 0.9 + 0.4) * 0.04 - 0.02;
-    if (lLower) lLower.rotation.y = Math.sin(t * 1.1) * 0.05;
-    if (rLower) rLower.rotation.y = -Math.sin(t * 1.1 + 0.3) * 0.05;
   });
 
   if (!vrm) return null;
@@ -322,6 +383,19 @@ const VRMStage = ({
   const [loadPct, setLoadPct] = useState(0);
   const [loadErr, setLoadErr] = useState<string | null>(null);
   const [viewPreset, setViewPreset] = useState<ViewPreset>("full");
+  const [vrmaUrl, setVrmaUrl] = useState<string | null>(null);
+  const [vrmaName, setVrmaName] = useState<string | null>(null);
+  const vrmaFileRef = useRef<HTMLInputElement | null>(null);
+  const handleAnimEnd = useCallback(() => {
+    setVrmaUrl((prev) => { if (prev) URL.revokeObjectURL(prev); return null; });
+    setVrmaName(null);
+  }, []);
+  const handlePickVrma = (file: File) => {
+    if (vrmaUrl) URL.revokeObjectURL(vrmaUrl);
+    setVrmaUrl(URL.createObjectURL(file));
+    setVrmaName(file.name.replace(/\.vrma$/i, ""));
+  };
+
 
 
   const groupTransform = useMemo(
@@ -375,6 +449,8 @@ const VRMStage = ({
               onError={setLoadErr}
               meshVisibility={meshVis}
               viewPreset={viewPreset}
+              vrmaUrl={vrmaUrl}
+              onAnimEnd={handleAnimEnd}
             />
           </group>
         </Suspense>
@@ -469,6 +545,44 @@ const VRMStage = ({
             {p === "full" ? "Full" : p === "upper" ? "Upper" : "Face"}
           </button>
         ))}
+      </div>
+
+      {/* VRMA animation controls */}
+      <div className="absolute right-3 sm:right-5 bottom-5 z-20 pointer-events-auto flex items-center gap-2">
+        <input
+          ref={vrmaFileRef}
+          type="file"
+          accept=".vrma,.glb"
+          className="hidden"
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            if (f) handlePickVrma(f);
+            e.target.value = "";
+          }}
+        />
+        {vrmaName && (
+          <div className="px-3 py-1.5 rounded-full bg-white/[0.08] border border-white/15 backdrop-blur-xl text-[11px] text-white/80 max-w-[160px] truncate">
+            <Film className="inline w-3 h-3 mr-1.5 -mt-0.5" />
+            {vrmaName}
+          </div>
+        )}
+        {vrmaUrl ? (
+          <button
+            onClick={(e) => { e.stopPropagation(); handleAnimEnd(); }}
+            className="h-9 px-3 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl text-white/80 hover:bg-white/15 transition flex items-center gap-1.5 text-[11px]"
+            title="Stop animation"
+          >
+            <Square className="w-3 h-3" /> Stop
+          </button>
+        ) : (
+          <button
+            onClick={(e) => { e.stopPropagation(); vrmaFileRef.current?.click(); }}
+            className="h-9 px-3 rounded-full border border-white/15 bg-white/[0.08] backdrop-blur-xl text-white/80 hover:bg-white/15 transition flex items-center gap-1.5 text-[11px]"
+            title="Load .vrma animation"
+          >
+            <Upload className="w-3 h-3" /> Load .vrma
+          </button>
+        )}
       </div>
     </div>
   );
