@@ -785,8 +785,9 @@ const VRMStage = ({
         }}
       />
 
-      {/* Animation sidebar — left, collapsible (drop zone + presets) */}
-      <div className="absolute left-3 sm:left-5 top-20 z-20 pointer-events-auto flex flex-col items-start gap-2">
+      {/* Animation sidebar — bottom-right, collapsible (drop zone + presets) */}
+      <div className="absolute right-3 sm:right-5 bottom-24 sm:bottom-28 z-20 pointer-events-auto flex flex-col-reverse items-end gap-2">
+
         <button
           onClick={(e) => { e.stopPropagation(); setAnimsOpen((v) => !v); }}
           className={`h-9 w-9 rounded-full border border-white/15 backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4)] transition flex items-center justify-center ${
