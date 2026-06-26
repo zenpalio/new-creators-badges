@@ -180,6 +180,7 @@ function VRMModel({
   onError: (msg: string | null) => void;
   meshVisibility: Record<string, boolean>;
   viewPreset: ViewPreset;
+  reframeNonce: number;
   vrmaUrl: string | null;
   animKind: "vrma" | "fbx" | null;
   onAnimEnd: () => void;
