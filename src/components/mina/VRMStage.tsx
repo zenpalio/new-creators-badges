@@ -334,6 +334,20 @@ const VRMStage = ({
         />
       </Canvas>
 
+      {loadPct < 100 && !loadErr && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="rounded-2xl bg-white/[0.06] backdrop-blur-xl border border-white/10 px-5 py-3 text-xs text-white/80">
+            Loading character… {loadPct}%
+          </div>
+        </div>
+      )}
+      {loadErr && (
+        <div className="absolute inset-x-0 bottom-24 mx-auto max-w-sm rounded-lg bg-red-500/15 border border-red-400/30 backdrop-blur px-4 py-3 text-xs text-red-100 text-center pointer-events-none">
+          Couldn't load character: {loadErr}
+        </div>
+      )}
+
+
       <div className="absolute left-3 sm:left-5 top-32 z-20 flex flex-col items-start gap-2 pointer-events-none">
         <button
           onClick={(e) => { e.stopPropagation(); setSpin((s) => s + Math.PI); }}
