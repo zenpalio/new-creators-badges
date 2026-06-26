@@ -115,8 +115,24 @@ const ChatComposer = ({ onAfterReply, onMouthLevel }: Props) => {
     setText("");
     setMsgs((p) => [...p, { role: "user", content: m }]);
     setSending(true);
-    await new Promise((r) => setTimeout(r, 800 + Math.random() * 600));
-    const reply = MOCK_REPLIES[Math.floor(Math.random() * MOCK_REPLIES.length)];
+    let reply = "...";
+    try {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/mina-chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${SUPABASE_ANON}`,
+          apikey: SUPABASE_ANON,
+        },
+        body: JSON.stringify({ slug: "mina", message: m }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data?.error || `chat ${res.status}`);
+      reply = data.reply ?? "...";
+    } catch (err) {
+      console.error("[mina-chat] failed", err);
+      reply = "Mmh… something got tangled. Try again?";
+    }
     setMsgs((p) => [...p, { role: "assistant", content: reply }]);
     setSending(false);
     onAfterReply?.();
