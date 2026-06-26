@@ -3,6 +3,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader.js";
 import { VRM, VRMLoaderPlugin, VRMUtils, VRMExpressionPresetName } from "@pixiv/three-vrm";
 import {
   VRMAnimationLoaderPlugin,
@@ -10,6 +11,87 @@ import {
   type VRMAnimation,
 } from "@pixiv/three-vrm-animation";
 import { RotateCw, Shirt, RefreshCw, Film, Upload, Square } from "lucide-react";
+
+// Mixamo bone name → VRM humanoid bone name
+const MIXAMO_TO_VRM: Record<string, string> = {
+  mixamorigHips: "hips",
+  mixamorigSpine: "spine",
+  mixamorigSpine1: "chest",
+  mixamorigSpine2: "upperChest",
+  mixamorigNeck: "neck",
+  mixamorigHead: "head",
+  mixamorigLeftShoulder: "leftShoulder",
+  mixamorigLeftArm: "leftUpperArm",
+  mixamorigLeftForeArm: "leftLowerArm",
+  mixamorigLeftHand: "leftHand",
+  mixamorigRightShoulder: "rightShoulder",
+  mixamorigRightArm: "rightUpperArm",
+  mixamorigRightForeArm: "rightLowerArm",
+  mixamorigRightHand: "rightHand",
+  mixamorigLeftUpLeg: "leftUpperLeg",
+  mixamorigLeftLeg: "leftLowerLeg",
+  mixamorigLeftFoot: "leftFoot",
+  mixamorigLeftToeBase: "leftToes",
+  mixamorigRightUpLeg: "rightUpperLeg",
+  mixamorigRightLeg: "rightLowerLeg",
+  mixamorigRightFoot: "rightFoot",
+  mixamorigRightToeBase: "rightToes",
+};
+
+// Retarget a Mixamo FBX clip onto a VRM humanoid rig.
+// Adapted from the official pixiv three-vrm Mixamo example.
+function retargetMixamoClip(asset: THREE.Group, vrm: VRM): THREE.AnimationClip | null {
+  const srcClip = asset.animations?.[0];
+  if (!srcClip) return null;
+  const tracks: THREE.KeyframeTrack[] = [];
+  const restRotInv = new THREE.Quaternion();
+  const parentRestRot = new THREE.Quaternion();
+  const _q = new THREE.Quaternion();
+  const _v = new THREE.Vector3();
+
+  const motionHipsNode = asset.getObjectByName("mixamorigHips");
+  const vrmHipsNode = vrm.humanoid?.getNormalizedBoneNode("hips");
+  if (!motionHipsNode || !vrmHipsNode) return null;
+  const motionHipsHeight = motionHipsNode.position.y;
+  const vrmHipsY = vrmHipsNode.getWorldPosition(_v).y;
+  const vrmRootY = vrm.scene.getWorldPosition(_v).y;
+  const vrmHipsHeight = Math.abs(vrmHipsY - vrmRootY);
+  const hipsScale = motionHipsHeight > 0 ? vrmHipsHeight / motionHipsHeight : 0.01;
+  const isVRM0 = (vrm.meta as any)?.metaVersion === "0";
+
+  for (const track of srcClip.tracks) {
+    const [mixName, propName] = track.name.split(".");
+    const vrmBoneName = MIXAMO_TO_VRM[mixName];
+    if (!vrmBoneName) continue;
+    const vrmNode = vrm.humanoid?.getNormalizedBoneNode(vrmBoneName as any);
+    if (!vrmNode) continue;
+    const mixNode = asset.getObjectByName(mixName);
+    if (!mixNode) continue;
+
+    mixNode.getWorldQuaternion(restRotInv).invert();
+    mixNode.parent?.getWorldQuaternion(parentRestRot);
+
+    if (track instanceof THREE.QuaternionKeyframeTrack) {
+      const values = track.values.slice();
+      for (let i = 0; i < values.length; i += 4) {
+        _q.fromArray(values, i);
+        _q.premultiply(parentRestRot).multiply(restRotInv);
+        if (isVRM0) { _q.x = -_q.x; _q.z = -_q.z; }
+        _q.toArray(values, i);
+      }
+      tracks.push(new THREE.QuaternionKeyframeTrack(`${vrmNode.name}.${propName}`, track.times as any, values as any));
+    } else if (track instanceof THREE.VectorKeyframeTrack) {
+      const values = track.values.slice();
+      for (let i = 0; i < values.length; i += 3) {
+        values[i] *= hipsScale * (isVRM0 ? -1 : 1);
+        values[i + 1] *= hipsScale;
+        values[i + 2] *= hipsScale * (isVRM0 ? -1 : 1);
+      }
+      tracks.push(new THREE.VectorKeyframeTrack(`${vrmNode.name}.${propName}`, track.times as any, values as any));
+    }
+  }
+  return new THREE.AnimationClip("mixamoRetarget", srcClip.duration, tracks);
+}
 
 export type VrmSentiment =
   | "neutral"
