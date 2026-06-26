@@ -832,12 +832,6 @@ const VRMStage = ({
             e.target.value = "";
           }}
         />
-        {vrmaName && (
-          <div className="px-3 py-1.5 rounded-full bg-white/[0.08] border border-white/15 backdrop-blur-xl text-[11px] text-white/80 max-w-[160px] truncate">
-            <Film className="inline w-3 h-3 mr-1.5 -mt-0.5" />
-            {vrmaName}
-          </div>
-        )}
         {vrmaUrl && vrmaUrl !== DEFAULT_ANIM.url ? (
           <button
             onClick={(e) => { e.stopPropagation(); handleAnimEnd(); }}
