@@ -77,36 +77,54 @@ const ChatComposer = ({ onAfterReply }: { onAfterReply?: () => void }) => {
 
   return (
     <div className="flex flex-col gap-3">
-      {/* Transcript */}
+      {/* Transcript — fades into the void */}
       {(msgs.length > 0 || sending) && (
         <div
           ref={scrollRef}
-          className="max-h-[28vh] overflow-y-auto scrollbar-hide flex flex-col gap-2 px-1"
+          className="max-h-[32vh] overflow-y-auto scrollbar-hide flex flex-col gap-2 px-1 py-2"
+          style={{
+            WebkitMaskImage:
+              "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.15) 10%, rgba(0,0,0,0.6) 30%, #000 55%)",
+            maskImage:
+              "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.15) 10%, rgba(0,0,0,0.6) 30%, #000 55%)",
+          }}
         >
-          {msgs.map((m, i) => (
-            <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
-              {m.role === "user" ? (
-                <div className="max-w-[75%] px-4 py-2 rounded-2xl rounded-br-md text-sm bg-white/90 text-[hsl(220_25%_10%)] shadow-lg">
-                  {m.content}
-                </div>
-              ) : (
-                <div className="max-w-[80%] text-sm text-white/95 leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-                  {m.content}
-                </div>
-              )}
-            </div>
-          ))}
+          {msgs.slice(-8).map((m, i, arr) => {
+            // Older items toward the top get a touch lower opacity to enhance the void feel
+            const age = arr.length - 1 - i;
+            const opacity = age <= 2 ? 1 : age <= 4 ? 0.85 : 0.6;
+            return (
+              <div
+                key={i}
+                className={`flex animate-fade-in ${m.role === "user" ? "justify-end" : "justify-start"}`}
+                style={{ opacity }}
+              >
+                {m.role === "user" ? (
+                  <div className="max-w-[75%] px-4 py-2 rounded-2xl rounded-br-md text-sm bg-white/90 text-[hsl(220_25%_10%)] shadow-lg">
+                    {m.content}
+                  </div>
+                ) : (
+                  <div className="max-w-[80%] px-4 py-2 rounded-2xl rounded-bl-md text-sm text-white bg-white/[0.08] backdrop-blur-2xl border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.45)] leading-relaxed">
+                    {m.content}
+                  </div>
+                )}
+              </div>
+            );
+          })}
           {sending && (
             <div className="flex justify-start">
-              <span className="inline-flex gap-1 py-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse" />
-                <span className="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse" style={{ animationDelay: "0.15s" }} />
-                <span className="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse" style={{ animationDelay: "0.3s" }} />
-              </span>
+              <div className="px-4 py-2 rounded-2xl rounded-bl-md bg-white/[0.08] backdrop-blur-2xl border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.45)]">
+                <span className="inline-flex gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse" style={{ animationDelay: "0.15s" }} />
+                  <span className="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse" style={{ animationDelay: "0.3s" }} />
+                </span>
+              </div>
             </div>
           )}
         </div>
       )}
+
 
       {/* Composer — glass pill */}
       <form
