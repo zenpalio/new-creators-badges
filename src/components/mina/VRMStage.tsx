@@ -45,6 +45,8 @@ const EXPR_MAP: Record<VrmSentiment, Partial<Record<string, number>>> = {
   intimate:  { happy: 0.4, relaxed: 0.6, surprised: 0.15, angry: 0, sad: 0 },
 };
 
+export type ViewPreset = "full" | "upper" | "face";
+
 function VRMModel({
   url,
   mouthRef,
@@ -57,6 +59,7 @@ function VRMModel({
   onProgress,
   onError,
   meshVisibility,
+  viewPreset,
 }: {
   url: string;
   mouthRef: React.MutableRefObject<number>;
@@ -69,14 +72,14 @@ function VRMModel({
   onProgress: (pct: number) => void;
   onError: (msg: string | null) => void;
   meshVisibility: Record<string, boolean>;
+  viewPreset: ViewPreset;
 }) {
   const [vrm, setVrm] = useState<VRM | null>(null);
   const blinkRef = useRef({ next: 2 + Math.random() * 3, t: 0, closing: 0 });
   const tiltRef = useRef({ next: 5 + Math.random() * 6, t: 0, amount: 0, dir: 1 });
-  const exprRef = useRef<Record<string, number>>({});
-  const reactRef = useRef({ last: 0, intensity: 0 });
-  const lookTargetRef = useRef(new THREE.Object3D());
-  const { camera, scene, controls } = useThree() as any;
+  const bboxRef = useRef<{ min: THREE.Vector3; max: THREE.Vector3; size: THREE.Vector3; center: THREE.Vector3 } | null>(null);
+  const { camera, scene } = useThree();
+
 
   useEffect(() => {
     scene.add(lookTargetRef.current);
