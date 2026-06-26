@@ -163,6 +163,7 @@ function VRMModel({
   onError,
   meshVisibility,
   viewPreset,
+  reframeNonce,
   vrmaUrl,
   animKind,
   onAnimEnd,
