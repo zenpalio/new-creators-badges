@@ -178,7 +178,7 @@ const Live2DStage = ({
   const totalScale = scale * zoom;
 
   return (
-    <div className="absolute inset-0 overflow-hidden">
+    <div className="absolute inset-0 overflow-hidden" style={{ perspective: "1600px" }}>
       {/* Soft floor glow */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[70%] h-48 rounded-[50%] bg-[radial-gradient(ellipse_at_center,hsl(230_60%_40%/0.35),transparent_70%)] blur-2xl pointer-events-none" />
 
