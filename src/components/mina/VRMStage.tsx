@@ -76,7 +76,7 @@ function VRMModel({
   const exprRef = useRef<Record<string, number>>({});
   const reactRef = useRef({ last: 0, intensity: 0 });
   const lookTargetRef = useRef(new THREE.Object3D());
-  const { camera, scene } = useThree();
+  const { camera, scene, controls } = useThree() as any;
 
   useEffect(() => {
     scene.add(lookTargetRef.current);
