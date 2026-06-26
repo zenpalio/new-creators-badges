@@ -45,6 +45,8 @@ const EXPR_MAP: Record<VrmSentiment, Partial<Record<string, number>>> = {
   intimate:  { happy: 0.4, relaxed: 0.6, surprised: 0.15, angry: 0, sad: 0 },
 };
 
+export type ViewPreset = "full" | "upper" | "face";
+
 function VRMModel({
   url,
   mouthRef,
@@ -57,6 +59,7 @@ function VRMModel({
   onProgress,
   onError,
   meshVisibility,
+  viewPreset,
 }: {
   url: string;
   mouthRef: React.MutableRefObject<number>;
@@ -69,6 +72,7 @@ function VRMModel({
   onProgress: (pct: number) => void;
   onError: (msg: string | null) => void;
   meshVisibility: Record<string, boolean>;
+  viewPreset: ViewPreset;
 }) {
   const [vrm, setVrm] = useState<VRM | null>(null);
   const blinkRef = useRef({ next: 2 + Math.random() * 3, t: 0, closing: 0 });
@@ -76,7 +80,42 @@ function VRMModel({
   const exprRef = useRef<Record<string, number>>({});
   const reactRef = useRef({ last: 0, intensity: 0 });
   const lookTargetRef = useRef(new THREE.Object3D());
-  const { camera, scene, controls } = useThree() as any;
+  const bboxRef = useRef<{ size: THREE.Vector3; center: THREE.Vector3; min: THREE.Vector3 } | null>(null);
+  const { camera, scene, get } = useThree() as any;
+
+  // Re-frame the camera based on current preset and the model's bbox
+  const applyView = useCallback((preset: ViewPreset) => {
+    const b = bboxRef.current;
+    if (!b) return;
+    const fovRad = ((camera as any).fov * Math.PI) / 180;
+    const fullH = b.size.y;
+    let frameH: number;
+    let focusY: number;
+    if (preset === "face") {
+      frameH = fullH * 0.28;
+      focusY = b.min.y + fullH * 0.92;
+    } else if (preset === "upper") {
+      frameH = fullH * 0.55;
+      focusY = b.min.y + fullH * 0.78;
+    } else {
+      // full body — pad 10%
+      frameH = fullH * 1.1;
+      focusY = b.min.y + fullH * 0.5;
+    }
+    const distance = (frameH / 2) / Math.tan(fovRad / 2) * 1.05;
+    camera.position.set(b.center.x, focusY, distance);
+    camera.lookAt(b.center.x, focusY, 0);
+    (camera as any).updateProjectionMatrix?.();
+    const controls = get().controls as any;
+    if (controls?.target) {
+      controls.target.set(b.center.x, focusY, 0);
+      controls.update?.();
+    }
+  }, [camera, get]);
+
+
+
+
 
   useEffect(() => {
     scene.add(lookTargetRef.current);
@@ -108,28 +147,19 @@ function VRMModel({
         });
         v.scene.rotation.y = Math.PI;
 
-        // Auto-frame: aim camera at the model's vertical center, with a
-        // distance that fits its height in the viewport.
+        // Measure and store bbox, then apply current view preset
         const box = new THREE.Box3().setFromObject(v.scene);
         const size = new THREE.Vector3();
         const center = new THREE.Vector3();
         box.getSize(size);
         box.getCenter(center);
-        const fovRad = ((camera as any).fov * Math.PI) / 180;
-        // frame the upper ~70% of the body (chest-up portrait)
-        const frameHeight = size.y * 0.7;
-        const focusY = box.min.y + size.y * 0.78; // around chest/face
-        const distance = (frameHeight / 2) / Math.tan(fovRad / 2) * 1.05;
-        camera.position.set(center.x, focusY, distance);
-        camera.lookAt(center.x, focusY, 0);
-        if (controls?.target) {
-          controls.target.set(center.x, focusY, 0);
-          controls.update?.();
-        }
+        bboxRef.current = { size, center, min: box.min.clone() };
 
         setVrm(v);
         onProgress(100);
         onMeshes(meshes);
+        // Defer to next tick so controls are mounted
+        requestAnimationFrame(() => applyView(viewPreset));
       },
       (evt) => {
         if (evt.total) onProgress(Math.round((evt.loaded / evt.total) * 100));
@@ -159,6 +189,10 @@ function VRMModel({
       reactRef.current.intensity = 1;
     }
   }, [reactTrigger]);
+
+  // Re-frame when preset changes
+  useEffect(() => { applyView(viewPreset); }, [viewPreset, applyView]);
+
 
   useFrame((_, dt) => {
     if (!vrm) return;
@@ -287,6 +321,8 @@ const VRMStage = ({
   const [outfitOpen, setOutfitOpen] = useState(false);
   const [loadPct, setLoadPct] = useState(0);
   const [loadErr, setLoadErr] = useState<string | null>(null);
+  const [viewPreset, setViewPreset] = useState<ViewPreset>("full");
+
 
   const groupTransform = useMemo(
     () => ({
@@ -338,6 +374,7 @@ const VRMStage = ({
               onProgress={setLoadPct}
               onError={setLoadErr}
               meshVisibility={meshVis}
+              viewPreset={viewPreset}
             />
           </group>
         </Suspense>
@@ -414,6 +451,24 @@ const VRMStage = ({
             })}
           </div>
         )}
+      </div>
+
+      {/* View preset switcher */}
+      <div className="absolute right-3 sm:right-5 top-32 z-20 pointer-events-auto flex flex-col gap-1.5 rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4)] p-1.5">
+        {(["full", "upper", "face"] as ViewPreset[]).map((p) => (
+          <button
+            key={p}
+            onClick={(e) => { e.stopPropagation(); setViewPreset(p); }}
+            className={`px-3 py-1.5 rounded-lg text-[11px] uppercase tracking-wider transition ${
+              viewPreset === p
+                ? "bg-white text-[hsl(220_25%_10%)]"
+                : "text-white/70 hover:bg-white/10"
+            }`}
+            title={`${p} view`}
+          >
+            {p === "full" ? "Full" : p === "upper" ? "Upper" : "Face"}
+          </button>
+        ))}
       </div>
     </div>
   );
