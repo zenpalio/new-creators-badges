@@ -112,13 +112,13 @@ const Mina = () => {
         >
           <Phone className="w-4 h-4" />
         </button>
-        <button
-          onClick={() => setGiftOpen(true)}
-          className="w-11 h-11 rounded-full bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] flex items-center justify-center text-white/90 hover:bg-white/[0.12] hover:scale-105 transition"
-          title="Send a gift"
-        >
-          <Gift className="w-4 h-4" />
-        </button>
+        <AnimationMenu
+          onPlay={(sentiment) => {
+            setFxSentiment(sentiment);
+            setFxDeltas({});
+            setFxTrigger((n) => n + 1);
+          }}
+        />
         <button
           onClick={() => setSceneOpen((v) => !v)}
           className={`w-11 h-11 rounded-full backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] flex items-center justify-center transition ${
@@ -131,7 +131,22 @@ const Mina = () => {
       </div>
 
       <SceneControls open={sceneOpen} onClose={() => setSceneOpen(false)} settings={scene} onChange={setScene} />
-      <StatsPanel stats={state.stats} affection={state.affection} tier={tier} affectionPulse={affectionPulse} pulseTrigger={fxTrigger} pulseDeltas={fxDeltas as any} />
+
+      {/* Top-left stack: vitals + gift */}
+      <div className="absolute top-5 left-3 sm:left-5 z-30 flex flex-col gap-2 w-[260px] sm:w-[280px]">
+        <StatsPanel stats={state.stats} affection={state.affection} tier={tier} affectionPulse={affectionPulse} pulseTrigger={fxTrigger} pulseDeltas={fxDeltas as any} />
+        <button
+          onClick={() => setGiftOpen(true)}
+          className="h-11 rounded-2xl bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] text-white/90 hover:bg-white/[0.12] transition flex items-center justify-center gap-2 text-[12px] font-semibold"
+          title="Send a gift"
+        >
+          <Gift className="w-4 h-4" />
+          Gifts
+          <span className="text-[10px] text-white/45 tabular-nums ml-1 flex items-center gap-1">
+            · {state.tokens_balance} 🪙
+          </span>
+        </button>
+      </div>
 
       {/* Sound toggle — bottom-left */}
       <div className="absolute bottom-5 left-3 sm:left-5 z-30">

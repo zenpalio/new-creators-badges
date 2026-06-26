@@ -139,7 +139,7 @@ const StatsPanel = ({ stats, affection, tier, affectionPulse, pulseTrigger = 0, 
   const accent = TIER_ACCENT[tier];
 
   return (
-    <div className="absolute top-5 left-3 sm:left-5 z-30 animate-fade-in">
+    <div className="animate-fade-in">
       <div className="w-[260px] sm:w-[280px] rounded-2xl bg-white/[0.06] backdrop-blur-2xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] overflow-hidden">
         {/* Identity header — always visible */}
         <button
