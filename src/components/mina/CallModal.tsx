@@ -113,40 +113,62 @@ const CallModalInner = ({ open, onClose, onMouthLevel, onTick }: Props) => {
   const fmt = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-      <div className="w-full max-w-sm bg-card-v2 rounded-3xl border border-border-v2/50 p-6 text-center relative">
-        <button onClick={onClose} className="absolute top-3 right-3 w-8 h-8 rounded-full hover:bg-muted-v2 flex items-center justify-center">
-          <X className="w-4 h-4" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4 animate-fade-in">
+      <div className="w-full max-w-sm bg-white/[0.07] backdrop-blur-2xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.6)] rounded-3xl p-7 text-center relative animate-scale-in">
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 flex items-center justify-center text-white/70"
+        >
+          <X className="w-3.5 h-3.5" />
         </button>
 
-        <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-red-500 to-pink-600 flex items-center justify-center mb-4 relative">
+        <div className="w-24 h-24 mx-auto rounded-full bg-white/[0.06] backdrop-blur-xl border border-white/15 flex items-center justify-center mb-5 relative">
           <span className="text-4xl">💋</span>
           {status === "live" && (
-            <span className="absolute inset-0 rounded-full ring-4 ring-red-500/40 animate-ping" />
+            <>
+              <span className="absolute inset-0 rounded-full ring-2 ring-white/40 animate-ping" />
+              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.8)]" />
+            </>
           )}
         </div>
 
-        <h3 className="text-xl font-bold text-foreground-v2">Mina</h3>
-        <p className="text-xs text-muted-v2-foreground mb-4">
-          {status === "idle"   && "Tap to call · 60s free / day, then 1 🪙/min"}
+        <h3 className="text-lg font-medium text-white/95">Mina</h3>
+        <p className="text-xs text-white/50 mb-5">
+          {status === "idle"       && "Tap to call · 60s free / day, then 1 token/min"}
           {status === "connecting" && "Connecting…"}
-          {status === "live"   && fmt(seconds)}
-          {status === "ended"  && "Call ended"}
+          {status === "live"       && fmt(seconds)}
+          {status === "ended"      && "Call ended"}
         </p>
 
         {status === "live" && (
-          <div className="flex justify-center gap-4 text-xs text-muted-v2-foreground mb-4">
-            {freeLeft !== null && freeLeft > 0 && <span>Free: {freeLeft}s</span>}
-            {tokensLeft !== null && <span>🪙 {tokensLeft}</span>}
+          <div className="flex justify-center gap-3 mb-5">
+            {freeLeft !== null && freeLeft > 0 && (
+              <span className="text-[11px] px-2.5 py-1 rounded-full bg-white/[0.06] border border-white/10 text-white/70 tabular-nums">
+                Free {freeLeft}s
+              </span>
+            )}
+            {tokensLeft !== null && (
+              <span className="text-[11px] px-2.5 py-1 rounded-full bg-white/[0.06] border border-white/10 text-white/70 tabular-nums">
+                {tokensLeft} tokens
+              </span>
+            )}
           </div>
         )}
 
         {(status === "idle" || status === "ended") ? (
-          <button onClick={startCall} className="w-16 h-16 mx-auto rounded-full bg-green-600 hover:bg-green-700 flex items-center justify-center text-white">
+          <button
+            onClick={startCall}
+            className="w-16 h-16 mx-auto rounded-full bg-white text-[hsl(220_25%_10%)] hover:scale-105 active:scale-95 shadow-[0_10px_30px_rgba(255,255,255,0.15)] flex items-center justify-center transition"
+            title="Start call"
+          >
             <Phone className="w-6 h-6" />
           </button>
         ) : (
-          <button onClick={endCall} className="w-16 h-16 mx-auto rounded-full bg-red-600 hover:bg-red-700 flex items-center justify-center text-white">
+          <button
+            onClick={endCall}
+            className="w-16 h-16 mx-auto rounded-full bg-white/[0.08] hover:bg-white/[0.15] border border-white/15 text-white hover:scale-105 active:scale-95 flex items-center justify-center transition"
+            title="End call"
+          >
             <PhoneOff className="w-6 h-6" />
           </button>
         )}
