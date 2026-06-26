@@ -449,6 +449,8 @@ const VRMStage = ({
               onError={setLoadErr}
               meshVisibility={meshVis}
               viewPreset={viewPreset}
+              vrmaUrl={vrmaUrl}
+              onAnimEnd={handleAnimEnd}
             />
           </group>
         </Suspense>
