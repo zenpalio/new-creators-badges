@@ -210,9 +210,10 @@ function VRMModel({
     let focusY: number;
     let frameW = b.size.x * 1.15;
     if (preset === "face") {
-      frameH = fullH * 0.32;
-      focusY = b.focus.face;
-      frameW = b.size.x * 0.45;
+      // Face + a little upper chest — frame head down to shoulders
+      frameH = fullH * 0.48;
+      focusY = b.focus.face - fullH * 0.08;
+      frameW = b.size.x * 0.7;
     } else if (preset === "upper") {
       frameH = fullH * 0.7;
       focusY = b.focus.upper;
