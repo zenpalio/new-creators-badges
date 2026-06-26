@@ -19,7 +19,7 @@ const Mina = () => {
     scale: 1,
     mirror: false,
     backgroundId: "midnight",
-    modelId: "mao",
+    modelId: "hiyori",
   });
   const { state, refresh } = useCompanion("mina");
   const tier = tierFromAffection(state.affection);

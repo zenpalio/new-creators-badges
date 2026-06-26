@@ -124,12 +124,25 @@ const Live2DStage = ({
         ro.observe(hostRef.current);
         (model as any).__ro = ro;
 
+        // Resolve the model's actual LipSync parameter IDs (varies by model:
+        // Hiyori/Haru use ParamMouthOpenY, Mao uses ParamA, Wanko uses
+        // PARAM_MOUTH_OPEN_Y, etc). Fall back to common defaults.
+        let lipSyncIds: string[] = [];
+        try {
+          const settings: any = model.internalModel?.settings;
+          const groups = settings?.groups ?? settings?.json?.Groups ?? [];
+          const g = groups.find((x: any) => (x.Name ?? x.name) === "LipSync");
+          lipSyncIds = (g?.Ids ?? g?.ids ?? []) as string[];
+        } catch {}
+        if (!lipSyncIds.length) lipSyncIds = ["ParamMouthOpenY", "ParamA", "PARAM_MOUTH_OPEN_Y"];
+
         // Drive mouth parameter each frame
         mouthTick = () => {
           try {
             const core = model.internalModel?.coreModel;
-            if (core?.setParameterValueById) {
-              core.setParameterValueById("ParamMouthOpenY", mouthRef.current);
+            if (!core?.setParameterValueById) return;
+            for (const id of lipSyncIds) {
+              try { core.setParameterValueById(id, mouthRef.current); } catch {}
             }
           } catch {}
         };
