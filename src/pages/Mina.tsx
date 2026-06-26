@@ -103,7 +103,7 @@ const Mina = () => {
       <AmbientSounds speaking={speaking || callOpen} volume={0.3} />
 
       {/* Top-right glass control cluster */}
-      <div className="absolute top-3 right-3 sm:top-5 sm:right-5 z-30 flex items-center gap-1.5 sm:gap-2">
+      <div className="absolute top-3 right-3 sm:top-5 sm:right-5 z-30 flex flex-col items-center gap-1.5 sm:gap-2">
         <button
           onClick={() => setCallOpen(true)}
           className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] flex items-center justify-center text-white/90 hover:bg-white/[0.12] hover:scale-105 transition"
@@ -111,14 +111,6 @@ const Mina = () => {
         >
           <Phone className="w-4 h-4" />
         </button>
-        <AnimationMenu
-          onPlay={(sentiment) => {
-            setFxSentiment(sentiment);
-            setFxDeltas({});
-            setFxTrigger((n) => n + 1);
-          }}
-        />
-        <SfxToggle />
         <button
           onClick={() => setSceneOpen((v) => !v)}
           className={`w-9 h-9 sm:w-11 sm:h-11 rounded-full backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] flex items-center justify-center transition ${
