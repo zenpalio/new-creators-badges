@@ -47,6 +47,7 @@ const Mina = () => {
         rotation={scene.rotation}
         scale={scene.scale}
         mirror={scene.mirror}
+        modelUrl={model.url}
       />
 
       {/* Top-right glass control cluster */}
