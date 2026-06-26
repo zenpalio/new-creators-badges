@@ -132,7 +132,10 @@ const Mina = () => {
           className="h-10 sm:h-11 rounded-2xl bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] text-white/90 hover:bg-white/[0.12] transition flex items-center justify-center gap-2 text-[12px] font-semibold"
           title="Activities, roleplay & gifts"
         >
-          <Drama className="w-4 h-4" />
+          <span className="relative inline-flex w-4 h-4 shrink-0">
+            <Heart className="w-3 h-3 absolute -left-0.5 -top-0.5 fill-current" />
+            <Heart className="w-3 h-3 absolute right-0 bottom-0 fill-current opacity-70" />
+          </span>
           Spend time together
         </button>
       </div>
