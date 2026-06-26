@@ -10,6 +10,7 @@ import StatsPanel from "@/components/mina/StatsPanel";
 
 const Mina = () => {
   const [mouth, setMouth] = useState(0);
+  const [speaking, setSpeaking] = useState(false);
   const [giftOpen, setGiftOpen] = useState(false);
   const [callOpen, setCallOpen] = useState(false);
   const [sceneOpen, setSceneOpen] = useState(false);
