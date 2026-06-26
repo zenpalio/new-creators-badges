@@ -80,6 +80,39 @@ function VRMModel({
   const exprRef = useRef<Record<string, number>>({});
   const reactRef = useRef({ last: 0, intensity: 0 });
   const lookTargetRef = useRef(new THREE.Object3D());
+  const bboxRef = useRef<{ size: THREE.Vector3; center: THREE.Vector3; min: THREE.Vector3 } | null>(null);
+  const { camera, scene, controls } = useThree() as any;
+
+  // Re-frame the camera based on current preset and the model's bbox
+  const applyView = useCallback((preset: ViewPreset) => {
+    const b = bboxRef.current;
+    if (!b) return;
+    const fovRad = ((camera as any).fov * Math.PI) / 180;
+    const fullH = b.size.y;
+    let frameH: number;
+    let focusY: number;
+    if (preset === "face") {
+      frameH = fullH * 0.28;
+      focusY = b.min.y + fullH * 0.92;
+    } else if (preset === "upper") {
+      frameH = fullH * 0.55;
+      focusY = b.min.y + fullH * 0.78;
+    } else {
+      // full body — pad 10%
+      frameH = fullH * 1.1;
+      focusY = b.min.y + fullH * 0.5;
+    }
+    const distance = (frameH / 2) / Math.tan(fovRad / 2) * 1.05;
+    camera.position.set(b.center.x, focusY, distance);
+    camera.lookAt(b.center.x, focusY, 0);
+    (camera as any).updateProjectionMatrix?.();
+    if (controls?.target) {
+      controls.target.set(b.center.x, focusY, 0);
+      controls.update?.();
+    }
+  }, [camera, controls]);
+
+
 
 
 
