@@ -259,7 +259,10 @@ function VRMModel({
 
   useFrame((_, dt) => {
     if (!vrm) return;
+    // Tick VRMA mixer BEFORE vrm.update so springs/lookAt run on top
+    mixerRef.current?.update(dt);
     vrm.update(dt);
+    const hasAnim = animPlaying;
 
     // Smooth turn-around target
     const target = Math.PI + spin;
