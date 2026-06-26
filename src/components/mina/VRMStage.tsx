@@ -621,6 +621,7 @@ const VRMStage = ({
               meshVisibility={meshVis}
               viewPreset={viewPreset}
               vrmaUrl={vrmaUrl}
+              animKind={animKind}
               onAnimEnd={handleAnimEnd}
             />
           </group>
