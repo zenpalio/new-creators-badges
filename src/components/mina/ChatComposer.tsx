@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Send, Volume2, VolumeX } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 
 interface Msg { role: "user" | "assistant"; content: string; }
