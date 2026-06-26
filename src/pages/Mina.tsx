@@ -6,6 +6,7 @@ import ChatComposer from "@/components/mina/ChatComposer";
 import GiftDrawer from "@/components/mina/GiftDrawer";
 import CallModal from "@/components/mina/CallModal";
 import SceneControls, { BACKGROUNDS, MODELS, type SceneSettings } from "@/components/mina/SceneControls";
+import StatsPanel from "@/components/mina/StatsPanel";
 
 const Mina = () => {
   const [mouth, setMouth] = useState(0);
