@@ -166,8 +166,12 @@ const Live2DStage = ({
     const characterWidth = fittedBoundsRef.current.width * total;
     const characterHeight = fittedBoundsRef.current.height * total;
 
-    const maxX = Math.max(0, (r.width - Math.min(characterWidth, r.width)) / 2);
-    const maxY = Math.max(0, (r.height - Math.min(characterHeight, r.height)) / 2);
+    // Always allow at least ~40% of viewport of slack so the user can reposition
+    // even when the character fits entirely within the stage.
+    const slackX = r.width * 0.4;
+    const slackY = r.height * 0.4;
+    const maxX = Math.max(slackX, (r.width - Math.min(characterWidth, r.width)) / 2 + slackX);
+    const maxY = Math.max(slackY, (r.height - Math.min(characterHeight, r.height)) / 2 + slackY);
 
     return {
       x: Math.min(maxX, Math.max(-maxX, nextPan.x)),
