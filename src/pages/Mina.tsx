@@ -105,33 +105,6 @@ const Mina = () => {
 
       {/* Top-right glass control cluster */}
       <div className="absolute top-5 right-5 z-30 flex items-center gap-2">
-        <div className="hidden sm:flex items-center gap-3 px-4 h-11 rounded-full bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)]">
-          <div className="flex items-center gap-2">
-            <span className="text-xs uppercase tracking-wider text-white/50">Mina</span>
-            <span className="text-xs font-medium text-white capitalize">· {tier}</span>
-          </div>
-          <div className="w-px h-4 bg-white/15" />
-          <div className="flex items-center gap-1.5">
-            <div className={`w-16 h-1 rounded-full bg-white/10 overflow-hidden transition-shadow duration-500 ${
-              affectionPulse === "up" ? "shadow-[0_0_18px_hsl(340_90%_65%/0.9)]" :
-              affectionPulse === "down" ? "shadow-[0_0_18px_hsl(220_30%_35%/0.9)]" : ""
-            }`}>
-              <div
-                className={`h-full rounded-full transition-all duration-700 ease-out ${
-                  affectionPulse === "up" ? "bg-gradient-to-r from-rose-300 to-pink-200" :
-                  affectionPulse === "down" ? "bg-gradient-to-r from-slate-500 to-slate-400" :
-                  "bg-gradient-to-r from-white/80 to-white/40"
-                }`}
-                style={{ width: `${state.affection}%` }}
-              />
-            </div>
-            <span className={`text-[10px] tabular-nums transition-colors duration-300 ${
-              affectionPulse === "up" ? "text-rose-200" :
-              affectionPulse === "down" ? "text-slate-400" : "text-white/40"
-            }`}>{state.affection}</span>
-          </div>
-        </div>
-
         <button
           onClick={() => setCallOpen(true)}
           className="w-11 h-11 rounded-full bg-white/[0.06] backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] flex items-center justify-center text-white/90 hover:bg-white/[0.12] hover:scale-105 transition"
