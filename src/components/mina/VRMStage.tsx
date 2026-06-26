@@ -451,6 +451,24 @@ const VRMStage = ({
           </div>
         )}
       </div>
+
+      {/* View preset switcher */}
+      <div className="absolute right-3 sm:right-5 top-32 z-20 pointer-events-auto flex flex-col gap-1.5 rounded-2xl border border-white/15 bg-white/[0.06] backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.4)] p-1.5">
+        {(["full", "upper", "face"] as ViewPreset[]).map((p) => (
+          <button
+            key={p}
+            onClick={(e) => { e.stopPropagation(); setViewPreset(p); }}
+            className={`px-3 py-1.5 rounded-lg text-[11px] uppercase tracking-wider transition ${
+              viewPreset === p
+                ? "bg-white text-[hsl(220_25%_10%)]"
+                : "text-white/70 hover:bg-white/10"
+            }`}
+            title={`${p} view`}
+          >
+            {p === "full" ? "Full" : p === "upper" ? "Upper" : "Face"}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
