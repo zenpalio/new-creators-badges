@@ -67,6 +67,8 @@ function VRMModel({
   meshVisibility: Record<string, boolean>;
 }) {
   const [vrm, setVrm] = useState<VRM | null>(null);
+  const [loadPct, setLoadPct] = useState(0);
+  const [loadErr, setLoadErr] = useState<string | null>(null);
   const blinkRef = useRef({ next: 2 + Math.random() * 3, t: 0, closing: 0 });
   const tiltRef = useRef({ next: 5 + Math.random() * 6, t: 0, amount: 0, dir: 1 });
   const exprRef = useRef<Record<string, number>>({});
