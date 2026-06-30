@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { X, Heart, Film, BookOpen } from "lucide-react";
 import StatsPanel from "@/components/mina/StatsPanel";
-import type { CompanionState } from "@/hooks/useCompanion";
+import type { CompanionState, Tier } from "@/hooks/useCompanion";
 
 type TabId = "vitals" | "episodes" | "lore";
 
