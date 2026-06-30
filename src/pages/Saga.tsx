@@ -4,6 +4,7 @@ import { useCompanion, tierFromAffection, type MoodStats } from "@/hooks/useComp
 import ChatComposer, { type Reaction, type Sentiment } from "@/components/mina/ChatComposer";
 import StatsPanel from "@/components/mina/StatsPanel";
 import ReactionFX from "@/components/mina/ReactionFX";
+import sagaChar from "@/assets/saga-char.jpg.asset.json";
 
 type Phase = "intro" | "chat";
 
@@ -127,28 +128,31 @@ const Saga = () => {
         {/* ===== CHAT: character + vitals + composer ===== */}
         {phase === "chat" && (
           <>
-            {/* Character image — full bleed background, swap with real art */}
+            {/* Character image — full bleed */}
             <div className="absolute inset-0">
+              <img
+                src={sagaChar.url}
+                alt="Character"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              {/* Top fade so vitals chip stays readable */}
               <div
-                className="absolute inset-0"
+                className="absolute inset-x-0 top-0 h-[28%] pointer-events-none"
                 style={{
                   background:
-                    "radial-gradient(ellipse at 50% 35%, hsl(15 60% 22%), transparent 55%), linear-gradient(180deg, hsl(220 30% 6%) 0%, hsl(15 35% 4%) 100%)",
+                    "linear-gradient(180deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.25) 60%, transparent 100%)",
                 }}
               />
-              {/* Placeholder silhouette where character art will sit */}
-              <div className="absolute inset-x-0 top-[10%] bottom-0 flex items-end justify-center">
-                <div className="w-[70%] h-[80%] rounded-t-[50%] bg-gradient-to-b from-white/[0.04] to-transparent border-t border-white/5" />
-              </div>
               {/* Bottom veil for chat legibility */}
               <div
                 className="absolute inset-x-0 bottom-0 h-[55%] pointer-events-none"
                 style={{
                   background:
-                    "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.45) 40%, rgba(0,0,0,0.88) 100%)",
+                    "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0.92) 100%)",
                 }}
               />
             </div>
+
 
             {/* Vitals (top-left) — same StatsPanel as Mina */}
             <div className="absolute top-3 left-3 z-30 w-[62vw] max-w-[260px] animate-fade-in">
