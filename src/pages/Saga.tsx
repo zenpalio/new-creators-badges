@@ -13,6 +13,7 @@ const INTRO_VIDEO_SRC = "";
 
 const Saga = () => {
   const [phase, setPhase] = useState<Phase>("intro");
+  const [menuOpen, setMenuOpen] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   // Reuse Mina's companion state for vitals — swap slug when saga companion ships.
