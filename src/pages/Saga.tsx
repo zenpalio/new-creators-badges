@@ -166,15 +166,18 @@ const Saga = () => {
               />
             </div>
 
-            {/* Episode chip (top-right) */}
-            <div className="absolute top-3 right-3 z-30 text-right animate-fade-in">
-              <div className="text-[9px] uppercase tracking-[0.25em] text-white/50">
-                S1 · E1
-              </div>
-              <div className="text-[12px] font-semibold tracking-tight text-white/90 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
-                Ashes on the Shore
+            {/* Episode chip — pinned just above the composer to avoid the vitals panel */}
+            <div className="absolute left-1/2 -translate-x-1/2 bottom-[112px] z-30 animate-fade-in pointer-events-none">
+              <div className="px-3 py-1 rounded-full bg-black/45 backdrop-blur-xl border border-white/10 text-center">
+                <div className="text-[9px] uppercase tracking-[0.3em] text-white/60 leading-none">
+                  S1 · E1
+                </div>
+                <div className="text-[11px] font-semibold tracking-tight text-white/90 leading-tight mt-0.5">
+                  Ashes on the Shore
+                </div>
               </div>
             </div>
+
 
             {/* Reaction FX */}
             <ReactionFX trigger={fxTrigger} sentiment={fxSentiment} deltas={fxDeltas} />
