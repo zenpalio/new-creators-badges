@@ -1,225 +1,207 @@
-import { useState, useRef, useEffect } from "react";
-import { Send, Play, Swords, Flame, Volume2, VolumeX } from "lucide-react";
+import { useState, useRef } from "react";
+import { SkipForward, Heart } from "lucide-react";
+import { useCompanion, tierFromAffection, type MoodStats } from "@/hooks/useCompanion";
+import ChatComposer, { type Reaction, type Sentiment } from "@/components/mina/ChatComposer";
+import StatsPanel from "@/components/mina/StatsPanel";
+import ReactionFX from "@/components/mina/ReactionFX";
 
-type Msg = { role: "narrator" | "user" | "character"; speaker?: string; content: string };
+type Phase = "intro" | "chat";
 
-const OPENING: Msg[] = [
-  {
-    role: "narrator",
-    content:
-      "The longships cut the morning fog. You are eight winters old when their shadows fall across the shore.",
-  },
-  {
-    role: "narrator",
-    content:
-      "From the treeline you watch the thatch of your father's hall catch fire. You do not scream. You remember faces.",
-  },
-];
-
-const CHOICES = [
-  { id: "hide", label: "Stay hidden. Watch. Remember.", icon: Flame },
-  { id: "run", label: "Run for the river before they see you.", icon: Play },
-  { id: "fight", label: "Pick up your father's axe.", icon: Swords },
-];
+// TODO: swap with the real Episode 1 cutscene once rendered.
+const INTRO_VIDEO_SRC = "";
 
 const Saga = () => {
-  const [msgs, setMsgs] = useState<Msg[]>(OPENING);
-  const [text, setText] = useState("");
-  const [sending, setSending] = useState(false);
-  const [choicesVisible, setChoicesVisible] = useState(true);
-  const [muted, setMuted] = useState(true);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [phase, setPhase] = useState<Phase>("intro");
+  const videoRef = useRef<HTMLVideoElement>(null);
 
-  useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [msgs, sending, choicesVisible]);
+  // Reuse Mina's companion state for vitals — swap slug when saga companion ships.
+  const { state, refresh, patch, nudgeStats } = useCompanion("mina");
+  const tier = tierFromAffection(state.affection);
 
-  const send = async (override?: string) => {
-    const m = (override ?? text).trim();
-    if (!m || sending) return;
-    if (!override) setText("");
-    setMsgs((p) => [...p, { role: "user", content: m }]);
-    setChoicesVisible(false);
-    setSending(true);
-    await new Promise((r) => setTimeout(r, 900));
-    setMsgs((p) => [
-      ...p,
-      {
-        role: "narrator",
-        content:
-          "The wind takes your decision and scatters it across the sand. Somewhere, a raven answers.",
-      },
-    ]);
-    setSending(false);
-    setTimeout(() => inputRef.current?.focus(), 50);
+  const [, setMouth] = useState(0);
+  const [, setSpeaking] = useState(false);
+
+  const [fxTrigger, setFxTrigger] = useState(0);
+  const [fxSentiment, setFxSentiment] = useState<Sentiment>("neutral");
+  const [fxDeltas, setFxDeltas] = useState<Reaction["deltas"]>({});
+  const [affectionPulse, setAffectionPulse] = useState<"up" | "down" | null>(null);
+
+  const handleReaction = (r: Reaction) => {
+    const d = (r.deltas ?? {}) as Record<string, number>;
+    const stat: Partial<MoodStats> = {};
+    Object.keys(d).forEach((k) => {
+      if (k === "affection") return;
+      if (typeof d[k] === "number") (stat as any)[k] = d[k];
+    });
+    if (Object.keys(stat).length) nudgeStats(stat);
+    if (typeof d.affection === "number" && d.affection !== 0) {
+      const next = Math.max(0, Math.min(100, state.affection + d.affection));
+      patch({ affection: next });
+      setAffectionPulse(d.affection > 0 ? "up" : "down");
+      window.setTimeout(() => setAffectionPulse(null), 900);
+    }
+    setFxDeltas(d as any);
+    setFxSentiment(r.sentiment);
+    setFxTrigger((n) => n + 1);
+  };
+
+  const endIntro = () => {
+    try { videoRef.current?.pause(); } catch {}
+    setPhase("chat");
   };
 
   return (
-    <div className="min-h-screen w-full bg-black text-white flex items-center justify-center">
-      {/* 9:16 stage — mobile-first, centered on larger screens */}
-      <div className="relative w-full h-screen sm:h-[100dvh] sm:max-w-[min(100vw,calc(100dvh*9/16))] sm:aspect-[9/16] sm:max-h-[100dvh] overflow-hidden bg-black">
-        {/* Background video / cutscene placeholder — fills entire stage */}
-        <div className="absolute inset-0">
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "radial-gradient(ellipse at 30% 30%, hsl(15 70% 28% / 0.85), transparent 55%), radial-gradient(ellipse at 70% 80%, hsl(220 50% 8% / 0.95), transparent 65%), linear-gradient(180deg, hsl(220 35% 6%), hsl(15 45% 5%))",
-            }}
-          />
-          {/* film grain */}
-          <div
-            className="absolute inset-0 opacity-[0.1] mix-blend-overlay pointer-events-none"
-            style={{
-              backgroundImage:
-                "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E\")",
-            }}
-          />
-          {/* center marker for the awaiting-video state */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 backdrop-blur-xl text-[11px] tracking-wide text-white/60">
-              <Play className="w-3 h-3" />
-              Vikings make shore
+    <div className="min-h-screen w-full bg-black text-white flex items-center justify-center overflow-hidden">
+      {/* 9:16 stage */}
+      <div className="relative w-full h-[100dvh] sm:max-w-[min(100vw,calc(100dvh*9/16))] sm:aspect-[9/16] sm:max-h-[100dvh] overflow-hidden bg-black">
+
+        {/* ===== INTRO: full-bleed cutscene ===== */}
+        {phase === "intro" && (
+          <div className="absolute inset-0 z-30 bg-black animate-fade-in">
+            {INTRO_VIDEO_SRC ? (
+              <video
+                ref={videoRef}
+                src={INTRO_VIDEO_SRC}
+                autoPlay
+                playsInline
+                onEnded={endIntro}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            ) : (
+              // Placeholder until the cutscene file is dropped in
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "radial-gradient(ellipse at 30% 30%, hsl(15 70% 28% / 0.85), transparent 55%), radial-gradient(ellipse at 70% 80%, hsl(220 50% 8% / 0.95), transparent 65%), linear-gradient(180deg, hsl(220 35% 6%), hsl(15 45% 5%))",
+                }}
+              />
+            )}
+
+            {/* film grain */}
+            <div
+              className="absolute inset-0 opacity-[0.1] mix-blend-overlay pointer-events-none"
+              style={{
+                backgroundImage:
+                  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E\")",
+              }}
+            />
+
+            {/* Letterbox bars for cinematic feel */}
+            <div className="absolute top-0 inset-x-0 h-10 bg-black/90 pointer-events-none" />
+            <div className="absolute bottom-0 inset-x-0 h-10 bg-black/90 pointer-events-none" />
+
+            {/* Episode label */}
+            <div className="absolute top-3 left-4 z-10">
+              <div className="text-[9px] uppercase tracking-[0.3em] text-white/60">
+                Season I · Episode 1
+              </div>
+              <div className="text-[12px] font-semibold tracking-tight text-white/85">
+                Ashes on the Shore
+              </div>
             </div>
-          </div>
-        </div>
 
-        {/* Bottom gradient veil — keeps chat readable over video */}
-        <div
-          className="absolute inset-x-0 bottom-0 h-[70%] pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.35) 35%, rgba(0,0,0,0.75) 65%, rgba(0,0,0,0.92) 100%)",
-          }}
-        />
+            {/* Skip */}
+            <button
+              onClick={endIntro}
+              className="absolute bottom-3 right-4 z-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.1] backdrop-blur-xl border border-white/15 text-[11px] text-white/85 hover:bg-white/[0.18] transition"
+            >
+              Skip intro <SkipForward className="w-3 h-3" />
+            </button>
 
-        {/* Top HUD */}
-        <div className="absolute top-0 inset-x-0 px-4 pt-4 pb-6 flex items-start justify-between z-20 pointer-events-none">
-          <div className="pointer-events-auto">
-            <div className="text-[9px] uppercase tracking-[0.25em] text-white/60">
-              S1 · E1
-            </div>
-            <h1 className="text-[15px] font-semibold tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-              Ashes on the Shore
-            </h1>
-          </div>
-          <button
-            onClick={() => setMuted((m) => !m)}
-            className="pointer-events-auto w-9 h-9 rounded-full bg-white/[0.08] backdrop-blur-xl border border-white/15 flex items-center justify-center text-white/80 hover:bg-white/[0.14] transition"
-          >
-            {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-          </button>
-        </div>
-
-        {/* Chat layer — bottom half overlays the video */}
-        <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col max-h-[62%]">
-          <div
-            ref={scrollRef}
-            className="flex-1 overflow-y-auto scrollbar-hide px-4 pt-8 pb-2 flex flex-col gap-3"
-            style={{
-              WebkitMaskImage:
-                "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 12%, #000 30%)",
-              maskImage:
-                "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 12%, #000 30%)",
-            }}
-          >
-            {msgs.map((m, i) => {
-              if (m.role === "narrator") {
-                return (
-                  <p
-                    key={i}
-                    className="animate-fade-in text-[14px] leading-relaxed text-white/90 italic font-serif text-center px-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]"
-                  >
-                    {m.content}
-                  </p>
-                );
-              }
-              if (m.role === "character") {
-                return (
-                  <div key={i} className="animate-fade-in self-start max-w-[85%]">
-                    <div className="text-[9px] uppercase tracking-[0.25em] text-amber-200/80 mb-1">
-                      {m.speaker ?? "Unknown"}
-                    </div>
-                    <div className="px-3.5 py-2.5 rounded-2xl rounded-bl-md bg-white/[0.1] backdrop-blur-xl border border-white/15 text-[14px] text-white leading-snug shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
-                      {m.content}
-                    </div>
+            {!INTRO_VIDEO_SRC && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-center px-6">
+                  <div className="text-[10px] uppercase tracking-[0.3em] text-white/40 mb-1">
+                    Cutscene
                   </div>
-                );
-              }
-              return (
-                <div key={i} className="animate-fade-in self-end max-w-[85%]">
-                  <div className="px-3.5 py-2.5 rounded-2xl rounded-br-md bg-white text-[hsl(220_25%_8%)] text-[14px] leading-snug shadow-[0_8px_24px_rgba(0,0,0,0.5)]">
-                    {m.content}
+                  <div className="text-[15px] italic font-serif text-white/80 max-w-[80%] mx-auto">
+                    "The longships cut the morning fog…"
                   </div>
                 </div>
-              );
-            })}
-
-            {sending && (
-              <div className="animate-fade-in self-center">
-                <span className="inline-flex gap-1.5 px-3 py-2 rounded-full bg-white/[0.08] backdrop-blur-xl border border-white/10">
-                  <span className="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse" />
-                  <span
-                    className="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse"
-                    style={{ animationDelay: "0.15s" }}
-                  />
-                  <span
-                    className="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse"
-                    style={{ animationDelay: "0.3s" }}
-                  />
-                </span>
-              </div>
-            )}
-
-            {choicesVisible && !sending && (
-              <div className="mt-1 flex flex-col gap-2 animate-fade-in">
-                {CHOICES.map((c) => {
-                  const Icon = c.icon;
-                  return (
-                    <button
-                      key={c.id}
-                      onClick={() => void send(c.label)}
-                      className="group text-left px-3.5 py-3 rounded-xl bg-black/40 hover:bg-black/55 backdrop-blur-xl border border-white/15 hover:border-white/30 transition flex items-center gap-3 shadow-[0_6px_20px_rgba(0,0,0,0.5)]"
-                    >
-                      <span className="w-8 h-8 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center text-white/85 shrink-0">
-                        <Icon className="w-4 h-4" />
-                      </span>
-                      <span className="text-[13.5px] text-white/95 leading-snug">
-                        {c.label}
-                      </span>
-                    </button>
-                  );
-                })}
               </div>
             )}
           </div>
+        )}
 
-          {/* Composer */}
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              void send();
-            }}
-            className="px-3 pt-2 pb-[max(12px,env(safe-area-inset-bottom))] flex items-center gap-2"
-          >
-            <input
-              ref={inputRef}
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              placeholder="Write your action…"
-              disabled={sending}
-              className="flex-1 h-11 px-4 rounded-full bg-white/[0.1] backdrop-blur-xl border border-white/15 text-[14px] text-white placeholder:text-white/40 focus:outline-none focus:border-white/30"
-            />
-            <button
-              type="submit"
-              disabled={sending || !text.trim()}
-              className="h-11 w-11 rounded-full bg-white text-[hsl(220_25%_8%)] flex items-center justify-center disabled:opacity-30 hover:scale-105 transition shrink-0 shadow-[0_6px_20px_rgba(0,0,0,0.5)]"
+        {/* ===== CHAT: character + vitals + composer ===== */}
+        {phase === "chat" && (
+          <>
+            {/* Character image — full bleed background, swap with real art */}
+            <div className="absolute inset-0">
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "radial-gradient(ellipse at 50% 35%, hsl(15 60% 22%), transparent 55%), linear-gradient(180deg, hsl(220 30% 6%) 0%, hsl(15 35% 4%) 100%)",
+                }}
+              />
+              {/* Placeholder silhouette where character art will sit */}
+              <div className="absolute inset-x-0 top-[10%] bottom-0 flex items-end justify-center">
+                <div className="w-[70%] h-[80%] rounded-t-[50%] bg-gradient-to-b from-white/[0.04] to-transparent border-t border-white/5" />
+              </div>
+              {/* Bottom veil for chat legibility */}
+              <div
+                className="absolute inset-x-0 bottom-0 h-[55%] pointer-events-none"
+                style={{
+                  background:
+                    "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.45) 40%, rgba(0,0,0,0.88) 100%)",
+                }}
+              />
+            </div>
+
+            {/* Vitals (top-left) — same StatsPanel as Mina */}
+            <div className="absolute top-3 left-3 z-30 w-[62vw] max-w-[260px] animate-fade-in">
+              <StatsPanel
+                stats={state.stats}
+                affection={state.affection}
+                tier={tier}
+                affectionPulse={affectionPulse}
+                pulseTrigger={fxTrigger}
+                pulseDeltas={fxDeltas as any}
+              />
+            </div>
+
+            {/* Episode chip (top-right) */}
+            <div className="absolute top-3 right-3 z-30 text-right animate-fade-in">
+              <div className="text-[9px] uppercase tracking-[0.25em] text-white/50">
+                S1 · E1
+              </div>
+              <div className="text-[12px] font-semibold tracking-tight text-white/90 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
+                Ashes on the Shore
+              </div>
+            </div>
+
+            {/* Reaction FX */}
+            <ReactionFX trigger={fxTrigger} sentiment={fxSentiment} deltas={fxDeltas} />
+
+            {/* Composer slides up from bottom */}
+            <div
+              className="absolute inset-x-0 bottom-0 z-20 px-3 pt-4 pb-[max(14px,env(safe-area-inset-bottom))]"
+              style={{ animation: "slide-in-right 0s, fade-in 0.5s ease-out" }}
             >
-              <Send className="w-4 h-4" />
-            </button>
-          </form>
-        </div>
+              <div
+                className="w-full"
+                style={{
+                  animation: "saga-slide-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) both",
+                }}
+              >
+                <ChatComposer
+                  onAfterReply={refresh}
+                  onMouthLevel={setMouth}
+                  onSpeakingChange={setSpeaking}
+                  onReaction={handleReaction}
+                />
+              </div>
+              <style>{`
+                @keyframes saga-slide-up {
+                  from { transform: translateY(120%); opacity: 0; }
+                  to   { transform: translateY(0);    opacity: 1; }
+                }
+              `}</style>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
