@@ -1,9 +1,9 @@
 import { useState, useRef } from "react";
-import { SkipForward, Heart } from "lucide-react";
+import { SkipForward, Menu } from "lucide-react";
 import { useCompanion, tierFromAffection, type MoodStats } from "@/hooks/useCompanion";
 import ChatComposer, { type Reaction, type Sentiment } from "@/components/mina/ChatComposer";
-import StatsPanel from "@/components/mina/StatsPanel";
 import ReactionFX from "@/components/mina/ReactionFX";
+import SagaSidebar from "@/components/saga/SagaSidebar";
 import sagaChar from "@/assets/saga-char.jpg.asset.json";
 
 type Phase = "intro" | "chat";
