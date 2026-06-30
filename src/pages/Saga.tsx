@@ -155,17 +155,14 @@ const Saga = () => {
             </div>
 
 
-            {/* Vitals (top-left) — same StatsPanel as Mina */}
-            <div className="absolute top-3 left-3 z-30 w-[62vw] max-w-[260px] animate-fade-in">
-              <StatsPanel
-                stats={state.stats}
-                affection={state.affection}
-                tier={tier}
-                affectionPulse={affectionPulse}
-                pulseTrigger={fxTrigger}
-                pulseDeltas={fxDeltas as any}
-              />
-            </div>
+            {/* Menu button — opens sidebar with vitals/episodes/lore */}
+            <button
+              onClick={() => setMenuOpen(true)}
+              className="absolute top-3 left-3 z-30 w-10 h-10 rounded-full bg-black/45 backdrop-blur-xl border border-white/15 flex items-center justify-center text-white/85 hover:bg-black/60 transition animate-fade-in"
+              aria-label="Open menu"
+            >
+              <Menu className="w-4 h-4" />
+            </button>
 
             {/* Episode chip — top-center, compact */}
             <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 animate-fade-in pointer-events-none">
@@ -173,6 +170,18 @@ const Saga = () => {
                 S1 · E1 · Ashes
               </div>
             </div>
+
+            {/* Sidebar drawer */}
+            <SagaSidebar
+              open={menuOpen}
+              onClose={() => setMenuOpen(false)}
+              state={state}
+              tier={tier}
+              affectionPulse={affectionPulse}
+              pulseTrigger={fxTrigger}
+              pulseDeltas={fxDeltas as any}
+            />
+
 
 
 
