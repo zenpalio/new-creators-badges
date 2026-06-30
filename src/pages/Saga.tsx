@@ -4,6 +4,7 @@ import { useCompanion, tierFromAffection, type MoodStats } from "@/hooks/useComp
 import ChatComposer, { type Reaction, type Sentiment } from "@/components/mina/ChatComposer";
 import StatsPanel from "@/components/mina/StatsPanel";
 import ReactionFX from "@/components/mina/ReactionFX";
+import sagaChar from "@/assets/saga-char.jpg.asset.json";
 
 type Phase = "intro" | "chat";
 
