@@ -22,7 +22,7 @@ interface Props {
   open: boolean;
   onClose: () => void;
   state: CompanionState;
-  tier: number;
+  tier: Tier;
   affectionPulse: "up" | "down" | null;
   pulseTrigger: number;
   pulseDeltas: Record<string, number> | undefined;
