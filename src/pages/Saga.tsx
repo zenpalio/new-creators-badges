@@ -25,6 +25,7 @@ const Saga = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [signupOpen, setSignupOpen] = useState(false);
   const [isAuthed, setIsAuthed] = useState(false);
+  const [chatVideoDone, setChatVideoDone] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
