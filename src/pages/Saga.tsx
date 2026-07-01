@@ -177,7 +177,7 @@ const Saga = () => {
                 Season I · Episode 1
               </div>
               <div className="text-[12px] font-semibold tracking-tight text-white/85">
-                Ashes on the Shore
+                The Last Eden
               </div>
             </div>
 
