@@ -154,9 +154,7 @@ const Saga = () => {
               }}
             />
 
-            {/* Letterbox bars for cinematic feel */}
-            <div className="absolute top-0 inset-x-0 h-10 bg-black/90 pointer-events-none" />
-            <div className="absolute bottom-0 inset-x-0 h-10 bg-black/90 pointer-events-none" />
+            {/* (letterbox bars removed — video fills the stage) */}
 
             {/* Episode label */}
             <div className="absolute top-3 left-4 z-10">
