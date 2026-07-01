@@ -14,6 +14,7 @@ import sagaIntro from "@/assets/saga-intro.mp4.asset.json";
 import sagaTitleBg from "@/assets/saga-title-bg.jpg";
 import sagaOutroBg from "@/assets/saga-narr-1.jpg";
 import annaStage from "@/assets/anna-stage-1.png.asset.json";
+import annaChatBg from "@/assets/anna-chat-bg.mp4.asset.json";
 
 type Phase = "title" | "intro" | "outro" | "narration" | "narration2" | "unlock" | "chat";
 
@@ -542,13 +543,24 @@ const Saga = () => {
         {/* ===== CHAT: character + vitals + composer ===== */}
         {phase === "chat" && (
           <>
-            {/* Character image — full bleed */}
+            {/* Character background — video with image fallback */}
             <div className="absolute inset-0">
               <img
                 src={sagaChatBg.url}
                 alt="Character"
                 className="absolute inset-0 w-full h-full object-cover"
               />
+              <video
+                src={annaChatBg.url}
+                poster={sagaChatBg.url}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+                className="absolute inset-0 w-full h-full object-cover animate-fade-in"
+              />
+
               {/* Top fade so vitals chip stays readable */}
               <div
                 className="absolute inset-x-0 top-0 h-[28%] pointer-events-none"
