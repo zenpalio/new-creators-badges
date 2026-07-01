@@ -553,6 +553,19 @@ const Saga = () => {
               />
               {!chatVideoDone && (
                 <video
+                  ref={(el) => {
+                    if (!el) return;
+                    el.muted = false;
+                    el.volume = 1;
+                    const p = el.play();
+                    if (p && typeof p.catch === "function") {
+                      p.catch(() => {
+                        // Autoplay with sound blocked — retry muted so visuals still play
+                        el.muted = true;
+                        el.play().catch(() => setChatVideoDone(true));
+                      });
+                    }
+                  }}
                   src={annaChatBg.url}
                   poster={sagaChatBg.url}
                   autoPlay
