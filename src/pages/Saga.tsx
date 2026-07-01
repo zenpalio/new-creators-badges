@@ -27,6 +27,7 @@ const Saga = () => {
   const [isAuthed, setIsAuthed] = useState(false);
   const [chatVideoDone, setChatVideoDone] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const chatIntroVideoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setIsAuthed(!!data.session));
@@ -71,7 +72,27 @@ const Saga = () => {
   };
   const endNarration = () => setPhase("narration2");
   const endNarration2 = () => setPhase("unlock");
-  const startRoleplay = () => { setChatVideoDone(false); setPhase("chat"); };
+  const startRoleplay = () => {
+    setChatVideoDone(false);
+    const video = chatIntroVideoRef.current;
+
+    if (video) {
+      try {
+        video.pause();
+        video.currentTime = 0;
+        video.muted = false;
+        video.volume = 1;
+        const playRequest = video.play();
+        if (playRequest) playRequest.catch(() => setChatVideoDone(true));
+      } catch {
+        setChatVideoDone(true);
+      }
+    } else {
+      setChatVideoDone(true);
+    }
+
+    setPhase("chat");
+  };
 
   const startIntro = () => setPhase("intro");
   const continueToChapterOne = () => {
@@ -670,6 +691,19 @@ const Saga = () => {
           onClose={() => setSignupOpen(false)}
           onSuccess={onSignupSuccess}
         />
+
+        {(phase === "unlock" || phase === "chat") && !chatVideoDone && (
+          <video
+            ref={chatIntroVideoRef}
+            src={annaChatBg.url}
+            poster={sagaChatBg.url}
+            playsInline
+            preload="auto"
+            onEnded={() => setChatVideoDone(true)}
+            onError={() => setChatVideoDone(true)}
+            className={`absolute inset-0 z-[1] w-full h-full object-cover transition-opacity duration-300 ${phase === "chat" ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+          />
+        )}
       </div>
     </div>
   );
