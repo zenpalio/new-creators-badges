@@ -191,6 +191,67 @@ const Saga = () => {
           </div>
         )}
 
+        {/* ===== OUTRO: end-of-intro CTA ===== */}
+        {phase === "outro" && (
+          <div className="absolute inset-0 z-40 bg-black flex flex-col items-center justify-center animate-fade-in">
+            {/* faint character silhouette behind */}
+            <div
+              className="absolute inset-0 opacity-30"
+              style={{
+                backgroundImage: `url(${sagaChar.url})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                filter: "blur(8px) grayscale(0.4)",
+              }}
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(ellipse at center, rgba(0,0,0,0.55) 40%, rgba(0,0,0,0.95) 100%)",
+              }}
+            />
+            <div
+              className="absolute inset-0 opacity-[0.12] mix-blend-overlay pointer-events-none"
+              style={{
+                backgroundImage:
+                  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E\")",
+              }}
+            />
+
+            <div className="relative z-10 w-full px-8 text-center">
+              <div className="mx-auto max-w-[320px]">
+                <div className="h-px w-full bg-gradient-to-r from-transparent via-[hsl(38_55%_55%)]/60 to-transparent mb-8" />
+                <div className="text-[10px] uppercase tracking-[0.4em] text-[hsl(38_55%_60%)] mb-4">
+                  Chapter 1
+                </div>
+                <h2
+                  className="text-white/95 leading-[1.05] mb-6"
+                  style={{
+                    fontFamily: "'Playfair Display', Georgia, serif",
+                    fontSize: "clamp(26px, 8vw, 38px)",
+                    fontWeight: 700,
+                  }}
+                >
+                  Finding Shelter
+                </h2>
+                <p className="text-[13px] italic font-serif text-white/60 mb-10 leading-relaxed">
+                  "The storm was closing in. She needed a place to hide before nightfall…"
+                </p>
+                <div className="h-px w-full bg-gradient-to-r from-transparent via-[hsl(38_55%_55%)]/60 to-transparent mb-10" />
+
+                <button
+                  onClick={enterChat}
+                  className="group inline-flex items-center gap-2.5 px-7 py-3 border border-[hsl(38_55%_55%)]/70 text-[hsl(38_55%_70%)] hover:bg-[hsl(38_55%_55%)]/10 hover:text-white transition-all uppercase tracking-[0.3em] text-[11px]"
+                >
+                  Continue
+                  <ArrowRight className="w-3 h-3" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* ===== CHAT: character + vitals + composer ===== */}
         {phase === "chat" && (
           <>
