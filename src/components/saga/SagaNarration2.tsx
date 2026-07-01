@@ -1,6 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { SkipForward } from "lucide-react";
 import narrationAsset from "@/assets/saga-narration-2.mp3.asset.json";
+import sfxWind from "@/assets/saga-sfx-wind.mp3.asset.json";
+import sfxBear from "@/assets/saga-sfx-bear.mp3.asset.json";
+import sfxRun from "@/assets/saga-sfx-run.mp3.asset.json";
+import sfxEagle from "@/assets/saga-sfx-eagle.mp3.asset.json";
+import sfxImpact from "@/assets/saga-sfx-impact.mp3.asset.json";
+import sfxFight from "@/assets/saga-sfx-fight.mp3.asset.json";
+import sfxCar from "@/assets/saga-sfx-car.mp3.asset.json";
 import img1 from "@/assets/saga-pov-1.jpg";
 import img2 from "@/assets/saga-pov-2.jpg";
 import img3 from "@/assets/saga-pov-3.jpg";
@@ -43,14 +50,39 @@ const IMAGES = [img1, img2, img3, img4, img5, img6];
 
 export default function SagaNarration2({ onComplete }: { onComplete: () => void }) {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const windRef = useRef<HTMLAudioElement>(null);
+  const bearRef = useRef<HTMLAudioElement>(null);
+  const runRef = useRef<HTMLAudioElement>(null);
+  const eagleRef = useRef<HTMLAudioElement>(null);
+  const impactRef = useRef<HTMLAudioElement>(null);
+  const fightRef = useRef<HTMLAudioElement>(null);
+  const carRef = useRef<HTMLAudioElement>(null);
   const [idx, setIdx] = useState(0);
   const [started, setStarted] = useState(false);
+  const firedRef = useRef<Set<string>>(new Set());
 
-  useEffect(() => {
+  // SFX cues: at time t, play ref with given volume
+  const CUES: { t: number; ref: React.RefObject<HTMLAudioElement>; vol: number; key: string }[] = [
+    { t: 15.0, ref: bearRef,   vol: 0.9, key: "bear" },
+    { t: 19.2, ref: runRef,    vol: 0.7, key: "run" },
+    { t: 27.0, ref: eagleRef,  vol: 0.9, key: "eagle" },
+    { t: 31.4, ref: impactRef, vol: 1.0, key: "impact" },
+    { t: 35.0, ref: fightRef,  vol: 0.75, key: "fight" },
+    { t: 48.0, ref: carRef,    vol: 0.85, key: "car" },
+  ];
+
+  const startAll = async () => {
     const a = audioRef.current;
+    const w = windRef.current;
     if (!a) return;
-    a.play().then(() => setStarted(true)).catch(() => setStarted(false));
-  }, []);
+    try {
+      if (w) { w.volume = 0.3; w.loop = true; await w.play().catch(() => {}); }
+      await a.play();
+      setStarted(true);
+    } catch { setStarted(false); }
+  };
+
+  useEffect(() => { startAll(); /* eslint-disable-next-line */ }, []);
 
   const onTime = () => {
     const a = audioRef.current;
@@ -59,6 +91,20 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
     let next = 0;
     for (let i = 0; i < LINES.length; i++) if (t >= LINES[i].t) next = i;
     if (next !== idx) setIdx(next);
+    for (const cue of CUES) {
+      if (t >= cue.t && !firedRef.current.has(cue.key)) {
+        firedRef.current.add(cue.key);
+        const el = cue.ref.current;
+        if (el) { el.volume = cue.vol; el.currentTime = 0; el.play().catch(() => {}); }
+      }
+    }
+  };
+
+  const handleComplete = () => {
+    [windRef, bearRef, runRef, eagleRef, impactRef, fightRef, carRef].forEach((r) => {
+      try { r.current?.pause(); } catch {}
+    });
+    onComplete();
   };
 
   const currentImg = useMemo(() => LINES[idx]?.img ?? 0, [idx]);
@@ -123,7 +169,7 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
           </span>
         </div>
         <button
-          onClick={onComplete}
+          onClick={handleComplete}
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.08] backdrop-blur-xl border border-white/15 text-[10px] uppercase tracking-[0.25em] text-white/80 hover:bg-white/[0.15] transition"
         >
           Skip <SkipForward className="w-3 h-3" />
@@ -158,17 +204,18 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
         </div>
       </div>
 
-      <audio
-        ref={audioRef}
-        src={narrationAsset.url}
-        onTimeUpdate={onTime}
-        onEnded={onComplete}
-        preload="auto"
-      />
+      <audio ref={audioRef} src={narrationAsset.url} onTimeUpdate={onTime} onEnded={handleComplete} preload="auto" />
+      <audio ref={windRef} src={sfxWind.url} preload="auto" />
+      <audio ref={bearRef} src={sfxBear.url} preload="auto" />
+      <audio ref={runRef} src={sfxRun.url} preload="auto" />
+      <audio ref={eagleRef} src={sfxEagle.url} preload="auto" />
+      <audio ref={impactRef} src={sfxImpact.url} preload="auto" />
+      <audio ref={fightRef} src={sfxFight.url} preload="auto" />
+      <audio ref={carRef} src={sfxCar.url} preload="auto" />
 
       {!started && (
         <button
-          onClick={() => audioRef.current?.play().then(() => setStarted(true)).catch(() => {})}
+          onClick={startAll}
           className="absolute inset-0 z-20 flex items-center justify-center bg-background/40 backdrop-blur-sm"
         >
           <span className="px-5 py-2.5 rounded-full bg-primary-v2 text-primary-v2-foreground text-[11px] font-semibold uppercase tracking-[0.2em]">
