@@ -239,32 +239,41 @@ const Saga = () => {
         {/* ===== OUTRO: end-of-intro CTA ===== */}
         {phase === "outro" && (
           <div className="absolute inset-0 z-40 bg-background flex flex-col items-center justify-center animate-fade-in overflow-hidden">
-            {/* Character image — soft, cinematic */}
+            {/* Character image — darkened for legibility */}
             <img
               src={sagaChar.url}
               alt=""
               className="absolute inset-0 w-full h-full object-cover"
               style={{
-                filter: "grayscale(0.15) contrast(1.05)",
+                filter: "brightness(0.4) grayscale(0.2) contrast(1.05)",
                 animation: "saga-poster-drift 18s ease-in-out infinite alternate",
               }}
             />
-            {/* Darkening gradient for legibility */}
+            {/* Heavy center scrim so text sits on solid dark */}
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
                 background:
-                  "linear-gradient(180deg, hsl(var(--background)/0.85) 0%, hsl(var(--background)/0.55) 40%, hsl(var(--background)/0.75) 70%, hsl(var(--background)/0.95) 100%)",
+                  "radial-gradient(ellipse 85% 65% at 50% 50%, hsl(var(--background)/0.9) 0%, hsl(var(--background)/0.7) 55%, hsl(var(--background)/0.35) 100%)",
               }}
             />
-            {/* Primary tint + vignette */}
+            {/* Top/bottom fades */}
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
                 background:
-                  "radial-gradient(ellipse 70% 55% at 50% 40%, hsl(var(--primary-v2)/0.18), transparent 70%), radial-gradient(ellipse at center, transparent 45%, hsl(var(--background)/0.9) 100%)",
+                  "linear-gradient(180deg, hsl(var(--background)/0.7) 0%, transparent 25%, transparent 75%, hsl(var(--background)/0.95) 100%)",
               }}
             />
+            {/* Blue tint */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(ellipse 60% 40% at 50% 45%, hsl(var(--primary-v2)/0.15), transparent 70%)",
+              }}
+            />
+
             {/* Film grain */}
             <div
               className="absolute inset-0 opacity-[0.1] mix-blend-overlay pointer-events-none"
