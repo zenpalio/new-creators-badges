@@ -64,25 +64,44 @@ const Saga = () => {
         {/* ===== TITLE: interactive opener ===== */}
         {phase === "title" && (
           <div className="absolute inset-0 z-40 bg-background flex flex-col items-center justify-center animate-fade-in overflow-hidden">
-            {/* Ambient background: soft primary glow + vignette */}
+            {/* Poster background */}
+            <img
+              src={sagaTitleBg}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ animation: "saga-poster-drift 20s ease-in-out infinite alternate" }}
+            />
+            {/* Darkening + legibility gradients */}
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
                 background:
-                  "radial-gradient(ellipse 60% 50% at 50% 35%, hsl(var(--primary-v2) / 0.22), transparent 70%), radial-gradient(ellipse at center, transparent 55%, hsl(var(--background) / 0.95) 100%)",
+                  "linear-gradient(180deg, hsl(var(--background)/0.85) 0%, hsl(var(--background)/0.35) 35%, hsl(var(--background)/0.55) 65%, hsl(var(--background)/0.95) 100%)",
               }}
             />
-            {/* Faint grid texture */}
+            {/* Primary tint + vignette */}
             <div
-              className="absolute inset-0 opacity-[0.06] pointer-events-none"
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(ellipse 70% 55% at 50% 35%, hsl(var(--primary-v2)/0.18), transparent 70%), radial-gradient(ellipse at center, transparent 45%, hsl(var(--background)/0.9) 100%)",
+              }}
+            />
+            {/* Film grain */}
+            <div
+              className="absolute inset-0 opacity-[0.12] mix-blend-overlay pointer-events-none"
               style={{
                 backgroundImage:
-                  "linear-gradient(hsl(var(--foreground-v2)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground-v2)) 1px, transparent 1px)",
-                backgroundSize: "44px 44px",
-                maskImage:
-                  "radial-gradient(ellipse at center, black 30%, transparent 75%)",
+                  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E\")",
               }}
             />
+            <style>{`
+              @keyframes saga-poster-drift {
+                0%   { transform: scale(1.05) translateY(0); }
+                100% { transform: scale(1.12) translateY(-1.5%); }
+              }
+            `}</style>
+
 
             <div className="relative z-10 w-full px-6 text-center">
               <div className="mx-auto max-w-[340px] flex flex-col items-center">
