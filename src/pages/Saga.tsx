@@ -102,7 +102,7 @@ const Saga = () => {
                 <h1 className="text-foreground-v2 leading-[0.95] tracking-tight font-bold mb-5"
                   style={{ fontSize: "clamp(38px, 11vw, 56px)" }}
                 >
-                  Ashes<br />on the Shore
+                  THE LAST<br />EDEN
                 </h1>
 
                 {/* Meta row */}
@@ -177,7 +177,7 @@ const Saga = () => {
                 Season I · Episode 1
               </div>
               <div className="text-[12px] font-semibold tracking-tight text-white/85">
-                Ashes on the Shore
+                The Last Eden
               </div>
             </div>
 
@@ -306,7 +306,7 @@ const Saga = () => {
             {/* Episode chip — top-center, compact */}
             <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 animate-fade-in pointer-events-none">
               <div className="px-2.5 py-1 rounded-full bg-black/45 backdrop-blur-xl border border-white/10 text-[10px] uppercase tracking-[0.25em] text-white/75 leading-none whitespace-nowrap">
-                S1 · E1 · Ashes
+                S1 · E1 · The Last Eden
               </div>
             </div>
 
