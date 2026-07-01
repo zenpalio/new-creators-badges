@@ -12,7 +12,7 @@ const TABS: { id: TabId; label: string; icon: typeof Heart }[] = [
 ];
 
 const EPISODES = [
-  { id: "s1e1", code: "S1 · E1", title: "Ashes on the Shore", status: "current" as const },
+  { id: "s1e1", code: "S1 · E1", title: "The Last Eden", status: "current" as const },
   { id: "s1e2", code: "S1 · E2", title: "The Long Walk North", status: "locked" as const },
   { id: "s1e3", code: "S1 · E3", title: "Iron and Salt", status: "locked" as const },
   { id: "s1e4", code: "S1 · E4", title: "Names Remembered", status: "locked" as const },
