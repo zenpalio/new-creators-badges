@@ -4,11 +4,12 @@ import { useCompanion, tierFromAffection, type MoodStats } from "@/hooks/useComp
 import ChatComposer, { type Reaction, type Sentiment } from "@/components/mina/ChatComposer";
 import ReactionFX from "@/components/mina/ReactionFX";
 import SagaSidebar from "@/components/saga/SagaSidebar";
+import SagaNarration from "@/components/saga/SagaNarration";
 import sagaChar from "@/assets/saga-char.jpg.asset.json";
 import sagaIntro from "@/assets/saga-intro.mp4.asset.json";
 import sagaTitleBg from "@/assets/saga-title-bg.jpg";
 
-type Phase = "title" | "intro" | "outro" | "chat";
+type Phase = "title" | "intro" | "narration" | "outro" | "chat";
 
 const INTRO_VIDEO_SRC = sagaIntro.url;
 
@@ -50,8 +51,9 @@ const Saga = () => {
 
   const endIntro = () => {
     try { videoRef.current?.pause(); } catch {}
-    setPhase("outro");
+    setPhase("narration");
   };
+  const endNarration = () => setPhase("outro");
 
   const startIntro = () => setPhase("intro");
   const enterChat = () => setPhase("chat");
@@ -235,6 +237,11 @@ const Saga = () => {
             )}
           </div>
         )}
+
+        {/* ===== NARRATION: subtitles + background imagery ===== */}
+        {phase === "narration" && <SagaNarration onComplete={endNarration} />}
+
+
 
         {/* ===== OUTRO: end-of-intro CTA ===== */}
         {phase === "outro" && (
