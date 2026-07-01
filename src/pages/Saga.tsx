@@ -25,6 +25,7 @@ const Saga = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [signupOpen, setSignupOpen] = useState(false);
   const [isAuthed, setIsAuthed] = useState(false);
+  const [chatVideoDone, setChatVideoDone] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -70,7 +71,7 @@ const Saga = () => {
   };
   const endNarration = () => setPhase("narration2");
   const endNarration2 = () => setPhase("unlock");
-  const startRoleplay = () => setPhase("chat");
+  const startRoleplay = () => { setChatVideoDone(false); setPhase("chat"); };
 
   const startIntro = () => setPhase("intro");
   const continueToChapterOne = () => {
@@ -550,16 +551,20 @@ const Saga = () => {
                 alt="Character"
                 className="absolute inset-0 w-full h-full object-cover"
               />
-              <video
-                src={annaChatBg.url}
-                poster={sagaChatBg.url}
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="auto"
-                className="absolute inset-0 w-full h-full object-cover animate-fade-in"
-              />
+              {!chatVideoDone && (
+                <video
+                  src={annaChatBg.url}
+                  poster={sagaChatBg.url}
+                  autoPlay
+                  muted
+                  playsInline
+                  preload="auto"
+                  onEnded={() => setChatVideoDone(true)}
+                  onError={() => setChatVideoDone(true)}
+                  className="absolute inset-0 w-full h-full object-cover animate-fade-in"
+                />
+              )}
+
 
               {/* Top fade so vitals chip stays readable */}
               <div
@@ -625,36 +630,38 @@ const Saga = () => {
             {/* Reaction FX */}
             <ReactionFX trigger={fxTrigger} sentiment={fxSentiment} deltas={fxDeltas} />
 
-            {/* Composer slides up from bottom */}
-            <div
-              className="absolute inset-x-0 bottom-0 z-20 px-3 pt-4 pb-[max(14px,env(safe-area-inset-bottom))]"
-              style={{ animation: "slide-in-right 0s, fade-in 0.5s ease-out" }}
-            >
+            {/* Composer slides up once the intro video finishes */}
+            {chatVideoDone && (
               <div
-                className="w-full"
-                style={{
-                  animation: "saga-slide-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) both",
-                }}
+                className="absolute inset-x-0 bottom-0 z-20 px-3 pt-4 pb-[max(14px,env(safe-area-inset-bottom))]"
+                style={{ animation: "slide-in-right 0s, fade-in 0.5s ease-out" }}
               >
-                <ChatComposer
-                  onAfterReply={refresh}
-                  onMouthLevel={setMouth}
-                  onSpeakingChange={setSpeaking}
-                  onReaction={handleReaction}
-                  scriptedIntro={[
-                    "Keep your hands where I can see them, passenger.",
-                    "You're lucky I stopped. Out here, most people don't.",
-                    "So talk. What were you doing on that road — and why should I take you any further?",
-                  ]}
-                />
-              </div>
+                <div
+                  className="w-full"
+                  style={{
+                    animation: "saga-slide-up 0.55s cubic-bezier(0.16, 1, 0.3, 1) both",
+                  }}
+                >
+                  <ChatComposer
+                    onAfterReply={refresh}
+                    onMouthLevel={setMouth}
+                    onSpeakingChange={setSpeaking}
+                    onReaction={handleReaction}
+                    scriptedIntro={[
+                      "Keep your hands where I can see them, passenger.",
+                      "You're lucky I stopped. Out here, most people don't.",
+                      "So talk. What were you doing on that road — and why should I take you any further?",
+                    ]}
+                  />
+                </div>
               <style>{`
                 @keyframes saga-slide-up {
                   from { transform: translateY(120%); opacity: 0; }
                   to   { transform: translateY(0);    opacity: 1; }
                 }
               `}</style>
-            </div>
+              </div>
+            )}
           </>
         )}
 
