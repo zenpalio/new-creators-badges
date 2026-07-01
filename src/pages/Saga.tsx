@@ -556,7 +556,6 @@ const Saga = () => {
                   src={annaChatBg.url}
                   poster={sagaChatBg.url}
                   autoPlay
-                  autoPlay
                   playsInline
                   preload="auto"
                   onEnded={() => setChatVideoDone(true)}
