@@ -60,6 +60,68 @@ const Saga = () => {
       {/* 9:16 stage */}
       <div className="relative w-full h-[100dvh] sm:max-w-[min(100vw,calc(100dvh*9/16))] sm:aspect-[9/16] sm:max-h-[100dvh] overflow-hidden bg-black">
 
+        {/* ===== TITLE: interactive opener ===== */}
+        {phase === "title" && (
+          <div className="absolute inset-0 z-40 bg-black flex flex-col items-center justify-center animate-fade-in">
+            {/* subtle vignette */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.85) 100%)",
+              }}
+            />
+            {/* film grain */}
+            <div
+              className="absolute inset-0 opacity-[0.12] mix-blend-overlay pointer-events-none"
+              style={{
+                backgroundImage:
+                  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E\")",
+              }}
+            />
+
+            <div className="relative z-10 w-full px-8 text-center">
+              <div className="mx-auto max-w-[320px]">
+                <div className="h-px w-full bg-gradient-to-r from-transparent via-[hsl(38_55%_55%)]/60 to-transparent mb-8" />
+                <div className="text-[10px] uppercase tracking-[0.4em] text-[hsl(38_55%_60%)] mb-5">
+                  mybabes.ai
+                </div>
+                <h1
+                  className="text-white/95 leading-[1.02] mb-4"
+                  style={{
+                    fontFamily: "'Playfair Display', Georgia, serif",
+                    fontSize: "clamp(30px, 9vw, 44px)",
+                    fontWeight: 700,
+                    letterSpacing: "0.01em",
+                  }}
+                >
+                  INTERACTIVE<br />MOVIE
+                </h1>
+                <div className="text-[11px] uppercase tracking-[0.35em] text-white/45 mb-8">
+                  Post-Apocalyptic Story
+                </div>
+                <div className="h-px w-full bg-gradient-to-r from-transparent via-[hsl(38_55%_55%)]/60 to-transparent mb-10" />
+
+                <button
+                  onClick={startIntro}
+                  className="group inline-flex items-center gap-2.5 px-7 py-3 border border-[hsl(38_55%_55%)]/70 text-[hsl(38_55%_70%)] hover:bg-[hsl(38_55%_55%)]/10 hover:text-white transition-all uppercase tracking-[0.3em] text-[11px]"
+                >
+                  <Play className="w-3 h-3 fill-current" />
+                  Play Intro
+                </button>
+
+                <div className="mt-4 text-[9px] uppercase tracking-[0.3em] text-white/30">
+                  Season I · Episode 1 — Ashes on the Shore
+                </div>
+              </div>
+            </div>
+
+            <div className="absolute bottom-6 inset-x-0 text-center text-[9px] uppercase tracking-[0.4em] text-white/25">
+              A mybabes.ai original
+            </div>
+          </div>
+        )}
+
         {/* ===== INTRO: full-bleed cutscene ===== */}
         {phase === "intro" && (
           <div className="absolute inset-0 z-30 bg-black animate-fade-in">
