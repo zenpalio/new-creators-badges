@@ -24,9 +24,11 @@ interface Props {
   onSpeakingChange?: (speaking: boolean) => void;
   /** Fires whenever a reply arrives with the model's sentiment + deltas. */
   onReaction?: (r: Reaction) => void;
+  /** Optional scripted assistant messages to play on mount (story intro). */
+  scriptedIntro?: string[];
 }
 
-const ChatComposer = ({ onAfterReply, onMouthLevel, onSpeakingChange, onReaction }: Props) => {
+const ChatComposer = ({ onAfterReply, onMouthLevel, onSpeakingChange, onReaction, scriptedIntro }: Props) => {
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
@@ -51,6 +53,38 @@ const ChatComposer = ({ onAfterReply, onMouthLevel, onSpeakingChange, onReaction
   }, [voiceOn]);
 
   useEffect(() => () => stopSpeaking(), []);
+
+  // Scripted story intro — Anna sends the first messages automatically.
+  useEffect(() => {
+    if (!scriptedIntro || scriptedIntro.length === 0) return;
+    let cancelled = false;
+    const timers: number[] = [];
+    const wait = (ms: number) =>
+      new Promise<void>((resolve) => {
+        const id = window.setTimeout(() => resolve(), ms);
+        timers.push(id);
+      });
+    (async () => {
+      await wait(700);
+      for (const line of scriptedIntro) {
+        if (cancelled) return;
+        setSending(true);
+        // Typing time scales with message length, clamped for pacing.
+        const typing = Math.min(2600, Math.max(900, line.length * 38));
+        await wait(typing);
+        if (cancelled) return;
+        setSending(false);
+        setMsgs((p) => [...p, { role: "assistant", content: line }]);
+        if (voiceOn) void speak(line);
+        await wait(650);
+      }
+    })();
+    return () => {
+      cancelled = true;
+      timers.forEach((id) => clearTimeout(id));
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // External injection from Activity/Roleplay drawer
   useEffect(() => {
