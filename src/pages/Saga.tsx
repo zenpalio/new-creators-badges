@@ -629,6 +629,11 @@ const Saga = () => {
                   onMouthLevel={setMouth}
                   onSpeakingChange={setSpeaking}
                   onReaction={handleReaction}
+                  scriptedIntro={[
+                    "Keep your hands where I can see them, passenger.",
+                    "You're lucky I stopped. Out here, most people don't.",
+                    "So talk. What were you doing on that road — and why should I take you any further?",
+                  ]}
                 />
               </div>
               <style>{`
