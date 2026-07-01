@@ -54,6 +54,38 @@ const ChatComposer = ({ onAfterReply, onMouthLevel, onSpeakingChange, onReaction
 
   useEffect(() => () => stopSpeaking(), []);
 
+  // Scripted story intro — Anna sends the first messages automatically.
+  useEffect(() => {
+    if (!scriptedIntro || scriptedIntro.length === 0) return;
+    let cancelled = false;
+    const timers: number[] = [];
+    const wait = (ms: number) =>
+      new Promise<void>((resolve) => {
+        const id = window.setTimeout(() => resolve(), ms);
+        timers.push(id);
+      });
+    (async () => {
+      await wait(700);
+      for (const line of scriptedIntro) {
+        if (cancelled) return;
+        setSending(true);
+        // Typing time scales with message length, clamped for pacing.
+        const typing = Math.min(2600, Math.max(900, line.length * 38));
+        await wait(typing);
+        if (cancelled) return;
+        setSending(false);
+        setMsgs((p) => [...p, { role: "assistant", content: line }]);
+        if (voiceOn) void speak(line);
+        await wait(650);
+      }
+    })();
+    return () => {
+      cancelled = true;
+      timers.forEach((id) => clearTimeout(id));
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // External injection from Activity/Roleplay drawer
   useEffect(() => {
     const onInject = (e: Event) => {
