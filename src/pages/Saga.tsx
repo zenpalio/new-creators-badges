@@ -49,8 +49,11 @@ const Saga = () => {
 
   const endIntro = () => {
     try { videoRef.current?.pause(); } catch {}
-    setPhase("chat");
+    setPhase("outro");
   };
+
+  const startIntro = () => setPhase("intro");
+  const enterChat = () => setPhase("chat");
 
   return (
     <div className="min-h-screen w-full bg-black text-white flex items-center justify-center overflow-hidden">
