@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { SkipForward, Menu, Play, ArrowRight } from "lucide-react";
+import { SkipForward, Menu, Play, ArrowRight, Trophy, Target, Sparkles, MessageCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useCompanion, tierFromAffection, type MoodStats } from "@/hooks/useCompanion";
 import ChatComposer, { type Reaction, type Sentiment } from "@/components/mina/ChatComposer";
