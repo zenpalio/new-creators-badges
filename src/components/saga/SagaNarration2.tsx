@@ -296,7 +296,7 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
         }
       `}</style>
 
-      <div className="relative z-10 pt-5 px-5 flex items-center justify-between">
+      <div className="relative z-30 pt-8 px-5 flex items-center justify-between">
         <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-primary-v2/30 bg-primary-v2/10 backdrop-blur">
           <span className="w-1.5 h-1.5 rounded-full bg-primary-v2 animate-pulse" />
           <span className="text-[9px] uppercase tracking-[0.3em] text-primary-v2 font-medium">
@@ -311,7 +311,7 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
         </button>
       </div>
 
-      <div className="relative z-10 mt-auto px-6 pb-16 w-full">
+      <div className="relative z-30 mt-auto px-6 pb-20 w-full">
         <div className="mx-auto max-w-[360px] min-h-[140px] flex items-end justify-center">
           <p
             key={idx}
