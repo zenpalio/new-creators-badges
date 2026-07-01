@@ -50,14 +50,39 @@ const IMAGES = [img1, img2, img3, img4, img5, img6];
 
 export default function SagaNarration2({ onComplete }: { onComplete: () => void }) {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const windRef = useRef<HTMLAudioElement>(null);
+  const bearRef = useRef<HTMLAudioElement>(null);
+  const runRef = useRef<HTMLAudioElement>(null);
+  const eagleRef = useRef<HTMLAudioElement>(null);
+  const impactRef = useRef<HTMLAudioElement>(null);
+  const fightRef = useRef<HTMLAudioElement>(null);
+  const carRef = useRef<HTMLAudioElement>(null);
   const [idx, setIdx] = useState(0);
   const [started, setStarted] = useState(false);
+  const firedRef = useRef<Set<string>>(new Set());
 
-  useEffect(() => {
+  // SFX cues: at time t, play ref with given volume
+  const CUES: { t: number; ref: React.RefObject<HTMLAudioElement>; vol: number; key: string }[] = [
+    { t: 15.0, ref: bearRef,   vol: 0.9, key: "bear" },
+    { t: 19.2, ref: runRef,    vol: 0.7, key: "run" },
+    { t: 27.0, ref: eagleRef,  vol: 0.9, key: "eagle" },
+    { t: 31.4, ref: impactRef, vol: 1.0, key: "impact" },
+    { t: 35.0, ref: fightRef,  vol: 0.75, key: "fight" },
+    { t: 48.0, ref: carRef,    vol: 0.85, key: "car" },
+  ];
+
+  const startAll = async () => {
     const a = audioRef.current;
+    const w = windRef.current;
     if (!a) return;
-    a.play().then(() => setStarted(true)).catch(() => setStarted(false));
-  }, []);
+    try {
+      if (w) { w.volume = 0.3; w.loop = true; await w.play().catch(() => {}); }
+      await a.play();
+      setStarted(true);
+    } catch { setStarted(false); }
+  };
+
+  useEffect(() => { startAll(); /* eslint-disable-next-line */ }, []);
 
   const onTime = () => {
     const a = audioRef.current;
@@ -66,6 +91,20 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
     let next = 0;
     for (let i = 0; i < LINES.length; i++) if (t >= LINES[i].t) next = i;
     if (next !== idx) setIdx(next);
+    for (const cue of CUES) {
+      if (t >= cue.t && !firedRef.current.has(cue.key)) {
+        firedRef.current.add(cue.key);
+        const el = cue.ref.current;
+        if (el) { el.volume = cue.vol; el.currentTime = 0; el.play().catch(() => {}); }
+      }
+    }
+  };
+
+  const handleComplete = () => {
+    [windRef, bearRef, runRef, eagleRef, impactRef, fightRef, carRef].forEach((r) => {
+      try { r.current?.pause(); } catch {}
+    });
+    onComplete();
   };
 
   const currentImg = useMemo(() => LINES[idx]?.img ?? 0, [idx]);
