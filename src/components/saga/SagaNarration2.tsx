@@ -1,6 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { SkipForward } from "lucide-react";
 import narrationAsset from "@/assets/saga-narration-2.mp3.asset.json";
+import sfxWind from "@/assets/saga-sfx-wind.mp3.asset.json";
+import sfxBear from "@/assets/saga-sfx-bear.mp3.asset.json";
+import sfxRun from "@/assets/saga-sfx-run.mp3.asset.json";
+import sfxEagle from "@/assets/saga-sfx-eagle.mp3.asset.json";
+import sfxImpact from "@/assets/saga-sfx-impact.mp3.asset.json";
+import sfxFight from "@/assets/saga-sfx-fight.mp3.asset.json";
+import sfxCar from "@/assets/saga-sfx-car.mp3.asset.json";
 import img1 from "@/assets/saga-pov-1.jpg";
 import img2 from "@/assets/saga-pov-2.jpg";
 import img3 from "@/assets/saga-pov-3.jpg";
