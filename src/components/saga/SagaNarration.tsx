@@ -1,28 +1,40 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { SkipForward } from "lucide-react";
 import narrationAsset from "@/assets/saga-narration-1.mp3.asset.json";
-import img1 from "@/assets/saga-narr-1.jpg";
-import img2 from "@/assets/saga-narr-2.jpg";
-import img3 from "@/assets/saga-narr-3.jpg";
-import img4 from "@/assets/saga-narr-4.jpg";
+import img1 from "@/assets/saga-narr-1.jpg"; // wasteland skyline
+import img2 from "@/assets/saga-narr-2.jpg"; // mutated wolf
+import img3 from "@/assets/saga-narr-3.jpg"; // lone survivor
+import img4 from "@/assets/saga-narr-4.jpg"; // shelter interior
+import img5 from "@/assets/saga-narr-5.jpg"; // mutated ravens
+import img6 from "@/assets/saga-narr-6.jpg"; // mutated deer
+import img7 from "@/assets/saga-narr-7.jpg"; // burning highway
+import img8 from "@/assets/saga-narr-8.jpg"; // ghoul mutant
+import img9 from "@/assets/saga-narr-9.jpg"; // mutated dog pack
 
 type Line = { t: number; text: string; img: number };
 
-// Timings hand-tuned to ~52.4s narration
+// Timings aligned to detected speech pauses in the narration audio (~52.4s total).
 const LINES: Line[] = [
-  { t: 0.0,  text: "Months passed. The dust settled. The silence stayed.", img: 0 },
-  { t: 5.0,  text: "The world you knew is gone — replaced by something rawer, stranger, and far more dangerous.", img: 0 },
-  { t: 12.0, text: "Radiation did what the bombs couldn't finish. It changed things.", img: 1 },
-  { t: 17.5, text: "Animals that once ran from men now hunt them.", img: 1 },
-  { t: 21.5, text: "People who survived the blast didn't always survive what came after — what the fallout made them into.", img: 1 },
-  { t: 29.5, text: "Most men are dead. The few that remain fight over whatever's left.", img: 2 },
-  { t: 35.0, text: "You are one of the few.", img: 2 },
-  { t: 37.5, text: "Out here, every choice has a cost. Every decision shapes who you become.", img: 2 },
-  { t: 43.5, text: "The shelter gives you safety — but the world outside will test you.", img: 3 },
-  { t: 48.0, text: "The question isn't whether you'll survive. It's what kind of person you'll be when you do.", img: 3 },
+  { t: 0.0,  text: "Months passed. The dust settled. The silence stayed.",                                     img: 0 }, // wasteland
+  { t: 4.78, text: "The world you knew is gone —",                                                              img: 6 }, // burning highway
+  { t: 7.34, text: "replaced by something rawer, stranger, and far more dangerous.",                            img: 6 },
+  { t: 12.54,text: "Radiation did what the bombs couldn't finish.",                                             img: 0 },
+  { t: 15.65,text: "It changed things.",                                                                        img: 5 }, // mutated deer
+  { t: 17.39,text: "Animals that once ran from men now hunt them.",                                             img: 1 }, // mutated wolf
+  { t: 20.90,text: "People who survived the blast didn't always survive what came after —",                     img: 8 }, // dog pack
+  { t: 24.90,text: "what the fallout made them into.",                                                          img: 7 }, // ghoul
+  { t: 27.66,text: "Most men are dead.",                                                                        img: 7 },
+  { t: 29.24,text: "The few that remain fight over whatever's left.",                                           img: 4 }, // ravens
+  { t: 32.32,text: "You are one of the few.",                                                                   img: 2 }, // lone survivor
+  { t: 34.68,text: "Out here, every choice has a cost.",                                                        img: 2 },
+  { t: 37.74,text: "Every decision shapes who you become.",                                                     img: 2 },
+  { t: 40.81,text: "The shelter gives you safety — but the world outside will test you in ways you're not ready for.", img: 3 }, // shelter
+  { t: 47.40,text: "The question isn't whether you'll survive.",                                                img: 3 },
+  { t: 50.02,text: "It's what kind of person you'll be when you do.",                                           img: 3 },
 ];
 
-const IMAGES = [img1, img2, img3, img4];
+const IMAGES = [img1, img2, img3, img4, img5, img6, img7, img8, img9];
+
 
 export default function SagaNarration({ onComplete }: { onComplete: () => void }) {
   const audioRef = useRef<HTMLAudioElement>(null);
