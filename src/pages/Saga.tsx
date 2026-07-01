@@ -361,7 +361,7 @@ const Saga = () => {
             {/* Character image — full bleed */}
             <div className="absolute inset-0">
               <img
-                src={sagaChar.url}
+                src={sagaChatBg.url}
                 alt="Character"
                 className="absolute inset-0 w-full h-full object-cover"
               />
