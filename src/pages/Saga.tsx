@@ -543,13 +543,24 @@ const Saga = () => {
         {/* ===== CHAT: character + vitals + composer ===== */}
         {phase === "chat" && (
           <>
-            {/* Character image — full bleed */}
+            {/* Character background — video with image fallback */}
             <div className="absolute inset-0">
               <img
                 src={sagaChatBg.url}
                 alt="Character"
                 className="absolute inset-0 w-full h-full object-cover"
               />
+              <video
+                src={annaChatBg.url}
+                poster={sagaChatBg.url}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+                className="absolute inset-0 w-full h-full object-cover animate-fade-in"
+              />
+
               {/* Top fade so vitals chip stays readable */}
               <div
                 className="absolute inset-x-0 top-0 h-[28%] pointer-events-none"
