@@ -226,64 +226,87 @@ const Saga = () => {
 
         {/* ===== OUTRO: end-of-intro CTA ===== */}
         {phase === "outro" && (
-          <div className="absolute inset-0 z-40 bg-black flex flex-col items-center justify-center animate-fade-in">
-            {/* faint character silhouette behind */}
-            <div
-              className="absolute inset-0 opacity-30"
+          <div className="absolute inset-0 z-40 bg-background flex flex-col items-center justify-center animate-fade-in overflow-hidden">
+            {/* Character image — soft, cinematic */}
+            <img
+              src={sagaChar.url}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover"
               style={{
-                backgroundImage: `url(${sagaChar.url})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                filter: "blur(8px) grayscale(0.4)",
+                filter: "grayscale(0.15) contrast(1.05)",
+                animation: "saga-poster-drift 18s ease-in-out infinite alternate",
               }}
             />
+            {/* Darkening gradient for legibility */}
             <div
-              className="absolute inset-0"
+              className="absolute inset-0 pointer-events-none"
               style={{
                 background:
-                  "radial-gradient(ellipse at center, rgba(0,0,0,0.55) 40%, rgba(0,0,0,0.95) 100%)",
+                  "linear-gradient(180deg, hsl(var(--background)/0.85) 0%, hsl(var(--background)/0.55) 40%, hsl(var(--background)/0.75) 70%, hsl(var(--background)/0.95) 100%)",
               }}
             />
+            {/* Primary tint + vignette */}
             <div
-              className="absolute inset-0 opacity-[0.12] mix-blend-overlay pointer-events-none"
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(ellipse 70% 55% at 50% 40%, hsl(var(--primary-v2)/0.18), transparent 70%), radial-gradient(ellipse at center, transparent 45%, hsl(var(--background)/0.9) 100%)",
+              }}
+            />
+            {/* Film grain */}
+            <div
+              className="absolute inset-0 opacity-[0.1] mix-blend-overlay pointer-events-none"
               style={{
                 backgroundImage:
                   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E\")",
               }}
             />
 
-            <div className="relative z-10 w-full px-8 text-center">
-              <div className="mx-auto max-w-[320px]">
-                <div className="h-px w-full bg-gradient-to-r from-transparent via-[hsl(38_55%_55%)]/60 to-transparent mb-8" />
-                <div className="text-[10px] uppercase tracking-[0.4em] text-[hsl(38_55%_60%)] mb-4">
-                  Chapter 1
+            <div className="relative z-10 w-full px-6 text-center">
+              <div className="mx-auto max-w-[340px] flex flex-col items-center">
+                {/* Chapter chip */}
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary-v2/30 bg-primary-v2/5 mb-6">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary-v2 animate-pulse" />
+                  <span className="text-[10px] uppercase tracking-[0.3em] text-primary-v2 font-medium">
+                    Chapter 1 · Now Playing
+                  </span>
                 </div>
-                <h2
-                  className="text-white/95 leading-[1.05] mb-6"
-                  style={{
-                    fontFamily: "'Playfair Display', Georgia, serif",
-                    fontSize: "clamp(26px, 8vw, 38px)",
-                    fontWeight: 700,
-                  }}
-                >
-                  Finding Shelter
-                </h2>
-                <p className="text-[13px] italic font-serif text-white/60 mb-10 leading-relaxed">
-                  "The storm was closing in. She needed a place to hide before nightfall…"
-                </p>
-                <div className="h-px w-full bg-gradient-to-r from-transparent via-[hsl(38_55%_55%)]/60 to-transparent mb-10" />
 
+                {/* Eyebrow */}
+                <div className="text-[10px] uppercase tracking-[0.45em] text-foreground-v2/50 mb-3">
+                  Your story begins
+                </div>
+
+                {/* Title */}
+                <h2 className="text-foreground-v2 leading-[0.95] tracking-tight font-bold mb-5"
+                  style={{ fontSize: "clamp(34px, 10vw, 48px)" }}
+                >
+                  Finding<br />Shelter
+                </h2>
+
+                {/* Body copy — clean sans, not italic serif */}
+                <p className="text-[14px] text-foreground-v2/70 mb-8 leading-relaxed max-w-[300px]">
+                  The storm is closing in. Find a place to hide before nightfall — every choice from here is yours.
+                </p>
+
+                {/* Primary CTA */}
                 <button
                   onClick={enterChat}
-                  className="group inline-flex items-center gap-2.5 px-7 py-3 border border-[hsl(38_55%_55%)]/70 text-[hsl(38_55%_70%)] hover:bg-[hsl(38_55%_55%)]/10 hover:text-white transition-all uppercase tracking-[0.3em] text-[11px]"
+                  className="group relative inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-primary-v2 text-primary-v2-foreground text-[12px] font-semibold uppercase tracking-[0.2em] hover:bg-primary-v2/90 transition-all shadow-[0_10px_40px_-10px_hsl(var(--primary-v2)/0.6)] hover:shadow-[0_14px_50px_-8px_hsl(var(--primary-v2)/0.8)] hover:-translate-y-0.5"
                 >
-                  Continue
-                  <ArrowRight className="w-3 h-3" />
+                  Enter the story
+                  <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
                 </button>
+
+                <div className="mt-4 text-[10px] text-foreground-v2/40">
+                  Chat begins · vitals track your journey
+                </div>
               </div>
             </div>
           </div>
         )}
+
+
 
         {/* ===== CHAT: character + vitals + composer ===== */}
         {phase === "chat" && (
