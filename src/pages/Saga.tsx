@@ -6,13 +6,14 @@ import ChatComposer, { type Reaction, type Sentiment } from "@/components/mina/C
 import ReactionFX from "@/components/mina/ReactionFX";
 import SagaSidebar from "@/components/saga/SagaSidebar";
 import SagaNarration from "@/components/saga/SagaNarration";
+import SagaNarration2 from "@/components/saga/SagaNarration2";
 import SagaSignupModal from "@/components/saga/SagaSignupModal";
 import sagaChar from "@/assets/saga-char.jpg.asset.json";
 import sagaChatBg from "@/assets/saga-chat-bg.png.asset.json";
 import sagaIntro from "@/assets/saga-intro.mp4.asset.json";
 import sagaTitleBg from "@/assets/saga-title-bg.jpg";
 
-type Phase = "title" | "intro" | "outro" | "narration" | "chat";
+type Phase = "title" | "intro" | "outro" | "narration" | "narration2" | "chat";
 
 const INTRO_VIDEO_SRC = sagaIntro.url;
 
@@ -64,7 +65,8 @@ const Saga = () => {
     try { videoRef.current?.pause(); } catch {}
     setPhase("outro");
   };
-  const endNarration = () => setPhase("chat");
+  const endNarration = () => setPhase("narration2");
+  const endNarration2 = () => setPhase("chat");
 
   const startIntro = () => setPhase("intro");
   const continueToChapterOne = () => {
