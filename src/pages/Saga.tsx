@@ -8,6 +8,7 @@ import SagaSidebar from "@/components/saga/SagaSidebar";
 import SagaNarration from "@/components/saga/SagaNarration";
 import SagaSignupModal from "@/components/saga/SagaSignupModal";
 import sagaChar from "@/assets/saga-char.jpg.asset.json";
+import sagaChatBg from "@/assets/saga-chat-bg.png.asset.json";
 import sagaIntro from "@/assets/saga-intro.mp4.asset.json";
 import sagaTitleBg from "@/assets/saga-title-bg.jpg";
 
