@@ -12,6 +12,7 @@ import sagaChar from "@/assets/saga-char.jpg.asset.json";
 import sagaChatBg from "@/assets/saga-chat-bg.png.asset.json";
 import sagaIntro from "@/assets/saga-intro.mp4.asset.json";
 import sagaTitleBg from "@/assets/saga-title-bg.jpg";
+import sagaOutroBg from "@/assets/saga-narr-1.jpg";
 
 type Phase = "title" | "intro" | "outro" | "narration" | "narration2" | "chat";
 
@@ -269,7 +270,7 @@ const Saga = () => {
           <div className="absolute inset-0 z-40 bg-background flex flex-col items-center justify-center animate-fade-in overflow-hidden">
             {/* Character image — darkened for legibility */}
             <img
-              src={sagaChar.url}
+              src={sagaOutroBg}
               alt=""
               className="absolute inset-0 w-full h-full object-cover"
               style={{
