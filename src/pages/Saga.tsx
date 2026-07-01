@@ -61,12 +61,19 @@ const Saga = () => {
 
   const endIntro = () => {
     try { videoRef.current?.pause(); } catch {}
-    setPhase("narration");
+    setPhase("outro");
   };
-  const endNarration = () => setPhase("outro");
+  const endNarration = () => setPhase("chat");
 
   const startIntro = () => setPhase("intro");
-  const enterChat = () => setPhase("chat");
+  const continueToChapterOne = () => {
+    if (isAuthed) setPhase("narration");
+    else setSignupOpen(true);
+  };
+  const onSignupSuccess = () => {
+    setSignupOpen(false);
+    setPhase("narration");
+  };
 
   return (
     <div className="min-h-screen w-full bg-black text-white flex items-center justify-center overflow-hidden">
