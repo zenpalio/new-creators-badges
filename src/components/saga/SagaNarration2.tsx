@@ -14,6 +14,12 @@ import img3 from "@/assets/saga-pov-3.jpg";
 import img4 from "@/assets/saga-pov-4.jpg";
 import img5 from "@/assets/saga-pov-5.jpg";
 import img6 from "@/assets/saga-pov-6.jpg";
+import vid1 from "@/assets/saga-pov-1.mp4.asset.json";
+import vid2 from "@/assets/saga-pov-2.mp4.asset.json";
+import vid3 from "@/assets/saga-pov-3.mp4.asset.json";
+import vid4 from "@/assets/saga-pov-4.mp4.asset.json";
+import vid5 from "@/assets/saga-pov-5.mp4.asset.json";
+import vid6 from "@/assets/saga-pov-6.mp4.asset.json";
 
 type Line = { t: number; text: string; img: number };
 
@@ -47,6 +53,7 @@ const LINES: Line[] = [
 ];
 
 const IMAGES = [img1, img2, img3, img4, img5, img6];
+const VIDEOS = [vid1.url, vid2.url, vid3.url, vid4.url, vid5.url, vid6.url];
 
 export default function SagaNarration2({ onComplete }: { onComplete: () => void }) {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -130,22 +137,22 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
           animation: `saga-shake-${shakeIntensity} 700ms cubic-bezier(.36,.07,.19,.97) both`,
         }}
       >
-        {IMAGES.map((src, i) => (
-          <img
+        {VIDEOS.map((src, i) => (
+          <video
             key={i}
             src={src}
-            alt=""
+            poster={IMAGES[i]}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
             aria-hidden
             className="absolute inset-0 w-full h-full object-cover"
             style={{
               opacity: currentImg === i ? 1 : 0,
               transition: "opacity 1400ms ease-out",
-              transformOrigin: "center center",
-              animation:
-                currentImg === i
-                  ? `${KEN_BURNS[i % KEN_BURNS.length]} 14s ease-out forwards`
-                  : undefined,
-              filter: "brightness(0.78) contrast(1.15) saturate(0.95) sepia(0.06)",
+              filter: "brightness(0.82) contrast(1.15) saturate(0.95) sepia(0.06)",
             }}
           />
         ))}
