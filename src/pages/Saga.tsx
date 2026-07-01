@@ -553,10 +553,10 @@ const Saga = () => {
               />
               {!chatVideoDone && (
                 <video
-                  ref={videoRef}
                   src={annaChatBg.url}
                   poster={sagaChatBg.url}
                   autoPlay
+                  muted
                   playsInline
                   preload="auto"
                   onEnded={() => setChatVideoDone(true)}
