@@ -313,7 +313,7 @@ const Saga = () => {
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary-v2/30 bg-primary-v2/5 mb-6">
                   <span className="w-1.5 h-1.5 rounded-full bg-primary-v2 animate-pulse" />
                   <span className="text-[10px] uppercase tracking-[0.3em] text-primary-v2 font-medium">
-                    Chapter 1 · Now Playing
+                    Chapter 1 · Get Ready
                   </span>
                 </div>
 
@@ -326,26 +326,27 @@ const Saga = () => {
                 <h2 className="text-foreground-v2 leading-[0.95] tracking-tight font-bold mb-5"
                   style={{ fontSize: "clamp(34px, 10vw, 48px)" }}
                 >
-                  Finding<br />Shelter
+                  Chapter<br />One
                 </h2>
 
-                {/* Body copy — clean sans, not italic serif */}
+                {/* Body copy */}
                 <p className="text-[14px] text-foreground-v2/70 mb-8 leading-relaxed max-w-[300px]">
-                  The storm is closing in. Find a place to hide before nightfall — every choice from here is yours.
+                  Months after the fallout, your story begins. Save your progress and step into the wasteland.
                 </p>
 
                 {/* Primary CTA */}
                 <button
-                  onClick={enterChat}
+                  onClick={continueToChapterOne}
                   className="group relative inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-primary-v2 text-primary-v2-foreground text-[12px] font-semibold uppercase tracking-[0.2em] hover:bg-primary-v2/90 transition-all shadow-[0_10px_40px_-10px_hsl(var(--primary-v2)/0.6)] hover:shadow-[0_14px_50px_-8px_hsl(var(--primary-v2)/0.8)] hover:-translate-y-0.5"
                 >
-                  Enter the story
+                  Continue to Chapter One
                   <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
                 </button>
 
                 <div className="mt-4 text-[10px] text-foreground-v2/40">
-                  Chat begins · vitals track your journey
+                  {isAuthed ? "Signed in · ready to continue" : "Free account · takes 10 seconds"}
                 </div>
+
               </div>
             </div>
           </div>
