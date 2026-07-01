@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { SkipForward } from "lucide-react";
+import narrationAsset from "@/assets/saga-narration-2.mp3.asset.json";
 import img1 from "@/assets/saga-pov-1.jpg";
 import img2 from "@/assets/saga-pov-2.jpg";
 import img3 from "@/assets/saga-pov-3.jpg";
@@ -7,53 +8,61 @@ import img4 from "@/assets/saga-pov-4.jpg";
 import img5 from "@/assets/saga-pov-5.jpg";
 import img6 from "@/assets/saga-pov-6.jpg";
 
-type Line = { d: number; text: string; img: number };
+type Line = { t: number; text: string; img: number };
 
-// Auto-advancing subtitles (no audio) — d = duration in ms for this line.
+// Timings aligned to the ~55.6s ElevenLabs narration; proportional to line length.
 const LINES: Line[] = [
-  { d: 4200, text: "You step out. Boots crush glass.",                                img: 0 },
-  { d: 4200, text: "The city is a corpse — hollow towers, ash for snow.",             img: 0 },
-  { d: 4000, text: "Every breath tastes like rust and smoke.",                        img: 0 },
+  { t: 0.0,  text: "You step out. Boots crush glass.",                                img: 0 },
+  { t: 2.55, text: "The city is a corpse — hollow towers, ash for snow.",             img: 0 },
+  { t: 6.61, text: "Every breath tastes like rust and smoke.",                        img: 0 },
 
-  { d: 3800, text: "Then — a sound. Wet. Heavy.",                                     img: 1 },
-  { d: 4200, text: "It rises from behind a burnt-out truck.",                         img: 1 },
-  { d: 4600, text: "A bear. But wrong. Four eyes. Ribs bared.",                       img: 1 },
-  { d: 3600, text: "It sees you.",                                                    img: 1 },
+  { t: 9.88, text: "Then — a sound. Wet. Heavy.",                                     img: 1 },
+  { t: 12.03,text: "It rises from behind a burnt-out truck.",                         img: 1 },
+  { t: 15.13,text: "A bear. But wrong. Four eyes. Ribs bared.",                       img: 1 },
+  { t: 18.40,text: "It sees you.",                                                    img: 1 },
 
-  { d: 3200, text: "Run.",                                                            img: 2 },
-  { d: 3800, text: "Legs burning. Lungs on fire.",                                    img: 2 },
-  { d: 4200, text: "The pavement blurs — you don't look back.",                       img: 2 },
+  { t: 19.36,text: "Run.",                                                            img: 2 },
+  { t: 19.90,text: "Legs burning. Lungs on fire.",                                    img: 2 },
+  { t: 21.90,text: "The pavement blurs — you don't look back.",                       img: 2 },
 
-  { d: 4200, text: "A shadow eclipses the sun.",                                      img: 3 },
-  { d: 4600, text: "Wings — enormous, tattered, screaming down from the sky.",        img: 3 },
-  { d: 4400, text: "The eagle slams into the bear like a meteor.",                    img: 3 },
+  { t: 25.17,text: "A shadow eclipses the sun.",                                      img: 3 },
+  { t: 27.24,text: "Wings — enormous, tattered, screaming down from the sky.",        img: 3 },
+  { t: 31.70,text: "The eagle slams into the bear like a meteor.",                    img: 3 },
 
-  { d: 3800, text: "Bone cracks. Feathers, fur, blood.",                              img: 4 },
-  { d: 4200, text: "The street shakes. Buildings groan.",                             img: 4 },
-  { d: 3800, text: "Two nightmares tearing each other apart.",                        img: 4 },
+  { t: 35.21,text: "Bone cracks. Feathers, fur, blood.",                              img: 4 },
+  { t: 37.91,text: "The street shakes. Buildings groan.",                             img: 4 },
+  { t: 40.70,text: "Two nightmares tearing each other apart.",                        img: 4 },
 
-  { d: 4000, text: "You keep running.",                                               img: 5 },
-  { d: 4400, text: "Headlights cut through the dust ahead.",                          img: 5 },
-  { d: 4200, text: "An armored car — engine howling, coming fast.",                   img: 5 },
-  { d: 4600, text: "You reach out. Someone inside is reaching back.",                 img: 5 },
+  { t: 43.89,text: "You keep running.",                                               img: 5 },
+  { t: 45.24,text: "Headlights cut through the dust ahead.",                          img: 5 },
+  { t: 48.27,text: "An armored car — engine howling, coming fast.",                   img: 5 },
+  { t: 51.85,text: "You reach out. Someone inside is reaching back.",                 img: 5 },
 ];
 
 const IMAGES = [img1, img2, img3, img4, img5, img6];
 
 export default function SagaNarration2({ onComplete }: { onComplete: () => void }) {
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [idx, setIdx] = useState(0);
+  const [started, setStarted] = useState(false);
 
   useEffect(() => {
-    if (idx >= LINES.length) {
-      const t = window.setTimeout(onComplete, 800);
-      return () => window.clearTimeout(t);
-    }
-    const t = window.setTimeout(() => setIdx((i) => i + 1), LINES[idx].d);
-    return () => window.clearTimeout(t);
-  }, [idx, onComplete]);
+    const a = audioRef.current;
+    if (!a) return;
+    a.play().then(() => setStarted(true)).catch(() => setStarted(false));
+  }, []);
 
-  const currentImg = LINES[Math.min(idx, LINES.length - 1)].img;
-  const line = LINES[Math.min(idx, LINES.length - 1)];
+  const onTime = () => {
+    const a = audioRef.current;
+    if (!a) return;
+    const t = a.currentTime;
+    let next = 0;
+    for (let i = 0; i < LINES.length; i++) if (t >= LINES[i].t) next = i;
+    if (next !== idx) setIdx(next);
+  };
+
+  const currentImg = useMemo(() => LINES[idx]?.img ?? 0, [idx]);
+  const line = LINES[idx];
 
   return (
     <div className="absolute inset-0 z-40 bg-background flex flex-col animate-fade-in overflow-hidden">
@@ -148,6 +157,25 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
           ))}
         </div>
       </div>
+
+      <audio
+        ref={audioRef}
+        src={narrationAsset.url}
+        onTimeUpdate={onTime}
+        onEnded={onComplete}
+        preload="auto"
+      />
+
+      {!started && (
+        <button
+          onClick={() => audioRef.current?.play().then(() => setStarted(true)).catch(() => {})}
+          className="absolute inset-0 z-20 flex items-center justify-center bg-background/40 backdrop-blur-sm"
+        >
+          <span className="px-5 py-2.5 rounded-full bg-primary-v2 text-primary-v2-foreground text-[11px] font-semibold uppercase tracking-[0.2em]">
+            Tap to begin
+          </span>
+        </button>
+      )}
     </div>
   );
 }
