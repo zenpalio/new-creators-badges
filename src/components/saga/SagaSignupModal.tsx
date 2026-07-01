@@ -28,23 +28,8 @@ export default function SagaSignupModal({
   };
 
   const google = async () => {
-    setLoading(true);
-    try {
-      const r = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: `${window.location.origin}/saga`,
-      });
-      if (r.error) {
-        toast.error("Google sign-in failed");
-        return;
-      }
-      if (r.redirected) return; // browser is navigating away
-      // Popup flow: session is set — proceed
-      onSuccess();
-    } catch (err: any) {
-      toast.error(err?.message ?? "Google sign-in failed");
-    } finally {
-      setLoading(false);
-    }
+    // Mock: skip real Google OAuth, just proceed
+    onSuccess();
   };
 
   return (
