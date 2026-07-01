@@ -5,11 +5,11 @@ import ChatComposer, { type Reaction, type Sentiment } from "@/components/mina/C
 import ReactionFX from "@/components/mina/ReactionFX";
 import SagaSidebar from "@/components/saga/SagaSidebar";
 import sagaChar from "@/assets/saga-char.jpg.asset.json";
+import sagaIntro from "@/assets/saga-intro.mp4.asset.json";
 
 type Phase = "title" | "intro" | "outro" | "chat";
 
-// TODO: swap with the real Episode 1 cutscene once rendered.
-const INTRO_VIDEO_SRC = "";
+const INTRO_VIDEO_SRC = sagaIntro.url;
 
 const Saga = () => {
   const [phase, setPhase] = useState<Phase>("title");
