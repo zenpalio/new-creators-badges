@@ -59,7 +59,12 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
   const carRef = useRef<HTMLAudioElement>(null);
   const [idx, setIdx] = useState(0);
   const [started, setStarted] = useState(false);
+  const [shakeKey, setShakeKey] = useState(0);
+  const [shakeIntensity, setShakeIntensity] = useState(1);
   const firedRef = useRef<Set<string>>(new Set());
+
+  // Per-image ken-burns direction so each shot pans differently
+  const KEN_BURNS = ["kb-a", "kb-b", "kb-c", "kb-d", "kb-e", "kb-f"] as const;
 
   // SFX cues: at time t, play ref with given volume
   const CUES: { t: number; ref: React.RefObject<HTMLAudioElement>; vol: number; key: string }[] = [
@@ -96,6 +101,11 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
         firedRef.current.add(cue.key);
         const el = cue.ref.current;
         if (el) { el.volume = cue.vol; el.currentTime = 0; el.play().catch(() => {}); }
+        // Trigger camera shake on impact-style cues
+        if (["bear","impact","fight","eagle"].includes(cue.key)) {
+          setShakeKey((k) => k + 1);
+          setShakeIntensity(cue.key === "impact" ? 3 : cue.key === "fight" ? 2 : 1);
+        }
       }
     }
   };
