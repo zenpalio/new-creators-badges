@@ -71,7 +71,7 @@ const Saga = () => {
   };
   const endNarration = () => setPhase("narration2");
   const endNarration2 = () => setPhase("unlock");
-  const startRoleplay = () => setPhase("chat");
+  const startRoleplay = () => { setChatVideoDone(false); setPhase("chat"); };
 
   const startIntro = () => setPhase("intro");
   const continueToChapterOne = () => {
