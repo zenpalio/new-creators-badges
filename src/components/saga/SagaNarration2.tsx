@@ -204,17 +204,18 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
         </div>
       </div>
 
-      <audio
-        ref={audioRef}
-        src={narrationAsset.url}
-        onTimeUpdate={onTime}
-        onEnded={onComplete}
-        preload="auto"
-      />
+      <audio ref={audioRef} src={narrationAsset.url} onTimeUpdate={onTime} onEnded={handleComplete} preload="auto" />
+      <audio ref={windRef} src={sfxWind.url} preload="auto" />
+      <audio ref={bearRef} src={sfxBear.url} preload="auto" />
+      <audio ref={runRef} src={sfxRun.url} preload="auto" />
+      <audio ref={eagleRef} src={sfxEagle.url} preload="auto" />
+      <audio ref={impactRef} src={sfxImpact.url} preload="auto" />
+      <audio ref={fightRef} src={sfxFight.url} preload="auto" />
+      <audio ref={carRef} src={sfxCar.url} preload="auto" />
 
       {!started && (
         <button
-          onClick={() => audioRef.current?.play().then(() => setStarted(true)).catch(() => {})}
+          onClick={startAll}
           className="absolute inset-0 z-20 flex items-center justify-center bg-background/40 backdrop-blur-sm"
         >
           <span className="px-5 py-2.5 rounded-full bg-primary-v2 text-primary-v2-foreground text-[11px] font-semibold uppercase tracking-[0.2em]">
