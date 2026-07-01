@@ -306,7 +306,7 @@ const Saga = () => {
             {/* Episode chip — top-center, compact */}
             <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 animate-fade-in pointer-events-none">
               <div className="px-2.5 py-1 rounded-full bg-black/45 backdrop-blur-xl border border-white/10 text-[10px] uppercase tracking-[0.25em] text-white/75 leading-none whitespace-nowrap">
-                S1 · E1 · Ashes
+                S1 · E1 · The Last Eden
               </div>
             </div>
 
