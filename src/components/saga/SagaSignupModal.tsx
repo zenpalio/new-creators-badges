@@ -23,45 +23,13 @@ export default function SagaSignupModal({
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: { emailRedirectTo: `${window.location.origin}/saga` },
-        });
-        if (error) throw error;
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-      }
-      onSuccess();
-    } catch (err: any) {
-      toast.error(err.message ?? "Something went wrong");
-    } finally {
-      setLoading(false);
-    }
+    // Mock: skip real auth for now, just proceed to next episode
+    onSuccess();
   };
 
   const google = async () => {
-    setLoading(true);
-    try {
-      const r = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: `${window.location.origin}/saga`,
-      });
-      if (r.error) {
-        toast.error("Google sign-in failed");
-        return;
-      }
-      if (r.redirected) return; // browser is navigating away
-      // Popup flow: session is set — proceed
-      onSuccess();
-    } catch (err: any) {
-      toast.error(err?.message ?? "Google sign-in failed");
-    } finally {
-      setLoading(false);
-    }
+    // Mock: skip real Google OAuth, just proceed
+    onSuccess();
   };
 
   return (
