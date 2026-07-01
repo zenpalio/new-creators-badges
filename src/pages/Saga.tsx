@@ -14,6 +14,7 @@ import sagaIntro from "@/assets/saga-intro.mp4.asset.json";
 import sagaTitleBg from "@/assets/saga-title-bg.jpg";
 import sagaOutroBg from "@/assets/saga-narr-1.jpg";
 import annaStage from "@/assets/anna-stage-1.png.asset.json";
+import annaChatBg from "@/assets/anna-chat-bg.mp4.asset.json";
 
 type Phase = "title" | "intro" | "outro" | "narration" | "narration2" | "unlock" | "chat";
 
