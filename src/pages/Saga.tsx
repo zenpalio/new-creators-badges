@@ -1,18 +1,18 @@
 import { useState, useRef } from "react";
-import { SkipForward, Menu } from "lucide-react";
+import { SkipForward, Menu, Play, ArrowRight } from "lucide-react";
 import { useCompanion, tierFromAffection, type MoodStats } from "@/hooks/useCompanion";
 import ChatComposer, { type Reaction, type Sentiment } from "@/components/mina/ChatComposer";
 import ReactionFX from "@/components/mina/ReactionFX";
 import SagaSidebar from "@/components/saga/SagaSidebar";
 import sagaChar from "@/assets/saga-char.jpg.asset.json";
 
-type Phase = "intro" | "chat";
+type Phase = "title" | "intro" | "outro" | "chat";
 
 // TODO: swap with the real Episode 1 cutscene once rendered.
 const INTRO_VIDEO_SRC = "";
 
 const Saga = () => {
-  const [phase, setPhase] = useState<Phase>("intro");
+  const [phase, setPhase] = useState<Phase>("title");
   const [menuOpen, setMenuOpen] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
