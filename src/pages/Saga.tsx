@@ -572,19 +572,6 @@ const Saga = () => {
                 alt="Character"
                 className="absolute inset-0 w-full h-full object-cover"
               />
-              {!chatVideoDone && (
-                <video
-                  src={annaChatBg.url}
-                  poster={sagaChatBg.url}
-                  autoPlay
-                  playsInline
-                  preload="auto"
-                  onEnded={() => setChatVideoDone(true)}
-                  onError={() => setChatVideoDone(true)}
-                  className="absolute inset-0 w-full h-full object-cover animate-fade-in"
-                />
-              )}
-
 
               {/* Top fade so vitals chip stays readable */}
               <div
