@@ -62,65 +62,80 @@ const Saga = () => {
 
         {/* ===== TITLE: interactive opener ===== */}
         {phase === "title" && (
-          <div className="absolute inset-0 z-40 bg-black flex flex-col items-center justify-center animate-fade-in">
-            {/* subtle vignette */}
+          <div className="absolute inset-0 z-40 bg-background flex flex-col items-center justify-center animate-fade-in overflow-hidden">
+            {/* Ambient background: soft primary glow + vignette */}
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
                 background:
-                  "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.85) 100%)",
+                  "radial-gradient(ellipse 60% 50% at 50% 35%, hsl(var(--primary-v2) / 0.22), transparent 70%), radial-gradient(ellipse at center, transparent 55%, hsl(var(--background) / 0.95) 100%)",
               }}
             />
-            {/* film grain */}
+            {/* Faint grid texture */}
             <div
-              className="absolute inset-0 opacity-[0.12] mix-blend-overlay pointer-events-none"
+              className="absolute inset-0 opacity-[0.06] pointer-events-none"
               style={{
                 backgroundImage:
-                  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E\")",
+                  "linear-gradient(hsl(var(--foreground-v2)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground-v2)) 1px, transparent 1px)",
+                backgroundSize: "44px 44px",
+                maskImage:
+                  "radial-gradient(ellipse at center, black 30%, transparent 75%)",
               }}
             />
 
-            <div className="relative z-10 w-full px-8 text-center">
-              <div className="mx-auto max-w-[320px]">
-                <div className="h-px w-full bg-gradient-to-r from-transparent via-[hsl(38_55%_55%)]/60 to-transparent mb-8" />
-                <div className="text-[10px] uppercase tracking-[0.4em] text-[hsl(38_55%_60%)] mb-5">
-                  mybabes.ai
+            <div className="relative z-10 w-full px-6 text-center">
+              <div className="mx-auto max-w-[340px] flex flex-col items-center">
+                {/* Brand mark */}
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary-v2/30 bg-primary-v2/5 mb-8">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary-v2 animate-pulse" />
+                  <span className="text-[10px] uppercase tracking-[0.3em] text-primary-v2 font-medium">
+                    mybabes.ai · original
+                  </span>
                 </div>
-                <h1
-                  className="text-white/95 leading-[1.02] mb-4"
-                  style={{
-                    fontFamily: "'Playfair Display', Georgia, serif",
-                    fontSize: "clamp(30px, 9vw, 44px)",
-                    fontWeight: 700,
-                    letterSpacing: "0.01em",
-                  }}
-                >
-                  INTERACTIVE<br />MOVIE
-                </h1>
-                <div className="text-[11px] uppercase tracking-[0.35em] text-white/45 mb-8">
-                  Post-Apocalyptic Story
-                </div>
-                <div className="h-px w-full bg-gradient-to-r from-transparent via-[hsl(38_55%_55%)]/60 to-transparent mb-10" />
 
+                {/* Eyebrow */}
+                <div className="text-[10px] uppercase tracking-[0.45em] text-foreground-v2/50 mb-3">
+                  Interactive Series
+                </div>
+
+                {/* Title — bold sans, tight */}
+                <h1 className="text-foreground-v2 leading-[0.95] tracking-tight font-bold mb-5"
+                  style={{ fontSize: "clamp(38px, 11vw, 56px)" }}
+                >
+                  Ashes<br />on the Shore
+                </h1>
+
+                {/* Meta row */}
+                <div className="flex items-center gap-3 text-[10px] uppercase tracking-[0.28em] text-foreground-v2/55 mb-10">
+                  <span>S1</span>
+                  <span className="w-1 h-1 rounded-full bg-foreground-v2/30" />
+                  <span>Episode 1</span>
+                  <span className="w-1 h-1 rounded-full bg-foreground-v2/30" />
+                  <span>Post-Apoc</span>
+                </div>
+
+                {/* Primary CTA */}
                 <button
                   onClick={startIntro}
-                  className="group inline-flex items-center gap-2.5 px-7 py-3 border border-[hsl(38_55%_55%)]/70 text-[hsl(38_55%_70%)] hover:bg-[hsl(38_55%_55%)]/10 hover:text-white transition-all uppercase tracking-[0.3em] text-[11px]"
+                  className="group relative inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-primary-v2 text-primary-v2-foreground text-[12px] font-semibold uppercase tracking-[0.2em] hover:bg-primary-v2/90 transition-all shadow-[0_10px_40px_-10px_hsl(var(--primary-v2)/0.6)] hover:shadow-[0_14px_50px_-8px_hsl(var(--primary-v2)/0.8)] hover:-translate-y-0.5"
                 >
-                  <Play className="w-3 h-3 fill-current" />
+                  <Play className="w-3.5 h-3.5 fill-current" />
                   Play Intro
                 </button>
 
-                <div className="mt-4 text-[9px] uppercase tracking-[0.3em] text-white/30">
-                  Season I · Episode 1 — Ashes on the Shore
+                <div className="mt-4 text-[10px] text-foreground-v2/40">
+                  ~1 min · then you take control
                 </div>
               </div>
             </div>
 
-            <div className="absolute bottom-6 inset-x-0 text-center text-[9px] uppercase tracking-[0.4em] text-white/25">
+            <div className="absolute bottom-5 inset-x-0 text-center text-[9px] uppercase tracking-[0.35em] text-foreground-v2/30">
               A mybabes.ai original
             </div>
           </div>
         )}
+
+
 
         {/* ===== INTRO: full-bleed cutscene ===== */}
         {phase === "intro" && (
