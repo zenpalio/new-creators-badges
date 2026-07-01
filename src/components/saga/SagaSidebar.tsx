@@ -62,7 +62,7 @@ const SagaSidebar = ({
               Saga
             </div>
             <div className="text-[14px] font-semibold tracking-tight text-white/95">
-              S1 · E1 · Ashes
+              S1 · E1 · The Last Eden
             </div>
           </div>
           <button
