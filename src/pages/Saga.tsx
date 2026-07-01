@@ -6,6 +6,7 @@ import ReactionFX from "@/components/mina/ReactionFX";
 import SagaSidebar from "@/components/saga/SagaSidebar";
 import sagaChar from "@/assets/saga-char.jpg.asset.json";
 import sagaIntro from "@/assets/saga-intro.mp4.asset.json";
+import sagaTitleBg from "@/assets/saga-title-bg.jpg";
 
 type Phase = "title" | "intro" | "outro" | "chat";
 
