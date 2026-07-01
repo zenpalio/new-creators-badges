@@ -443,6 +443,13 @@ const Saga = () => {
             </div>
           </>
         )}
+
+        {/* Signup / signin gate for Chapter One */}
+        <SagaSignupModal
+          open={signupOpen}
+          onClose={() => setSignupOpen(false)}
+          onSuccess={onSignupSuccess}
+        />
       </div>
     </div>
   );
