@@ -260,6 +260,7 @@ const Saga = () => {
 
         {/* ===== NARRATION: subtitles + background imagery ===== */}
         {phase === "narration" && <SagaNarration onComplete={endNarration} />}
+        {phase === "narration2" && <SagaNarration2 onComplete={endNarration2} />}
 
 
 
