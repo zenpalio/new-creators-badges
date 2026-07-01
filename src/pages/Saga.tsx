@@ -557,14 +557,8 @@ const Saga = () => {
             </div>
 
 
-            {/* Menu button — opens sidebar with vitals/episodes/lore */}
-            <button
-              onClick={() => setMenuOpen(true)}
-              className="absolute top-3 left-3 z-30 w-10 h-10 rounded-full bg-black/45 backdrop-blur-xl border border-white/15 flex items-center justify-center text-white/85 hover:bg-black/60 transition animate-fade-in"
-              aria-label="Open menu"
-            >
-              <Menu className="w-4 h-4" />
-            </button>
+
+
 
             {/* Roleplay goal + persuasion progress — top-center */}
             <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 animate-fade-in w-[min(78%,300px)]">
