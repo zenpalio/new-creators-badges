@@ -566,10 +566,28 @@ const Saga = () => {
               <Menu className="w-4 h-4" />
             </button>
 
-            {/* Episode chip — top-center, compact */}
-            <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 animate-fade-in pointer-events-none">
-              <div className="px-2.5 py-1 rounded-full bg-black/45 backdrop-blur-xl border border-white/10 text-[10px] uppercase tracking-[0.25em] text-white/75 leading-none whitespace-nowrap">
-                S1 · E1 · The Last Eden
+            {/* Roleplay goal + persuasion progress — top-center */}
+            <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 animate-fade-in w-[min(78%,300px)]">
+              <div className="rounded-2xl bg-black/55 backdrop-blur-xl border border-white/10 px-3 py-2 shadow-[0_8px_30px_rgba(0,0,0,0.4)]">
+                <div className="flex items-center gap-1.5 mb-1.5">
+                  <Target className="w-3 h-3 text-primary-v2 shrink-0" />
+                  <span className="text-[9px] uppercase tracking-[0.22em] text-white/60 font-medium truncate">
+                    Persuade Anna · Girls' Shelter
+                  </span>
+                </div>
+                <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+                  <div
+                    className="h-full bg-primary-v2 rounded-full transition-all duration-700 ease-out"
+                    style={{
+                      width: `${Math.max(3, Math.min(100, state.affection))}%`,
+                      boxShadow: "0 0 12px hsl(var(--primary-v2)/0.7)",
+                    }}
+                  />
+                </div>
+                <div className="mt-1 flex items-center justify-between text-[9px] uppercase tracking-[0.2em] text-white/45">
+                  <span>Persuasion</span>
+                  <span>{Math.round(state.affection)} / 100</span>
+                </div>
               </div>
             </div>
 
