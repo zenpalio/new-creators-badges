@@ -145,7 +145,7 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
                 currentImg === i
                   ? `${KEN_BURNS[i % KEN_BURNS.length]} 14s ease-out forwards`
                   : undefined,
-              filter: "brightness(0.62) contrast(1.12) saturate(0.9) sepia(0.08)",
+              filter: "brightness(0.78) contrast(1.15) saturate(0.95) sepia(0.06)",
             }}
           />
         ))}
@@ -227,9 +227,7 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
         }}
       />
 
-      {/* Cinematic letterbox bars */}
-      <div className="absolute top-0 left-0 right-0 h-[7%] bg-black z-20 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 right-0 h-[7%] bg-black z-20 pointer-events-none" />
+      {/* Letterbox bars removed — full-bleed cinematic fill */}
 
       <style>{`
         @keyframes kb-a { from { transform: scale(1.06) translate(0,0); } to { transform: scale(1.18) translate(-2%, -2%); } }
