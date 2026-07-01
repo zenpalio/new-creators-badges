@@ -264,6 +264,174 @@ const Saga = () => {
         {phase === "narration" && <SagaNarration onComplete={endNarration} />}
         {phase === "narration2" && <SagaNarration2 onComplete={endNarration2} />}
 
+        {/* ===== UNLOCK: achievement-style roleplay reveal ===== */}
+        {phase === "unlock" && (
+          <div className="absolute inset-0 z-40 bg-background flex flex-col items-center justify-center animate-fade-in overflow-hidden">
+            <img
+              src={sagaOutroBg}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{
+                filter: "brightness(0.35) grayscale(0.15) contrast(1.1)",
+                animation: "saga-poster-drift 18s ease-in-out infinite alternate",
+              }}
+            />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(ellipse 90% 65% at 50% 50%, hsl(var(--background)/0.88) 0%, hsl(var(--background)/0.7) 55%, hsl(var(--background)/0.35) 100%)",
+              }}
+            />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(ellipse 70% 45% at 50% 40%, hsl(var(--primary-v2)/0.25), transparent 70%)",
+              }}
+            />
+            {/* Radiating rays behind the trophy */}
+            <div
+              className="absolute inset-0 pointer-events-none opacity-40"
+              style={{
+                background:
+                  "conic-gradient(from 0deg at 50% 42%, transparent 0deg, hsl(var(--primary-v2)/0.35) 10deg, transparent 20deg, transparent 40deg, hsl(var(--primary-v2)/0.35) 50deg, transparent 60deg, transparent 90deg, hsl(var(--primary-v2)/0.35) 100deg, transparent 110deg, transparent 140deg, hsl(var(--primary-v2)/0.35) 150deg, transparent 160deg, transparent 200deg, hsl(var(--primary-v2)/0.35) 210deg, transparent 220deg, transparent 260deg, hsl(var(--primary-v2)/0.35) 270deg, transparent 280deg, transparent 320deg, hsl(var(--primary-v2)/0.35) 330deg, transparent 340deg)",
+                animation: "saga-rays-spin 24s linear infinite",
+                maskImage: "radial-gradient(ellipse 55% 40% at 50% 42%, #000 0%, transparent 70%)",
+                WebkitMaskImage: "radial-gradient(ellipse 55% 40% at 50% 42%, #000 0%, transparent 70%)",
+              }}
+            />
+
+            <div
+              className="absolute inset-0 opacity-[0.1] mix-blend-overlay pointer-events-none"
+              style={{
+                backgroundImage:
+                  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E\")",
+              }}
+            />
+
+            <style>{`
+              @keyframes saga-rays-spin { to { transform: rotate(360deg); } }
+              @keyframes saga-unlock-pop {
+                0%   { transform: scale(0.4) rotate(-12deg); opacity: 0; }
+                60%  { transform: scale(1.15) rotate(4deg); opacity: 1; }
+                100% { transform: scale(1) rotate(0deg); opacity: 1; }
+              }
+              @keyframes saga-shine {
+                0% { transform: translateX(-120%); }
+                100% { transform: translateX(220%); }
+              }
+              @keyframes saga-badge-float {
+                0%,100% { transform: translateY(0); }
+                50%     { transform: translateY(-6px); }
+              }
+            `}</style>
+
+            <div className="relative z-10 w-full px-6 text-center">
+              <div className="mx-auto max-w-[340px] flex flex-col items-center">
+                {/* Unlocked chip */}
+                <div
+                  className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary-v2/40 bg-primary-v2/10 mb-6 animate-fade-in"
+                  style={{ animationDelay: "0.15s", animationFillMode: "both" }}
+                >
+                  <Sparkles className="w-3 h-3 text-primary-v2" />
+                  <span className="text-[10px] uppercase tracking-[0.3em] text-primary-v2 font-semibold">
+                    Achievement Unlocked
+                  </span>
+                </div>
+
+                {/* Trophy badge */}
+                <div
+                  className="relative mb-6"
+                  style={{ animation: "saga-unlock-pop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both" }}
+                >
+                  <div
+                    className="w-24 h-24 rounded-3xl flex items-center justify-center relative overflow-hidden"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, hsl(var(--primary-v2)) 0%, hsl(var(--primary-v2)/0.7) 100%)",
+                      boxShadow:
+                        "0 20px 60px -10px hsl(var(--primary-v2)/0.65), inset 0 1px 0 rgba(255,255,255,0.35)",
+                      animation: "saga-badge-float 3.5s ease-in-out infinite",
+                    }}
+                  >
+                    <Trophy className="w-11 h-11 text-primary-v2-foreground drop-shadow" />
+                    {/* Shine sweep */}
+                    <div
+                      className="absolute inset-0 pointer-events-none"
+                      style={{
+                        background:
+                          "linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.55) 50%, transparent 70%)",
+                        animation: "saga-shine 3s ease-in-out 0.9s infinite",
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Title */}
+                <div
+                  className="text-[11px] uppercase tracking-[0.35em] text-foreground-v2/55 mb-2 animate-fade-in"
+                  style={{ animationDelay: "0.35s", animationFillMode: "both" }}
+                >
+                  New Roleplay
+                </div>
+                <h2
+                  className="text-foreground-v2 leading-[1] tracking-tight font-bold mb-5 animate-fade-in"
+                  style={{
+                    fontSize: "clamp(28px, 8vw, 38px)",
+                    animationDelay: "0.45s",
+                    animationFillMode: "both",
+                  }}
+                >
+                  Unlocked: Anna
+                </h2>
+
+                {/* Goal card */}
+                <div
+                  className="w-full rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl p-4 mb-7 text-left animate-fade-in"
+                  style={{ animationDelay: "0.6s", animationFillMode: "both" }}
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <Target className="w-3.5 h-3.5 text-primary-v2" />
+                    <span className="text-[10px] uppercase tracking-[0.3em] text-primary-v2/90 font-semibold">
+                      Your Goal
+                    </span>
+                  </div>
+                  <p className="text-[14px] leading-snug text-foreground-v2/90">
+                    Persuade Anna to take you to the{" "}
+                    <span className="text-primary-v2 font-semibold">girls' shelter</span>.
+                  </p>
+                  <div className="mt-3 flex items-center justify-between text-[10px] uppercase tracking-[0.2em] text-foreground-v2/45">
+                    <span>Persuasion</span>
+                    <span>0 / 100</span>
+                  </div>
+                  <div className="mt-1.5 h-1.5 rounded-full bg-white/10 overflow-hidden">
+                    <div className="h-full w-0 bg-primary-v2 rounded-full" />
+                  </div>
+                </div>
+
+                {/* CTA */}
+                <button
+                  onClick={startRoleplay}
+                  className="group relative inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-primary-v2 text-primary-v2-foreground text-[12px] font-semibold uppercase tracking-[0.2em] hover:bg-primary-v2/90 transition-all shadow-[0_10px_40px_-10px_hsl(var(--primary-v2)/0.6)] hover:shadow-[0_14px_50px_-8px_hsl(var(--primary-v2)/0.8)] hover:-translate-y-0.5 animate-fade-in"
+                  style={{ animationDelay: "0.8s", animationFillMode: "both" }}
+                >
+                  <MessageCircle className="w-3.5 h-3.5" />
+                  Start Roleplaying
+                  <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                </button>
+
+                <div
+                  className="mt-4 text-[10px] text-foreground-v2/40 animate-fade-in"
+                  style={{ animationDelay: "0.95s", animationFillMode: "both" }}
+                >
+                  Every reply shifts her trust
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
 
 
         {/* ===== OUTRO: end-of-intro CTA ===== */}
