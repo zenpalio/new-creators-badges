@@ -238,6 +238,11 @@ const Saga = () => {
           </div>
         )}
 
+        {/* ===== NARRATION: subtitles + background imagery ===== */}
+        {phase === "narration" && <SagaNarration onComplete={endNarration} />}
+
+
+
         {/* ===== OUTRO: end-of-intro CTA ===== */}
         {phase === "outro" && (
           <div className="absolute inset-0 z-40 bg-background flex flex-col items-center justify-center animate-fade-in overflow-hidden">
