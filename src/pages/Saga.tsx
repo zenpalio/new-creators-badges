@@ -13,6 +13,7 @@ import sagaChatBg from "@/assets/saga-chat-bg.png.asset.json";
 import sagaIntro from "@/assets/saga-intro.mp4.asset.json";
 import sagaTitleBg from "@/assets/saga-title-bg.jpg";
 import sagaOutroBg from "@/assets/saga-narr-1.jpg";
+import annaStage from "@/assets/anna-stage-1.png.asset.json";
 
 type Phase = "title" | "intro" | "outro" | "narration" | "narration2" | "unlock" | "chat";
 
@@ -329,39 +330,49 @@ const Saga = () => {
 
             <div className="relative z-10 w-full px-6 text-center">
               <div className="mx-auto max-w-[340px] flex flex-col items-center">
-                {/* Unlocked chip */}
+                {/* Stage chip */}
                 <div
                   className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary-v2/40 bg-primary-v2/10 mb-6 animate-fade-in"
                   style={{ animationDelay: "0.15s", animationFillMode: "both" }}
                 >
                   <Sparkles className="w-3 h-3 text-primary-v2" />
                   <span className="text-[10px] uppercase tracking-[0.3em] text-primary-v2 font-semibold">
-                    Achievement Unlocked
+                    Stage 1 · Unlocked
                   </span>
                 </div>
 
-                {/* Trophy badge */}
+                {/* Anna portrait */}
                 <div
                   className="relative mb-6"
                   style={{ animation: "saga-unlock-pop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both" }}
                 >
                   <div
-                    className="w-24 h-24 rounded-3xl flex items-center justify-center relative overflow-hidden"
+                    className="w-40 h-52 sm:w-44 sm:h-56 rounded-3xl relative overflow-hidden"
                     style={{
-                      background:
-                        "linear-gradient(135deg, hsl(var(--primary-v2)) 0%, hsl(var(--primary-v2)/0.7) 100%)",
                       boxShadow:
-                        "0 20px 60px -10px hsl(var(--primary-v2)/0.65), inset 0 1px 0 rgba(255,255,255,0.35)",
+                        "0 24px 70px -12px hsl(var(--primary-v2)/0.65), inset 0 0 0 1.5px hsl(var(--primary-v2)/0.7)",
                       animation: "saga-badge-float 3.5s ease-in-out infinite",
                     }}
                   >
-                    <Trophy className="w-11 h-11 text-primary-v2-foreground drop-shadow" />
+                    <img
+                      src={annaStage.url}
+                      alt="Anna"
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                    {/* Subtle bottom fade */}
+                    <div
+                      className="absolute inset-x-0 bottom-0 h-1/3 pointer-events-none"
+                      style={{
+                        background:
+                          "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.55) 100%)",
+                      }}
+                    />
                     {/* Shine sweep */}
                     <div
                       className="absolute inset-0 pointer-events-none"
                       style={{
                         background:
-                          "linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.55) 50%, transparent 70%)",
+                          "linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.28) 50%, transparent 70%)",
                         animation: "saga-shine 3s ease-in-out 0.9s infinite",
                       }}
                     />
@@ -373,7 +384,7 @@ const Saga = () => {
                   className="text-[11px] uppercase tracking-[0.35em] text-foreground-v2/55 mb-2 animate-fade-in"
                   style={{ animationDelay: "0.35s", animationFillMode: "both" }}
                 >
-                  New Roleplay
+                  New Stage
                 </div>
                 <h2
                   className="text-foreground-v2 leading-[1] tracking-tight font-bold mb-5 animate-fade-in"
@@ -383,7 +394,7 @@ const Saga = () => {
                     animationFillMode: "both",
                   }}
                 >
-                  Unlocked: Anna
+                  Anna
                 </h2>
 
                 {/* Goal card */}
