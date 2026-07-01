@@ -59,7 +59,12 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
   const carRef = useRef<HTMLAudioElement>(null);
   const [idx, setIdx] = useState(0);
   const [started, setStarted] = useState(false);
+  const [shakeKey, setShakeKey] = useState(0);
+  const [shakeIntensity, setShakeIntensity] = useState(1);
   const firedRef = useRef<Set<string>>(new Set());
+
+  // Per-image ken-burns direction so each shot pans differently
+  const KEN_BURNS = ["kb-a", "kb-b", "kb-c", "kb-d", "kb-e", "kb-f"] as const;
 
   // SFX cues: at time t, play ref with given volume
   const CUES: { t: number; ref: React.RefObject<HTMLAudioElement>; vol: number; key: string }[] = [
@@ -96,6 +101,11 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
         firedRef.current.add(cue.key);
         const el = cue.ref.current;
         if (el) { el.volume = cue.vol; el.currentTime = 0; el.play().catch(() => {}); }
+        // Trigger camera shake on impact-style cues
+        if (["bear","impact","fight","eagle"].includes(cue.key)) {
+          setShakeKey((k) => k + 1);
+          setShakeIntensity(cue.key === "impact" ? 3 : cue.key === "fight" ? 2 : 1);
+        }
       }
     }
   };
@@ -111,57 +121,182 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
   const line = LINES[idx];
 
   return (
-    <div className="absolute inset-0 z-40 bg-background flex flex-col animate-fade-in overflow-hidden">
-      {IMAGES.map((src, i) => (
-        <img
-          key={i}
-          src={src}
-          alt=""
-          aria-hidden
-          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-[1400ms] ease-out"
-          style={{
-            opacity: currentImg === i ? 1 : 0,
-            transform: "scale(1.08)",
-            animation: currentImg === i ? "saga-narr2-drift 12s ease-out forwards" : undefined,
-            filter: "brightness(0.6) contrast(1.08) saturate(0.95)",
-          }}
-        />
-      ))}
+    <div className="absolute inset-0 z-40 bg-black flex flex-col animate-fade-in overflow-hidden">
+      {/* Shake wrapper — replays keyframes when shakeKey changes */}
+      <div
+        key={shakeKey}
+        className="absolute inset-0"
+        style={{
+          animation: `saga-shake-${shakeIntensity} 700ms cubic-bezier(.36,.07,.19,.97) both`,
+        }}
+      >
+        {IMAGES.map((src, i) => (
+          <img
+            key={i}
+            src={src}
+            alt=""
+            aria-hidden
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{
+              opacity: currentImg === i ? 1 : 0,
+              transition: "opacity 1400ms ease-out",
+              transformOrigin: "center center",
+              animation:
+                currentImg === i
+                  ? `${KEN_BURNS[i % KEN_BURNS.length]} 14s ease-out forwards`
+                  : undefined,
+              filter: "brightness(0.62) contrast(1.12) saturate(0.9) sepia(0.08)",
+            }}
+          />
+        ))}
 
+        {/* Chromatic aberration ghost on shake */}
+        <div
+          className="absolute inset-0 pointer-events-none mix-blend-screen opacity-0"
+          style={{
+            animation: `saga-chroma 700ms ease-out both`,
+            animationDelay: "0s",
+            background: "transparent",
+            boxShadow: "inset 0 0 60px hsl(0 100% 50% / 0.15), inset 0 0 60px hsl(200 100% 50% / 0.1)",
+          }}
+          key={`chroma-${shakeKey}`}
+        />
+      </div>
+
+      {/* Vignette (pulsing) */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "linear-gradient(180deg, hsl(var(--background)/0.55) 0%, hsl(var(--background)/0.2) 30%, hsl(var(--background)/0.55) 65%, hsl(var(--background)/0.95) 100%)",
+            "radial-gradient(ellipse 90% 70% at 50% 50%, transparent 40%, rgba(0,0,0,0.55) 80%, rgba(0,0,0,0.9) 100%)",
+          animation: "saga-vignette-pulse 6s ease-in-out infinite",
         }}
       />
+
+      {/* Bottom scrim for subtitle legibility */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse 70% 45% at 50% 80%, hsl(var(--background)/0.85) 0%, transparent 70%)",
+            "linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0) 25%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.85) 100%)",
         }}
       />
+
+      {/* Warm ember tint that flickers */}
       <div
-        className="absolute inset-0 opacity-[0.12] mix-blend-overlay pointer-events-none"
+        className="absolute inset-0 pointer-events-none mix-blend-overlay"
+        style={{
+          background:
+            "radial-gradient(ellipse 60% 40% at 50% 60%, hsl(22 90% 45% / 0.25), transparent 70%)",
+          animation: "saga-flicker 3.2s ease-in-out infinite",
+        }}
+      />
+
+      {/* Floating ash / dust particles */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {Array.from({ length: 22 }).map((_, i) => {
+          const left = (i * 47) % 100;
+          const delay = (i * 0.37) % 6;
+          const dur = 9 + ((i * 1.7) % 8);
+          const size = 1 + ((i * 3) % 4);
+          return (
+            <span
+              key={i}
+              className="absolute rounded-full bg-white/60"
+              style={{
+                left: `${left}%`,
+                top: "-10px",
+                width: size,
+                height: size,
+                filter: "blur(0.5px)",
+                opacity: 0.35,
+                animation: `saga-ash ${dur}s linear ${delay}s infinite`,
+              }}
+            />
+          );
+        })}
+      </div>
+
+      {/* Film grain */}
+      <div
+        className="absolute inset-0 opacity-[0.14] mix-blend-overlay pointer-events-none"
         style={{
           backgroundImage:
             "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E\")",
+          animation: "saga-grain 0.8s steps(6) infinite",
         }}
       />
 
+      {/* Cinematic letterbox bars */}
+      <div className="absolute top-0 left-0 right-0 h-[7%] bg-black z-20 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-[7%] bg-black z-20 pointer-events-none" />
+
       <style>{`
-        @keyframes saga-narr2-drift {
-          from { transform: scale(1.05) translateY(0); }
-          to   { transform: scale(1.15) translateY(-2%); }
-        }
+        @keyframes kb-a { from { transform: scale(1.06) translate(0,0); } to { transform: scale(1.18) translate(-2%, -2%); } }
+        @keyframes kb-b { from { transform: scale(1.18) translate(2%, 1%); } to { transform: scale(1.06) translate(0, 0); } }
+        @keyframes kb-c { from { transform: scale(1.05) translate(1%, -1%); } to { transform: scale(1.16) translate(-2%, 2%); } }
+        @keyframes kb-d { from { transform: scale(1.15) translate(-1%, 2%); } to { transform: scale(1.05) translate(2%, -1%); } }
+        @keyframes kb-e { from { transform: scale(1.08) translate(0, 2%); } to { transform: scale(1.2) translate(0, -3%); } }
+        @keyframes kb-f { from { transform: scale(1.2) translate(-2%, 0); } to { transform: scale(1.06) translate(2%, 1%); } }
+
         @keyframes saga-line2-in {
           from { opacity: 0; transform: translateY(10px); filter: blur(4px); }
           to   { opacity: 1; transform: translateY(0);    filter: blur(0);   }
         }
+        @keyframes saga-vignette-pulse {
+          0%,100% { opacity: 0.9; }
+          50%     { opacity: 1; }
+        }
+        @keyframes saga-flicker {
+          0%,100% { opacity: 0.7; }
+          25%     { opacity: 0.4; }
+          50%     { opacity: 0.85; }
+          75%     { opacity: 0.55; }
+        }
+        @keyframes saga-grain {
+          0%   { transform: translate(0,0); }
+          25%  { transform: translate(-2%, 1%); }
+          50%  { transform: translate(1%, -2%); }
+          75%  { transform: translate(-1%, 2%); }
+          100% { transform: translate(0,0); }
+        }
+        @keyframes saga-ash {
+          0%   { transform: translate3d(0,0,0) rotate(0deg); opacity: 0; }
+          10%  { opacity: 0.5; }
+          100% { transform: translate3d(-30px, 110vh, 0) rotate(120deg); opacity: 0; }
+        }
+        @keyframes saga-shake-1 {
+          0%,100% { transform: translate(0,0) rotate(0); }
+          20% { transform: translate(-3px, 2px) rotate(-0.2deg); }
+          40% { transform: translate(4px, -2px) rotate(0.2deg); }
+          60% { transform: translate(-2px, 3px) rotate(-0.1deg); }
+          80% { transform: translate(2px, -1px) rotate(0.1deg); }
+        }
+        @keyframes saga-shake-2 {
+          0%,100% { transform: translate(0,0) rotate(0); }
+          15% { transform: translate(-6px, 4px) rotate(-0.4deg); }
+          30% { transform: translate(7px, -5px) rotate(0.5deg); }
+          45% { transform: translate(-5px, 6px) rotate(-0.3deg); }
+          60% { transform: translate(6px, -3px) rotate(0.4deg); }
+          80% { transform: translate(-3px, 2px) rotate(-0.1deg); }
+        }
+        @keyframes saga-shake-3 {
+          0%,100% { transform: translate(0,0) rotate(0) scale(1); }
+          10% { transform: translate(-10px, 8px) rotate(-0.6deg) scale(1.02); }
+          25% { transform: translate(12px, -9px) rotate(0.7deg) scale(1.02); }
+          40% { transform: translate(-9px, 10px) rotate(-0.5deg) scale(1.015); }
+          55% { transform: translate(10px, -6px) rotate(0.6deg) scale(1.01); }
+          70% { transform: translate(-6px, 5px) rotate(-0.3deg) scale(1); }
+          85% { transform: translate(4px, -3px) rotate(0.2deg) scale(1); }
+        }
+        @keyframes saga-chroma {
+          0%   { opacity: 0; }
+          20%  { opacity: 1; }
+          100% { opacity: 0; }
+        }
       `}</style>
 
-      <div className="relative z-10 pt-5 px-5 flex items-center justify-between">
+      <div className="relative z-30 pt-8 px-5 flex items-center justify-between">
         <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-primary-v2/30 bg-primary-v2/10 backdrop-blur">
           <span className="w-1.5 h-1.5 rounded-full bg-primary-v2 animate-pulse" />
           <span className="text-[9px] uppercase tracking-[0.3em] text-primary-v2 font-medium">
@@ -176,7 +311,7 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
         </button>
       </div>
 
-      <div className="relative z-10 mt-auto px-6 pb-16 w-full">
+      <div className="relative z-30 mt-auto px-6 pb-20 w-full">
         <div className="mx-auto max-w-[360px] min-h-[140px] flex items-end justify-center">
           <p
             key={idx}
