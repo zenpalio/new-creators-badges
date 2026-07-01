@@ -102,7 +102,7 @@ const Saga = () => {
                 <h1 className="text-foreground-v2 leading-[0.95] tracking-tight font-bold mb-5"
                   style={{ fontSize: "clamp(38px, 11vw, 56px)" }}
                 >
-                  Ashes<br />on the Shore
+                  THE LAST<br />EDEN
                 </h1>
 
                 {/* Meta row */}
