@@ -24,9 +24,11 @@ interface Props {
   onSpeakingChange?: (speaking: boolean) => void;
   /** Fires whenever a reply arrives with the model's sentiment + deltas. */
   onReaction?: (r: Reaction) => void;
+  /** Optional scripted assistant messages to play on mount (story intro). */
+  scriptedIntro?: string[];
 }
 
-const ChatComposer = ({ onAfterReply, onMouthLevel, onSpeakingChange, onReaction }: Props) => {
+const ChatComposer = ({ onAfterReply, onMouthLevel, onSpeakingChange, onReaction, scriptedIntro }: Props) => {
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
