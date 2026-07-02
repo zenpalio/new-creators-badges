@@ -1,7 +1,9 @@
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile, toBlobURL } from "@ffmpeg/util";
 import outroAsset from "../../assets/ads-outro.mp4.asset.json";
+import logoAsset from "../../assets/mybabes-logo.svg.asset.json";
 const OUTRO_URL = outroAsset.url;
+const LOGO_URL = logoAsset.url;
 import {
   drawIntroFrame,
   INTRO_FPS,
@@ -66,8 +68,14 @@ async function renderIntroFrames(
       bgImg = null;
     }
   }
+  let logoImg: HTMLImageElement | null = null;
+  try {
+    logoImg = await loadImage(LOGO_URL);
+  } catch {
+    logoImg = null;
+  }
   for (let f = 0; f < INTRO_FRAMES; f++) {
-    drawIntroFrame(ctx, f, intro, bgImg);
+    drawIntroFrame(ctx, f, intro, bgImg, logoImg);
     const blob: Blob = await new Promise((resolve) =>
       canvas.toBlob((b) => resolve(b!), "image/jpeg", 0.9),
     );

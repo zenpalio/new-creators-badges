@@ -101,6 +101,7 @@ export function drawIntroFrame(
   frame: number,
   config: IntroConfig,
   backgroundImage?: HTMLImageElement | null,
+  logoImage?: HTMLImageElement | null,
 ) {
   const w = ctx.canvas.width;
   const h = ctx.canvas.height;
@@ -148,52 +149,16 @@ export function drawIntroFrame(
     ctx.fillRect(0, 0, w, h);
   }
 
-  // 3. mybabes.ai logo lockup — always visible
-  {
-    ctx.save();
-    const logoY = 150;
-
-    // Mark: rounded square with "M"
-    const markSize = 68;
-    ctx.font = `700 44px "Inter", system-ui, sans-serif`;
-    ctx.textAlign = "left";
-    ctx.textBaseline = "middle";
-    const wordmark = "mybabes";
-    const tld = ".ai";
-    const wordW = ctx.measureText(wordmark).width;
-    const tldW = ctx.measureText(tld).width;
-    const gap = 18;
-    const totalW = markSize + gap + wordW + tldW;
-    const startX = w / 2 - totalW / 2;
-
-    // Mark background (accent, rounded)
-    const markX = startX;
-    const markY = logoY - markSize / 2;
-    ctx.save();
-    ctx.shadowColor = theme.accent;
-    ctx.shadowBlur = 24;
-    ctx.fillStyle = theme.accent;
-    roundRect(ctx, markX, markY, markSize, markSize, 20);
-    ctx.fill();
-    ctx.restore();
-    // Mark letter
-    ctx.fillStyle = "#ffffff";
-    ctx.font = `800 40px "Inter", system-ui, sans-serif`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("M", markX + markSize / 2, logoY + 2);
-
-    // Wordmark
-    ctx.textAlign = "left";
-    ctx.font = `700 44px "Inter", system-ui, sans-serif`;
-    ctx.fillStyle = theme.text;
-    const wordX = markX + markSize + gap;
-    ctx.fillText(wordmark, wordX, logoY);
-    ctx.fillStyle = theme.accent;
-    ctx.fillText(tld, wordX + wordW, logoY);
-
-    ctx.restore();
+  // 3. mybabes.ai logo — real SVG asset, always visible
+  if (logoImage && logoImage.complete && logoImage.naturalWidth > 0) {
+    const targetW = 420;
+    const ratio = logoImage.naturalHeight / logoImage.naturalWidth;
+    const targetH = targetW * ratio;
+    const lx = w / 2 - targetW / 2;
+    const ly = 140;
+    ctx.drawImage(logoImage, lx, ly, targetW, targetH);
   }
+
 
 
   // 4. Eyebrow accent line above title
@@ -317,25 +282,8 @@ export function drawIntroFrame(
     }
   }
 
-  // (progress dots removed)
+  // (progress dots + film grain removed)
 
-
-  // 9. Film grain overlay (very subtle, deterministic)
-  if (theme.grain > 0) {
-    const cellSize = 4;
-    ctx.save();
-    ctx.globalAlpha = theme.grain;
-    for (let gy = 0; gy < h; gy += cellSize) {
-      for (let gx = 0; gx < w; gx += cellSize) {
-        const n = noise(gx, gy, frame);
-        if (n > 0.55) {
-          ctx.fillStyle = n > 0.85 ? "#ffffff" : "#000000";
-          ctx.fillRect(gx, gy, cellSize, cellSize);
-        }
-      }
-    }
-    ctx.restore();
-  }
 
   // 10. Outgoing transition — clean fade to black (no white flash, no cutout)
   if (frame >= 78) {

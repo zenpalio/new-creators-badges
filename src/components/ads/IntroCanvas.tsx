@@ -8,6 +8,8 @@ import {
   loadImage,
   type IntroConfig,
 } from "../../lib/adsStudio/introFrames";
+import logoAsset from "../../assets/mybabes-logo.svg.asset.json";
+
 
 interface Props {
   config: IntroConfig;
@@ -22,6 +24,17 @@ const IntroCanvas = ({ config, playing, frame, onEnd, className }: Props) => {
   const rafRef = useRef<number | null>(null);
   const startRef = useRef<number | null>(null);
   const [bgImg, setBgImg] = useState<HTMLImageElement | null>(null);
+  const [logoImg, setLogoImg] = useState<HTMLImageElement | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    loadImage(logoAsset.url)
+      .then((img) => alive && setLogoImg(img))
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   useEffect(() => {
     let alive = true;
@@ -43,12 +56,12 @@ const IntroCanvas = ({ config, playing, frame, onEnd, className }: Props) => {
     const ctx = canvas.getContext("2d")!;
 
     if (typeof frame === "number") {
-      drawIntroFrame(ctx, Math.max(0, Math.min(INTRO_FRAMES - 1, frame)), config, bgImg);
+      drawIntroFrame(ctx, Math.max(0, Math.min(INTRO_FRAMES - 1, frame)), config, bgImg, logoImg);
       return;
     }
 
     if (!playing) {
-      drawIntroFrame(ctx, 0, config, bgImg);
+      drawIntroFrame(ctx, 0, config, bgImg, logoImg);
       return;
     }
 
@@ -58,18 +71,19 @@ const IntroCanvas = ({ config, playing, frame, onEnd, className }: Props) => {
       const elapsed = (ts - startRef.current) / 1000;
       const f = Math.floor(elapsed * INTRO_FPS);
       if (f >= INTRO_FRAMES) {
-        drawIntroFrame(ctx, INTRO_FRAMES - 1, config, bgImg);
+        drawIntroFrame(ctx, INTRO_FRAMES - 1, config, bgImg, logoImg);
         onEnd?.();
         return;
       }
-      drawIntroFrame(ctx, f, config, bgImg);
+      drawIntroFrame(ctx, f, config, bgImg, logoImg);
       rafRef.current = requestAnimationFrame(tick);
     };
     rafRef.current = requestAnimationFrame(tick);
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [playing, frame, config, onEnd, bgImg]);
+  }, [playing, frame, config, onEnd, bgImg, logoImg]);
+
 
   return (
     <canvas
