@@ -37,6 +37,24 @@ export interface RenderConfig {
   onProgress?: (stage: string, ratio: number) => void;
 }
 
+async function getMediaDuration(src: Blob | string): Promise<number> {
+  return new Promise((resolve, reject) => {
+    const url = typeof src === "string" ? src : URL.createObjectURL(src);
+    const v = document.createElement("video");
+    v.preload = "metadata";
+    v.src = url;
+    v.onloadedmetadata = () => {
+      const d = v.duration;
+      if (typeof src !== "string") URL.revokeObjectURL(url);
+      resolve(isFinite(d) ? d : 0);
+    };
+    v.onerror = () => {
+      if (typeof src !== "string") URL.revokeObjectURL(url);
+      reject(new Error("Failed to read media duration"));
+    };
+  });
+}
+
 let ffmpegInstance: FFmpeg | null = null;
 
 async function getFFmpeg(onLog?: (msg: string) => void): Promise<FFmpeg> {
