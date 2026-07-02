@@ -19,6 +19,9 @@
   },
   "dependencies": {
     "@elevenlabs/react": "^1.9.0",
+    "@ffmpeg/ffmpeg": "^0.12.15",
+    "@ffmpeg/util": "^0.12.2",
+    "@fontsource/bebas-neue": "^5.2.7",
     "@fontsource/outfit": "^5.2.8",
     "@hookform/resolvers": "^3.10.0",
     "@lovable.dev/cloud-auth-js": "^1.1.2",
