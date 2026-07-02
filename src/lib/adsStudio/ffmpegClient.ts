@@ -2,10 +2,8 @@ import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile, toBlobURL } from "@ffmpeg/util";
 import outroAsset from "../../assets/ads-outro.mp4.asset.json";
 import logoAsset from "../../assets/mybabes-logo.svg.asset.json";
-import musicAsset from "../../assets/ads-music.mp3.asset.json";
 const OUTRO_URL = outroAsset.url;
 const LOGO_URL = logoAsset.url;
-const MUSIC_URL = musicAsset.url;
 import {
   drawIntroFrame,
   INTRO_FPS,
@@ -239,7 +237,7 @@ export async function renderVideo(config: RenderConfig): Promise<Blob> {
       "-i",
       "outro_in.mp4",
       "-vf",
-      "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920",
+      "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=black,setsar=1",
       "-r",
       String(INTRO_FPS),
       "-c:v",
@@ -250,14 +248,7 @@ export async function renderVideo(config: RenderConfig): Promise<Blob> {
       "outro.mp4",
     ], "outro processing", ffmpegLogTail);
 
-    // 4. Fetch music track and write to ffmpeg FS
-    onProgress?.("adding-music", 0);
-    const musicRes = await fetch(MUSIC_URL);
-    if (!musicRes.ok) throw new Error(`Failed to fetch music: ${musicRes.status}`);
-    const musicBuf = new Uint8Array(await musicRes.arrayBuffer());
-    await ffmpeg.writeFile("music.mp3", musicBuf);
-
-    // 4b. Pre-generated intro SFX (whoosh + thump) as a WAV file
+    // 4. Pre-generated intro SFX (short click) as WAV — no background music.
     const sfxBuf = generateIntroSfxWav();
     await ffmpeg.writeFile("sfx.wav", sfxBuf);
 
@@ -267,10 +258,8 @@ export async function renderVideo(config: RenderConfig): Promise<Blob> {
     const offset1 = Math.max(0.1, introDur - xfadeDur); // intro→clip
     const offset2 = Math.max(offset1 + 0.1, introDur + clipDur - xfadeDur * 2); // (intro+clip)→outro
     const totalDur = introDur + clipDur + outroDur - xfadeDur * 2;
-    const musicFadeOutStart = Math.max(0, totalDur - 1.2);
 
-    // 6. Final assembly — smooth video crossfades + music + intro SFX.
-    // Audio is generated here so uploads/outros without audio tracks still render.
+    // 6. Final assembly — smooth video crossfades + short intro click only.
     onProgress?.("concatenating", 0);
     const filter = [
       `[0:v]fps=${INTRO_FPS},format=yuv420p,settb=AVTB,setpts=PTS-STARTPTS[v0]`,
@@ -278,17 +267,13 @@ export async function renderVideo(config: RenderConfig): Promise<Blob> {
       `[2:v]fps=${INTRO_FPS},format=yuv420p,settb=AVTB,setpts=PTS-STARTPTS[v2]`,
       `[v0][v1]xfade=transition=fade:duration=${xfadeDur}:offset=${offset1.toFixed(3)}[vx1]`,
       `[vx1][v2]xfade=transition=fade:duration=${xfadeDur}:offset=${offset2.toFixed(3)}[vout]`,
-      `[3:a]atrim=0:${totalDur.toFixed(3)},asetpts=PTS-STARTPTS,afade=t=in:st=0:d=0.8,afade=t=out:st=${musicFadeOutStart.toFixed(3)}:d=1.2,volume=0.85[bg]`,
-      `[4:a]aformat=channel_layouts=stereo,volume=1.4[sfx]`,
-      `[bg][sfx]amix=inputs=2:duration=first:dropout_transition=0:normalize=0[aout]`,
+      `[3:a]aformat=channel_layouts=stereo,apad,atrim=0:${totalDur.toFixed(3)},asetpts=PTS-STARTPTS[aout]`,
     ].join(";");
 
     await execOrThrow(ffmpeg, [
       "-i", "intro.mp4",
       "-i", "clip_out.mp4",
       "-i", "outro.mp4",
-      "-stream_loop", "-1",
-      "-i", "music.mp3",
       "-i", "sfx.wav",
       "-filter_complex", filter,
       "-map", "[vout]",
@@ -318,7 +303,6 @@ export async function renderVideo(config: RenderConfig): Promise<Blob> {
       "clip_out.mp4",
       "outro_in.mp4",
       "outro.mp4",
-      "music.mp3",
       "sfx.wav",
       "final.mp4",
     ].map((name) => ffmpeg.deleteFile(name).catch(() => undefined)));
