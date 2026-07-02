@@ -171,7 +171,7 @@ export function drawIntroFrame(
     const markY = logoY - markSize / 2;
     ctx.save();
     ctx.shadowColor = theme.accent;
-    ctx.shadowBlur = 24 * logoT;
+    ctx.shadowBlur = 24;
     ctx.fillStyle = theme.accent;
     roundRect(ctx, markX, markY, markSize, markSize, 20);
     ctx.fill();
