@@ -8,6 +8,7 @@ import {
   INTRO_FRAMES,
   INTRO_H,
   INTRO_W,
+  loadImage,
   type IntroConfig,
 } from "./introFrames";
 import { escapeDrawtext } from "./drawtextEscape";
@@ -57,8 +58,16 @@ async function renderIntroFrames(
   canvas.width = INTRO_W;
   canvas.height = INTRO_H;
   const ctx = canvas.getContext("2d")!;
+  let bgImg: HTMLImageElement | null = null;
+  if (intro.backgroundImage) {
+    try {
+      bgImg = await loadImage(intro.backgroundImage);
+    } catch {
+      bgImg = null;
+    }
+  }
   for (let f = 0; f < INTRO_FRAMES; f++) {
-    drawIntroFrame(ctx, f, intro);
+    drawIntroFrame(ctx, f, intro, bgImg);
     const blob: Blob = await new Promise((resolve) =>
       canvas.toBlob((b) => resolve(b!), "image/jpeg", 0.9),
     );
