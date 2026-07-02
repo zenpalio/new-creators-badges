@@ -206,7 +206,7 @@ export function drawIntroFrame(
 
   // Split into words for staggered reveal
   const words = title.split(" ");
-  const wordGap = 6;
+  const wordGap = titleFontSize * 0.28;
   // Measure each word
   const wordWidths = words.map((wd) => ctx.measureText(wd).width);
   const totalWordsW = wordWidths.reduce((a, b) => a + b, 0) + wordGap * (words.length - 1);
