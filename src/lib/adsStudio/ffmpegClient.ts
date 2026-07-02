@@ -260,6 +260,10 @@ export async function renderVideo(config: RenderConfig): Promise<Blob> {
   const musicBuf = new Uint8Array(await musicRes.arrayBuffer());
   await ffmpeg.writeFile("music.mp3", musicBuf);
 
+  // 4b. Pre-generated intro SFX (whoosh + thump) as a WAV file
+  const sfxBuf = generateIntroSfxWav();
+  await ffmpeg.writeFile("sfx.wav", sfxBuf);
+
   // 5. Read durations for xfade offsets
   const introDur = INTRO_FRAMES / INTRO_FPS; // known: 3.0
   const clipDur = await getMediaDuration(clip).catch(() => 15);
@@ -272,8 +276,6 @@ export async function renderVideo(config: RenderConfig): Promise<Blob> {
 
   // 6. Final assembly — xfade video + acrossfade audio + music mix + intro SFX
   onProgress?.("concatenating", 0);
-  // Button "press" happens around frame 65 @ 60fps ≈ 1.083s
-  const thumpDelayMs = 1050;
   const filter = [
     // video crossfades
     `[0:v][1:v]xfade=transition=fade:duration=${xfadeDur}:offset=${offset1.toFixed(3)}[vx1]`,
@@ -282,34 +284,36 @@ export async function renderVideo(config: RenderConfig): Promise<Blob> {
     `[0:a][1:a]acrossfade=d=${xfadeDur}:c1=tri:c2=tri[ax1]`,
     `[ax1][2:a]acrossfade=d=${xfadeDur}:c1=tri:c2=tri[aorig]`,
     // background music — loop to cover full length, audible but not overpowering
-    `[3:a]aloop=loop=-1:size=2e9,atrim=0:${totalDur.toFixed(3)},asetpts=PTS-STARTPTS,afade=t=in:st=0:d=0.8,afade=t=out:st=${(totalDur - 1.2).toFixed(3)}:d=1.2,volume=0.7[bg]`,
-    // SFX 1: swoosh — filtered pink noise sweeping in during first 0.5s
-    `[4:a]highpass=f=350,lowpass=f=2600,afade=t=in:st=0:d=0.05,afade=t=out:st=0.35:d=0.15,volume=0.9[whoosh]`,
-    // SFX 2: sub-bass thump on button press (~1.05s)
-    `[5:a]afade=t=out:st=0.05:d=0.22,adelay=${thumpDelayMs}|${thumpDelayMs},volume=1.1[thump]`,
-    `[whoosh][thump]amix=inputs=2:duration=longest:normalize=0[sfx]`,
+    `[3:a]aloop=loop=-1:size=2147483000,atrim=0:${totalDur.toFixed(3)},asetpts=PTS-STARTPTS,afade=t=in:st=0:d=0.8,afade=t=out:st=${(totalDur - 1.2).toFixed(3)}:d=1.2,volume=0.7[bg]`,
+    // Intro SFX (WAV containing whoosh + thump, mono → stereo, boosted)
+    `[4:a]aformat=channel_layouts=stereo,volume=1.4[sfx]`,
     // Final mix: original + music + intro SFX
     `[aorig][bg][sfx]amix=inputs=3:duration=first:dropout_transition=0:normalize=0[aout]`,
   ].join(";");
 
-  await ffmpeg.exec([
-    "-i", "intro.mp4",
-    "-i", "clip_out.mp4",
-    "-i", "outro.mp4",
-    "-i", "music.mp3",
-    "-f", "lavfi", "-t", "0.5", "-i", "anoisesrc=c=pink:a=0.8:d=0.5",
-    "-f", "lavfi", "-t", "0.3", "-i", "sine=f=70:d=0.3",
-    "-filter_complex", filter,
-    "-map", "[vout]",
-    "-map", "[aout]",
-    "-c:v", "libx264",
-    "-pix_fmt", "yuv420p",
-    "-r", String(INTRO_FPS),
-    "-c:a", "aac",
-    "-b:a", "192k",
-    "-movflags", "+faststart",
-    "final.mp4",
-  ]);
+  try {
+    await ffmpeg.exec([
+      "-i", "intro.mp4",
+      "-i", "clip_out.mp4",
+      "-i", "outro.mp4",
+      "-i", "music.mp3",
+      "-i", "sfx.wav",
+      "-filter_complex", filter,
+      "-map", "[vout]",
+      "-map", "[aout]",
+      "-c:v", "libx264",
+      "-pix_fmt", "yuv420p",
+      "-r", String(INTRO_FPS),
+      "-c:a", "aac",
+      "-b:a", "192k",
+      "-movflags", "+faststart",
+      "final.mp4",
+    ]);
+  } catch (e) {
+    console.error("[ads-studio] ffmpeg final assembly failed. Last log lines:\n" + ffmpegLogTail.join("\n"));
+    throw e;
+  }
+
 
 
   const data = (await ffmpeg.readFile("final.mp4")) as Uint8Array;
