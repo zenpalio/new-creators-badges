@@ -35,17 +35,20 @@ const PreviewStage = ({ intro, clipUrl, headline, captions }: Props) => {
     }
   };
   const pause = () => {
-    if (stage === "clip" && videoRef.current) videoRef.current.pause();
+    if ((stage === "clip" || stage === "outro") && videoRef.current) videoRef.current.pause();
     setStage("idle");
   };
 
   useEffect(() => {
-    if (stage !== "clip" || !videoRef.current) return;
+    if ((stage !== "clip" && stage !== "outro") || !videoRef.current) return;
     const v = videoRef.current;
     v.currentTime = 0;
     v.play().catch(() => {});
     const onTime = () => setVideoTime(v.currentTime);
-    const onEnd = () => setStage("done");
+    const onEnd = () => {
+      if (stage === "clip") setStage("outro");
+      else setStage("done");
+    };
     v.addEventListener("timeupdate", onTime);
     v.addEventListener("ended", onEnd);
     return () => {
@@ -72,20 +75,33 @@ const PreviewStage = ({ intro, clipUrl, headline, captions }: Props) => {
             <IntroCanvas
               config={intro}
               playing={stage === "intro"}
-              onEnd={() => setStage(clipUrl ? "clip" : "done")}
+              onEnd={() => setStage(clipUrl ? "clip" : "outro")}
             />
           </div>
         )}
 
         {/* Clip layer */}
-        {clipUrl && (stage === "clip" || stage === "done") && (
+        {clipUrl && (stage === "clip" || stage === "done") && stage !== "outro" && (
           <video
             ref={videoRef}
+            key="clip"
             src={clipUrl}
             className="absolute inset-0 h-full w-full object-cover"
             playsInline
           />
         )}
+
+        {/* Outro layer */}
+        {stage === "outro" && (
+          <video
+            ref={videoRef}
+            key="outro"
+            src={OUTRO_URL}
+            className="absolute inset-0 h-full w-full object-cover"
+            playsInline
+          />
+        )}
+
 
         {/* Overlays */}
         {showHeadline && headline && (
