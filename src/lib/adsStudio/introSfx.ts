@@ -1,6 +1,5 @@
-// Generate intro SFX (whoosh + sub-bass thump) into a WAV Uint8Array using WebAudio.
-// This avoids relying on ffmpeg lavfi sources (anoisesrc/sine) which are
-// hit-or-miss depending on the wasm build.
+// Generate a short UI "click" SFX for the intro button press as a WAV Uint8Array.
+// Kept intentionally tiny and punchy — no music, no whoosh.
 
 const SR = 44100;
 
@@ -37,39 +36,24 @@ function encodeWAV(samples: Float32Array): Uint8Array {
   return new Uint8Array(buffer);
 }
 
+// Click at ~2.07s (frame 62 @ 30fps = button press moment).
+// Total length matches full intro duration (3s) so ffmpeg timing lines up.
 export function generateIntroSfxWav(): Uint8Array {
-  const durSec = 1.6;
+  const durSec = 3.0;
   const total = Math.floor(SR * durSec);
   const out = new Float32Array(total);
 
-  // --- Whoosh: filtered pink-ish noise, 0 → 0.5s, with fade in/out ---
-  const whooshLen = Math.floor(SR * 0.5);
-  let lp = 0;
-  let hp = 0;
-  for (let i = 0; i < whooshLen; i++) {
-    const noise = Math.random() * 2 - 1;
-    // 1-pole low-pass then high-pass to shape into a mid whoosh band
-    lp += (noise - lp) * 0.35; // low-pass ~ few kHz
-    const bandpassed = noise - (hp += (lp - hp) * 0.05); // subtract slow-moving avg
-    const t = i / whooshLen;
-    const env =
-      Math.min(1, t / 0.05) * // 50ms fade-in
-      Math.min(1, (1 - t) / 0.3); // 150ms fade-out (last 30%)
-    out[i] += bandpassed * env * 0.55;
-  }
-
-  // --- Sub-bass thump around 1.05s (button press) ---
-  const thumpStart = Math.floor(SR * 1.05);
-  const thumpLen = Math.floor(SR * 0.28);
-  for (let i = 0; i < thumpLen; i++) {
-    const t = i / thumpLen;
-    // Pitch drops from 110Hz → 55Hz for punch
-    const freq = 110 - 55 * t;
+  const clickStart = Math.floor(SR * 2.07);
+  const clickLen = Math.floor(SR * 0.09); // 90ms
+  for (let i = 0; i < clickLen; i++) {
+    const t = i / clickLen;
+    // High-pitched blip: 1800Hz sine + a bit of noise, sharp exp decay
+    const freq = 1800 - 600 * t;
     const phase = (2 * Math.PI * freq * i) / SR;
-    // Sharp attack, exp decay
-    const env = Math.pow(1 - t, 2.2) * (i < SR * 0.005 ? i / (SR * 0.005) : 1);
-    const idx = thumpStart + i;
-    if (idx < total) out[idx] += Math.sin(phase) * env * 0.95;
+    const noise = (Math.random() * 2 - 1) * 0.15;
+    const env = Math.pow(1 - t, 3) * (i < SR * 0.002 ? i / (SR * 0.002) : 1);
+    const idx = clickStart + i;
+    if (idx < total) out[idx] = (Math.sin(phase) + noise) * env * 0.7;
   }
 
   return encodeWAV(out);
