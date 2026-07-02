@@ -7,6 +7,17 @@ export interface IntroConfig {
   title: string;
   subtitle: string;
   theme: IntroTheme;
+  backgroundImage?: string | null; // data URL or blob URL
+}
+
+export function loadImage(url: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = url;
+  });
 }
 
 export const INTRO_FPS = 30;
@@ -66,9 +77,39 @@ export function drawIntroFrame(
   const theme = THEMES[config.theme];
   const t = frame / INTRO_FRAMES;
 
+export function drawIntroFrame(
+  ctx: CanvasRenderingContext2D,
+  frame: number,
+  config: IntroConfig,
+  backgroundImage?: HTMLImageElement | null,
+) {
+  const w = ctx.canvas.width;
+  const h = ctx.canvas.height;
+  const theme = THEMES[config.theme];
+
   // Background
   ctx.fillStyle = theme.bg;
   ctx.fillRect(0, 0, w, h);
+
+  // Background image (cover-fit, subtle Ken Burns zoom)
+  if (backgroundImage) {
+    const zoom = 1 + (frame / INTRO_FRAMES) * 0.08;
+    const iw = backgroundImage.width;
+    const ih = backgroundImage.height;
+    const scale = Math.max(w / iw, h / ih) * zoom;
+    const dw = iw * scale;
+    const dh = ih * scale;
+    const dx = (w - dw) / 2;
+    const dy = (h - dh) / 2;
+    ctx.drawImage(backgroundImage, dx, dy, dw, dh);
+    // Dark vignette so UI stays readable
+    const vg = ctx.createLinearGradient(0, 0, 0, h);
+    vg.addColorStop(0, "rgba(0,0,0,0.55)");
+    vg.addColorStop(0.5, "rgba(0,0,0,0.35)");
+    vg.addColorStop(1, "rgba(0,0,0,0.75)");
+    ctx.fillStyle = vg;
+    ctx.fillRect(0, 0, w, h);
+  }
 
   // Radial glow (pulses from center)
   const pulse = 0.6 + 0.4 * Math.sin(frame * 0.15);
