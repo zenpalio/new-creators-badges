@@ -1,6 +1,6 @@
 import "@fontsource/bebas-neue/400.css";
 import { useEffect, useMemo, useState } from "react";
-import { Download, Loader2 } from "lucide-react";
+import { Download, Loader2, RotateCcw } from "lucide-react";
 import PreviewStage from "../components/ads/PreviewStage";
 import IntroConfigPanel from "../components/ads/IntroConfig";
 import ClipDropzone from "../components/ads/ClipDropzone";
@@ -8,17 +8,35 @@ import OverlayEditor from "../components/ads/OverlayEditor";
 import type { IntroConfig } from "../lib/adsStudio/introFrames";
 import type { Caption, Headline } from "../lib/adsStudio/ffmpegClient";
 import { renderVideo } from "../lib/adsStudio/ffmpegClient";
+import {
+  loadClip,
+  loadJSON,
+  saveClip,
+  saveJSON,
+} from "../lib/adsStudio/persistence";
 import { toast } from "sonner";
 
+const LS_INTRO = "ads-studio:intro";
+const LS_HEADLINE = "ads-studio:headline";
+const LS_CAPTIONS = "ads-studio:captions";
+
+const DEFAULT_INTRO: IntroConfig = {
+  title: "Anna's Diary",
+  subtitle: "A POV Roleplay",
+  theme: "anna",
+};
+
 const AdsStudio = () => {
-  const [intro, setIntro] = useState<IntroConfig>({
-    title: "Anna's Diary",
-    subtitle: "A POV Roleplay",
-    theme: "anna",
-  });
+  const [intro, setIntro] = useState<IntroConfig>(() =>
+    loadJSON<IntroConfig>(LS_INTRO, DEFAULT_INTRO),
+  );
   const [clip, setClip] = useState<File | null>(null);
-  const [headline, setHeadline] = useState<Headline | null>(null);
-  const [captions, setCaptions] = useState<Caption[]>([]);
+  const [headline, setHeadline] = useState<Headline | null>(() =>
+    loadJSON<Headline | null>(LS_HEADLINE, null),
+  );
+  const [captions, setCaptions] = useState<Caption[]>(() =>
+    loadJSON<Caption[]>(LS_CAPTIONS, []),
+  );
   const [rendering, setRendering] = useState(false);
   const [stage, setStage] = useState<string>("");
   const [progress, setProgress] = useState(0);
@@ -31,9 +49,38 @@ const AdsStudio = () => {
     };
   }, [clipUrl]);
 
+  // Hydrate clip from IndexedDB on mount
+  useEffect(() => {
+    loadClip().then((f) => {
+      if (f) setClip(f);
+    });
+  }, []);
+
+  // Persist state changes
+  useEffect(() => saveJSON(LS_INTRO, intro), [intro]);
+  useEffect(() => saveJSON(LS_HEADLINE, headline), [headline]);
+  useEffect(() => saveJSON(LS_CAPTIONS, captions), [captions]);
+  useEffect(() => {
+    void saveClip(clip);
+  }, [clip]);
+
   useEffect(() => {
     document.title = "Ads Studio — Internal";
   }, []);
+
+  const handleReset = () => {
+    setIntro(DEFAULT_INTRO);
+    setClip(null);
+    setHeadline(null);
+    setCaptions([]);
+    setDownloadUrl(null);
+    localStorage.removeItem(LS_INTRO);
+    localStorage.removeItem(LS_HEADLINE);
+    localStorage.removeItem(LS_CAPTIONS);
+    void saveClip(null);
+    toast.success("Reset");
+  };
+
 
   const handleExport = async () => {
     if (!clip) {
