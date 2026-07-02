@@ -1,5 +1,7 @@
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile, toBlobURL } from "@ffmpeg/util";
+import outroAsset from "../../assets/ads-outro.mp4.asset.json";
+const OUTRO_URL = outroAsset.url;
 import {
   drawIntroFrame,
   INTRO_FPS,
@@ -180,9 +182,35 @@ export async function renderVideo(config: RenderConfig): Promise<Blob> {
     "clip_out.mp4",
   ]);
 
-  // 4. Concat
+  // 3b. Fetch + normalize outro to matching format
+  onProgress?.("processing-outro", 0);
+  const outroRes = await fetch(OUTRO_URL);
+  if (!outroRes.ok) throw new Error(`Failed to fetch outro: ${outroRes.status}`);
+  const outroBuf = new Uint8Array(await outroRes.arrayBuffer());
+  await ffmpeg.writeFile("outro_in.mp4", outroBuf);
+  await ffmpeg.exec([
+    "-i",
+    "outro_in.mp4",
+    "-vf",
+    "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920",
+    "-r",
+    String(INTRO_FPS),
+    "-c:v",
+    "libx264",
+    "-pix_fmt",
+    "yuv420p",
+    "-c:a",
+    "aac",
+    "-ar",
+    "44100",
+    "-ac",
+    "2",
+    "outro.mp4",
+  ]);
+
+  // 4. Concat intro + clip + outro
   onProgress?.("concatenating", 0);
-  const list = "file 'intro.mp4'\nfile 'clip_out.mp4'\n";
+  const list = "file 'intro.mp4'\nfile 'clip_out.mp4'\nfile 'outro.mp4'\n";
   await ffmpeg.writeFile("list.txt", new TextEncoder().encode(list));
   await ffmpeg.exec([
     "-f",
@@ -205,6 +233,8 @@ export async function renderVideo(config: RenderConfig): Promise<Blob> {
     await ffmpeg.deleteFile("intro.mp4");
     await ffmpeg.deleteFile("input.mp4");
     await ffmpeg.deleteFile("clip_out.mp4");
+    await ffmpeg.deleteFile("outro_in.mp4");
+    await ffmpeg.deleteFile("outro.mp4");
     await ffmpeg.deleteFile("list.txt");
     await ffmpeg.deleteFile("final.mp4");
   } catch {
