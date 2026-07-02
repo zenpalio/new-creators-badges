@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import IntroCanvas from "./IntroCanvas";
 import type { IntroConfig } from "../../lib/adsStudio/introFrames";
 import type { Caption, Headline } from "../../lib/adsStudio/ffmpegClient";
+import outroAsset from "../../assets/ads-outro.mp4.asset.json";
 import { Play, Pause, RotateCcw } from "lucide-react";
 
 interface Props {
@@ -11,7 +12,9 @@ interface Props {
   captions: Caption[];
 }
 
-type Stage = "idle" | "intro" | "clip" | "done";
+type Stage = "idle" | "intro" | "clip" | "outro" | "done";
+
+const OUTRO_URL = outroAsset.url;
 
 const INTRO_SECONDS = 3;
 
