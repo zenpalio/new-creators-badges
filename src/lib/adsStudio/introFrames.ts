@@ -148,36 +148,54 @@ export function drawIntroFrame(
     ctx.fillRect(0, 0, w, h);
   }
 
-  // 3. Top brand chip — small, refined, appears frame 4-14
-  const chipT = clamp01((frame - 4) / 10);
-  if (chipT > 0) {
+  // 3. mybabes.ai logo lockup — top, refined, appears frame 2-14
+  const logoT = clamp01((frame - 2) / 12);
+  if (logoT > 0) {
     ctx.save();
-    ctx.globalAlpha = chipT;
-    const chipY = 130 - (1 - chipT) * 12;
-    const chipLabel = "PRESENTED BY META COMICS";
-    ctx.font = `600 22px "Inter", system-ui, sans-serif`;
+    ctx.globalAlpha = logoT;
+    const logoY = 150 - (1 - logoT) * 14;
+    // Mark: rounded square with "M"
+    const markSize = 68;
+    ctx.font = `700 44px "Inter", system-ui, sans-serif`;
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    const wordmark = "mybabes";
+    const tld = ".ai";
+    const wordW = ctx.measureText(wordmark).width;
+    const tldW = ctx.measureText(tld).width;
+    const gap = 18;
+    const totalW = markSize + gap + wordW + tldW;
+    const startX = w / 2 - totalW / 2;
+
+    // Mark background (accent, rounded)
+    const markX = startX;
+    const markY = logoY - markSize / 2;
+    ctx.save();
+    ctx.shadowColor = theme.accent;
+    ctx.shadowBlur = 24 * logoT;
+    ctx.fillStyle = theme.accent;
+    roundRect(ctx, markX, markY, markSize, markSize, 20);
+    ctx.fill();
+    ctx.restore();
+    // Mark letter
+    ctx.fillStyle = "#ffffff";
+    ctx.font = `800 40px "Inter", system-ui, sans-serif`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    const chipTextW = ctx.measureText(chipLabel).width;
-    const padX = 28;
-    const chipW = chipTextW + padX * 2;
-    const chipH = 52;
-    const chipX = w / 2 - chipW / 2;
-    ctx.fillStyle = theme.surface;
-    roundRect(ctx, chipX, chipY - chipH / 2, chipW, chipH, 26);
-    ctx.fill();
-    ctx.strokeStyle = "rgba(255,255,255,0.08)";
-    ctx.lineWidth = 1;
-    ctx.stroke();
-    // small dot
+    ctx.fillText("M", markX + markSize / 2, logoY + 2);
+
+    // Wordmark
+    ctx.textAlign = "left";
+    ctx.font = `700 44px "Inter", system-ui, sans-serif`;
+    ctx.fillStyle = theme.text;
+    const wordX = markX + markSize + gap;
+    ctx.fillText(wordmark, wordX, logoY);
     ctx.fillStyle = theme.accent;
-    ctx.beginPath();
-    ctx.arc(chipX + 20, chipY, 5, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = theme.sub;
-    ctx.fillText(chipLabel, w / 2 + 8, chipY);
+    ctx.fillText(tld, wordX + wordW, logoY);
+
     ctx.restore();
   }
+
 
   // 4. Eyebrow accent line above title (fine detail)
   const lineT = clamp01((frame - 10) / 14);
