@@ -24,7 +24,7 @@ function encodeWAV(samples: Float32Array): Uint8Array {
   view.setUint32(24, SR, true);
   view.setUint32(28, byteRate, true);
   view.setUint16(32, blockAlign, true);
-  view.setUint16(34, bytesPerSample, true);
+  view.setUint16(34, bytesPerSample * 8, true);
   writeString(36, "data");
   view.setUint32(40, dataSize, true);
   let offset = 44;
@@ -44,16 +44,16 @@ export function generateIntroSfxWav(): Uint8Array {
   const out = new Float32Array(total);
 
   const clickStart = Math.floor(SR * 2.07);
-  const clickLen = Math.floor(SR * 0.09); // 90ms
+  const clickLen = Math.floor(SR * 0.045); // 45ms
   for (let i = 0; i < clickLen; i++) {
     const t = i / clickLen;
-    // High-pitched blip: 1800Hz sine + a bit of noise, sharp exp decay
-    const freq = 1800 - 600 * t;
+    // Short UI tap: high-pitched blip, sharp decay, no background bed.
+    const freq = 1650 - 450 * t;
     const phase = (2 * Math.PI * freq * i) / SR;
-    const noise = (Math.random() * 2 - 1) * 0.15;
+    const noise = (Math.random() * 2 - 1) * 0.04;
     const env = Math.pow(1 - t, 3) * (i < SR * 0.002 ? i / (SR * 0.002) : 1);
     const idx = clickStart + i;
-    if (idx < total) out[idx] = (Math.sin(phase) + noise) * env * 0.7;
+    if (idx < total) out[idx] = (Math.sin(phase) + noise) * env * 0.35;
   }
 
   return encodeWAV(out);
