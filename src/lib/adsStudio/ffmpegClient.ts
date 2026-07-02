@@ -159,11 +159,17 @@ function buildOverlayFilter(
 
 export async function renderVideo(config: RenderConfig): Promise<Blob> {
   const { intro, clip, headline, captions, onProgress } = config;
-  const ffmpeg = await getFFmpeg();
+  const ffmpegLogTail: string[] = [];
+  const ffmpeg = await getFFmpeg((msg) => {
+    ffmpegLogTail.push(msg);
+    if (ffmpegLogTail.length > 60) ffmpegLogTail.shift();
+  });
 
   ffmpeg.on("progress", ({ progress }) => {
     onProgress?.("encoding", Math.max(0, Math.min(1, progress)));
   });
+
+
 
   // 1. Intro frames
   onProgress?.("rendering-intro-frames", 0);
