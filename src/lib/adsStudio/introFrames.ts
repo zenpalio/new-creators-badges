@@ -101,6 +101,7 @@ export function drawIntroFrame(
   frame: number,
   config: IntroConfig,
   backgroundImage?: HTMLImageElement | null,
+  logoImage?: HTMLImageElement | null,
 ) {
   const w = ctx.canvas.width;
   const h = ctx.canvas.height;
