@@ -303,7 +303,6 @@ export async function renderVideo(config: RenderConfig): Promise<Blob> {
       "clip_out.mp4",
       "outro_in.mp4",
       "outro.mp4",
-      "music.mp3",
       "sfx.wav",
       "final.mp4",
     ].map((name) => ffmpeg.deleteFile(name).catch(() => undefined)));
