@@ -262,8 +262,10 @@ export async function renderVideo(config: RenderConfig): Promise<Blob> {
   const offset2 = Math.max(offset1 + 0.1, introDur + clipDur - xfadeDur * 2); // (intro+clip)→outro
   const totalDur = introDur + clipDur + outroDur - xfadeDur * 2;
 
-  // 6. Final assembly — xfade video + acrossfade audio + music mix
+  // 6. Final assembly — xfade video + acrossfade audio + music mix + intro SFX
   onProgress?.("concatenating", 0);
+  // Button "press" happens around frame 65 @ 60fps ≈ 1.083s
+  const thumpDelayMs = 1050;
   const filter = [
     // video crossfades
     `[0:v][1:v]xfade=transition=fade:duration=${xfadeDur}:offset=${offset1.toFixed(3)}[vx1]`,
@@ -271,9 +273,15 @@ export async function renderVideo(config: RenderConfig): Promise<Blob> {
     // audio crossfades (original tracks — intro is silent, clip + outro carry theirs)
     `[0:a][1:a]acrossfade=d=${xfadeDur}:c1=tri:c2=tri[ax1]`,
     `[ax1][2:a]acrossfade=d=${xfadeDur}:c1=tri:c2=tri[aorig]`,
-    // background music — loop to cover full length, ducked under original audio
-    `[3:a]aloop=loop=-1:size=2e9,atrim=0:${totalDur.toFixed(3)},afade=t=in:st=0:d=0.8,afade=t=out:st=${(totalDur - 1.2).toFixed(3)}:d=1.2,volume=0.35[bg]`,
-    `[aorig][bg]amix=inputs=2:duration=first:dropout_transition=0:normalize=0[aout]`,
+    // background music — loop to cover full length, audible but not overpowering
+    `[3:a]aloop=loop=-1:size=2e9,atrim=0:${totalDur.toFixed(3)},asetpts=PTS-STARTPTS,afade=t=in:st=0:d=0.8,afade=t=out:st=${(totalDur - 1.2).toFixed(3)}:d=1.2,volume=0.7[bg]`,
+    // SFX 1: swoosh — filtered pink noise sweeping in during first 0.5s
+    `[4:a]highpass=f=350,lowpass=f=2600,afade=t=in:st=0:d=0.05,afade=t=out:st=0.35:d=0.15,volume=0.9[whoosh]`,
+    // SFX 2: sub-bass thump on button press (~1.05s)
+    `[5:a]afade=t=out:st=0.05:d=0.22,adelay=${thumpDelayMs}|${thumpDelayMs},volume=1.1[thump]`,
+    `[whoosh][thump]amix=inputs=2:duration=longest:normalize=0[sfx]`,
+    // Final mix: original + music + intro SFX
+    `[aorig][bg][sfx]amix=inputs=3:duration=first:dropout_transition=0:normalize=0[aout]`,
   ].join(";");
 
   await ffmpeg.exec([
@@ -281,6 +289,8 @@ export async function renderVideo(config: RenderConfig): Promise<Blob> {
     "-i", "clip_out.mp4",
     "-i", "outro.mp4",
     "-i", "music.mp3",
+    "-f", "lavfi", "-t", "0.5", "-i", "anoisesrc=c=pink:a=0.8:d=0.5",
+    "-f", "lavfi", "-t", "0.3", "-i", "sine=f=70:d=0.3",
     "-filter_complex", filter,
     "-map", "[vout]",
     "-map", "[aout]",
@@ -292,6 +302,7 @@ export async function renderVideo(config: RenderConfig): Promise<Blob> {
     "-movflags", "+faststart",
     "final.mp4",
   ]);
+
 
   const data = (await ffmpeg.readFile("final.mp4")) as Uint8Array;
   // Cleanup
