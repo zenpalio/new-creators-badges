@@ -25,48 +25,76 @@ export const INTRO_FRAMES = 90;
 export const INTRO_W = 1080;
 export const INTRO_H = 1920;
 
-const THEMES: Record<
-  IntroTheme,
-  { bg: string; glow: string; accent: string; text: string; sub: string; button: string; buttonText: string }
-> = {
+interface ThemeTokens {
+  bg: string;
+  surface: string;
+  accent: string;
+  accentSoft: string;
+  text: string;
+  sub: string;
+  muted: string;
+  button: string;
+  buttonText: string;
+  grain: number;
+}
+
+const THEMES: Record<IntroTheme, ThemeTokens> = {
   anna: {
     bg: "#05070d",
-    glow: "rgba(0, 128, 255, 0.55)",
-    accent: "#0080ff",
+    surface: "rgba(255,255,255,0.04)",
+    accent: "#1f8bff",
+    accentSoft: "rgba(31, 139, 255, 0.18)",
     text: "#ffffff",
-    sub: "rgba(255,255,255,0.75)",
-    button: "#0080ff",
-    buttonText: "#000814",
+    sub: "rgba(255,255,255,0.72)",
+    muted: "rgba(255,255,255,0.42)",
+    button: "#1f8bff",
+    buttonText: "#ffffff",
+    grain: 0.05,
   },
   neon: {
-    bg: "#0a0014",
-    glow: "rgba(255, 0, 200, 0.5)",
-    accent: "#ff2bd6",
+    bg: "#08070f",
+    surface: "rgba(255,255,255,0.05)",
+    accent: "#7c5cff",
+    accentSoft: "rgba(124, 92, 255, 0.20)",
     text: "#ffffff",
-    sub: "rgba(255,255,255,0.8)",
-    button: "#00e5ff",
-    buttonText: "#0a0014",
+    sub: "rgba(255,255,255,0.75)",
+    muted: "rgba(255,255,255,0.45)",
+    button: "#ffffff",
+    buttonText: "#08070f",
+    grain: 0.06,
   },
   minimal: {
     bg: "#f5f2ec",
-    glow: "rgba(0,0,0,0.08)",
+    surface: "rgba(0,0,0,0.04)",
     accent: "#111111",
+    accentSoft: "rgba(17,17,17,0.10)",
     text: "#111111",
-    sub: "rgba(17,17,17,0.6)",
+    sub: "rgba(17,17,17,0.65)",
+    muted: "rgba(17,17,17,0.4)",
     button: "#111111",
     buttonText: "#f5f2ec",
+    grain: 0.03,
   },
 };
 
+function clamp01(v: number) {
+  return Math.max(0, Math.min(1, v));
+}
 function easeOutCubic(t: number) {
   return 1 - Math.pow(1 - t, 3);
 }
-function easeOutBack(t: number) {
-  const c1 = 1.70158;
-  const c3 = c1 + 1;
-  return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+function easeOutQuint(t: number) {
+  return 1 - Math.pow(1 - t, 5);
+}
+function easeInOutCubic(t: number) {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
+// Deterministic pseudo-random for film grain
+function noise(x: number, y: number, seed: number) {
+  const n = Math.sin(x * 12.9898 + y * 78.233 + seed * 43.1) * 43758.5453;
+  return n - Math.floor(n);
+}
 
 export function drawIntroFrame(
   ctx: CanvasRenderingContext2D,
@@ -76,164 +104,279 @@ export function drawIntroFrame(
 ) {
   const w = ctx.canvas.width;
   const h = ctx.canvas.height;
+  const t = frame / INTRO_FRAMES; // 0..1 progress
   const theme = THEMES[config.theme];
 
-  // Background
+  // 1. Base fill
   ctx.fillStyle = theme.bg;
   ctx.fillRect(0, 0, w, h);
 
-  // Background image (cover-fit, subtle Ken Burns zoom)
+  // 2. Background image — cover-fit, slow drift, cinematic grade
   if (backgroundImage) {
-    const zoom = 1 + (frame / INTRO_FRAMES) * 0.08;
+    const zoom = 1.05 + easeOutCubic(t) * 0.07;
     const iw = backgroundImage.width;
     const ih = backgroundImage.height;
     const scale = Math.max(w / iw, h / ih) * zoom;
     const dw = iw * scale;
     const dh = ih * scale;
+    // subtle vertical parallax drift
+    const drift = (t - 0.5) * 40;
     const dx = (w - dw) / 2;
-    const dy = (h - dh) / 2;
+    const dy = (h - dh) / 2 + drift;
     ctx.drawImage(backgroundImage, dx, dy, dw, dh);
-    // Dark vignette so UI stays readable
+
+    // Cinematic vignette: darker at edges, deeper at bottom
     const vg = ctx.createLinearGradient(0, 0, 0, h);
     vg.addColorStop(0, "rgba(0,0,0,0.55)");
-    vg.addColorStop(0.5, "rgba(0,0,0,0.35)");
-    vg.addColorStop(1, "rgba(0,0,0,0.75)");
+    vg.addColorStop(0.45, "rgba(0,0,0,0.25)");
+    vg.addColorStop(1, "rgba(0,0,0,0.88)");
     ctx.fillStyle = vg;
+    ctx.fillRect(0, 0, w, h);
+
+    // Corner vignette
+    const cv = ctx.createRadialGradient(w / 2, h / 2, w * 0.3, w / 2, h / 2, w * 0.85);
+    cv.addColorStop(0, "rgba(0,0,0,0)");
+    cv.addColorStop(1, "rgba(0,0,0,0.55)");
+    ctx.fillStyle = cv;
+    ctx.fillRect(0, 0, w, h);
+  } else {
+    // No image: subtle radial accent wash
+    const rg = ctx.createRadialGradient(w / 2, h * 0.4, 0, w / 2, h * 0.4, w * 0.9);
+    rg.addColorStop(0, theme.accentSoft);
+    rg.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = rg;
     ctx.fillRect(0, 0, w, h);
   }
 
-  // Radial glow (pulses from center)
-  const pulse = 0.6 + 0.4 * Math.sin(frame * 0.15);
-  const glowR = w * (0.15 + easeOutCubic(Math.min(1, frame / 20)) * 0.65) * pulse;
-  const grad = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, glowR);
-  grad.addColorStop(0, theme.glow);
-  grad.addColorStop(1, "rgba(0,0,0,0)");
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, w, h);
-
-  // ---- Beat 1: 0-24 title letters type in ----
-  const title = (config.title || "YOUR ROLEPLAY").toUpperCase();
-  const letters = title.split("");
-  const perLetter = 24 / Math.max(1, letters.length);
-  const titleFontSize = Math.min(160, (w * 0.85) / Math.max(6, letters.length) * 1.4);
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.font = `900 ${titleFontSize}px "Bebas Neue", Impact, sans-serif`;
-
-  const cy = h * 0.42;
-  const totalWidth = ctx.measureText(title).width;
-  let cursorX = w / 2 - totalWidth / 2;
-  letters.forEach((ch, i) => {
-    const localT = Math.min(1, Math.max(0, (frame - i * perLetter) / 8));
-    if (localT <= 0) {
-      cursorX += ctx.measureText(ch).width;
-      return;
-    }
-    const eased = easeOutBack(localT);
-    const yOffset = (1 - eased) * 60;
-    const alpha = Math.min(1, localT * 1.5);
+  // 3. Top brand chip — small, refined, appears frame 4-14
+  const chipT = clamp01((frame - 4) / 10);
+  if (chipT > 0) {
     ctx.save();
-    ctx.globalAlpha = alpha;
-    // subtle chromatic aberration
+    ctx.globalAlpha = chipT;
+    const chipY = 130 - (1 - chipT) * 12;
+    const chipLabel = "PRESENTED BY META COMICS";
+    ctx.font = `600 22px "Inter", system-ui, sans-serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    const chipTextW = ctx.measureText(chipLabel).width;
+    const padX = 28;
+    const chipW = chipTextW + padX * 2;
+    const chipH = 52;
+    const chipX = w / 2 - chipW / 2;
+    ctx.fillStyle = theme.surface;
+    roundRect(ctx, chipX, chipY - chipH / 2, chipW, chipH, 26);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,0.08)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    // small dot
     ctx.fillStyle = theme.accent;
-    ctx.globalAlpha = alpha * 0.35;
-    ctx.fillText(ch, cursorX + ctx.measureText(ch).width / 2 - 4, cy + yOffset);
-    ctx.fillStyle = theme.text;
-    ctx.globalAlpha = alpha;
-    ctx.fillText(ch, cursorX + ctx.measureText(ch).width / 2, cy + yOffset);
-    ctx.restore();
-    cursorX += ctx.measureText(ch).width;
-  });
-
-  // ---- Beat 2: 24-54 subtitle + START button ----
-  if (frame >= 20) {
-    const subT = Math.min(1, (frame - 20) / 12);
-    ctx.save();
-    ctx.globalAlpha = subT;
+    ctx.beginPath();
+    ctx.arc(chipX + 20, chipY, 5, 0, Math.PI * 2);
+    ctx.fill();
     ctx.fillStyle = theme.sub;
-    ctx.font = `500 42px "Inter", system-ui, sans-serif`;
-    ctx.fillText(config.subtitle || "A POV Roleplay", w / 2, cy + titleFontSize * 0.75);
+    ctx.fillText(chipLabel, w / 2 + 8, chipY);
     ctx.restore();
   }
 
-  // START button (appears frame 30)
-  const btnAppearStart = 30;
-  const btnEnd = 90;
-  if (frame >= btnAppearStart) {
-    const bt = Math.min(1, (frame - btnAppearStart) / 12);
-    const scale = easeOutBack(bt);
-    const idlePulse = 1 + 0.03 * Math.sin(frame * 0.25);
-    // Tap effect at frame 60-66: depress
-    let pressScale = 1;
-    if (frame >= 60 && frame <= 66) pressScale = 0.9;
+  // 4. Eyebrow accent line above title (fine detail)
+  const lineT = clamp01((frame - 10) / 14);
+  if (lineT > 0) {
+    ctx.save();
+    ctx.globalAlpha = lineT;
+    const lineW = 120 * easeOutQuint(lineT);
+    const lineY = h * 0.36;
+    ctx.strokeStyle = theme.accent;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(w / 2 - lineW / 2, lineY);
+    ctx.lineTo(w / 2 + lineW / 2, lineY);
+    ctx.stroke();
+    ctx.restore();
+  }
 
-    const btnW = 520 * scale * idlePulse * pressScale;
-    const btnH = 160 * scale * idlePulse * pressScale;
+  // 5. Title — clean editorial reveal, mask-slide up (no chromatic aberration)
+  const title = (config.title || "Your Roleplay").toUpperCase();
+  const titleAppear = 8;
+  const titleFontSize = Math.min(200, (w * 0.9) / Math.max(6, title.length) * 1.55);
+  ctx.font = `800 ${titleFontSize}px "Bebas Neue", Impact, sans-serif`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  const cy = h * 0.44;
+
+  // Split into words for staggered reveal
+  const words = title.split(" ");
+  const wordGap = titleFontSize * 0.28;
+  // Measure each word
+  const wordWidths = words.map((wd) => ctx.measureText(wd).width);
+  const totalWordsW = wordWidths.reduce((a, b) => a + b, 0) + wordGap * (words.length - 1);
+  let cx = w / 2 - totalWordsW / 2;
+  words.forEach((wd, i) => {
+    const wT = clamp01((frame - titleAppear - i * 4) / 16);
+    if (wT <= 0) {
+      cx += wordWidths[i] + wordGap;
+      return;
+    }
+    const eased = easeOutQuint(wT);
+    const yOffset = (1 - eased) * 80;
+    const alpha = wT;
+    ctx.save();
+    // Clip mask reveal for extra polish
+    ctx.beginPath();
+    ctx.rect(cx - 20, cy - titleFontSize * 0.7, wordWidths[i] + 40, titleFontSize * 1.4);
+    ctx.clip();
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = theme.text;
+    ctx.fillText(wd, cx + wordWidths[i] / 2, cy + yOffset);
+    ctx.restore();
+    cx += wordWidths[i] + wordGap;
+  });
+
+  // 6. Subtitle — refined, tracking, mono-ish
+  const subT = clamp01((frame - 22) / 14);
+  if (subT > 0) {
+    ctx.save();
+    ctx.globalAlpha = subT;
+    const subY = cy + titleFontSize * 0.7;
+    ctx.fillStyle = theme.sub;
+    ctx.font = `500 34px "Inter", system-ui, sans-serif`;
+    // letter-spacing manually
+    const sub = (config.subtitle || "A POV Roleplay").toUpperCase();
+    const tracking = 6;
+    const chars = sub.split("");
+    const widths = chars.map((c) => ctx.measureText(c).width);
+    const totalW = widths.reduce((a, b) => a + b, 0) + tracking * (chars.length - 1);
+    let sx = w / 2 - totalW / 2;
+    chars.forEach((c, i) => {
+      ctx.fillText(c, sx + widths[i] / 2, subY + (1 - easeOutCubic(subT)) * 20);
+      sx += widths[i] + tracking;
+    });
+    ctx.restore();
+  }
+
+  // 7. START pill button — sleek, subtle inner sheen, restrained pulse
+  const btnAppear = 32;
+  if (frame >= btnAppear) {
+    const bt = clamp01((frame - btnAppear) / 16);
+    const eased = easeOutQuint(bt);
+    // subtle breathing (barely visible)
+    const idle = 1 + 0.012 * Math.sin(frame * 0.18);
+    // tap press
+    let press = 1;
+    if (frame >= 62 && frame <= 68) {
+      const pt = (frame - 62) / 6;
+      press = 1 - Math.sin(pt * Math.PI) * 0.06;
+    }
+
+    const btnW = 460 * eased * idle * press;
+    const btnH = 128 * eased * idle * press;
     const btnX = w / 2 - btnW / 2;
-    const btnY = h * 0.62;
+    const btnY = h * 0.66;
+    const radius = btnH / 2;
 
-    // Glow behind button
+    ctx.save();
+    ctx.globalAlpha = bt;
+
+    // Soft ambient glow
     ctx.save();
     ctx.shadowColor = theme.accent;
-    ctx.shadowBlur = 60 * bt;
+    ctx.shadowBlur = 80 * bt;
     ctx.fillStyle = theme.button;
-    roundRect(ctx, btnX, btnY, btnW, btnH, 80);
+    roundRect(ctx, btnX, btnY, btnW, btnH, radius);
     ctx.fill();
     ctx.restore();
 
-    // Label
-    ctx.save();
-    ctx.globalAlpha = bt;
+    // Inner sheen gradient
+    const sheen = ctx.createLinearGradient(btnX, btnY, btnX, btnY + btnH);
+    sheen.addColorStop(0, "rgba(255,255,255,0.18)");
+    sheen.addColorStop(0.5, "rgba(255,255,255,0.02)");
+    sheen.addColorStop(1, "rgba(0,0,0,0.15)");
+    ctx.fillStyle = sheen;
+    roundRect(ctx, btnX, btnY, btnW, btnH, radius);
+    ctx.fill();
+
+    // Label + arrow
     ctx.fillStyle = theme.buttonText;
-    ctx.font = `900 ${64 * scale}px "Bebas Neue", Impact, sans-serif`;
+    ctx.font = `700 44px "Inter", system-ui, sans-serif`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText("START", w / 2, btnY + btnH / 2 + 4);
+    const label = "START";
+    const labelW = ctx.measureText(label).width;
+    const cxBtn = w / 2;
+    ctx.fillText(label, cxBtn - 22, btnY + btnH / 2);
+    // arrow
+    const arrowX = cxBtn + labelW / 2 - 4;
+    const arrowY = btnY + btnH / 2;
+    ctx.strokeStyle = theme.buttonText;
+    ctx.lineWidth = 5;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.beginPath();
+    ctx.moveTo(arrowX, arrowY);
+    ctx.lineTo(arrowX + 26, arrowY);
+    ctx.moveTo(arrowX + 14, arrowY - 12);
+    ctx.lineTo(arrowX + 26, arrowY);
+    ctx.lineTo(arrowX + 14, arrowY + 12);
+    ctx.stroke();
+
     ctx.restore();
 
-    // Ripple burst on tap (frame 58-72)
-    if (frame >= 58 && frame <= 78) {
-      const rt = (frame - 58) / 20;
-      const rippleR = rt * 700;
+    // Refined ring pulse (single, subtle) on tap
+    if (frame >= 62 && frame <= 82) {
+      const rt = (frame - 62) / 20;
+      const rEased = easeOutCubic(rt);
       ctx.save();
-      ctx.globalAlpha = 1 - rt;
+      ctx.globalAlpha = (1 - rt) * 0.7;
       ctx.strokeStyle = theme.accent;
-      ctx.lineWidth = 8 * (1 - rt);
+      ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.arc(w / 2, btnY + btnH / 2, rippleR, 0, Math.PI * 2);
+      ctx.arc(w / 2, btnY + btnH / 2, radius + rEased * 320, 0, Math.PI * 2);
       ctx.stroke();
       ctx.restore();
     }
-
-    if (frame >= btnEnd - 15) {
-      // fade out button as wipe takes over
-      const fo = (frame - (btnEnd - 15)) / 15;
-      ctx.fillStyle = `rgba(0,0,0,${fo * 0.6})`;
-      ctx.fillRect(0, 0, w, h);
-    }
   }
 
-  // ---- Beat 3: flash frames 66-68 ----
-  if (frame >= 66 && frame <= 68) {
-    ctx.fillStyle = "rgba(255,255,255,0.9)";
-    ctx.fillRect(0, 0, w, h);
-  }
-
-  // ---- Beat 4: radial wipe reveal (frame 75-90) shows black hole growing (transition placeholder) ----
-  if (frame >= 75) {
-    const wt = (frame - 75) / 15;
-    const r = wt * Math.hypot(w, h);
+  // 8. Bottom progress dots (three) — pacing indicator
+  const dotsT = clamp01((frame - 28) / 12);
+  if (dotsT > 0) {
     ctx.save();
-    ctx.globalCompositeOperation = "destination-out";
-    ctx.beginPath();
-    ctx.arc(w / 2, h / 2, r, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.globalAlpha = dotsT * 0.9;
+    const dotsY = h - 160;
+    const dotR = 5;
+    const gap = 22;
+    const active = Math.min(2, Math.floor((frame - 28) / 20));
+    for (let i = 0; i < 3; i++) {
+      const dx = w / 2 + (i - 1) * gap;
+      ctx.fillStyle = i <= active ? theme.accent : theme.muted;
+      ctx.beginPath();
+      ctx.arc(dx, dotsY, dotR, 0, Math.PI * 2);
+      ctx.fill();
+    }
     ctx.restore();
-    // fill exposed area with pure black so concat cut is clean
-    ctx.globalCompositeOperation = "destination-over";
-    ctx.fillStyle = "#000000";
+  }
+
+  // 9. Film grain overlay (very subtle, deterministic)
+  if (theme.grain > 0) {
+    const cellSize = 4;
+    ctx.save();
+    ctx.globalAlpha = theme.grain;
+    for (let gy = 0; gy < h; gy += cellSize) {
+      for (let gx = 0; gx < w; gx += cellSize) {
+        const n = noise(gx, gy, frame);
+        if (n > 0.55) {
+          ctx.fillStyle = n > 0.85 ? "#ffffff" : "#000000";
+          ctx.fillRect(gx, gy, cellSize, cellSize);
+        }
+      }
+    }
+    ctx.restore();
+  }
+
+  // 10. Outgoing transition — clean fade to black (no white flash, no cutout)
+  if (frame >= 78) {
+    const fo = clamp01((frame - 78) / 12);
+    ctx.fillStyle = `rgba(0,0,0,${easeInOutCubic(fo)})`;
     ctx.fillRect(0, 0, w, h);
-    ctx.globalCompositeOperation = "source-over";
   }
 }
 
