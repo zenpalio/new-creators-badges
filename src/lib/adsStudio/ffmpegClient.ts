@@ -2,8 +2,10 @@ import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile, toBlobURL } from "@ffmpeg/util";
 import outroAsset from "../../assets/ads-outro.mp4.asset.json";
 import logoAsset from "../../assets/mybabes-logo.svg.asset.json";
+import musicAsset from "../../assets/ads-music.mp3.asset.json";
 const OUTRO_URL = outroAsset.url;
 const LOGO_URL = logoAsset.url;
+const MUSIC_URL = musicAsset.url;
 import {
   drawIntroFrame,
   INTRO_FPS,
@@ -33,6 +35,24 @@ export interface RenderConfig {
   headline: Headline | null;
   captions: Caption[];
   onProgress?: (stage: string, ratio: number) => void;
+}
+
+async function getMediaDuration(src: Blob | string): Promise<number> {
+  return new Promise((resolve, reject) => {
+    const url = typeof src === "string" ? src : URL.createObjectURL(src);
+    const v = document.createElement("video");
+    v.preload = "metadata";
+    v.src = url;
+    v.onloadedmetadata = () => {
+      const d = v.duration;
+      if (typeof src !== "string") URL.revokeObjectURL(url);
+      resolve(isFinite(d) ? d : 0);
+    };
+    v.onerror = () => {
+      if (typeof src !== "string") URL.revokeObjectURL(url);
+      reject(new Error("Failed to read media duration"));
+    };
+  });
 }
 
 let ffmpegInstance: FFmpeg | null = null;
@@ -225,19 +245,51 @@ export async function renderVideo(config: RenderConfig): Promise<Blob> {
     "outro.mp4",
   ]);
 
-  // 4. Concat intro + clip + outro
+  // 4. Fetch music track and write to ffmpeg FS
+  onProgress?.("adding-music", 0);
+  const musicRes = await fetch(MUSIC_URL);
+  if (!musicRes.ok) throw new Error(`Failed to fetch music: ${musicRes.status}`);
+  const musicBuf = new Uint8Array(await musicRes.arrayBuffer());
+  await ffmpeg.writeFile("music.mp3", musicBuf);
+
+  // 5. Read durations for xfade offsets
+  const introDur = INTRO_FRAMES / INTRO_FPS; // known: 3.0
+  const clipDur = await getMediaDuration(clip).catch(() => 15);
+  const outroDur = await getMediaDuration(new Blob([outroBuf.buffer as ArrayBuffer], { type: "video/mp4" })).catch(() => 4);
+
+  const xfadeDur = 0.5;
+  const offset1 = Math.max(0.1, introDur - xfadeDur); // intro→clip
+  const offset2 = Math.max(offset1 + 0.1, introDur + clipDur - xfadeDur * 2); // (intro+clip)→outro
+  const totalDur = introDur + clipDur + outroDur - xfadeDur * 2;
+
+  // 6. Final assembly — xfade video + acrossfade audio + music mix
   onProgress?.("concatenating", 0);
-  const list = "file 'intro.mp4'\nfile 'clip_out.mp4'\nfile 'outro.mp4'\n";
-  await ffmpeg.writeFile("list.txt", new TextEncoder().encode(list));
+  const filter = [
+    // video crossfades
+    `[0:v][1:v]xfade=transition=fade:duration=${xfadeDur}:offset=${offset1.toFixed(3)}[vx1]`,
+    `[vx1][2:v]xfade=transition=fade:duration=${xfadeDur}:offset=${offset2.toFixed(3)}[vout]`,
+    // audio crossfades (original tracks — intro is silent, clip + outro carry theirs)
+    `[0:a][1:a]acrossfade=d=${xfadeDur}:c1=tri:c2=tri[ax1]`,
+    `[ax1][2:a]acrossfade=d=${xfadeDur}:c1=tri:c2=tri[aorig]`,
+    // background music — loop to cover full length, ducked under original audio
+    `[3:a]aloop=loop=-1:size=2e9,atrim=0:${totalDur.toFixed(3)},afade=t=in:st=0:d=0.8,afade=t=out:st=${(totalDur - 1.2).toFixed(3)}:d=1.2,volume=0.35[bg]`,
+    `[aorig][bg]amix=inputs=2:duration=first:dropout_transition=0:normalize=0[aout]`,
+  ].join(";");
+
   await ffmpeg.exec([
-    "-f",
-    "concat",
-    "-safe",
-    "0",
-    "-i",
-    "list.txt",
-    "-c",
-    "copy",
+    "-i", "intro.mp4",
+    "-i", "clip_out.mp4",
+    "-i", "outro.mp4",
+    "-i", "music.mp3",
+    "-filter_complex", filter,
+    "-map", "[vout]",
+    "-map", "[aout]",
+    "-c:v", "libx264",
+    "-pix_fmt", "yuv420p",
+    "-r", String(INTRO_FPS),
+    "-c:a", "aac",
+    "-b:a", "192k",
+    "-movflags", "+faststart",
     "final.mp4",
   ]);
 
@@ -252,7 +304,7 @@ export async function renderVideo(config: RenderConfig): Promise<Blob> {
     await ffmpeg.deleteFile("clip_out.mp4");
     await ffmpeg.deleteFile("outro_in.mp4");
     await ffmpeg.deleteFile("outro.mp4");
-    await ffmpeg.deleteFile("list.txt");
+    await ffmpeg.deleteFile("music.mp3");
     await ffmpeg.deleteFile("final.mp4");
   } catch {
     // ignore cleanup errors
