@@ -16,6 +16,8 @@ import {
   type IntroConfig,
 } from "./introFrames";
 import { escapeDrawtext } from "./drawtextEscape";
+import { generateIntroSfxWav } from "./introSfx";
+
 
 export interface Caption {
   text: string;
