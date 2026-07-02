@@ -255,7 +255,7 @@ export async function renderVideo(config: RenderConfig): Promise<Blob> {
   // 5. Read durations for xfade offsets
   const introDur = INTRO_FRAMES / INTRO_FPS; // known: 3.0
   const clipDur = await getMediaDuration(clip).catch(() => 15);
-  const outroDur = await getMediaDuration(OUTRO_URL).catch(() => 4);
+  const outroDur = await getMediaDuration(new Blob([outroBuf.buffer as ArrayBuffer], { type: "video/mp4" })).catch(() => 4);
 
   const xfadeDur = 0.5;
   const offset1 = Math.max(0.1, introDur - xfadeDur); // intro→clip
