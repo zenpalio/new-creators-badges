@@ -282,25 +282,8 @@ export function drawIntroFrame(
     }
   }
 
-  // (progress dots removed)
+  // (progress dots + film grain removed)
 
-
-  // 9. Film grain overlay (very subtle, deterministic)
-  if (theme.grain > 0) {
-    const cellSize = 4;
-    ctx.save();
-    ctx.globalAlpha = theme.grain;
-    for (let gy = 0; gy < h; gy += cellSize) {
-      for (let gx = 0; gx < w; gx += cellSize) {
-        const n = noise(gx, gy, frame);
-        if (n > 0.55) {
-          ctx.fillStyle = n > 0.85 ? "#ffffff" : "#000000";
-          ctx.fillRect(gx, gy, cellSize, cellSize);
-        }
-      }
-    }
-    ctx.restore();
-  }
 
   // 10. Outgoing transition — clean fade to black (no white flash, no cutout)
   if (frame >= 78) {
