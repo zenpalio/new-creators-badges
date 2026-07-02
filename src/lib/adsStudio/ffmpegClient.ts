@@ -328,7 +328,9 @@ export async function renderVideo(config: RenderConfig): Promise<Blob> {
     await ffmpeg.deleteFile("outro_in.mp4");
     await ffmpeg.deleteFile("outro.mp4");
     await ffmpeg.deleteFile("music.mp3");
+    await ffmpeg.deleteFile("sfx.wav");
     await ffmpeg.deleteFile("final.mp4");
+
   } catch {
     // ignore cleanup errors
   }
