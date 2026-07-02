@@ -196,12 +196,10 @@ export function drawIntroFrame(
   }
 
 
-  // 4. Eyebrow accent line above title (fine detail)
-  const lineT = clamp01((frame - 10) / 14);
-  if (lineT > 0) {
+  // 4. Eyebrow accent line above title
+  {
     ctx.save();
-    ctx.globalAlpha = lineT;
-    const lineW = 120 * easeOutQuint(lineT);
+    const lineW = 120;
     const lineY = h * 0.36;
     ctx.strokeStyle = theme.accent;
     ctx.lineWidth = 3;
@@ -211,6 +209,7 @@ export function drawIntroFrame(
     ctx.stroke();
     ctx.restore();
   }
+
 
   // 5. Title — always visible from frame 0
   const title = (config.title || "Your Roleplay").toUpperCase();
