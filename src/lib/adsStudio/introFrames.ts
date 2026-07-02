@@ -285,12 +285,8 @@ export function drawIntroFrame(
   // (progress dots + film grain removed)
 
 
-  // 10. Outgoing transition — clean fade to black (no white flash, no cutout)
-  if (frame >= 78) {
-    const fo = clamp01((frame - 78) / 12);
-    ctx.fillStyle = `rgba(0,0,0,${easeInOutCubic(fo)})`;
-    ctx.fillRect(0, 0, w, h);
-  }
+  // (fade-out removed — outer ffmpeg xfade handles the transition)
+
 }
 
 function roundRect(
