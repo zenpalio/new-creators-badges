@@ -67,15 +67,6 @@ function easeOutBack(t: number) {
   return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
 }
 
-export function drawIntroFrame(
-  ctx: CanvasRenderingContext2D,
-  frame: number,
-  config: IntroConfig,
-) {
-  const w = ctx.canvas.width;
-  const h = ctx.canvas.height;
-  const theme = THEMES[config.theme];
-  const t = frame / INTRO_FRAMES;
 
 export function drawIntroFrame(
   ctx: CanvasRenderingContext2D,
