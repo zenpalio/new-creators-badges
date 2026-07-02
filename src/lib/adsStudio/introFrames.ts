@@ -148,12 +148,11 @@ export function drawIntroFrame(
     ctx.fillRect(0, 0, w, h);
   }
 
-  // 3. mybabes.ai logo lockup — top, refined, appears frame 2-14
-  const logoT = clamp01((frame - 2) / 12);
-  if (logoT > 0) {
+  // 3. mybabes.ai logo lockup — always visible
+  {
     ctx.save();
-    ctx.globalAlpha = logoT;
-    const logoY = 150 - (1 - logoT) * 14;
+    const logoY = 150;
+
     // Mark: rounded square with "M"
     const markSize = 68;
     ctx.font = `700 44px "Inter", system-ui, sans-serif`;
