@@ -354,24 +354,8 @@ export function drawIntroFrame(
     }
   }
 
-  // 8. Bottom progress dots (three) — pacing indicator
-  const dotsT = clamp01((frame - 28) / 12);
-  if (dotsT > 0) {
-    ctx.save();
-    ctx.globalAlpha = dotsT * 0.9;
-    const dotsY = h - 160;
-    const dotR = 5;
-    const gap = 22;
-    const active = Math.min(2, Math.floor((frame - 28) / 20));
-    for (let i = 0; i < 3; i++) {
-      const dx = w / 2 + (i - 1) * gap;
-      ctx.fillStyle = i <= active ? theme.accent : theme.muted;
-      ctx.beginPath();
-      ctx.arc(dx, dotsY, dotR, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.restore();
-  }
+  // (progress dots removed)
+
 
   // 9. Film grain overlay (very subtle, deterministic)
   if (theme.grain > 0) {
