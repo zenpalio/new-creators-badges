@@ -8,6 +8,8 @@ import {
   loadImage,
   type IntroConfig,
 } from "../../lib/adsStudio/introFrames";
+import logoAsset from "../../assets/mybabes-logo.svg.asset.json";
+
 
 interface Props {
   config: IntroConfig;
