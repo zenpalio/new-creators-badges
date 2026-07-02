@@ -57,20 +57,31 @@ async function getMediaDuration(src: Blob | string): Promise<number> {
   });
 }
 
-let ffmpegInstance: FFmpeg | null = null;
-
 async function getFFmpeg(onLog?: (msg: string) => void): Promise<FFmpeg> {
-  if (ffmpegInstance) return ffmpegInstance;
   const ffmpeg = new FFmpeg();
   if (onLog) ffmpeg.on("log", ({ message }) => onLog(message));
   // Single-threaded core — no SharedArrayBuffer / COOP-COEP required.
-  const baseURL = "https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd";
+  const baseURL = "https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/esm";
   await ffmpeg.load({
     coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, "text/javascript"),
     wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, "application/wasm"),
+    workerURL: await toBlobURL(`${baseURL}/ffmpeg-core.worker.js`, "text/javascript"),
   });
-  ffmpegInstance = ffmpeg;
   return ffmpeg;
+}
+
+async function execOrThrow(
+  ffmpeg: FFmpeg,
+  args: string[],
+  stage: string,
+  logTail: string[],
+) {
+  const code = await ffmpeg.exec(args);
+  if (code !== 0) {
+    throw new Error(
+      `${stage} failed (ffmpeg exit ${code}). Last log lines:\n${logTail.join("\n")}`,
+    );
+  }
 }
 
 async function renderIntroFrames(
@@ -171,131 +182,112 @@ export async function renderVideo(config: RenderConfig): Promise<Blob> {
 
 
 
-  // 1. Intro frames
-  onProgress?.("rendering-intro-frames", 0);
-  await renderIntroFrames(intro, ffmpeg, (r) =>
-    onProgress?.("rendering-intro-frames", r),
-  );
-
-  // 2. Encode intro to mp4 (silent audio track for concat compatibility)
-  onProgress?.("encoding-intro", 0);
-  await ffmpeg.exec([
-    "-framerate",
-    String(INTRO_FPS),
-    "-i",
-    "intro_%04d.jpg",
-    "-f",
-    "lavfi",
-    "-i",
-    "anullsrc=channel_layout=stereo:sample_rate=44100",
-    "-c:v",
-    "libx264",
-    "-pix_fmt",
-    "yuv420p",
-    "-r",
-    String(INTRO_FPS),
-    "-c:a",
-    "aac",
-    "-shortest",
-    "-t",
-    String(INTRO_FRAMES / INTRO_FPS),
-    "intro.mp4",
-  ]);
-
-  // 3. Process clip with overlays -> normalized to 1080x1920, 30fps, aac
-  onProgress?.("processing-clip", 0);
-  const clipBuf = new Uint8Array(await clip.arrayBuffer());
-  await ffmpeg.writeFile("input.mp4", clipBuf);
-  const vf = buildOverlayFilter(headline, captions);
-  await ffmpeg.exec([
-    "-i",
-    "input.mp4",
-    "-vf",
-    vf,
-    "-r",
-    String(INTRO_FPS),
-    "-c:v",
-    "libx264",
-    "-pix_fmt",
-    "yuv420p",
-    "-c:a",
-    "aac",
-    "-ar",
-    "44100",
-    "-ac",
-    "2",
-    "clip_out.mp4",
-  ]);
-
-  // 3b. Fetch + normalize outro to matching format
-  onProgress?.("processing-outro", 0);
-  const outroRes = await fetch(OUTRO_URL);
-  if (!outroRes.ok) throw new Error(`Failed to fetch outro: ${outroRes.status}`);
-  const outroBuf = new Uint8Array(await outroRes.arrayBuffer());
-  await ffmpeg.writeFile("outro_in.mp4", outroBuf);
-  await ffmpeg.exec([
-    "-i",
-    "outro_in.mp4",
-    "-vf",
-    "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920",
-    "-r",
-    String(INTRO_FPS),
-    "-c:v",
-    "libx264",
-    "-pix_fmt",
-    "yuv420p",
-    "-c:a",
-    "aac",
-    "-ar",
-    "44100",
-    "-ac",
-    "2",
-    "outro.mp4",
-  ]);
-
-  // 4. Fetch music track and write to ffmpeg FS
-  onProgress?.("adding-music", 0);
-  const musicRes = await fetch(MUSIC_URL);
-  if (!musicRes.ok) throw new Error(`Failed to fetch music: ${musicRes.status}`);
-  const musicBuf = new Uint8Array(await musicRes.arrayBuffer());
-  await ffmpeg.writeFile("music.mp3", musicBuf);
-
-  // 4b. Pre-generated intro SFX (whoosh + thump) as a WAV file
-  const sfxBuf = generateIntroSfxWav();
-  await ffmpeg.writeFile("sfx.wav", sfxBuf);
-
-  // 5. Read durations for xfade offsets
-  const introDur = INTRO_FRAMES / INTRO_FPS; // known: 3.0
-  const clipDur = await getMediaDuration(clip).catch(() => 15);
-  const outroDur = await getMediaDuration(new Blob([outroBuf.buffer as ArrayBuffer], { type: "video/mp4" })).catch(() => 4);
-
-  const xfadeDur = 0.5;
-  const offset1 = Math.max(0.1, introDur - xfadeDur); // intro→clip
-  const offset2 = Math.max(offset1 + 0.1, introDur + clipDur - xfadeDur * 2); // (intro+clip)→outro
-  const totalDur = introDur + clipDur + outroDur - xfadeDur * 2;
-
-  // 6. Final assembly — xfade video + acrossfade audio + music mix + intro SFX
-  onProgress?.("concatenating", 0);
-  const filter = [
-    // video crossfades
-    `[0:v][1:v]xfade=transition=fade:duration=${xfadeDur}:offset=${offset1.toFixed(3)}[vx1]`,
-    `[vx1][2:v]xfade=transition=fade:duration=${xfadeDur}:offset=${offset2.toFixed(3)}[vout]`,
-    // audio crossfades (original tracks — intro is silent, clip + outro carry theirs)
-    `[0:a][1:a]acrossfade=d=${xfadeDur}:c1=tri:c2=tri[ax1]`,
-    `[ax1][2:a]acrossfade=d=${xfadeDur}:c1=tri:c2=tri[aorig]`,
-    // background music — loop to cover full length, audible but not overpowering
-    `[3:a]aloop=loop=-1:size=2147483000,atrim=0:${totalDur.toFixed(3)},asetpts=PTS-STARTPTS,afade=t=in:st=0:d=0.8,afade=t=out:st=${(totalDur - 1.2).toFixed(3)}:d=1.2,volume=0.7[bg]`,
-    // Intro SFX (WAV containing whoosh + thump, mono → stereo, boosted)
-    `[4:a]aformat=channel_layouts=stereo,volume=1.4[sfx]`,
-    // Final mix: original + music + intro SFX
-    `[aorig][bg][sfx]amix=inputs=3:duration=first:dropout_transition=0:normalize=0[aout]`,
-  ].join(";");
-
   try {
-    await ffmpeg.exec([
+    // 1. Intro frames
+    onProgress?.("rendering-intro-frames", 0);
+    await renderIntroFrames(intro, ffmpeg, (r) =>
+      onProgress?.("rendering-intro-frames", r),
+    );
+
+    // 2. Encode intro to mp4
+    onProgress?.("encoding-intro", 0);
+    await execOrThrow(ffmpeg, [
+      "-framerate",
+      String(INTRO_FPS),
+      "-i",
+      "intro_%04d.jpg",
+      "-c:v",
+      "libx264",
+      "-pix_fmt",
+      "yuv420p",
+      "-r",
+      String(INTRO_FPS),
+      "-t",
+      String(INTRO_FRAMES / INTRO_FPS),
+      "intro.mp4",
+    ], "intro encode", ffmpegLogTail);
+
+    // 3. Process clip with overlays -> normalized to 1080x1920, 30fps
+    onProgress?.("processing-clip", 0);
+    const clipDur = await getMediaDuration(clip).catch(() => 15);
+    const clipBuf = new Uint8Array(await clip.arrayBuffer());
+    await ffmpeg.writeFile("input.mp4", clipBuf);
+    const vf = buildOverlayFilter(headline, captions);
+    await execOrThrow(ffmpeg, [
+      "-i",
+      "input.mp4",
+      "-vf",
+      vf,
+      "-r",
+      String(INTRO_FPS),
+      "-c:v",
+      "libx264",
+      "-pix_fmt",
+      "yuv420p",
+      "-an",
+      "clip_out.mp4",
+    ], "clip processing", ffmpegLogTail);
+
+    // 3b. Fetch + normalize outro to matching format
+    onProgress?.("processing-outro", 0);
+    const outroRes = await fetch(OUTRO_URL);
+    if (!outroRes.ok) throw new Error(`Failed to fetch outro: ${outroRes.status}`);
+    const outroArrayBuffer = await outroRes.arrayBuffer();
+    const outroDur = await getMediaDuration(new Blob([outroArrayBuffer.slice(0)], { type: "video/mp4" })).catch(() => 4);
+    await ffmpeg.writeFile("outro_in.mp4", new Uint8Array(outroArrayBuffer));
+    await execOrThrow(ffmpeg, [
+      "-i",
+      "outro_in.mp4",
+      "-vf",
+      "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920",
+      "-r",
+      String(INTRO_FPS),
+      "-c:v",
+      "libx264",
+      "-pix_fmt",
+      "yuv420p",
+      "-an",
+      "outro.mp4",
+    ], "outro processing", ffmpegLogTail);
+
+    // 4. Fetch music track and write to ffmpeg FS
+    onProgress?.("adding-music", 0);
+    const musicRes = await fetch(MUSIC_URL);
+    if (!musicRes.ok) throw new Error(`Failed to fetch music: ${musicRes.status}`);
+    const musicBuf = new Uint8Array(await musicRes.arrayBuffer());
+    await ffmpeg.writeFile("music.mp3", musicBuf);
+
+    // 4b. Pre-generated intro SFX (whoosh + thump) as a WAV file
+    const sfxBuf = generateIntroSfxWav();
+    await ffmpeg.writeFile("sfx.wav", sfxBuf);
+
+    // 5. Read durations for xfade offsets
+    const introDur = INTRO_FRAMES / INTRO_FPS; // known: 3.0
+    const xfadeDur = 0.5;
+    const offset1 = Math.max(0.1, introDur - xfadeDur); // intro→clip
+    const offset2 = Math.max(offset1 + 0.1, introDur + clipDur - xfadeDur * 2); // (intro+clip)→outro
+    const totalDur = introDur + clipDur + outroDur - xfadeDur * 2;
+    const musicFadeOutStart = Math.max(0, totalDur - 1.2);
+
+    // 6. Final assembly — smooth video crossfades + music + intro SFX.
+    // Audio is generated here so uploads/outros without audio tracks still render.
+    onProgress?.("concatenating", 0);
+    const filter = [
+      `[0:v]fps=${INTRO_FPS},format=yuv420p,settb=AVTB,setpts=PTS-STARTPTS[v0]`,
+      `[1:v]fps=${INTRO_FPS},format=yuv420p,settb=AVTB,setpts=PTS-STARTPTS[v1]`,
+      `[2:v]fps=${INTRO_FPS},format=yuv420p,settb=AVTB,setpts=PTS-STARTPTS[v2]`,
+      `[v0][v1]xfade=transition=fade:duration=${xfadeDur}:offset=${offset1.toFixed(3)}[vx1]`,
+      `[vx1][v2]xfade=transition=fade:duration=${xfadeDur}:offset=${offset2.toFixed(3)}[vout]`,
+      `[3:a]atrim=0:${totalDur.toFixed(3)},asetpts=PTS-STARTPTS,afade=t=in:st=0:d=0.8,afade=t=out:st=${musicFadeOutStart.toFixed(3)}:d=1.2,volume=0.85[bg]`,
+      `[4:a]aformat=channel_layouts=stereo,volume=1.4[sfx]`,
+      `[bg][sfx]amix=inputs=2:duration=first:dropout_transition=0:normalize=0[aout]`,
+    ].join(";");
+
+    await execOrThrow(ffmpeg, [
       "-i", "intro.mp4",
       "-i", "clip_out.mp4",
       "-i", "outro.mp4",
+      "-stream_loop", "-1",
       "-i", "music.mp3",
       "-i", "sfx.wav",
       "-filter_complex", filter,
@@ -308,33 +300,30 @@ export async function renderVideo(config: RenderConfig): Promise<Blob> {
       "-b:a", "192k",
       "-movflags", "+faststart",
       "final.mp4",
-    ]);
+    ], "final assembly", ffmpegLogTail);
+
+    const data = (await ffmpeg.readFile("final.mp4")) as Uint8Array;
+    const finalBuffer = data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength) as ArrayBuffer;
+    return new Blob([finalBuffer], { type: "video/mp4" });
   } catch (e) {
-    console.error("[ads-studio] ffmpeg final assembly failed. Last log lines:\n" + ffmpegLogTail.join("\n"));
+    console.error("[ads-studio] render failed. Last ffmpeg log lines:\n" + ffmpegLogTail.join("\n"));
     throw e;
-  }
-
-
-
-  const data = (await ffmpeg.readFile("final.mp4")) as Uint8Array;
-  // Cleanup
-  try {
+  } finally {
     for (let f = 0; f < INTRO_FRAMES; f++) {
-      await ffmpeg.deleteFile(`intro_${String(f).padStart(4, "0")}.jpg`);
+      await ffmpeg.deleteFile(`intro_${String(f).padStart(4, "0")}.jpg`).catch(() => undefined);
     }
-    await ffmpeg.deleteFile("intro.mp4");
-    await ffmpeg.deleteFile("input.mp4");
-    await ffmpeg.deleteFile("clip_out.mp4");
-    await ffmpeg.deleteFile("outro_in.mp4");
-    await ffmpeg.deleteFile("outro.mp4");
-    await ffmpeg.deleteFile("music.mp3");
-    await ffmpeg.deleteFile("sfx.wav");
-    await ffmpeg.deleteFile("final.mp4");
-
-  } catch {
-    // ignore cleanup errors
+    await Promise.all([
+      "intro.mp4",
+      "input.mp4",
+      "clip_out.mp4",
+      "outro_in.mp4",
+      "outro.mp4",
+      "music.mp3",
+      "sfx.wav",
+      "final.mp4",
+    ].map((name) => ffmpeg.deleteFile(name).catch(() => undefined)));
+    ffmpeg.terminate();
   }
-  return new Blob([data.buffer as ArrayBuffer], { type: "video/mp4" });
 }
 
 // re-export helper for consumers
