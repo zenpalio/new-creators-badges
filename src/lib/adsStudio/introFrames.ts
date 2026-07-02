@@ -213,52 +213,22 @@ export function drawIntroFrame(
     ctx.restore();
   }
 
-  // 5. Title — clean editorial reveal, mask-slide up (no chromatic aberration)
+  // 5. Title — always visible from frame 0
   const title = (config.title || "Your Roleplay").toUpperCase();
-  const titleAppear = 8;
   const titleFontSize = Math.min(200, (w * 0.9) / Math.max(6, title.length) * 1.55);
   ctx.font = `800 ${titleFontSize}px "Bebas Neue", Impact, sans-serif`;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   const cy = h * 0.44;
+  ctx.fillStyle = theme.text;
+  ctx.fillText(title, w / 2, cy);
 
-  // Split into words for staggered reveal
-  const words = title.split(" ");
-  const wordGap = titleFontSize * 0.28;
-  // Measure each word
-  const wordWidths = words.map((wd) => ctx.measureText(wd).width);
-  const totalWordsW = wordWidths.reduce((a, b) => a + b, 0) + wordGap * (words.length - 1);
-  let cx = w / 2 - totalWordsW / 2;
-  words.forEach((wd, i) => {
-    const wT = clamp01((frame - titleAppear - i * 4) / 16);
-    if (wT <= 0) {
-      cx += wordWidths[i] + wordGap;
-      return;
-    }
-    const eased = easeOutQuint(wT);
-    const yOffset = (1 - eased) * 80;
-    const alpha = wT;
+  // 6. Subtitle — always visible, letter-tracked
+  {
     ctx.save();
-    // Clip mask reveal for extra polish
-    ctx.beginPath();
-    ctx.rect(cx - 20, cy - titleFontSize * 0.7, wordWidths[i] + 40, titleFontSize * 1.4);
-    ctx.clip();
-    ctx.globalAlpha = alpha;
-    ctx.fillStyle = theme.text;
-    ctx.fillText(wd, cx + wordWidths[i] / 2, cy + yOffset);
-    ctx.restore();
-    cx += wordWidths[i] + wordGap;
-  });
-
-  // 6. Subtitle — refined, tracking, mono-ish
-  const subT = clamp01((frame - 22) / 14);
-  if (subT > 0) {
-    ctx.save();
-    ctx.globalAlpha = subT;
     const subY = cy + titleFontSize * 0.7;
     ctx.fillStyle = theme.sub;
     ctx.font = `500 34px "Inter", system-ui, sans-serif`;
-    // letter-spacing manually
     const sub = (config.subtitle || "A POV Roleplay").toUpperCase();
     const tracking = 6;
     const chars = sub.split("");
@@ -266,43 +236,38 @@ export function drawIntroFrame(
     const totalW = widths.reduce((a, b) => a + b, 0) + tracking * (chars.length - 1);
     let sx = w / 2 - totalW / 2;
     chars.forEach((c, i) => {
-      ctx.fillText(c, sx + widths[i] / 2, subY + (1 - easeOutCubic(subT)) * 20);
+      ctx.fillText(c, sx + widths[i] / 2, subY);
       sx += widths[i] + tracking;
     });
     ctx.restore();
   }
 
-  // 7. START pill button — sleek, subtle inner sheen, restrained pulse
-  const btnAppear = 32;
-  if (frame >= btnAppear) {
-    const bt = clamp01((frame - btnAppear) / 16);
-    const eased = easeOutQuint(bt);
-    // subtle breathing (barely visible)
+  // 7. START pill button — always visible, with subtle idle breathing + tap press
+  {
     const idle = 1 + 0.012 * Math.sin(frame * 0.18);
-    // tap press
     let press = 1;
     if (frame >= 62 && frame <= 68) {
       const pt = (frame - 62) / 6;
       press = 1 - Math.sin(pt * Math.PI) * 0.06;
     }
 
-    const btnW = 460 * eased * idle * press;
-    const btnH = 128 * eased * idle * press;
+    const btnW = 460 * idle * press;
+    const btnH = 128 * idle * press;
     const btnX = w / 2 - btnW / 2;
     const btnY = h * 0.66;
     const radius = btnH / 2;
 
     ctx.save();
-    ctx.globalAlpha = bt;
 
     // Soft ambient glow
     ctx.save();
     ctx.shadowColor = theme.accent;
-    ctx.shadowBlur = 80 * bt;
+    ctx.shadowBlur = 80;
     ctx.fillStyle = theme.button;
     roundRect(ctx, btnX, btnY, btnW, btnH, radius);
     ctx.fill();
     ctx.restore();
+
 
     // Inner sheen gradient
     const sheen = ctx.createLinearGradient(btnX, btnY, btnX, btnY + btnH);
