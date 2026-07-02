@@ -145,10 +145,11 @@ const AdsStudio = () => {
             />
           </div>
 
-          <div className="rounded-xl border border-dashed border-white/10 bg-black/20 p-4 text-sm text-white/50">
-            <div className="font-semibold text-white/70">Outro</div>
-            <div className="mt-1">Awaiting assets — will be appended after the clip.</div>
+          <div className="rounded-xl border border-white/10 bg-black/30 p-4 text-sm text-white/60">
+            <div className="font-semibold text-white/80">Outro</div>
+            <div className="mt-1">META COMICS outro will be appended automatically after your clip.</div>
           </div>
+
         </section>
       </main>
     </div>
