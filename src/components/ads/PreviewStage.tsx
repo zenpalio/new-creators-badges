@@ -81,7 +81,7 @@ const PreviewStage = ({ intro, clipUrl, headline, captions }: Props) => {
         )}
 
         {/* Clip layer */}
-        {clipUrl && (stage === "clip" || stage === "done") && stage !== "outro" && (
+        {clipUrl && (stage === "clip" || stage === "done") && (
           <video
             ref={videoRef}
             key="clip"
