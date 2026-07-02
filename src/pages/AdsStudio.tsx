@@ -123,14 +123,26 @@ const AdsStudio = () => {
             <h1 className="text-xl font-bold tracking-tight">Ads Studio</h1>
             <p className="text-xs text-white/50">Internal — 9:16 ad stitcher</p>
           </div>
-          <button
-            onClick={handleExport}
-            disabled={rendering || !clip}
-            className="inline-flex items-center gap-2 rounded-full bg-primary-v2 px-4 py-2 text-sm font-semibold text-primary-v2-foreground shadow-lg shadow-primary-v2/20 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            {rendering ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-            {rendering ? "Rendering…" : "Export MP4"}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleReset}
+              disabled={rendering}
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white/70 hover:bg-white/10 disabled:opacity-40"
+              title="Clear saved state"
+            >
+              <RotateCcw className="h-3.5 w-3.5" />
+              Reset
+            </button>
+            <button
+              onClick={handleExport}
+              disabled={rendering || !clip}
+              className="inline-flex items-center gap-2 rounded-full bg-primary-v2 px-4 py-2 text-sm font-semibold text-primary-v2-foreground shadow-lg shadow-primary-v2/20 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              {rendering ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+              {rendering ? "Rendering…" : "Export MP4"}
+            </button>
+          </div>
+
         </div>
       </header>
 
