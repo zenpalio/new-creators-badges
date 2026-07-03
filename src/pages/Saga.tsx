@@ -754,6 +754,102 @@ const Saga = () => {
           </>
         )}
 
+        {/* ===== LOST cutscene ===== */}
+        {phase === "lost" && (
+          <div className="absolute inset-0 z-50 bg-black flex flex-col items-center justify-end animate-fade-in overflow-hidden">
+            <img
+              src={cutsceneLostBg}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{
+                filter: "brightness(0.55) contrast(1.05) saturate(0.9)",
+                animation: "saga-poster-drift 22s ease-in-out infinite alternate",
+              }}
+            />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(0,0,0,0.55) 0%, transparent 35%, transparent 55%, rgba(0,0,0,0.95) 100%)",
+              }}
+            />
+            <div className="relative z-10 w-full px-6 pb-14 text-center">
+              <div className="mx-auto max-w-[340px] flex flex-col items-center">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-red-500/40 bg-red-500/10 mb-5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                  <span className="text-[10px] uppercase tracking-[0.3em] text-red-400 font-medium">
+                    Stage Failed
+                  </span>
+                </div>
+                <h2 className="text-white leading-[0.95] tracking-tight font-bold mb-4"
+                  style={{ fontSize: "clamp(32px, 9vw, 44px)" }}
+                >
+                  She left you<br />on the road.
+                </h2>
+                <p className="text-[14px] text-white/70 mb-8 leading-relaxed max-w-[300px]">
+                  Anna's trust ran out. The armored truck disappears into the wasteland — and the shelter with it.
+                </p>
+                <button
+                  onClick={restartChapter}
+                  className="inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-white text-black text-[12px] font-semibold uppercase tracking-[0.2em] hover:bg-white/90 transition-all shadow-[0_10px_40px_-10px_rgba(255,255,255,0.6)] hover:-translate-y-0.5"
+                >
+                  <ArrowRight className="w-3.5 h-3.5" />
+                  Try Again
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ===== WON cutscene ===== */}
+        {phase === "won" && (
+          <div className="absolute inset-0 z-50 bg-black flex flex-col items-center justify-end animate-fade-in overflow-hidden">
+            <img
+              src={cutsceneWonBg}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{
+                filter: "brightness(0.7) contrast(1.05) saturate(1.1)",
+                animation: "saga-poster-drift 22s ease-in-out infinite alternate",
+              }}
+            />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(ellipse 70% 50% at 50% 40%, hsl(var(--primary-v2)/0.18), transparent 70%), linear-gradient(180deg, rgba(0,0,0,0.4) 0%, transparent 40%, transparent 55%, rgba(0,0,0,0.95) 100%)",
+              }}
+            />
+            <div className="relative z-10 w-full px-6 pb-14 text-center">
+              <div className="mx-auto max-w-[340px] flex flex-col items-center">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary-v2/40 bg-primary-v2/10 mb-5">
+                  <Trophy className="w-3 h-3 text-primary-v2" />
+                  <span className="text-[10px] uppercase tracking-[0.3em] text-primary-v2 font-medium">
+                    Stage Cleared
+                  </span>
+                </div>
+                <h2 className="text-white leading-[0.95] tracking-tight font-bold mb-4"
+                  style={{ fontSize: "clamp(32px, 9vw, 44px)" }}
+                >
+                  Haven-7<br />in sight.
+                </h2>
+                <p className="text-[14px] text-white/75 mb-8 leading-relaxed max-w-[300px]">
+                  Anna trusts you. The truck rolls through the blast doors — and a whole new chapter opens on the other side.
+                </p>
+                <button
+                  onClick={restartChapter}
+                  className="inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-primary-v2 text-primary-v2-foreground text-[12px] font-semibold uppercase tracking-[0.2em] hover:bg-primary-v2/90 transition-all shadow-[0_10px_40px_-10px_hsl(var(--primary-v2)/0.7)] hover:-translate-y-0.5"
+                >
+                  Continue
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+
+
         {/* Signup / signin gate for Chapter One */}
         <SagaSignupModal
           open={signupOpen}
