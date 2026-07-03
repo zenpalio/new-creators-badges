@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { SkipForward } from "lucide-react";
+import { SkipForward, ChevronLeft, ChevronRight } from "lucide-react";
 import narrationAsset from "@/assets/saga-narration-2.mp3.asset.json";
 import sfxWind from "@/assets/saga-sfx-wind.mp3.asset.json";
 import sfxBear from "@/assets/saga-sfx-bear.mp3.asset.json";
