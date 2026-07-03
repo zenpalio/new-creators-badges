@@ -871,7 +871,7 @@ const Saga = () => {
                   Anna trusts you. The truck rolls through the blast doors — and a whole new chapter opens on the other side.
                 </p>
                 <button
-                  onClick={restartChapter}
+                  onClick={() => setPhase("haven7Video")}
                   className="inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-primary-v2 text-primary-v2-foreground text-[12px] font-semibold uppercase tracking-[0.2em] hover:bg-primary-v2/90 transition-all shadow-[0_10px_40px_-10px_hsl(var(--primary-v2)/0.7)] hover:-translate-y-0.5"
                 >
                   Continue
