@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SkipForward, ChevronRight } from "lucide-react";
+import { SkipForward } from "lucide-react";
 import s01 from "@/assets/vn/h7-s01-mai-corridor.jpg.asset.json";
 import s02 from "@/assets/vn/h7-s02-mai-tour.jpg.asset.json";
 import s03 from "@/assets/vn/h7-s03-abby-cleo-wide.jpg.asset.json";
