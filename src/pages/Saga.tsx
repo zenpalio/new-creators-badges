@@ -69,6 +69,8 @@ const Saga = () => {
   const [fxSentiment, setFxSentiment] = useState<Sentiment>("neutral");
   const [fxDeltas, setFxDeltas] = useState<Reaction["deltas"]>({});
   const [affectionPulse, setAffectionPulse] = useState<"up" | "down" | null>(null);
+  const [activeGirl, setActiveGirl] = useState<GirlSlug | null>(null);
+  const [persuade, setPersuade] = useState<PersuadeState>({ abby: null, bo: null, cleo: null, anna: null });
   const [stageTier, setStageTier] = useState(0);
   const [stageToast, setStageToast] = useState<{ tier: number; label: string } | null>(null);
   const cutsceneFiredRef = useRef<{ won: boolean; lost: boolean }>({ won: false, lost: false });
@@ -366,6 +368,18 @@ const Saga = () => {
         {phase === "narration" && <SagaNarration onComplete={endNarration} />}
         {phase === "narration2" && <SagaNarration2 onComplete={endNarration2} />}
         {phase === "annaCar" && <SagaAnnaCar onComplete={endAnnaCar} />}
+        {phase === "shelterTour" && <SagaShelterTour onComplete={endShelterTour} />}
+        {phase === "persuadeHub" && (
+          <SagaPersuadeHub state={persuade} onTalk={openGirlChat} onVote={startVote} />
+        )}
+        {phase === "girlChat" && activeGirl && (
+          <SagaGirlChat
+            girl={activeGirl}
+            onDone={endGirlChat}
+            onBack={() => { setActiveGirl(null); setPhase("persuadeHub"); }}
+          />
+        )}
+        {phase === "vote" && <SagaVote state={persuade} onComplete={endVote} />}
 
         {/* ===== UNLOCK: achievement-style roleplay reveal ===== */}
         {phase === "unlock" && (
