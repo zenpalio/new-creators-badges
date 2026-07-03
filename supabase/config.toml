@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.mina-ambient-sfx]
 verify_jwt = false
+
+[functions.saga-persuade-chat]
+verify_jwt = false
