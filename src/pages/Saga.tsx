@@ -130,7 +130,8 @@ const Saga = () => {
     setPhase("outro");
   };
   const endNarration = () => setPhase("narration2");
-  const endNarration2 = () => setPhase("unlock");
+  const endNarration2 = () => setPhase("annaCar");
+  const endAnnaCar = () => setPhase("unlock");
   const startRoleplay = () => {
     setChatVideoDone(false);
     cutsceneFiredRef.current = { won: false, lost: false };
