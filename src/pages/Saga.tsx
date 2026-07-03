@@ -61,6 +61,9 @@ const Saga = () => {
   const [fxSentiment, setFxSentiment] = useState<Sentiment>("neutral");
   const [fxDeltas, setFxDeltas] = useState<Reaction["deltas"]>({});
   const [affectionPulse, setAffectionPulse] = useState<"up" | "down" | null>(null);
+  const [stageTier, setStageTier] = useState(0);
+  const [stageToast, setStageToast] = useState<{ tier: number; label: string } | null>(null);
+  const cutsceneFiredRef = useRef<{ won: boolean; lost: boolean }>({ won: false, lost: false });
 
   const handleReaction = (r: Reaction) => {
     const d = (r.deltas ?? {}) as Record<string, number>;
