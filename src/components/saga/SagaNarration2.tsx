@@ -87,7 +87,7 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
     } catch { setStarted(false); }
   };
 
-  useEffect(() => { startAll(); /* eslint-disable-next-line */ }, []);
+  // No autoplay — user must tap to begin
 
   const onTime = () => {
     const a = audioRef.current;
