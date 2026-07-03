@@ -8,18 +8,12 @@ import sfxEagle from "@/assets/saga-sfx-eagle.mp3.asset.json";
 import sfxImpact from "@/assets/saga-sfx-impact.mp3.asset.json";
 import sfxFight from "@/assets/saga-sfx-fight.mp3.asset.json";
 import sfxCar from "@/assets/saga-sfx-car.mp3.asset.json";
-import img1 from "@/assets/saga-pov-1.jpg";
-import img2 from "@/assets/saga-pov-2.jpg";
-import img3 from "@/assets/saga-pov-3.jpg";
-import img4 from "@/assets/saga-pov-4.jpg";
-import img5 from "@/assets/saga-pov-5.jpg";
-import img6 from "@/assets/saga-pov-6.jpg";
-import vid1 from "@/assets/saga-pov-1.mp4.asset.json";
-import vid2 from "@/assets/saga-pov-2.mp4.asset.json";
-import vid3 from "@/assets/saga-pov-3.mp4.asset.json";
-import vid4 from "@/assets/saga-pov-4.mp4.asset.json";
-import vid5 from "@/assets/saga-pov-5.mp4.asset.json";
-import vid6 from "@/assets/saga-pov-6.mp4.asset.json";
+import img1 from "@/assets/saga-pov-1-v2.jpg.asset.json";
+import img2 from "@/assets/saga-pov-2-v2.jpg.asset.json";
+import img3 from "@/assets/saga-pov-3-v2.jpg.asset.json";
+import img4 from "@/assets/saga-pov-4-v2.jpg.asset.json";
+import img5 from "@/assets/saga-pov-5-v2.jpg.asset.json";
+import img6 from "@/assets/saga-pov-6-v2.jpg.asset.json";
 
 type Line = { t: number; text: string; img: number };
 
