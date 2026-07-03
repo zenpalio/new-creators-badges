@@ -15,8 +15,23 @@ import sagaTitleBg from "@/assets/saga-title-bg.jpg";
 import sagaOutroBg from "@/assets/saga-narr-1.jpg";
 import annaStage from "@/assets/anna-stage-1.png.asset.json";
 import annaChatBg from "@/assets/anna-chat-bg.mp4.asset.json";
+import annaStageBg2 from "@/assets/saga-anna-truck-2.jpg";
+import annaStageBg3 from "@/assets/saga-anna-truck-3.jpg";
+import annaStageBg4 from "@/assets/saga-anna-truck-4.jpg";
+import cutsceneLostBg from "@/assets/saga-cutscene-lost.jpg";
+import cutsceneWonBg from "@/assets/saga-cutscene-won.jpg";
 
-type Phase = "title" | "intro" | "outro" | "narration" | "narration2" | "unlock" | "chat";
+type Phase = "title" | "intro" | "outro" | "narration" | "narration2" | "unlock" | "chat" | "lost" | "won";
+
+// Persuasion stage thresholds — chat background evolves as Anna warms up
+const STAGE_THRESHOLDS = [0, 30, 50, 80] as const;
+const STAGE_LABELS = ["Cold", "Curious", "Warming", "Trusting"] as const;
+const stageFromAffection = (a: number) => {
+  if (a >= 80) return 3;
+  if (a >= 50) return 2;
+  if (a >= 30) return 1;
+  return 0;
+};
 
 const INTRO_VIDEO_SRC = sagaIntro.url;
 
@@ -46,6 +61,9 @@ const Saga = () => {
   const [fxSentiment, setFxSentiment] = useState<Sentiment>("neutral");
   const [fxDeltas, setFxDeltas] = useState<Reaction["deltas"]>({});
   const [affectionPulse, setAffectionPulse] = useState<"up" | "down" | null>(null);
+  const [stageTier, setStageTier] = useState(0);
+  const [stageToast, setStageToast] = useState<{ tier: number; label: string } | null>(null);
+  const cutsceneFiredRef = useRef<{ won: boolean; lost: boolean }>({ won: false, lost: false });
 
   const handleReaction = (r: Reaction) => {
     const d = (r.deltas ?? {}) as Record<string, number>;
@@ -66,6 +84,43 @@ const Saga = () => {
     setFxTrigger((n) => n + 1);
   };
 
+  // Watch persuasion progress → advance stage bg + trigger win/lose cutscenes
+  useEffect(() => {
+    if (phase !== "chat") return;
+    const a = state.affection;
+
+    // Win at 100
+    if (a >= 100 && !cutsceneFiredRef.current.won) {
+      cutsceneFiredRef.current.won = true;
+      setPhase("won");
+      return;
+    }
+    // Lose at 0 (only after user has been in chat)
+    if (a <= 0 && !cutsceneFiredRef.current.lost) {
+      cutsceneFiredRef.current.lost = true;
+      setPhase("lost");
+      return;
+    }
+
+    const nextTier = stageFromAffection(a);
+    if (nextTier !== stageTier) {
+      const climbing = nextTier > stageTier;
+      setStageTier(nextTier);
+      if (climbing) {
+        setStageToast({ tier: nextTier, label: STAGE_LABELS[nextTier] });
+        window.setTimeout(() => setStageToast(null), 2600);
+      }
+    }
+  }, [state.affection, phase, stageTier]);
+
+  const restartChapter = () => {
+    cutsceneFiredRef.current = { won: false, lost: false };
+    setStageTier(0);
+    patch({ affection: 20 });
+    setPhase("unlock");
+  };
+
+
   const endIntro = () => {
     try { videoRef.current?.pause(); } catch {}
     setPhase("outro");
@@ -74,6 +129,11 @@ const Saga = () => {
   const endNarration2 = () => setPhase("unlock");
   const startRoleplay = () => {
     setChatVideoDone(false);
+    cutsceneFiredRef.current = { won: false, lost: false };
+    setStageTier(0);
+    // Seed persuasion so the "lost" cutscene doesn't fire immediately at 0.
+    if (state.affection <= 0 || state.affection >= 100) patch({ affection: 20 });
+
     const video = chatIntroVideoRef.current;
 
     if (video) {
@@ -565,13 +625,22 @@ const Saga = () => {
         {/* ===== CHAT: character + vitals + composer ===== */}
         {phase === "chat" && (
           <>
-            {/* Character background — video with image fallback */}
+            {/* Character background — layered stage images that cross-fade with persuasion */}
             <div className="absolute inset-0">
-              <img
-                src={sagaChatBg.url}
-                alt="Character"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
+              {[
+                { src: sagaChatBg.url, tier: 0 },
+                { src: annaStageBg2, tier: 1 },
+                { src: annaStageBg3, tier: 2 },
+                { src: annaStageBg4, tier: 3 },
+              ].map((bg) => (
+                <img
+                  key={bg.tier}
+                  src={bg.src}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover transition-opacity duration-[1400ms] ease-out"
+                  style={{ opacity: stageTier === bg.tier ? 1 : 0 }}
+                />
+              ))}
 
               {/* Top fade so vitals chip stays readable */}
               <div
@@ -590,6 +659,24 @@ const Saga = () => {
                 }}
               />
             </div>
+
+            {/* Stage-up toast */}
+            {stageToast && (
+              <div className="absolute top-[88px] left-1/2 -translate-x-1/2 z-40 pointer-events-none">
+                <div
+                  className="rounded-full border border-primary-v2/40 bg-black/70 backdrop-blur-xl px-4 py-2 shadow-[0_10px_40px_-10px_hsl(var(--primary-v2)/0.8)]"
+                  style={{ animation: "saga-toast-in 0.5s cubic-bezier(0.16,1,0.3,1) both" }}
+                >
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-3.5 h-3.5 text-primary-v2" />
+                    <div className="text-[10px] uppercase tracking-[0.3em] text-primary-v2 font-semibold">
+                      Stage {stageToast.tier + 1} · {stageToast.label}
+                    </div>
+                  </div>
+                </div>
+                <style>{`@keyframes saga-toast-in { from { transform: translateY(-16px); opacity: 0 } to { transform: translateY(0); opacity: 1 } }`}</style>
+              </div>
+            )}
 
 
 
@@ -671,6 +758,102 @@ const Saga = () => {
             )}
           </>
         )}
+
+        {/* ===== LOST cutscene ===== */}
+        {phase === "lost" && (
+          <div className="absolute inset-0 z-50 bg-black flex flex-col items-center justify-end animate-fade-in overflow-hidden">
+            <img
+              src={cutsceneLostBg}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{
+                filter: "brightness(0.55) contrast(1.05) saturate(0.9)",
+                animation: "saga-poster-drift 22s ease-in-out infinite alternate",
+              }}
+            />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(0,0,0,0.55) 0%, transparent 35%, transparent 55%, rgba(0,0,0,0.95) 100%)",
+              }}
+            />
+            <div className="relative z-10 w-full px-6 pb-14 text-center">
+              <div className="mx-auto max-w-[340px] flex flex-col items-center">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-red-500/40 bg-red-500/10 mb-5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                  <span className="text-[10px] uppercase tracking-[0.3em] text-red-400 font-medium">
+                    Stage Failed
+                  </span>
+                </div>
+                <h2 className="text-white leading-[0.95] tracking-tight font-bold mb-4"
+                  style={{ fontSize: "clamp(32px, 9vw, 44px)" }}
+                >
+                  She left you<br />on the road.
+                </h2>
+                <p className="text-[14px] text-white/70 mb-8 leading-relaxed max-w-[300px]">
+                  Anna's trust ran out. The armored truck disappears into the wasteland — and the shelter with it.
+                </p>
+                <button
+                  onClick={restartChapter}
+                  className="inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-white text-black text-[12px] font-semibold uppercase tracking-[0.2em] hover:bg-white/90 transition-all shadow-[0_10px_40px_-10px_rgba(255,255,255,0.6)] hover:-translate-y-0.5"
+                >
+                  <ArrowRight className="w-3.5 h-3.5" />
+                  Try Again
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ===== WON cutscene ===== */}
+        {phase === "won" && (
+          <div className="absolute inset-0 z-50 bg-black flex flex-col items-center justify-end animate-fade-in overflow-hidden">
+            <img
+              src={cutsceneWonBg}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{
+                filter: "brightness(0.7) contrast(1.05) saturate(1.1)",
+                animation: "saga-poster-drift 22s ease-in-out infinite alternate",
+              }}
+            />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(ellipse 70% 50% at 50% 40%, hsl(var(--primary-v2)/0.18), transparent 70%), linear-gradient(180deg, rgba(0,0,0,0.4) 0%, transparent 40%, transparent 55%, rgba(0,0,0,0.95) 100%)",
+              }}
+            />
+            <div className="relative z-10 w-full px-6 pb-14 text-center">
+              <div className="mx-auto max-w-[340px] flex flex-col items-center">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary-v2/40 bg-primary-v2/10 mb-5">
+                  <Trophy className="w-3 h-3 text-primary-v2" />
+                  <span className="text-[10px] uppercase tracking-[0.3em] text-primary-v2 font-medium">
+                    Stage Cleared
+                  </span>
+                </div>
+                <h2 className="text-white leading-[0.95] tracking-tight font-bold mb-4"
+                  style={{ fontSize: "clamp(32px, 9vw, 44px)" }}
+                >
+                  Haven-7<br />in sight.
+                </h2>
+                <p className="text-[14px] text-white/75 mb-8 leading-relaxed max-w-[300px]">
+                  Anna trusts you. The truck rolls through the blast doors — and a whole new chapter opens on the other side.
+                </p>
+                <button
+                  onClick={restartChapter}
+                  className="inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-primary-v2 text-primary-v2-foreground text-[12px] font-semibold uppercase tracking-[0.2em] hover:bg-primary-v2/90 transition-all shadow-[0_10px_40px_-10px_hsl(var(--primary-v2)/0.7)] hover:-translate-y-0.5"
+                >
+                  Continue
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+
 
         {/* Signup / signin gate for Chapter One */}
         <SagaSignupModal
