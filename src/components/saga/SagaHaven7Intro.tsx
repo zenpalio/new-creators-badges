@@ -59,24 +59,17 @@ export default function SagaHaven7Intro({ onComplete }: { onComplete: () => void
             opacity: idx === i ? 1 : 0,
             transform: "scale(1.06)",
             animation: idx === i ? "saga-h7-drift 7s ease-out forwards" : undefined,
-            filter: "brightness(0.72) contrast(1.05) saturate(1.05)",
+            filter: "contrast(1.02) saturate(1.05)",
           }}
         />
       ))}
 
-      {/* Scrim */}
+      {/* Subtitle scrim — only at the bottom so the image stays clean */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-x-0 bottom-0 h-[45%] pointer-events-none"
         style={{
           background:
-            "linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 30%, rgba(0,0,0,0.55) 62%, rgba(0,0,0,0.96) 100%)",
-        }}
-      />
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 65% 45% at 50% 80%, rgba(0,0,0,0.85) 0%, transparent 70%), radial-gradient(ellipse 55% 40% at 50% 50%, hsl(var(--primary-v2)/0.10), transparent 70%)",
+            "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.92) 100%)",
         }}
       />
       {/* Grain */}
