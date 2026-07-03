@@ -147,39 +147,6 @@ export default function SagaHaven7Intro({ onComplete }: { onComplete: () => void
           </p>
         </div>
 
-        {/* Progress dots */}
-        <div className="mt-5 flex items-center justify-center gap-1">
-          {SCENES.map((_, i) => (
-            <span
-              key={i}
-              className="h-[2px] rounded-full transition-all duration-500"
-              style={{
-                width: i === idx ? 20 : 8,
-                background: i <= idx ? "hsl(var(--primary-v2))" : "rgba(255,255,255,0.2)",
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Auto-advance bar */}
-        <div className="mt-3 mx-auto max-w-[280px] h-[2px] bg-white/10 rounded-full overflow-hidden">
-          <div
-            key={`bar-${idx}`}
-            className="h-full bg-primary-v2/70"
-            style={{ animation: `saga-h7-bar ${DURATION_MS}ms linear forwards` }}
-          />
-        </div>
-
-        {/* Next / Enter button */}
-        <div className="mt-5 flex justify-center">
-          <button
-            onClick={next}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-v2 text-primary-v2-foreground text-[11px] font-semibold uppercase tracking-[0.2em] hover:brightness-110 transition"
-          >
-            {idx < SCENES.length - 1 ? "Next" : "Enter Haven-7"}
-            <ChevronRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
       </div>
     </div>
   );
