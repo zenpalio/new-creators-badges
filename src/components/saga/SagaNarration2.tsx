@@ -350,7 +350,40 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
             />
           ))}
         </div>
+
+        <div className="mt-5 flex items-center justify-center gap-3">
+          <button
+            onClick={goPrev}
+            disabled={idx === 0}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/[0.08] backdrop-blur-xl border border-white/15 text-[10px] uppercase tracking-[0.25em] text-white/85 hover:bg-white/[0.15] transition disabled:opacity-30 disabled:pointer-events-none"
+          >
+            <ChevronLeft className="w-3.5 h-3.5" /> Back
+          </button>
+          <button
+            onClick={goNext}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-primary-v2/90 text-primary-v2-foreground text-[10px] font-semibold uppercase tracking-[0.25em] hover:bg-primary-v2 transition"
+          >
+            {idx >= LINES.length - 1 ? "Enter" : "Next"} <ChevronRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </div>
+
+      {/* Side tap zones */}
+      <button
+        onClick={goPrev}
+        aria-label="Previous"
+        disabled={idx === 0}
+        className="absolute left-0 top-[20%] bottom-[25%] w-[22%] z-20 flex items-center justify-start pl-2 opacity-0 hover:opacity-100 transition disabled:pointer-events-none"
+      >
+        <ChevronLeft className="w-6 h-6 text-white/70" />
+      </button>
+      <button
+        onClick={goNext}
+        aria-label="Next"
+        className="absolute right-0 top-[20%] bottom-[25%] w-[22%] z-20 flex items-center justify-end pr-2 opacity-0 hover:opacity-100 transition"
+      >
+        <ChevronRight className="w-6 h-6 text-white/70" />
+      </button>
 
       <audio ref={audioRef} src={narrationAsset.url} onTimeUpdate={onTime} onEnded={handleComplete} preload="auto" />
       <audio ref={windRef} src={sfxWind.url} preload="auto" />
@@ -360,6 +393,20 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
       <audio ref={impactRef} src={sfxImpact.url} preload="auto" />
       <audio ref={fightRef} src={sfxFight.url} preload="auto" />
       <audio ref={carRef} src={sfxCar.url} preload="auto" />
+
+      {!started && (
+        <button
+          onClick={startAll}
+          className="absolute inset-0 z-30 flex items-center justify-center bg-background/40 backdrop-blur-sm"
+        >
+          <span className="px-5 py-2.5 rounded-full bg-primary-v2 text-primary-v2-foreground text-[11px] font-semibold uppercase tracking-[0.2em]">
+            Tap to begin
+          </span>
+        </button>
+      )}
+    </div>
+  );
+}
 
       {!started && (
         <button
