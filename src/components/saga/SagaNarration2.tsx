@@ -407,17 +407,3 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
     </div>
   );
 }
-
-      {!started && (
-        <button
-          onClick={startAll}
-          className="absolute inset-0 z-20 flex items-center justify-center bg-background/40 backdrop-blur-sm"
-        >
-          <span className="px-5 py-2.5 rounded-full bg-primary-v2 text-primary-v2-foreground text-[11px] font-semibold uppercase tracking-[0.2em]">
-            Tap to begin
-          </span>
-        </button>
-      )}
-    </div>
-  );
-}
