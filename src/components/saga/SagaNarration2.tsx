@@ -117,6 +117,24 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
     onComplete();
   };
 
+  const seekTo = (i: number) => {
+    if (i < 0 || i >= LINES.length) return;
+    const a = audioRef.current;
+    setIdx(i);
+    if (a) {
+      a.currentTime = LINES[i].t + 0.01;
+      // Reset SFX gate so cues past the new time won't retrigger, earlier cues can play again
+      firedRef.current = new Set(
+        CUES.filter((c) => c.t < LINES[i].t).map((c) => c.key)
+      );
+    }
+  };
+  const goPrev = () => seekTo(idx - 1);
+  const goNext = () => {
+    if (idx >= LINES.length - 1) return handleComplete();
+    seekTo(idx + 1);
+  };
+
   const currentImg = useMemo(() => LINES[idx]?.img ?? 0, [idx]);
   const line = LINES[idx];
 
