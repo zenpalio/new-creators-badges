@@ -15,8 +15,23 @@ import sagaTitleBg from "@/assets/saga-title-bg.jpg";
 import sagaOutroBg from "@/assets/saga-narr-1.jpg";
 import annaStage from "@/assets/anna-stage-1.png.asset.json";
 import annaChatBg from "@/assets/anna-chat-bg.mp4.asset.json";
+import annaStageBg2 from "@/assets/saga-anna-truck-2.jpg";
+import annaStageBg3 from "@/assets/saga-anna-truck-3.jpg";
+import annaStageBg4 from "@/assets/saga-anna-truck-4.jpg";
+import cutsceneLostBg from "@/assets/saga-cutscene-lost.jpg";
+import cutsceneWonBg from "@/assets/saga-cutscene-won.jpg";
 
-type Phase = "title" | "intro" | "outro" | "narration" | "narration2" | "unlock" | "chat";
+type Phase = "title" | "intro" | "outro" | "narration" | "narration2" | "unlock" | "chat" | "lost" | "won";
+
+// Persuasion stage thresholds — chat background evolves as Anna warms up
+const STAGE_THRESHOLDS = [0, 30, 50, 80] as const;
+const STAGE_LABELS = ["Cold", "Curious", "Warming", "Trusting"] as const;
+const stageFromAffection = (a: number) => {
+  if (a >= 80) return 3;
+  if (a >= 50) return 2;
+  if (a >= 30) return 1;
+  return 0;
+};
 
 const INTRO_VIDEO_SRC = sagaIntro.url;
 
