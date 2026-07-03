@@ -46,8 +46,7 @@ const LINES: Line[] = [
   { t: 51.85,text: "You reach out. Someone inside is reaching back.",                 img: 5 },
 ];
 
-const IMAGES = [img1, img2, img3, img4, img5, img6];
-const VIDEOS = [vid1.url, vid2.url, vid3.url, vid4.url, vid5.url, vid6.url];
+const IMAGES = [img1.url, img2.url, img3.url, img4.url, img5.url, img6.url];
 
 export default function SagaNarration2({ onComplete }: { onComplete: () => void }) {
   const audioRef = useRef<HTMLAudioElement>(null);
