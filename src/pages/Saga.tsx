@@ -137,7 +137,7 @@ const Saga = () => {
   };
   const endNarration = () => setPhase("narration2");
   const endNarration2 = () => setPhase("annaCar");
-  const endAnnaCar = () => setPhase("shelterTour");
+  const endAnnaCar = () => setPhase("unlock");
   const endShelterTour = () => setPhase("persuadeHub");
   const openGirlChat = (g: GirlSlug) => { setActiveGirl(g); setPhase("girlChat"); };
   const endGirlChat = (verdict: "yes" | "no") => {
@@ -146,7 +146,7 @@ const Saga = () => {
     setPhase("persuadeHub");
   };
   const startVote = () => setPhase("vote");
-  const endVote = () => setPhase("unlock");
+  const endVote = () => setPhase("haven7Unlock");
   const startRoleplay = () => {
     setChatVideoDone(false);
     cutsceneFiredRef.current = { won: false, lost: false };
@@ -922,12 +922,12 @@ const Saga = () => {
               autoPlay
               playsInline
               muted={false}
-              onEnded={() => setPhase("haven7Unlock")}
-              onError={() => setPhase("haven7Unlock")}
+              onEnded={() => setPhase("shelterTour")}
+              onError={() => setPhase("shelterTour")}
               className="absolute inset-0 w-full h-full object-cover"
             />
             <button
-              onClick={() => setPhase("haven7Unlock")}
+              onClick={() => setPhase("shelterTour")}
               className="absolute bottom-6 right-6 z-10 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/60 backdrop-blur border border-white/15 text-white text-[11px] uppercase tracking-[0.2em] hover:bg-black/80"
             >
               Skip <SkipForward className="w-3.5 h-3.5" />
