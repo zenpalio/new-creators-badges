@@ -137,7 +137,7 @@ const Saga = () => {
   };
   const endNarration = () => setPhase("narration2");
   const endNarration2 = () => setPhase("annaCar");
-  const endAnnaCar = () => setPhase("shelterTour");
+  const endAnnaCar = () => setPhase("unlock");
   const endShelterTour = () => setPhase("persuadeHub");
   const openGirlChat = (g: GirlSlug) => { setActiveGirl(g); setPhase("girlChat"); };
   const endGirlChat = (verdict: "yes" | "no") => {
@@ -146,7 +146,7 @@ const Saga = () => {
     setPhase("persuadeHub");
   };
   const startVote = () => setPhase("vote");
-  const endVote = () => setPhase("unlock");
+  const endVote = () => setPhase("haven7Unlock");
   const startRoleplay = () => {
     setChatVideoDone(false);
     cutsceneFiredRef.current = { won: false, lost: false };
