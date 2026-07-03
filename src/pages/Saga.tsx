@@ -135,7 +135,16 @@ const Saga = () => {
   };
   const endNarration = () => setPhase("narration2");
   const endNarration2 = () => setPhase("annaCar");
-  const endAnnaCar = () => setPhase("unlock");
+  const endAnnaCar = () => setPhase("shelterTour");
+  const endShelterTour = () => setPhase("persuadeHub");
+  const openGirlChat = (g: GirlSlug) => { setActiveGirl(g); setPhase("girlChat"); };
+  const endGirlChat = (verdict: "yes" | "no") => {
+    if (activeGirl) setPersuade((p) => ({ ...p, [activeGirl]: verdict }));
+    setActiveGirl(null);
+    setPhase("persuadeHub");
+  };
+  const startVote = () => setPhase("vote");
+  const endVote = () => setPhase("unlock");
   const startRoleplay = () => {
     setChatVideoDone(false);
     cutsceneFiredRef.current = { won: false, lost: false };
