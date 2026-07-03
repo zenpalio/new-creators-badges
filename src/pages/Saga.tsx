@@ -352,6 +352,7 @@ const Saga = () => {
         {/* ===== NARRATION: subtitles + background imagery ===== */}
         {phase === "narration" && <SagaNarration onComplete={endNarration} />}
         {phase === "narration2" && <SagaNarration2 onComplete={endNarration2} />}
+        {phase === "annaCar" && <SagaAnnaCar onComplete={endAnnaCar} />}
 
         {/* ===== UNLOCK: achievement-style roleplay reveal ===== */}
         {phase === "unlock" && (
