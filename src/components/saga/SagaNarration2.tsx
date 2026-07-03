@@ -130,22 +130,19 @@ export default function SagaNarration2({ onComplete }: { onComplete: () => void 
           animation: `saga-shake-${shakeIntensity} 700ms cubic-bezier(.36,.07,.19,.97) both`,
         }}
       >
-        {VIDEOS.map((src, i) => (
-          <video
+        {IMAGES.map((src, i) => (
+          <img
             key={i}
             src={src}
-            poster={IMAGES[i]}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
+            alt=""
             aria-hidden
             className="absolute inset-0 w-full h-full object-cover"
             style={{
               opacity: currentImg === i ? 1 : 0,
               transition: "opacity 1400ms ease-out",
-              filter: "brightness(0.82) contrast(1.15) saturate(0.95) sepia(0.06)",
+              transform: "scale(1.06)",
+              animation: currentImg === i ? `${KEN_BURNS[i]} 12s ease-out forwards` : undefined,
+              filter: "contrast(1.05) saturate(1.02)",
             }}
           />
         ))}
