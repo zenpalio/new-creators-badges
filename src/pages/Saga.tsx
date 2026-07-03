@@ -7,6 +7,7 @@ import ReactionFX from "@/components/mina/ReactionFX";
 import SagaSidebar from "@/components/saga/SagaSidebar";
 import SagaNarration from "@/components/saga/SagaNarration";
 import SagaNarration2 from "@/components/saga/SagaNarration2";
+import SagaHaven7Intro from "@/components/saga/SagaHaven7Intro";
 import SagaSignupModal from "@/components/saga/SagaSignupModal";
 import sagaChar from "@/assets/saga-char.jpg.asset.json";
 import sagaChatBg from "@/assets/saga-chat-bg.png.asset.json";
@@ -21,7 +22,7 @@ import annaStageBg4 from "@/assets/saga-anna-truck-4.jpg";
 import cutsceneLostBg from "@/assets/saga-cutscene-lost.jpg";
 import cutsceneWonBg from "@/assets/saga-cutscene-won.jpg";
 
-type Phase = "title" | "intro" | "outro" | "narration" | "narration2" | "unlock" | "chat" | "lost" | "won";
+type Phase = "title" | "intro" | "outro" | "narration" | "narration2" | "unlock" | "chat" | "lost" | "won" | "haven7";
 
 // Persuasion stage thresholds — chat background evolves as Anna warms up
 const STAGE_THRESHOLDS = [0, 30, 50, 80] as const;
