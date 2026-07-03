@@ -8,6 +8,7 @@ import SagaSidebar from "@/components/saga/SagaSidebar";
 import SagaNarration from "@/components/saga/SagaNarration";
 import SagaNarration2 from "@/components/saga/SagaNarration2";
 import SagaHaven7Intro from "@/components/saga/SagaHaven7Intro";
+import SagaAnnaCar from "@/components/saga/SagaAnnaCar";
 import SagaSignupModal from "@/components/saga/SagaSignupModal";
 import sagaChar from "@/assets/saga-char.jpg.asset.json";
 import sagaChatBg from "@/assets/saga-chat-bg.png.asset.json";
@@ -24,7 +25,7 @@ import cutsceneWonBg from "@/assets/saga-cutscene-won.jpg";
 import haven7IntroVideo from "@/assets/vn/haven7-arrival-intro.mp4.asset.json";
 import meiPortrait from "@/assets/chars/mei.png.asset.json";
 
-type Phase = "title" | "intro" | "outro" | "narration" | "narration2" | "unlock" | "chat" | "lost" | "won" | "haven7Video" | "haven7Unlock" | "haven7";
+type Phase = "title" | "intro" | "outro" | "narration" | "narration2" | "annaCar" | "unlock" | "chat" | "lost" | "won" | "haven7Video" | "haven7Unlock" | "haven7";
 
 // Persuasion stage thresholds — chat background evolves as Anna warms up
 const STAGE_THRESHOLDS = [0, 30, 50, 80] as const;
@@ -129,7 +130,8 @@ const Saga = () => {
     setPhase("outro");
   };
   const endNarration = () => setPhase("narration2");
-  const endNarration2 = () => setPhase("unlock");
+  const endNarration2 = () => setPhase("annaCar");
+  const endAnnaCar = () => setPhase("unlock");
   const startRoleplay = () => {
     setChatVideoDone(false);
     cutsceneFiredRef.current = { won: false, lost: false };
@@ -350,6 +352,7 @@ const Saga = () => {
         {/* ===== NARRATION: subtitles + background imagery ===== */}
         {phase === "narration" && <SagaNarration onComplete={endNarration} />}
         {phase === "narration2" && <SagaNarration2 onComplete={endNarration2} />}
+        {phase === "annaCar" && <SagaAnnaCar onComplete={endAnnaCar} />}
 
         {/* ===== UNLOCK: achievement-style roleplay reveal ===== */}
         {phase === "unlock" && (
