@@ -620,13 +620,22 @@ const Saga = () => {
         {/* ===== CHAT: character + vitals + composer ===== */}
         {phase === "chat" && (
           <>
-            {/* Character background — video with image fallback */}
+            {/* Character background — layered stage images that cross-fade with persuasion */}
             <div className="absolute inset-0">
-              <img
-                src={sagaChatBg.url}
-                alt="Character"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
+              {[
+                { src: sagaChatBg.url, tier: 0 },
+                { src: annaStageBg2, tier: 1 },
+                { src: annaStageBg3, tier: 2 },
+                { src: annaStageBg4, tier: 3 },
+              ].map((bg) => (
+                <img
+                  key={bg.tier}
+                  src={bg.src}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover transition-opacity duration-[1400ms] ease-out"
+                  style={{ opacity: stageTier === bg.tier ? 1 : 0 }}
+                />
+              ))}
 
               {/* Top fade so vitals chip stays readable */}
               <div
@@ -645,6 +654,24 @@ const Saga = () => {
                 }}
               />
             </div>
+
+            {/* Stage-up toast */}
+            {stageToast && (
+              <div className="absolute top-[88px] left-1/2 -translate-x-1/2 z-40 pointer-events-none">
+                <div
+                  className="rounded-full border border-primary-v2/40 bg-black/70 backdrop-blur-xl px-4 py-2 shadow-[0_10px_40px_-10px_hsl(var(--primary-v2)/0.8)]"
+                  style={{ animation: "saga-toast-in 0.5s cubic-bezier(0.16,1,0.3,1) both" }}
+                >
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-3.5 h-3.5 text-primary-v2" />
+                    <div className="text-[10px] uppercase tracking-[0.3em] text-primary-v2 font-semibold">
+                      Stage {stageToast.tier + 1} · {stageToast.label}
+                    </div>
+                  </div>
+                </div>
+                <style>{`@keyframes saga-toast-in { from { transform: translateY(-16px); opacity: 0 } to { transform: translateY(0); opacity: 1 } }`}</style>
+              </div>
+            )}
 
 
 
