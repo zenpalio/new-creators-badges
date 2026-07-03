@@ -84,6 +84,43 @@ const Saga = () => {
     setFxTrigger((n) => n + 1);
   };
 
+  // Watch persuasion progress → advance stage bg + trigger win/lose cutscenes
+  useEffect(() => {
+    if (phase !== "chat") return;
+    const a = state.affection;
+
+    // Win at 100
+    if (a >= 100 && !cutsceneFiredRef.current.won) {
+      cutsceneFiredRef.current.won = true;
+      setPhase("won");
+      return;
+    }
+    // Lose at 0 (only after user has been in chat)
+    if (a <= 0 && !cutsceneFiredRef.current.lost) {
+      cutsceneFiredRef.current.lost = true;
+      setPhase("lost");
+      return;
+    }
+
+    const nextTier = stageFromAffection(a);
+    if (nextTier !== stageTier) {
+      const climbing = nextTier > stageTier;
+      setStageTier(nextTier);
+      if (climbing) {
+        setStageToast({ tier: nextTier, label: STAGE_LABELS[nextTier] });
+        window.setTimeout(() => setStageToast(null), 2600);
+      }
+    }
+  }, [state.affection, phase, stageTier]);
+
+  const restartChapter = () => {
+    cutsceneFiredRef.current = { won: false, lost: false };
+    setStageTier(0);
+    patch({ affection: 20 });
+    setPhase("unlock");
+  };
+
+
   const endIntro = () => {
     try { videoRef.current?.pause(); } catch {}
     setPhase("outro");
