@@ -707,6 +707,32 @@ const Saga = () => {
               </div>
             </div>
 
+            {/* DEV: test controls for persuasion progress */}
+            <div className="absolute top-20 left-1/2 -translate-x-1/2 z-30 flex gap-1.5 bg-black/60 backdrop-blur-xl border border-yellow-400/30 rounded-full px-2 py-1">
+              <span className="text-[8px] uppercase tracking-[0.2em] text-yellow-300/80 self-center px-1">Dev</span>
+              {[-25, -10, +10, +25].map((d) => (
+                <button
+                  key={d}
+                  onClick={() => patch({ affection: Math.max(0, Math.min(100, state.affection + d)) })}
+                  className="px-2 py-0.5 rounded-full bg-white/10 hover:bg-white/20 text-[10px] font-mono text-white/90 border border-white/15"
+                >
+                  {d > 0 ? `+${d}` : d}
+                </button>
+              ))}
+              <button
+                onClick={() => patch({ affection: 100 })}
+                className="px-2 py-0.5 rounded-full bg-emerald-500/25 hover:bg-emerald-500/40 text-[10px] font-mono text-emerald-100 border border-emerald-400/30"
+              >
+                Win
+              </button>
+              <button
+                onClick={() => patch({ affection: 0 })}
+                className="px-2 py-0.5 rounded-full bg-red-500/25 hover:bg-red-500/40 text-[10px] font-mono text-red-100 border border-red-400/30"
+              >
+                Lose
+              </button>
+            </div>
+
             {/* Sidebar drawer */}
             <SagaSidebar
               open={menuOpen}
