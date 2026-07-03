@@ -9,6 +9,10 @@ import SagaNarration from "@/components/saga/SagaNarration";
 import SagaNarration2 from "@/components/saga/SagaNarration2";
 import SagaHaven7Intro from "@/components/saga/SagaHaven7Intro";
 import SagaAnnaCar from "@/components/saga/SagaAnnaCar";
+import SagaShelterTour from "@/components/saga/SagaShelterTour";
+import SagaPersuadeHub, { type GirlSlug, type PersuadeState } from "@/components/saga/SagaPersuadeHub";
+import SagaGirlChat from "@/components/saga/SagaGirlChat";
+import SagaVote from "@/components/saga/SagaVote";
 import SagaSignupModal from "@/components/saga/SagaSignupModal";
 import sagaChar from "@/assets/saga-char.jpg.asset.json";
 import sagaChatBg from "@/assets/saga-chat-bg.png.asset.json";
@@ -25,7 +29,7 @@ import cutsceneWonBg from "@/assets/saga-cutscene-won.jpg";
 import haven7IntroVideo from "@/assets/vn/haven7-arrival-intro.mp4.asset.json";
 import meiPortrait from "@/assets/chars/mei.png.asset.json";
 
-type Phase = "title" | "intro" | "outro" | "narration" | "narration2" | "annaCar" | "unlock" | "chat" | "lost" | "won" | "haven7Video" | "haven7Unlock" | "haven7";
+type Phase = "title" | "intro" | "outro" | "narration" | "narration2" | "annaCar" | "shelterTour" | "persuadeHub" | "girlChat" | "vote" | "unlock" | "chat" | "lost" | "won" | "haven7Video" | "haven7Unlock" | "haven7";
 
 // Persuasion stage thresholds — chat background evolves as Anna warms up
 const STAGE_THRESHOLDS = [0, 30, 50, 80] as const;
@@ -65,6 +69,8 @@ const Saga = () => {
   const [fxSentiment, setFxSentiment] = useState<Sentiment>("neutral");
   const [fxDeltas, setFxDeltas] = useState<Reaction["deltas"]>({});
   const [affectionPulse, setAffectionPulse] = useState<"up" | "down" | null>(null);
+  const [activeGirl, setActiveGirl] = useState<GirlSlug | null>(null);
+  const [persuade, setPersuade] = useState<PersuadeState>({ abby: null, bo: null, cleo: null, anna: null });
   const [stageTier, setStageTier] = useState(0);
   const [stageToast, setStageToast] = useState<{ tier: number; label: string } | null>(null);
   const cutsceneFiredRef = useRef<{ won: boolean; lost: boolean }>({ won: false, lost: false });
@@ -131,7 +137,16 @@ const Saga = () => {
   };
   const endNarration = () => setPhase("narration2");
   const endNarration2 = () => setPhase("annaCar");
-  const endAnnaCar = () => setPhase("unlock");
+  const endAnnaCar = () => setPhase("shelterTour");
+  const endShelterTour = () => setPhase("persuadeHub");
+  const openGirlChat = (g: GirlSlug) => { setActiveGirl(g); setPhase("girlChat"); };
+  const endGirlChat = (verdict: "yes" | "no") => {
+    if (activeGirl) setPersuade((p) => ({ ...p, [activeGirl]: verdict }));
+    setActiveGirl(null);
+    setPhase("persuadeHub");
+  };
+  const startVote = () => setPhase("vote");
+  const endVote = () => setPhase("unlock");
   const startRoleplay = () => {
     setChatVideoDone(false);
     cutsceneFiredRef.current = { won: false, lost: false };
@@ -353,6 +368,18 @@ const Saga = () => {
         {phase === "narration" && <SagaNarration onComplete={endNarration} />}
         {phase === "narration2" && <SagaNarration2 onComplete={endNarration2} />}
         {phase === "annaCar" && <SagaAnnaCar onComplete={endAnnaCar} />}
+        {phase === "shelterTour" && <SagaShelterTour onComplete={endShelterTour} />}
+        {phase === "persuadeHub" && (
+          <SagaPersuadeHub state={persuade} onTalk={openGirlChat} onVote={startVote} />
+        )}
+        {phase === "girlChat" && activeGirl && (
+          <SagaGirlChat
+            girl={activeGirl}
+            onDone={endGirlChat}
+            onBack={() => { setActiveGirl(null); setPhase("persuadeHub"); }}
+          />
+        )}
+        {phase === "vote" && <SagaVote state={persuade} onComplete={endVote} />}
 
         {/* ===== UNLOCK: achievement-style roleplay reveal ===== */}
         {phase === "unlock" && (
