@@ -25,7 +25,7 @@ import cutsceneWonBg from "@/assets/saga-cutscene-won.jpg";
 import haven7IntroVideo from "@/assets/vn/haven7-arrival-intro.mp4.asset.json";
 import meiPortrait from "@/assets/chars/mei.png.asset.json";
 
-type Phase = "title" | "intro" | "outro" | "narration" | "narration2" | "unlock" | "chat" | "lost" | "won" | "haven7Video" | "haven7Unlock" | "haven7";
+type Phase = "title" | "intro" | "outro" | "narration" | "narration2" | "annaCar" | "unlock" | "chat" | "lost" | "won" | "haven7Video" | "haven7Unlock" | "haven7";
 
 // Persuasion stage thresholds — chat background evolves as Anna warms up
 const STAGE_THRESHOLDS = [0, 30, 50, 80] as const;
