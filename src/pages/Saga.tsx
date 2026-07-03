@@ -7,6 +7,7 @@ import ReactionFX from "@/components/mina/ReactionFX";
 import SagaSidebar from "@/components/saga/SagaSidebar";
 import SagaNarration from "@/components/saga/SagaNarration";
 import SagaNarration2 from "@/components/saga/SagaNarration2";
+import SagaHaven7Intro from "@/components/saga/SagaHaven7Intro";
 import SagaSignupModal from "@/components/saga/SagaSignupModal";
 import sagaChar from "@/assets/saga-char.jpg.asset.json";
 import sagaChatBg from "@/assets/saga-chat-bg.png.asset.json";
