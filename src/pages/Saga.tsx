@@ -21,8 +21,10 @@ import annaStageBg3 from "@/assets/saga-anna-truck-3.jpg";
 import annaStageBg4 from "@/assets/saga-anna-truck-4.jpg";
 import cutsceneLostBg from "@/assets/saga-cutscene-lost.jpg";
 import cutsceneWonBg from "@/assets/saga-cutscene-won.jpg";
+import haven7IntroVideo from "@/assets/vn/haven7-arrival-intro.mp4.asset.json";
+import meiPortrait from "@/assets/chars/mei.png.asset.json";
 
-type Phase = "title" | "intro" | "outro" | "narration" | "narration2" | "unlock" | "chat" | "lost" | "won" | "haven7";
+type Phase = "title" | "intro" | "outro" | "narration" | "narration2" | "unlock" | "chat" | "lost" | "won" | "haven7Video" | "haven7Unlock" | "haven7";
 
 // Persuasion stage thresholds — chat background evolves as Anna warms up
 const STAGE_THRESHOLDS = [0, 30, 50, 80] as const;
@@ -869,7 +871,7 @@ const Saga = () => {
                   Anna trusts you. The truck rolls through the blast doors — and a whole new chapter opens on the other side.
                 </p>
                 <button
-                  onClick={restartChapter}
+                  onClick={() => setPhase("haven7Video")}
                   className="inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-primary-v2 text-primary-v2-foreground text-[12px] font-semibold uppercase tracking-[0.2em] hover:bg-primary-v2/90 transition-all shadow-[0_10px_40px_-10px_hsl(var(--primary-v2)/0.7)] hover:-translate-y-0.5"
                 >
                   Continue
@@ -881,6 +883,164 @@ const Saga = () => {
         )}
 
 
+
+        {/* ===== HAVEN-7 arrival video ===== */}
+        {phase === "haven7Video" && (
+          <div className="absolute inset-0 z-50 bg-black flex items-center justify-center animate-fade-in">
+            <video
+              src={haven7IntroVideo.url}
+              autoPlay
+              playsInline
+              muted={false}
+              onEnded={() => setPhase("haven7Unlock")}
+              onError={() => setPhase("haven7Unlock")}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <button
+              onClick={() => setPhase("haven7Unlock")}
+              className="absolute bottom-6 right-6 z-10 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/60 backdrop-blur border border-white/15 text-white text-[11px] uppercase tracking-[0.2em] hover:bg-black/80"
+            >
+              Skip <SkipForward className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
+
+        {/* ===== STAGE 2 UNLOCK — Enter Haven-7 ===== */}
+        {phase === "haven7Unlock" && (
+          <div className="absolute inset-0 z-40 bg-background flex flex-col items-center justify-center animate-fade-in overflow-hidden">
+            <img
+              src={meiPortrait.url}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ filter: "brightness(0.28) blur(6px) saturate(1.1)" }}
+            />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(ellipse 85% 65% at 50% 50%, hsl(var(--background)/0.85) 0%, hsl(var(--background)/0.65) 55%, hsl(var(--background)/0.3) 100%)",
+              }}
+            />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(ellipse 60% 40% at 50% 45%, hsl(var(--primary-v2)/0.18), transparent 70%)",
+              }}
+            />
+            <div
+              className="absolute inset-0 opacity-[0.1] mix-blend-overlay pointer-events-none"
+              style={{
+                backgroundImage:
+                  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E\")",
+              }}
+            />
+
+            <div className="relative z-10 w-full px-6 text-center">
+              <div className="mx-auto max-w-[340px] flex flex-col items-center">
+                <div
+                  className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary-v2/40 bg-primary-v2/10 mb-6 animate-fade-in"
+                  style={{ animationDelay: "0.15s", animationFillMode: "both" }}
+                >
+                  <Sparkles className="w-3 h-3 text-primary-v2" />
+                  <span className="text-[10px] uppercase tracking-[0.3em] text-primary-v2 font-semibold">
+                    Stage 2 · Unlocked
+                  </span>
+                </div>
+
+                <div
+                  className="relative mb-6"
+                  style={{ animation: "saga-unlock-pop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both" }}
+                >
+                  <div
+                    className="w-40 h-52 sm:w-44 sm:h-56 rounded-3xl relative overflow-hidden"
+                    style={{
+                      boxShadow:
+                        "0 24px 70px -12px hsl(var(--primary-v2)/0.65), inset 0 0 0 1.5px hsl(var(--primary-v2)/0.7)",
+                      animation: "saga-badge-float 3.5s ease-in-out infinite",
+                    }}
+                  >
+                    <img src={meiPortrait.url} alt="Mei" className="absolute inset-0 w-full h-full object-cover" />
+                    <div
+                      className="absolute inset-x-0 bottom-0 h-1/3 pointer-events-none"
+                      style={{ background: "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.55) 100%)" }}
+                    />
+                    <div
+                      className="absolute inset-0 pointer-events-none"
+                      style={{
+                        background:
+                          "linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.28) 50%, transparent 70%)",
+                        animation: "saga-shine 3s ease-in-out 0.9s infinite",
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div
+                  className="text-[11px] uppercase tracking-[0.35em] text-foreground-v2/55 mb-2 animate-fade-in"
+                  style={{ animationDelay: "0.35s", animationFillMode: "both" }}
+                >
+                  New Stage
+                </div>
+                <h2
+                  className="text-foreground-v2 leading-[1] tracking-tight font-bold mb-5 animate-fade-in"
+                  style={{
+                    fontSize: "clamp(28px, 8vw, 38px)",
+                    animationDelay: "0.45s",
+                    animationFillMode: "both",
+                  }}
+                >
+                  Enter Haven-7
+                </h2>
+
+                <div
+                  className="w-full rounded-2xl border border-white/10 bg-black/40 backdrop-blur-xl p-4 mb-7 text-left animate-fade-in"
+                  style={{ animationDelay: "0.6s", animationFillMode: "both" }}
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <Target className="w-3.5 h-3.5 text-primary-v2" />
+                    <span className="text-[10px] uppercase tracking-[0.3em] text-primary-v2/90 font-semibold">
+                      Your Goal
+                    </span>
+                  </div>
+                  <p className="text-[14px] leading-snug text-foreground-v2/90">
+                    Meet the girls of{" "}
+                    <span className="text-primary-v2 font-semibold">Haven-7</span> and earn your place inside the shelter.
+                  </p>
+                  <div className="mt-3 flex items-center justify-between text-[10px] uppercase tracking-[0.2em] text-foreground-v2/45">
+                    <span>Survivors</span>
+                    <span>0 / 3</span>
+                  </div>
+                  <div className="mt-1.5 h-1.5 rounded-full bg-white/10 overflow-hidden">
+                    <div className="h-full w-0 bg-primary-v2 rounded-full" />
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setPhase("haven7")}
+                  className="group relative inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-primary-v2 text-primary-v2-foreground text-[12px] font-semibold uppercase tracking-[0.2em] hover:bg-primary-v2/90 transition-all shadow-[0_10px_40px_-10px_hsl(var(--primary-v2)/0.6)] hover:shadow-[0_14px_50px_-8px_hsl(var(--primary-v2)/0.8)] hover:-translate-y-0.5 animate-fade-in"
+                  style={{ animationDelay: "0.8s", animationFillMode: "both" }}
+                >
+                  <MessageCircle className="w-3.5 h-3.5" />
+                  Step Inside
+                  <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                </button>
+
+                <div
+                  className="mt-4 text-[10px] text-foreground-v2/40 animate-fade-in"
+                  style={{ animationDelay: "0.95s", animationFillMode: "both" }}
+                >
+                  Three survivors. One shelter.
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ===== HAVEN-7 VN sequence ===== */}
+        {phase === "haven7" && (
+          <SagaHaven7Intro onComplete={() => setPhase("haven7Unlock")} />
+        )}
 
         {/* Signup / signin gate for Chapter One */}
         <SagaSignupModal
