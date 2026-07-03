@@ -22,7 +22,7 @@ import annaStageBg4 from "@/assets/saga-anna-truck-4.jpg";
 import cutsceneLostBg from "@/assets/saga-cutscene-lost.jpg";
 import cutsceneWonBg from "@/assets/saga-cutscene-won.jpg";
 
-type Phase = "title" | "intro" | "outro" | "narration" | "narration2" | "unlock" | "chat" | "lost" | "won";
+type Phase = "title" | "intro" | "outro" | "narration" | "narration2" | "unlock" | "chat" | "lost" | "won" | "haven7";
 
 // Persuasion stage thresholds — chat background evolves as Anna warms up
 const STAGE_THRESHOLDS = [0, 30, 50, 80] as const;
