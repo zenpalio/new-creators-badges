@@ -129,6 +129,11 @@ const Saga = () => {
   const endNarration2 = () => setPhase("unlock");
   const startRoleplay = () => {
     setChatVideoDone(false);
+    cutsceneFiredRef.current = { won: false, lost: false };
+    setStageTier(0);
+    // Seed persuasion so the "lost" cutscene doesn't fire immediately at 0.
+    if (state.affection <= 0 || state.affection >= 100) patch({ affection: 20 });
+
     const video = chatIntroVideoRef.current;
 
     if (video) {
