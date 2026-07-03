@@ -1,58 +1,64 @@
-import { useEffect, useRef, useState } from "react";
-import { SkipForward } from "lucide-react";
-import narrAsset from "@/assets/vn/haven7-narration.mp3.asset.json";
-import meiShot from "@/assets/vn/h7-mei-shelter-tour.jpg.asset.json";
-import abbyShot from "@/assets/vn/h7-abby-intro.jpg.asset.json";
-import cleoShot from "@/assets/vn/h7-cleo-intro.jpg.asset.json";
+import { useEffect, useState } from "react";
+import { SkipForward, ChevronRight } from "lucide-react";
+import s01 from "@/assets/vn/h7-s01-mai-corridor.jpg.asset.json";
+import s02 from "@/assets/vn/h7-s02-mai-tour.jpg.asset.json";
+import s03 from "@/assets/vn/h7-s03-abby-cleo-wide.jpg.asset.json";
+import s04 from "@/assets/vn/h7-s04-abby-closeup.jpg.asset.json";
+import s05 from "@/assets/vn/h7-s05-cleo-closeup.jpg.asset.json";
+import s06 from "@/assets/vn/h7-s06-bo-hallway.jpg.asset.json";
+import s07 from "@/assets/vn/h7-s07-bo-closeup.jpg.asset.json";
+import s08 from "@/assets/vn/h7-s08-bo-cleo-pair.jpg.asset.json";
+import s09 from "@/assets/vn/h7-s09-mai-room.jpg.asset.json";
+import s10 from "@/assets/vn/h7-s10-group-lantern.jpg.asset.json";
 
-type Line = { t: number; text: string; img: 0 | 1 | 2 };
+type Scene = { img: string; name: string; text: string };
 
-// Timed to the ~40.7s Adam narration
-const LINES: Line[] = [
-  { t: 0.0,  text: "Haven Seven. Deep beneath the wasteland — behind blast doors sealed against the poisoned wind.", img: 0 },
-  { t: 8.5,  text: "Mei brings you inside. The air is warmer here, thick with dust and old wiring.",                img: 0 },
-  { t: 15.0, text: "In the common room, two more survivors are waiting.",                                          img: 1 },
-  { t: 18.5, text: "Abby — blonde, sharp-eyed, arms already folded. She doesn't trust strangers, and she won't pretend to.", img: 1 },
-  { t: 26.5, text: "And Cleo — purple hair, half a smile, half a warning. The kind of welcome that could go either way.",     img: 2 },
-  { t: 33.5, text: "Three girls. One shelter. Every choice from here decides which of them lets you stay.",       img: 2 },
+const SCENES: Scene[] = [
+  { img: s01.url, name: "Mai",             text: "Haven-7. Blast doors seal behind you. Mai leads you into the dark, warm hum of the shelter." },
+  { img: s02.url, name: "Mai",             text: "Painted arrows. Survivor stencils. She points them out like a girl showing off her home." },
+  { img: s03.url, name: "The common room", text: "In the common room, two girls are already waiting. They stop talking the moment you walk in." },
+  { img: s04.url, name: "Abby",            text: "Abby — blonde, arms folded, that look women use when they've already decided you're trouble." },
+  { img: s05.url, name: "Cleo",            text: "Cleo — purple hair, teasing smirk. She doesn't hide that she's enjoying this." },
+  { img: s06.url, name: "…someone else",   text: "A shadow moves in the side hallway. Someone you haven't met yet." },
+  { img: s07.url, name: "Bo",              text: "Bo. Black hair, crop top, cool stare. She sizes you up in one breath and gives nothing back." },
+  { img: s08.url, name: "Bo & Cleo",       text: "Cleo leans into Bo, whispers something. Bo's mouth twitches. You're the joke — or the prize." },
+  { img: s09.url, name: "Mai",             text: "Mai opens a small bunk room. \"This one's yours,\" she says softly. \"If they let you stay.\"" },
+  { img: s10.url, name: "Four girls",      text: "Four girls. One shelter. Every choice from here decides which of them lets you in — and how far." },
 ];
 
-const IMAGES = [meiShot.url, abbyShot.url, cleoShot.url] as const;
-const NAMES = ["Mei", "Abby", "Cleo"] as const;
+const DURATION_MS = 5200;
 
 export default function SagaHaven7Intro({ onComplete }: { onComplete: () => void }) {
-  const audioRef = useRef<HTMLAudioElement>(null);
   const [idx, setIdx] = useState(0);
-  const [started, setStarted] = useState(false);
 
   useEffect(() => {
-    audioRef.current?.play().then(() => setStarted(true)).catch(() => setStarted(false));
-  }, []);
+    const t = setTimeout(() => {
+      if (idx < SCENES.length - 1) setIdx(idx + 1);
+      else onComplete();
+    }, DURATION_MS);
+    return () => clearTimeout(t);
+  }, [idx, onComplete]);
 
-  const onTime = () => {
-    const a = audioRef.current;
-    if (!a) return;
-    const t = a.currentTime;
-    let next = 0;
-    for (let i = 0; i < LINES.length; i++) if (t >= LINES[i].t) next = i;
-    if (next !== idx) setIdx(next);
+  const next = () => {
+    if (idx < SCENES.length - 1) setIdx(idx + 1);
+    else onComplete();
   };
 
-  const currentImg = LINES[idx]?.img ?? 0;
+  const current = SCENES[idx];
 
   return (
     <div className="absolute inset-0 z-[60] bg-black flex flex-col animate-fade-in overflow-hidden">
-      {IMAGES.map((src, i) => (
+      {SCENES.map((s, i) => (
         <img
           key={i}
-          src={src}
+          src={s.img}
           alt=""
           aria-hidden
-          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-[1200ms] ease-out"
+          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-[900ms] ease-out"
           style={{
-            opacity: currentImg === i ? 1 : 0,
+            opacity: idx === i ? 1 : 0,
             transform: "scale(1.06)",
-            animation: currentImg === i ? "saga-h7-drift 14s ease-out forwards" : undefined,
+            animation: idx === i ? "saga-h7-drift 7s ease-out forwards" : undefined,
             filter: "brightness(0.72) contrast(1.05) saturate(1.05)",
           }}
         />
@@ -91,6 +97,10 @@ export default function SagaHaven7Intro({ onComplete }: { onComplete: () => void
           from { opacity: 0; transform: translateY(10px); filter: blur(4px); }
           to   { opacity: 1; transform: translateY(0);    filter: blur(0);   }
         }
+        @keyframes saga-h7-bar {
+          from { width: 0%; }
+          to   { width: 100%; }
+        }
       `}</style>
 
       {/* Header */}
@@ -112,18 +122,18 @@ export default function SagaHaven7Intro({ onComplete }: { onComplete: () => void
       {/* Name chip */}
       <div className="relative z-10 mt-4 px-6">
         <div
-          key={`name-${currentImg}`}
+          key={`name-${idx}`}
           className="mx-auto max-w-[360px] text-center"
           style={{ animation: "saga-h7-line-in 0.5s cubic-bezier(0.16,1,0.3,1) both" }}
         >
           <span className="inline-block text-[11px] uppercase tracking-[0.35em] text-white/75 font-semibold">
-            {NAMES[currentImg]}
+            {current.name}
           </span>
         </div>
       </div>
 
       {/* Subtitle */}
-      <div className="relative z-10 mt-auto px-6 pb-16 w-full">
+      <div className="relative z-10 mt-auto px-6 pb-8 w-full">
         <div className="mx-auto max-w-[360px] min-h-[150px] flex items-end justify-center">
           <p
             key={idx}
@@ -133,42 +143,44 @@ export default function SagaHaven7Intro({ onComplete }: { onComplete: () => void
               textShadow: "0 2px 20px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6)",
             }}
           >
-            {LINES[idx].text}
+            {current.text}
           </p>
         </div>
 
-        <div className="mt-6 flex items-center justify-center gap-1.5">
-          {LINES.map((_, i) => (
+        {/* Progress dots */}
+        <div className="mt-5 flex items-center justify-center gap-1">
+          {SCENES.map((_, i) => (
             <span
               key={i}
               className="h-[2px] rounded-full transition-all duration-500"
               style={{
-                width: i === idx ? 22 : 10,
+                width: i === idx ? 20 : 8,
                 background: i <= idx ? "hsl(var(--primary-v2))" : "rgba(255,255,255,0.2)",
               }}
             />
           ))}
         </div>
+
+        {/* Auto-advance bar */}
+        <div className="mt-3 mx-auto max-w-[280px] h-[2px] bg-white/10 rounded-full overflow-hidden">
+          <div
+            key={`bar-${idx}`}
+            className="h-full bg-primary-v2/70"
+            style={{ animation: `saga-h7-bar ${DURATION_MS}ms linear forwards` }}
+          />
+        </div>
+
+        {/* Next / Enter button */}
+        <div className="mt-5 flex justify-center">
+          <button
+            onClick={next}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-v2 text-primary-v2-foreground text-[11px] font-semibold uppercase tracking-[0.2em] hover:brightness-110 transition"
+          >
+            {idx < SCENES.length - 1 ? "Next" : "Enter Haven-7"}
+            <ChevronRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </div>
-
-      <audio
-        ref={audioRef}
-        src={narrAsset.url}
-        onTimeUpdate={onTime}
-        onEnded={onComplete}
-        preload="auto"
-      />
-
-      {!started && (
-        <button
-          onClick={() => audioRef.current?.play().then(() => setStarted(true)).catch(() => {})}
-          className="absolute inset-0 z-20 flex items-center justify-center bg-black/50 backdrop-blur-sm"
-        >
-          <span className="px-5 py-2.5 rounded-full bg-primary-v2 text-primary-v2-foreground text-[11px] font-semibold uppercase tracking-[0.2em]">
-            Tap to enter Haven-7
-          </span>
-        </button>
-      )}
     </div>
   );
 }
