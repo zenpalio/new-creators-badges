@@ -35,6 +35,10 @@ export type Scenario = {
   hero: string;
   heat: string[]; // [cold, warm, hot]
   accent: string; // hex color for match flash
+  bio: string;
+  traits: string[];
+  roleplay: string;
+  slides: string[]; // profile gallery
 };
 
 export const SCENARIOS: Scenario[] = [
@@ -49,6 +53,10 @@ export const SCENARIOS: Scenario[] = [
     hero: maiHero.url,
     heat: [maiHero.url, maiHero.url, maiHero.url],
     accent: "#f472b6",
+    bio: "Art student. Night owl. Keeps a stack of Polaroids on her desk and never explains what's on them.",
+    traits: ["shy at first", "flirty when comfy", "midnight talker"],
+    roleplay: "You just moved in. Shared bathroom, thin walls, one shared kitchen. Tonight she 'accidentally' walked into your room in a hoodie and nothing else — and didn't leave.",
+    slides: [maiHero.url, maiPortrait.url, maiHero.url],
   },
   {
     id: "cleo-app",
@@ -61,6 +69,10 @@ export const SCENARIOS: Scenario[] = [
     hero: cleoBg.url,
     heat: [cleoBg.url, cleoWarm.url, cleoWin.url],
     accent: "#a78bfa",
+    bio: "Bartender with purple curls and a sharper tongue than her cocktails. Reads tarot for fun, believes none of it.",
+    traits: ["forward", "playful", "loves a dare"],
+    roleplay: "You matched an hour ago. She's alone in her apartment, bored, drink in hand — and she messaged first. See how far the banter goes before she suggests you come over.",
+    slides: [cleoBg.url, cleoWarm.url, cleoWin.url, cleoPortrait.url],
   },
   {
     id: "anna-rescue",
@@ -73,6 +85,10 @@ export const SCENARIOS: Scenario[] = [
     hero: annaBg.url,
     heat: [annaBg.url, annaWarm.url, annaWin.url],
     accent: "#fb923c",
+    bio: "Ex-medic living off-grid. Doesn't do small talk, doesn't do names, doesn't usually let strangers stay the night.",
+    traits: ["guarded", "protective", "quietly intense"],
+    roleplay: "You crashed near her cabin during the storm. She patched you up. Phones are dead, roads are gone, and it's just the two of you until sunrise.",
+    slides: [annaBg.url, annaWarm.url, annaWin.url, annaPortrait.url],
   },
   {
     id: "abby-boss",
@@ -85,6 +101,10 @@ export const SCENARIOS: Scenario[] = [
     hero: abbyBg.url,
     heat: [abbyBg.url, abbyWarm.url, abbyWin.url],
     accent: "#facc15",
+    bio: "Law school dropout, daddy's problem. Shows up to your office in heels she can't walk in and knows exactly what she's doing.",
+    traits: ["bratty", "spoiled", "hard to impress"],
+    roleplay: "It's the office holiday party. Everyone's gone home except her — and she just locked your office door behind her. Bad idea. Very bad idea.",
+    slides: [abbyBg.url, abbyWarm.url, abbyWin.url, abbyPortrait.url],
   },
   {
     id: "bo-ex",
@@ -97,8 +117,13 @@ export const SCENARIOS: Scenario[] = [
     hero: boBg.url,
     heat: [boBg.url, boWarm.url, boWin.url],
     accent: "#f43f5e",
+    bio: "The one you shouldn't reply to. Black hair, crop top, still has a hoodie of yours she'll never give back.",
+    traits: ["blunt", "unfinished business", "still knows you"],
+    roleplay: "It's almost 2am. She texted first. She knows what she's doing. So do you. The question is who folds first.",
+    slides: [boBg.url, boWarm.url, boWin.url, boPortrait.url],
   },
 ];
+
 
 export const scenarioById = (id: ScenarioId) =>
   SCENARIOS.find((s) => s.id === id)!;
