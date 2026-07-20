@@ -104,14 +104,10 @@ export default function MatchDeck({
                 <Info className="w-5 h-5" />
               </button>
             </div>
-            <ul className="pt-2 space-y-1.5">
-              {current.pitch.map((line, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-white/85">
-                  <span className="mt-1.5 w-1 h-1 rounded-full bg-primary-v2 shrink-0" />
-                  <span>{line}</span>
-                </li>
-              ))}
-            </ul>
+            <p className="pt-2 text-sm leading-relaxed text-white/85">
+              {current.roleplay}
+            </p>
+
 
           </div>
         </div>
