@@ -1,8 +1,15 @@
 import { useState } from "react";
-import { Heart, X, Flame } from "lucide-react";
+import { Heart, X, Flame, Info } from "lucide-react";
 import { SCENARIOS, type ScenarioId } from "./scenarios";
 
-export default function MatchDeck({ onMatch }: { onMatch: (id: ScenarioId) => void }) {
+export default function MatchDeck({
+  onMatch,
+  onPreview,
+}: {
+  onMatch: (id: ScenarioId) => void;
+  onPreview: (id: ScenarioId) => void;
+}) {
+
   const [index, setIndex] = useState(0);
   const [drag, setDrag] = useState(0);
   const [startX, setStartX] = useState<number | null>(null);
