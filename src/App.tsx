@@ -27,6 +27,7 @@ import Saga from "./pages/Saga.tsx";
 import MinaAuth from "./pages/MinaAuth.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import AdsStudio from "./pages/AdsStudio.tsx";
+import Match from "./pages/Match.tsx";
 
 
 
@@ -50,6 +51,7 @@ const App = () => (
           <Route path="/saga" element={<Saga />} />
           <Route path="/mina/auth" element={<MinaAuth />} />
           <Route path="/admin/ads-studio" element={<AdsStudio />} />
+          <Route path="/match" element={<Match />} />
 
           {/* SFW funnels */}
           <Route path="/exp/her/anime/sfw" element={<ExpHerAnime />} />
