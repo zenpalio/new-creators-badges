@@ -46,16 +46,6 @@ export default function MatchDeck({
 
   return (
     <div className="min-h-[100dvh] bg-black text-white flex flex-col items-center overflow-hidden">
-      {/* Top bar */}
-      <div className="w-full max-w-md flex items-center justify-between px-4 pt-2 pb-1">
-        <div className="flex items-center gap-1.5">
-          <Flame className="w-3.5 h-3.5 text-primary-v2" />
-          <span className="text-[10px] font-bold tracking-widest uppercase">Sparks</span>
-        </div>
-        <span className="text-[9px] uppercase tracking-[0.2em] text-white/40">
-          {index + 1} / {SCENARIOS.length}
-        </span>
-      </div>
 
 
       {/* Deck */}
