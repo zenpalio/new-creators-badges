@@ -30,6 +30,7 @@ export type Scenario = {
   age: number;
   tag: string;
   hook: string;
+  pitch: string[]; // 3 short roleplay lines shown on the card
   opener: string;
   portrait: string;
   hero: string;
@@ -48,6 +49,11 @@ export const SCENARIOS: Scenario[] = [
     age: 22,
     tag: "Your new roommate",
     hook: "first night · she 'accidentally' walked in",
+    pitch: [
+      "You just moved in together",
+      "Thin walls, one shared bathroom",
+      "Tonight she 'accidentally' walked in",
+    ],
     opener: "hey…sorry. i thought this was my room 🙈 you unpacking?",
     portrait: maiPortrait.url,
     hero: maiHero.url,
@@ -64,6 +70,11 @@ export const SCENARIOS: Scenario[] = [
     age: 24,
     tag: "Matched on Sparks",
     hook: "she messaged first · 11:42pm",
+    pitch: [
+      "You matched an hour ago",
+      "She's home alone, bored, buzzed",
+      "She texted first — see where it goes",
+    ],
     opener: "ok your bio genuinely made me laugh. dangerous move.",
     portrait: cleoPortrait.url,
     hero: cleoBg.url,
@@ -80,6 +91,11 @@ export const SCENARIOS: Scenario[] = [
     age: 27,
     tag: "The stranger who saved you",
     hook: "her cabin · no signal · storm outside",
+    pitch: [
+      "You crashed near her cabin",
+      "No signal, no roads, storm outside",
+      "Just the two of you until sunrise",
+    ],
     opener: "you're awake. drink this. don't talk yet — just nod if it hurts.",
     portrait: annaPortrait.url,
     hero: annaBg.url,
@@ -96,6 +112,11 @@ export const SCENARIOS: Scenario[] = [
     age: 25,
     tag: "The boss's daughter",
     hook: "office party · after hours · she cornered you",
+    pitch: [
+      "Office holiday party, after hours",
+      "Everyone's gone home except her",
+      "She just locked your office door",
+    ],
     opener: "so. you're the one everyone's scared of my dad hiring. cute.",
     portrait: abbyPortrait.url,
     hero: abbyBg.url,
@@ -112,6 +133,11 @@ export const SCENARIOS: Scenario[] = [
     age: 26,
     tag: "Your ex",
     hook: "1:47am · 'you up?'",
+    pitch: [
+      "It's almost 2am",
+      "She texted first — 'you up?'",
+      "You both know what happens next",
+    ],
     opener: "you up?",
     portrait: boPortrait.url,
     hero: boBg.url,
@@ -123,6 +149,7 @@ export const SCENARIOS: Scenario[] = [
     slides: [boBg.url, boWarm.url, boWin.url, boPortrait.url],
   },
 ];
+
 
 
 export const scenarioById = (id: ScenarioId) =>
