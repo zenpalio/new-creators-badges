@@ -45,17 +45,12 @@ export default function MatchDeck({
   const nopeOpacity = Math.max(0, Math.min(1, -drag / 100));
 
   return (
-    <div className="min-h-[100dvh] bg-black text-white flex flex-col items-center overflow-hidden">
-
-
-      {/* Deck */}
-      <div className="relative w-[min(92vw,380px)] h-[min(70dvh,560px)] mt-2">
+    <div className="relative min-h-[100dvh] bg-black text-white overflow-hidden">
+      {/* Deck — fullscreen */}
+      <div className="absolute inset-0">
         {/* Behind card */}
         {index + 1 < SCENARIOS.length && (
-          <div
-            className="absolute inset-0 rounded-3xl overflow-hidden shadow-2xl scale-[0.94] opacity-70"
-            style={{ transform: "translateY(14px) scale(0.94)" }}
-          >
+          <div className="absolute inset-0 overflow-hidden opacity-70">
             <img src={next.hero} alt="" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-black/40" />
           </div>
@@ -63,9 +58,9 @@ export default function MatchDeck({
 
         {/* Current card */}
         <div
-          className="absolute inset-0 rounded-3xl overflow-hidden shadow-2xl cursor-grab active:cursor-grabbing select-none touch-none"
+          className="absolute inset-0 overflow-hidden cursor-grab active:cursor-grabbing select-none touch-none"
           style={{
-            transform: `translateX(${drag}px) rotate(${rot}deg)`,
+            transform: `translateX(${drag}px) rotate(${rot * 0.3}deg)`,
             transition: startX === null ? "transform 0.35s cubic-bezier(0.16,1,0.3,1)" : "none",
           }}
           onPointerDown={onPointerDown}
@@ -74,27 +69,27 @@ export default function MatchDeck({
           onPointerCancel={onPointerUp}
         >
           <img src={current.hero} alt={current.name} className="absolute inset-0 w-full h-full object-cover" draggable={false} />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
 
           {/* LIKE / NOPE stamps */}
           <div
-            className="absolute top-8 left-6 px-4 py-2 border-4 border-emerald-400 rounded-xl text-emerald-400 font-black text-3xl uppercase tracking-wider -rotate-12"
+            className="absolute top-10 left-6 px-4 py-2 border-4 border-emerald-400 rounded-xl text-emerald-400 font-black text-3xl uppercase tracking-wider -rotate-12"
             style={{ opacity: likeOpacity }}
           >
             Match
           </div>
           <div
-            className="absolute top-8 right-6 px-4 py-2 border-4 border-rose-500 rounded-xl text-rose-500 font-black text-3xl uppercase tracking-wider rotate-12"
+            className="absolute top-10 right-6 px-4 py-2 border-4 border-rose-500 rounded-xl text-rose-500 font-black text-3xl uppercase tracking-wider rotate-12"
             style={{ opacity: nopeOpacity }}
           >
             Nope
           </div>
 
           {/* Card body */}
-          <div className="absolute bottom-0 left-0 right-0 p-5 space-y-1">
+          <div className="absolute bottom-32 left-0 right-0 p-6 space-y-1">
             <div className="flex items-baseline justify-between gap-2">
               <div className="flex items-baseline gap-2">
-                <h2 className="text-3xl font-black tracking-tight">{current.name}</h2>
+                <h2 className="text-4xl font-black tracking-tight">{current.name}</h2>
                 <span className="text-2xl font-light text-white/80">{current.age}</span>
               </div>
               <button
@@ -103,7 +98,7 @@ export default function MatchDeck({
                   onPreview(current.id);
                 }}
                 onPointerDown={(e) => e.stopPropagation()}
-                className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition"
+                className="w-11 h-11 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition"
                 aria-label="View profile"
               >
                 <Info className="w-5 h-5" />
@@ -112,12 +107,11 @@ export default function MatchDeck({
             <p className="text-sm text-white/85 font-medium">{current.tag}</p>
             <p className="text-xs uppercase tracking-[0.18em] text-white/50">{current.hook}</p>
           </div>
-
         </div>
       </div>
 
-      {/* Action buttons */}
-      <div className="flex items-center gap-8 mt-8">
+      {/* Action buttons — floating */}
+      <div className="absolute bottom-8 left-0 right-0 flex items-center justify-center gap-8 z-10">
         <button
           onClick={() => swipe("left")}
           className="w-16 h-16 rounded-full bg-white/5 backdrop-blur-xl border border-white/15 flex items-center justify-center text-rose-400 hover:scale-110 active:scale-95 transition"
@@ -134,10 +128,7 @@ export default function MatchDeck({
           <Heart className="w-10 h-10 fill-white" />
         </button>
       </div>
-
-      <p className="mt-6 text-[10px] uppercase tracking-[0.25em] text-white/35">
-        Swipe or tap
-      </p>
     </div>
   );
 }
+
