@@ -3,9 +3,10 @@ import MatchDeck from "@/components/match/MatchDeck";
 import MatchFlash from "@/components/match/MatchFlash";
 import MatchColdOpen from "@/components/match/MatchColdOpen";
 import MatchChat from "@/components/match/MatchChat";
+import MatchProfile from "@/components/match/MatchProfile";
 import type { ScenarioId } from "@/components/match/scenarios";
 
-type Phase = "deck" | "flash" | "coldopen" | "chat";
+type Phase = "deck" | "profile" | "flash" | "coldopen" | "chat";
 
 export default function Match() {
   const [phase, setPhase] = useState<Phase>("deck");
@@ -22,6 +23,21 @@ export default function Match() {
           onMatch={(id) => {
             setPicked(id);
             setPhase("flash");
+          }}
+          onPreview={(id) => {
+            setPicked(id);
+            setPhase("profile");
+          }}
+        />
+      )}
+      {phase === "profile" && picked && (
+        <MatchProfile
+          id={picked}
+          onBack={() => setPhase("deck")}
+          onMatch={() => setPhase("flash")}
+          onPass={() => {
+            setPicked(null);
+            setPhase("deck");
           }}
         />
       )}
@@ -43,3 +59,4 @@ export default function Match() {
     </div>
   );
 }
+
