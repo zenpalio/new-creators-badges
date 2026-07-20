@@ -101,13 +101,27 @@ export default function MatchDeck({
 
           {/* Card body */}
           <div className="absolute bottom-0 left-0 right-0 p-5 space-y-1">
-            <div className="flex items-baseline gap-2">
-              <h2 className="text-3xl font-black tracking-tight">{current.name}</h2>
-              <span className="text-2xl font-light text-white/80">{current.age}</span>
+            <div className="flex items-baseline justify-between gap-2">
+              <div className="flex items-baseline gap-2">
+                <h2 className="text-3xl font-black tracking-tight">{current.name}</h2>
+                <span className="text-2xl font-light text-white/80">{current.age}</span>
+              </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onPreview(current.id);
+                }}
+                onPointerDown={(e) => e.stopPropagation()}
+                className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition"
+                aria-label="View profile"
+              >
+                <Info className="w-5 h-5" />
+              </button>
             </div>
             <p className="text-sm text-white/85 font-medium">{current.tag}</p>
             <p className="text-xs uppercase tracking-[0.18em] text-white/50">{current.hook}</p>
           </div>
+
         </div>
       </div>
 
