@@ -60,7 +60,7 @@ export type Database = {
           preview_url: string | null
           role: string
           updated_at: string
-          user_id: string
+          user_id: string | null
           voice_id: string | null
         }
         Insert: {
@@ -73,7 +73,7 @@ export type Database = {
           preview_url?: string | null
           role?: string
           updated_at?: string
-          user_id: string
+          user_id?: string | null
           voice_id?: string | null
         }
         Update: {
@@ -86,7 +86,7 @@ export type Database = {
           preview_url?: string | null
           role?: string
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
           voice_id?: string | null
         }
         Relationships: []
@@ -170,7 +170,7 @@ export type Database = {
           title: string
           tone: string | null
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           aspect_ratio?: string
@@ -185,7 +185,7 @@ export type Database = {
           title: string
           tone?: string | null
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           aspect_ratio?: string
@@ -200,7 +200,7 @@ export type Database = {
           title?: string
           tone?: string | null
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -216,7 +216,7 @@ export type Database = {
           synopsis: string | null
           title: string
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -229,7 +229,7 @@ export type Database = {
           synopsis?: string | null
           title: string
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -242,7 +242,7 @@ export type Database = {
           synopsis?: string | null
           title?: string
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -299,7 +299,7 @@ export type Database = {
           name: string
           preview_url: string | null
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -310,7 +310,7 @@ export type Database = {
           name: string
           preview_url?: string | null
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -321,7 +321,7 @@ export type Database = {
           name?: string
           preview_url?: string | null
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -363,7 +363,7 @@ export type Database = {
           shot_prompt: string | null
           status: string
           updated_at: string
-          user_id: string
+          user_id: string | null
           variants: Json
         }
         Insert: {
@@ -379,7 +379,7 @@ export type Database = {
           shot_prompt?: string | null
           status?: string
           updated_at?: string
-          user_id: string
+          user_id?: string | null
           variants?: Json
         }
         Update: {
@@ -395,7 +395,7 @@ export type Database = {
           shot_prompt?: string | null
           status?: string
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
           variants?: Json
         }
         Relationships: [
