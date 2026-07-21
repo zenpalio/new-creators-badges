@@ -151,14 +151,7 @@ export default function MatchDeck({
           >
             {isScenario ? "Match" : currentIsStory ? "Read" : "Build"}
           </div>
-          <div
-            className="absolute top-10 right-6 rounded-xl border-4 border-rose-500 px-4 py-2 text-3xl font-black uppercase tracking-wider text-rose-500 rotate-12"
-            style={{ opacity: nopeOpacity }}
-          >
-            Skip
-          </div>
-
-          <div className="absolute right-6 top-24 z-10 flex max-w-[78vw] items-center gap-2 sm:max-w-[360px]">
+          <div className="absolute right-6 top-6 z-10 flex max-w-[78vw] items-center gap-2 sm:max-w-[360px]">
             {badgeLabel ? (
               <div
                 className="inline-flex w-fit items-center gap-2 rounded-full border px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-white shadow-[0_8px_30px_rgba(0,0,0,0.28)] backdrop-blur-xl"
