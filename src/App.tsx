@@ -30,6 +30,7 @@ import AdsStudio from "./pages/AdsStudio.tsx";
 import Match from "./pages/Match.tsx";
 import DramaStudio from "./pages/DramaStudio.tsx";
 import DramaEditor from "./pages/DramaEditor.tsx";
+import DramaShowrunner from "./pages/DramaShowrunner.tsx";
 
 
 
@@ -55,7 +56,8 @@ const App = () => (
           <Route path="/admin/ads-studio" element={<AdsStudio />} />
           <Route path="/match" element={<Match />} />
           <Route path="/studio" element={<DramaStudio />} />
-          <Route path="/studio/drama/:id" element={<DramaEditor />} />
+          <Route path="/studio/drama/:id" element={<DramaShowrunner />} />
+          <Route path="/studio/drama/:id/legacy" element={<DramaEditor />} />
 
 
           {/* SFW funnels */}
