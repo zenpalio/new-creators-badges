@@ -223,20 +223,24 @@ function EpisodeDetail({ episodeId }: { episodeId: string }) {
 
       <div className="mb-3 flex items-center justify-between">
         <div className="text-[10px] uppercase tracking-[0.2em] text-white/40">Scenes ({scenes.length})</div>
-        <Button size="sm" onClick={addScene} className="bg-primary-v2 hover:bg-primary-v2/90"><Plus className="mr-1 h-3 w-3" /> Scene</Button>
+        <div className="flex gap-2">
+          <AiDraftScenesButton episodeId={episodeId} onDone={load} />
+          <Button size="sm" onClick={addScene} className="bg-primary-v2 hover:bg-primary-v2/90"><Plus className="mr-1 h-3 w-3" /> Scene</Button>
+        </div>
       </div>
 
       <div className="space-y-3">
         {scenes.map(s => (
-          <SceneRow key={s.id} scene={s} cast={cast} locs={locs} onChange={p => updateScene(s.id, p)} onDelete={() => removeScene(s.id)} />
+          <SceneRow key={s.id} scene={s} cast={cast} locs={locs} onChange={p => updateScene(s.id, p)} onDelete={() => removeScene(s.id)} onGenerated={load} />
         ))}
-        {scenes.length === 0 && <div className="rounded-xl border border-dashed border-white/10 p-8 text-center text-xs text-white/40">No scenes yet — add your first shot.</div>}
+        {scenes.length === 0 && <div className="rounded-xl border border-dashed border-white/10 p-8 text-center text-xs text-white/40">No scenes yet — draft with AI or add manually.</div>}
       </div>
     </div>
   );
 }
 
-function SceneRow({ scene, cast, locs, onChange, onDelete }: { scene: Scene; cast: { id: string; name: string }[]; locs: { id: string; name: string }[]; onChange: (p: Partial<Scene>) => void; onDelete: () => void }) {
+
+function SceneRow({ scene, cast, locs, onChange, onDelete, onGenerated }: { scene: Scene; cast: { id: string; name: string }[]; locs: { id: string; name: string }[]; onChange: (p: Partial<Scene>) => void; onDelete: () => void; onGenerated: () => void }) {
   const [prompt, setPrompt] = useState(scene.shot_prompt ?? "");
   const dialog: DialogLine[] = Array.isArray(scene.dialog) ? scene.dialog : [];
 
