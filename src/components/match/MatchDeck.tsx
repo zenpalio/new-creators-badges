@@ -97,6 +97,23 @@ export default function MatchDeck({
   const isScenario = current.type === "scenario";
   const currentIsStory = currentCreate ? isStoryCard(currentCreate.id) : false;
   const nextImage = nextScenario?.hero ?? nextCreate?.imageUrl;
+  const badgeLabel = currentScenario?.modeLabel ?? currentCreate?.badge ?? "";
+  const badgeColor = currentScenario?.accent ?? currentCreate?.accent ?? "#ffffff";
+  const badgeIcon = currentScenario ? (
+    currentScenario.mode === "live" ? (
+      <Clapperboard className="h-3.5 w-3.5" />
+    ) : currentScenario.mode === "story" ? (
+      <Sparkles className="h-3.5 w-3.5" />
+    ) : (
+      <Info className="h-3.5 w-3.5" />
+    )
+  ) : currentIsStory ? (
+    <BookOpen className="h-3.5 w-3.5" />
+  ) : currentCreate?.id === "create-video" ? (
+    <Clapperboard className="h-3.5 w-3.5" />
+  ) : (
+    <Sparkles className="h-3.5 w-3.5" />
+  );
 
   return (
     <div className="relative min-h-[100dvh] overflow-hidden bg-black text-white">
@@ -141,68 +158,21 @@ export default function MatchDeck({
             Skip
           </div>
 
-          <div className="absolute right-6 top-24 z-10 max-w-[78vw] sm:max-w-[360px]">
-            {currentScenario ? (
-              <div className="space-y-3 rounded-[28px] border border-white/12 bg-black/45 p-4 backdrop-blur-xl">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="space-y-2">
-                    <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/12 bg-white/[0.08] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.24em] text-white/85">
-                      {currentScenario.mode === "live" ? (
-                        <Clapperboard className="h-3.5 w-3.5" />
-                      ) : (
-                        <Sparkles className="h-3.5 w-3.5" />
-                      )}
-                      {currentScenario.modeLabel}
-                    </div>
-                    <p className="text-xs font-medium uppercase tracking-[0.22em] text-white/65">
-                      {currentScenario.tag}
-                    </p>
-                  </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onPreview(currentScenario.id);
-                    }}
-                    onPointerDown={(e) => e.stopPropagation()}
-                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md transition hover:bg-white/20"
-                    aria-label="View profile"
-                  >
-                    <Info className="h-5 w-5" />
-                  </button>
-                </div>
-                <div className="space-y-1.5">
-                  <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-white/55">
-                    What this card is about
-                  </p>
-                  <p className="text-sm leading-relaxed text-white/90">{currentScenario.roleplay}</p>
-                </div>
+          {badgeLabel ? (
+            <div className="absolute right-6 top-24 z-10 max-w-[78vw] sm:max-w-[360px]">
+              <div
+                className="inline-flex w-fit items-center gap-2 rounded-full border px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-white shadow-[0_8px_30px_rgba(0,0,0,0.28)] backdrop-blur-xl"
+                style={{
+                  borderColor: `${badgeColor}55`,
+                  backgroundColor: `${badgeColor}26`,
+                  boxShadow: `0 10px 30px ${badgeColor}30`,
+                }}
+              >
+                {badgeIcon}
+                {badgeLabel}
               </div>
-            ) : currentCreate ? (
-              <div className="space-y-3 rounded-[28px] border border-white/12 bg-black/45 p-4 backdrop-blur-xl">
-                <div className="space-y-2">
-                  <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/12 bg-white/[0.08] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.24em] text-white/85">
-                    {currentIsStory ? (
-                      <BookOpen className="h-3.5 w-3.5" />
-                    ) : currentCreate.id === "create-video" ? (
-                      <Clapperboard className="h-3.5 w-3.5" />
-                    ) : (
-                      <Sparkles className="h-3.5 w-3.5" />
-                    )}
-                    {currentCreate.badge}
-                  </div>
-                  <p className="text-xs font-medium uppercase tracking-[0.22em] text-white/65">
-                    {currentIsStory ? "Production story" : "Custom experience"}
-                  </p>
-                </div>
-                <div className="space-y-1.5">
-                  <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-white/55">
-                    What this card is about
-                  </p>
-                  <p className="text-sm leading-relaxed text-white/90">{currentCreate.description}</p>
-                </div>
-              </div>
-            ) : null}
-          </div>
+            </div>
+          ) : null}
 
           <div className="absolute bottom-32 left-0 right-0 space-y-2 p-6">
             {currentScenario ? (
