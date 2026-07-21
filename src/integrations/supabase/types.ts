@@ -49,6 +49,48 @@ export type Database = {
           },
         ]
       }
+      cast_members: {
+        Row: {
+          created_at: string
+          element_id: string | null
+          id: string
+          name: string
+          notes: string | null
+          personality: string | null
+          preview_url: string | null
+          role: string
+          updated_at: string
+          user_id: string
+          voice_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          element_id?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          personality?: string | null
+          preview_url?: string | null
+          role?: string
+          updated_at?: string
+          user_id: string
+          voice_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          element_id?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          personality?: string | null
+          preview_url?: string | null
+          role?: string
+          updated_at?: string
+          user_id?: string
+          voice_id?: string | null
+        }
+        Relationships: []
+      }
       chat_messages: {
         Row: {
           companion_id: string
@@ -114,6 +156,104 @@ export type Database = {
         }
         Relationships: []
       }
+      dramas: {
+        Row: {
+          aspect_ratio: string
+          created_at: string
+          description: string | null
+          genre: string | null
+          id: string
+          logline: string | null
+          poster_url: string | null
+          status: string
+          target_episode_seconds: number
+          title: string
+          tone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          aspect_ratio?: string
+          created_at?: string
+          description?: string | null
+          genre?: string | null
+          id?: string
+          logline?: string | null
+          poster_url?: string | null
+          status?: string
+          target_episode_seconds?: number
+          title: string
+          tone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          aspect_ratio?: string
+          created_at?: string
+          description?: string | null
+          genre?: string | null
+          id?: string
+          logline?: string | null
+          poster_url?: string | null
+          status?: string
+          target_episode_seconds?: number
+          title?: string
+          tone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      episodes: {
+        Row: {
+          created_at: string
+          drama_id: string
+          final_video_url: string | null
+          hook: string | null
+          id: string
+          index: number
+          status: string
+          synopsis: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          drama_id: string
+          final_video_url?: string | null
+          hook?: string | null
+          id?: string
+          index: number
+          status?: string
+          synopsis?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          drama_id?: string
+          final_video_url?: string | null
+          hook?: string | null
+          id?: string
+          index?: number
+          status?: string
+          synopsis?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "episodes_drama_id_fkey"
+            columns: ["drama_id"]
+            isOneToOne: false
+            referencedRelation: "dramas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       gift_log: {
         Row: {
           at: string
@@ -149,6 +289,42 @@ export type Database = {
           },
         ]
       }
+      locations: {
+        Row: {
+          created_at: string
+          description: string | null
+          element_id: string | null
+          id: string
+          mood_tags: string[] | null
+          name: string
+          preview_url: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          element_id?: string | null
+          id?: string
+          mood_tags?: string[] | null
+          name: string
+          preview_url?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          element_id?: string | null
+          id?: string
+          mood_tags?: string[] | null
+          name?: string
+          preview_url?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -172,6 +348,72 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      scenes: {
+        Row: {
+          camera: string | null
+          cast_ids: string[] | null
+          created_at: string
+          dialog: Json
+          duration_seconds: number
+          episode_id: string
+          id: string
+          location_id: string | null
+          order_index: number
+          shot_prompt: string | null
+          status: string
+          updated_at: string
+          user_id: string
+          variants: Json
+        }
+        Insert: {
+          camera?: string | null
+          cast_ids?: string[] | null
+          created_at?: string
+          dialog?: Json
+          duration_seconds?: number
+          episode_id: string
+          id?: string
+          location_id?: string | null
+          order_index: number
+          shot_prompt?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+          variants?: Json
+        }
+        Update: {
+          camera?: string | null
+          cast_ids?: string[] | null
+          created_at?: string
+          dialog?: Json
+          duration_seconds?: number
+          episode_id?: string
+          id?: string
+          location_id?: string | null
+          order_index?: number
+          shot_prompt?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+          variants?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scenes_episode_id_fkey"
+            columns: ["episode_id"]
+            isOneToOne: false
+            referencedRelation: "episodes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scenes_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       unlock_catalog: {
         Row: {
