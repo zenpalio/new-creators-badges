@@ -7,13 +7,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { ArrowLeft, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Sparkles, Wand2, ImageIcon, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+
 
 type Drama = { id: string; title: string; logline: string | null; description: string | null; genre: string | null; tone: string | null; target_episode_seconds: number; aspect_ratio: string; status: string };
 type Episode = { id: string; index: number; title: string; hook: string | null; synopsis: string | null; status: string };
-type Scene = { id: string; order_index: number; shot_prompt: string | null; camera: string; duration_seconds: number; location_id: string | null; cast_ids: string[] | null; dialog: DialogLine[]; status: string };
+type Scene = { id: string; order_index: number; shot_prompt: string | null; camera: string; duration_seconds: number; location_id: string | null; cast_ids: string[] | null; dialog: DialogLine[]; variants: Variant[]; status: string };
 type DialogLine = { cast_id: string; text: string; delivery?: string };
+type Variant = { url: string; path: string; mime: string; prompt?: string; created_at?: string };
+
 
 export default function DramaEditor() {
   const { id } = useParams<{ id: string }>();
