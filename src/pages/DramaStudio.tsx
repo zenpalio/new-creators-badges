@@ -186,23 +186,7 @@ function CastTab({ cast, onChanged }: { cast: Cast[]; onChanged: () => void }) {
         <EmptyState icon={<Users className="h-8 w-8" />} title="No cast yet" hint="Add characters with locked reference elements so they stay consistent across scenes." />
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {cast.map(c => (
-            <Card key={c.id} className="overflow-hidden border-white/10 bg-white/[0.03]">
-              <div className="aspect-square bg-white/5">
-                {c.preview_url && <img src={c.preview_url} alt={c.name} className="h-full w-full object-cover" />}
-              </div>
-              <div className="p-3">
-                <div className="flex items-center justify-between">
-                  <div className="font-semibold">{c.name}</div>
-                  <span className="text-[9px] uppercase tracking-widest text-white/40">{c.role}</span>
-                </div>
-                <div className="mt-1 text-[10px] text-white/40">
-                  {c.element_id ? "🔒 element" : "no element"} · {c.voice_id ? "🎙 voice" : "no voice"}
-                </div>
-                <button onClick={() => remove(c.id)} className="mt-2 text-[10px] text-white/40 hover:text-red-400">Delete</button>
-              </div>
-            </Card>
-          ))}
+          {cast.map(c => <CastCard key={c.id} c={c} onChanged={onChanged} onDelete={() => remove(c.id)} />)}
         </div>
       )}
     </>
