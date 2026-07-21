@@ -111,7 +111,7 @@ export const SCENARIOS: Scenario[] = [
     roleplay: "You just moved in. Shared bathroom, thin walls, one shared kitchen. Tonight she 'accidentally' walked into your room in a hoodie and didn't leave.",
     slides: [maiHero.url, maiPortrait.url, maiHero.url],
     mode: "story",
-    modeLabel: "Story intro",
+    modeLabel: "Interactive shorts",
     introSlides: [
       {
         media: maiHero.url,
@@ -160,7 +160,7 @@ export const SCENARIOS: Scenario[] = [
     roleplay: "You matched an hour ago. She's alone in her apartment, bored, drink in hand — and she messaged first. See how far the banter goes before she suggests you come over.",
     slides: [cleoBg.url, cleoWarm.url, cleoWin.url, cleoPortrait.url],
     mode: "story",
-    modeLabel: "Story intro",
+    modeLabel: "Interactive shorts",
     introSlides: [
       {
         media: cleoBg.url,
@@ -237,7 +237,7 @@ export const SCENARIOS: Scenario[] = [
     roleplay: "It's the office holiday party. Everyone's gone home except her — and she just locked your office door behind her. Bad idea. Very bad idea.",
     slides: [abbyBg.url, abbyWarm.url, abbyWin.url, abbyPortrait.url],
     mode: "simple",
-    modeLabel: "Quick chat",
+    modeLabel: "Trending babe",
   },
   {
     id: "bo-ex",
@@ -264,7 +264,7 @@ export const SCENARIOS: Scenario[] = [
     roleplay: "It's almost 2am. She texted first. She knows what she's doing. So do you. The question is who folds first.",
     slides: [boBg.url, boWarm.url, boWin.url, boPortrait.url],
     mode: "simple",
-    modeLabel: "Quick chat",
+    modeLabel: "Trending babe",
   },
 ];
 
@@ -272,7 +272,7 @@ export const CREATE_CARDS: CreateCard[] = [
   {
     id: "create-image",
     title: "Create your own babe",
-    badge: "Generate images",
+    badge: "Image & video model",
     description: "Pick her look, body, vibe, and story — then spin up custom images that match your fantasy.",
     imageUrl: meiPortrait.url,
     accent: "#38bdf8",
@@ -288,7 +288,7 @@ export const CREATE_CARDS: CreateCard[] = [
   {
     id: "story-island-escape",
     title: "Island Escape",
-    badge: "Read stories",
+    badge: "Trending story",
     description: "Stranded on a tropical paradise with a beautiful stranger, every day brings new temptation.",
     imageUrl: storyIsland,
     accent: "#f59e0b",
@@ -304,7 +304,7 @@ export const CREATE_CARDS: CreateCard[] = [
   {
     id: "create-video",
     title: "Make her move on screen",
-    badge: "Generate videos",
+    badge: "Image & video model",
     description: "Turn your custom character into idle loops, cinematic intros, and story clips before the chat even starts.",
     imageUrl: pricingHero.url,
     accent: "#22d3ee",
@@ -320,7 +320,7 @@ export const CREATE_CARDS: CreateCard[] = [
   {
     id: "story-tokyo-after-dark",
     title: "Tokyo After Dark",
-    badge: "Read stories",
+    badge: "Trending story",
     description: "Neon-lit alleys, late trains, and a chance meeting that changes everything.",
     imageUrl: storyTokyo,
     accent: "#06b6d4",
@@ -336,7 +336,7 @@ export const CREATE_CARDS: CreateCard[] = [
   {
     id: "story-velvet-hours",
     title: "Velvet Hours",
-    badge: "Read stories",
+    badge: "Trending story",
     description: "Slow-burn elegance behind closed velvet curtains.",
     imageUrl: storyVelvet,
     accent: "#dc2626",
