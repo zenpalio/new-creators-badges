@@ -160,7 +160,7 @@ export const SCENARIOS: Scenario[] = [
     roleplay: "You matched an hour ago. She's alone in her apartment, bored, drink in hand — and she messaged first. See how far the banter goes before she suggests you come over.",
     slides: [cleoBg.url, cleoWarm.url, cleoWin.url, cleoPortrait.url],
     mode: "story",
-    modeLabel: "Story intro",
+    modeLabel: "Interactive shorts",
     introSlides: [
       {
         media: cleoBg.url,
