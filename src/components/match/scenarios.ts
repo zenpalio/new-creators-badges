@@ -20,10 +20,11 @@ import boWin from "@/assets/saga-chat-bo-win.jpg.asset.json";
 import annaChatBg from "@/assets/anna-chat-bg.mp4.asset.json";
 import sagaPov1Video from "@/assets/saga-pov-1.mp4.asset.json";
 import sagaPov2Video from "@/assets/saga-pov-2.mp4.asset.json";
-import pricingHero from "@/assets/pricing-hero.jpeg.asset.json";
 import storyIsland from "@/assets/story-island.jpg";
 import storyTokyo from "@/assets/story-tokyo.jpg";
 import storyVelvet from "@/assets/story-velvet.jpg";
+import createYourOwnBabe from "@/assets/match/create-your-own-babe.jpg";
+import createImagesVideosModel from "@/assets/match/create-images-videos-model.jpg";
 
 export type ScenarioId =
   | "mai-roommate"
@@ -272,17 +273,33 @@ export const CREATE_CARDS: CreateCard[] = [
   {
     id: "create-image",
     title: "Create your own babe",
-    badge: "Image & video model",
-    description: "Pick her look, body, vibe, and story — then spin up custom images that match your fantasy.",
-    imageUrl: meiPortrait.url,
+    badge: "Create your own babe",
+    description: "Pick her look, body, vibe, and story — then build a custom girl around your exact fantasy.",
+    imageUrl: createYourOwnBabe,
     accent: "#38bdf8",
     benefits: [
       "Design looks, body & style",
       "Write personality and backstory",
-      "Generate custom photos instantly",
-      "Drop her into chat when ready",
+      "Lock in her tone and chemistry",
+      "Start from your own fantasy",
     ],
-    ctaLabel: "Start with images",
+    ctaLabel: "Create your babe",
+    ctaUrl: "https://mybabes.ai/babes/create",
+  },
+  {
+    id: "create-video",
+    title: "Create images & videos",
+    badge: "Image & video model",
+    description: "Use a ready model to generate custom photos, idle clips, and short cinematic scenes on demand.",
+    imageUrl: createImagesVideosModel,
+    accent: "#22d3ee",
+    benefits: [
+      "Generate custom photos instantly",
+      "Create idle and intro video clips",
+      "Mix images, motion, and vibe",
+      "Build media before chat starts",
+    ],
+    ctaLabel: "Create media",
     ctaUrl: "https://mybabes.ai/babes/create",
   },
   {
@@ -300,22 +317,6 @@ export const CREATE_CARDS: CreateCard[] = [
     ],
     ctaLabel: "Open story",
     ctaUrl: "https://mybabes.ai/stories",
-  },
-  {
-    id: "create-video",
-    title: "Make her move on screen",
-    badge: "Image & video model",
-    description: "Turn your custom character into idle loops, cinematic intros, and story clips before the chat even starts.",
-    imageUrl: pricingHero.url,
-    accent: "#22d3ee",
-    benefits: [
-      "Generate idle and intro scenes",
-      "Create roleplay-ready video loops",
-      "Match images, voice, and vibe",
-      "Build a fully custom funnel",
-    ],
-    ctaLabel: "Start with video",
-    ctaUrl: "https://mybabes.ai/babes/create",
   },
   {
     id: "story-tokyo-after-dark",
