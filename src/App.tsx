@@ -28,6 +28,8 @@ import MinaAuth from "./pages/MinaAuth.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import AdsStudio from "./pages/AdsStudio.tsx";
 import Match from "./pages/Match.tsx";
+import DramaStudio from "./pages/DramaStudio.tsx";
+import DramaEditor from "./pages/DramaEditor.tsx";
 
 
 
