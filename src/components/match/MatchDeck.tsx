@@ -150,11 +150,16 @@ export default function MatchDeck({
   const currentIsStory = currentCreate ? isStoryCard(currentCreate.id) : false;
   const nextImage = nextScenario?.hero ?? nextCreate?.imageUrl;
   const experienceTone = getExperienceTone(currentScenario, currentCreate);
-  const cardDescriptionLines = currentScenario
+  const cardDescription = (currentScenario
     ? currentScenario.pitch.slice(0, 3)
     : currentCreate
       ? [currentCreate.description, ...currentCreate.benefits].slice(0, 3)
-      : [];
+      : []
+  )
+    .map((line) => line.trim().replace(/[.!?]+$/, ""))
+    .filter(Boolean)
+    .join(". ")
+    .concat(".");
 
   return (
     <div className="relative min-h-[100dvh] overflow-hidden bg-black text-white">
