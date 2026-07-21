@@ -209,10 +209,10 @@ export default function MatchDeck({
                   onPreview(currentScenario.id);
                 }}
                 onPointerDown={(e) => e.stopPropagation()}
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/35 text-white backdrop-blur-md transition hover:bg-white/20"
+                className="inline-flex h-[34px] min-w-[34px] shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/35 px-2.5 text-white backdrop-blur-md transition hover:bg-white/20"
                 aria-label="View profile"
               >
-                <Info className="h-4.5 w-4.5" />
+                <Info className="h-3.5 w-3.5" />
               </button>
             ) : null}
           </div>
