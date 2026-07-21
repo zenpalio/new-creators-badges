@@ -272,7 +272,7 @@ export const CREATE_CARDS: CreateCard[] = [
   {
     id: "create-image",
     title: "Create your own babe",
-    badge: "Generate images",
+    badge: "Image & video model",
     description: "Pick her look, body, vibe, and story — then spin up custom images that match your fantasy.",
     imageUrl: meiPortrait.url,
     accent: "#38bdf8",
@@ -288,7 +288,7 @@ export const CREATE_CARDS: CreateCard[] = [
   {
     id: "story-island-escape",
     title: "Island Escape",
-    badge: "Read stories",
+    badge: "Trending story",
     description: "Stranded on a tropical paradise with a beautiful stranger, every day brings new temptation.",
     imageUrl: storyIsland,
     accent: "#f59e0b",
@@ -304,7 +304,7 @@ export const CREATE_CARDS: CreateCard[] = [
   {
     id: "create-video",
     title: "Make her move on screen",
-    badge: "Generate videos",
+    badge: "Image & video model",
     description: "Turn your custom character into idle loops, cinematic intros, and story clips before the chat even starts.",
     imageUrl: pricingHero.url,
     accent: "#22d3ee",
@@ -320,7 +320,7 @@ export const CREATE_CARDS: CreateCard[] = [
   {
     id: "story-tokyo-after-dark",
     title: "Tokyo After Dark",
-    badge: "Read stories",
+    badge: "Trending story",
     description: "Neon-lit alleys, late trains, and a chance meeting that changes everything.",
     imageUrl: storyTokyo,
     accent: "#06b6d4",
@@ -336,7 +336,7 @@ export const CREATE_CARDS: CreateCard[] = [
   {
     id: "story-velvet-hours",
     title: "Velvet Hours",
-    badge: "Read stories",
+    badge: "Trending story",
     description: "Slow-burn elegance behind closed velvet curtains.",
     imageUrl: storyVelvet,
     accent: "#dc2626",
