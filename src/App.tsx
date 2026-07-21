@@ -28,6 +28,8 @@ import MinaAuth from "./pages/MinaAuth.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import AdsStudio from "./pages/AdsStudio.tsx";
 import Match from "./pages/Match.tsx";
+import DramaStudio from "./pages/DramaStudio.tsx";
+import DramaEditor from "./pages/DramaEditor.tsx";
 
 
 
@@ -52,6 +54,9 @@ const App = () => (
           <Route path="/mina/auth" element={<MinaAuth />} />
           <Route path="/admin/ads-studio" element={<AdsStudio />} />
           <Route path="/match" element={<Match />} />
+          <Route path="/studio" element={<DramaStudio />} />
+          <Route path="/studio/drama/:id" element={<DramaEditor />} />
+
 
           {/* SFW funnels */}
           <Route path="/exp/her/anime/sfw" element={<ExpHerAnime />} />
