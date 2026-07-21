@@ -1,10 +1,36 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, Send, Flame, Loader2, Lock } from "lucide-react";
-import { scenarioById, type ScenarioId } from "./scenarios";
+import { scenarioById, type MediaStage, type ScenarioId } from "./scenarios";
 
 type Msg = { role: "user" | "assistant"; content: string; selfie?: string };
 
 const FREE_MESSAGES = 5;
+
+const renderBackground = (bg: MediaStage) => {
+  if (bg.kind === "video") {
+    return (
+      <video
+        key={bg.src}
+        src={bg.src}
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 h-full w-full object-cover transition-all duration-1000"
+      />
+    );
+  }
+
+  return (
+    <img
+      key={bg.src}
+      src={bg.src}
+      alt=""
+      aria-hidden
+      className="absolute inset-0 h-full w-full object-cover transition-all duration-1000"
+    />
+  );
+};
 
 export default function MatchChat({
   id,
@@ -14,9 +40,7 @@ export default function MatchChat({
   onBack: () => void;
 }) {
   const s = scenarioById(id);
-  const [messages, setMessages] = useState<Msg[]>([
-    { role: "assistant", content: s.opener },
-  ]);
+  const [messages, setMessages] = useState<Msg[]>([{ role: "assistant", content: s.opener }]);
   const [input, setInput] = useState("");
   const [heat, setHeat] = useState(10);
   const [busy, setBusy] = useState(false);
@@ -37,7 +61,9 @@ export default function MatchChat({
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, busy]);
 
-  useEffect(() => { inputRef.current?.focus(); }, []);
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   const send = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -74,8 +100,7 @@ export default function MatchChat({
       };
       const newHeat = Math.max(0, Math.min(100, heat + (data.heatDelta || 0)));
       setHeat(newHeat);
-      const nextHeatIdx = newHeat >= 60 ? 2 : newHeat >= 30 ? 1 : 0;
-      const selfieUrl = data.selfie ? s.heat[nextHeatIdx] : undefined;
+      const selfieUrl = data.selfie ? s.selfies?.[heatIdx] ?? s.heat[heatIdx]?.src : undefined;
       setMessages((m) => [...m, { role: "assistant", content: data.reply, selfie: selfieUrl }]);
       if (data.done) setDone(true);
       if (userTurns + 1 >= FREE_MESSAGES) {
@@ -94,55 +119,44 @@ export default function MatchChat({
   const messagesLeft = Math.max(0, FREE_MESSAGES - userTurns);
 
   return (
-    <div className="fixed inset-0 z-40 bg-black overflow-hidden animate-fade-in">
-      <img
-        src={bg}
-        alt=""
-        aria-hidden
-        className="absolute inset-0 w-full h-full object-cover transition-all duration-1000"
-        style={{ filter: heat >= 60 ? "saturate(1.1)" : "none" }}
-        key={bg}
-      />
+    <div className="fixed inset-0 z-40 overflow-hidden bg-black animate-fade-in">
+      {renderBackground(bg)}
 
-      {/* Top scrim */}
       <div
         className="absolute inset-x-0 top-0 h-[30%] pointer-events-none"
         style={{ background: "linear-gradient(180deg, rgba(0,0,0,0.75) 0%, transparent 100%)" }}
       />
-      {/* Bottom scrim */}
       <div
         className="absolute inset-x-0 bottom-0 h-[55%] pointer-events-none"
         style={{ background: "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.95) 100%)" }}
       />
 
-      {/* Back */}
-      <div className="absolute top-3 left-3 z-30">
+      <div className="absolute left-3 top-3 z-30">
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.1] backdrop-blur-xl border border-white/15 text-[10px] uppercase tracking-[0.2em] text-white/85 hover:bg-white/[0.18] transition"
+          className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.1] px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] text-white/85 backdrop-blur-xl transition hover:bg-white/[0.18]"
         >
-          <ArrowLeft className="w-3.5 h-3.5" /> Back
+          <ArrowLeft className="h-3.5 w-3.5" /> Back
         </button>
       </div>
 
-      {/* Heat meter */}
-      <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 w-[min(72%,280px)]">
-        <div className="rounded-2xl bg-black/60 backdrop-blur-xl border border-white/10 px-3 py-2 shadow-2xl">
-          <div className="flex items-center gap-2 mb-1.5">
+      <div className="absolute left-1/2 top-3 z-30 w-[min(72%,280px)] -translate-x-1/2">
+        <div className="rounded-2xl border border-white/10 bg-black/60 px-3 py-2 shadow-2xl backdrop-blur-xl">
+          <div className="mb-1.5 flex items-center gap-2">
             <img
               src={s.portrait}
               alt={s.name}
-              className="w-5 h-5 rounded-full object-cover border border-white/25 shrink-0"
+              className="h-5 w-5 shrink-0 rounded-full border border-white/25 object-cover"
             />
-            <Flame className="w-3 h-3 shrink-0" style={{ color: s.accent }} />
-            <span className="text-[9px] uppercase tracking-[0.22em] text-white/70 font-medium truncate">
+            <Flame className="h-3 w-3 shrink-0" style={{ color: s.accent }} />
+            <span className="truncate text-[9px] font-medium uppercase tracking-[0.22em] text-white/70">
               {s.name} · Heat
             </span>
             <span className="ml-auto text-[9px] uppercase tracking-[0.2em] text-white/40">
               {messagesLeft} left
             </span>
           </div>
-          <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+          <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
             <div
               className="h-full rounded-full transition-all duration-700 ease-out"
               style={{
@@ -155,12 +169,11 @@ export default function MatchChat({
         </div>
       </div>
 
-      {/* Chat body */}
-      <div className="absolute inset-x-0 bottom-0 z-20 px-3 pt-4 pb-[max(14px,env(safe-area-inset-bottom))]">
-        <div className="max-w-md mx-auto flex flex-col gap-3">
+      <div className="absolute inset-x-0 bottom-0 z-20 px-3 pb-[max(14px,env(safe-area-inset-bottom))] pt-4">
+        <div className="mx-auto flex max-w-md flex-col gap-3">
           <div
             ref={scrollRef}
-            className="max-h-[52vh] overflow-y-auto scrollbar-hide flex flex-col gap-2 px-1 py-2"
+            className="scrollbar-hide flex max-h-[52vh] flex-col gap-2 overflow-y-auto px-1 py-2"
             style={{
               WebkitMaskImage:
                 "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.2) 8%, rgba(0,0,0,0.7) 25%, #000 45%)",
@@ -170,21 +183,21 @@ export default function MatchChat({
           >
             {messages.slice(-10).map((m, i) => (
               <div
-                key={i}
+                key={`${m.role}-${i}-${m.content.slice(0, 24)}`}
                 className={`flex animate-fade-in ${m.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 {m.role === "user" ? (
-                  <div className="max-w-[75%] px-4 py-2 rounded-2xl rounded-br-md text-sm bg-white/95 text-[hsl(220_25%_10%)] shadow-lg">
+                  <div className="max-w-[75%] rounded-2xl rounded-br-md bg-white/95 px-4 py-2 text-sm text-[hsl(220_25%_10%)] shadow-lg">
                     {m.content}
                   </div>
                 ) : (
-                  <div className="flex flex-col gap-1.5 max-w-[82%]">
+                  <div className="flex max-w-[82%] flex-col gap-1.5">
                     {m.selfie && (
-                      <div className="rounded-2xl overflow-hidden border border-white/15 shadow-2xl animate-scale-in">
-                        <img src={m.selfie} alt="" className="w-full h-40 object-cover" />
+                      <div className="animate-scale-in overflow-hidden rounded-2xl border border-white/15 shadow-2xl">
+                        <img src={m.selfie} alt="" className="h-40 w-full object-cover" />
                       </div>
                     )}
-                    <div className="px-4 py-2.5 rounded-2xl rounded-bl-md text-sm text-white bg-white/[0.08] border border-white/15 shadow-2xl leading-relaxed backdrop-blur-xl">
+                    <div className="rounded-2xl rounded-bl-md border border-white/15 bg-white/[0.08] px-4 py-2.5 text-sm leading-relaxed text-white shadow-2xl backdrop-blur-xl">
                       {m.content}
                     </div>
                   </div>
@@ -193,11 +206,11 @@ export default function MatchChat({
             ))}
             {busy && (
               <div className="flex justify-start">
-                <div className="px-4 py-2 rounded-2xl rounded-bl-md bg-white/[0.08] backdrop-blur-2xl border border-white/10">
+                <div className="rounded-2xl rounded-bl-md border border-white/10 bg-white/[0.08] px-4 py-2 backdrop-blur-2xl">
                   <span className="inline-flex gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse" />
-                    <span className="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse" style={{ animationDelay: "0.15s" }} />
-                    <span className="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse" style={{ animationDelay: "0.3s" }} />
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white/70" />
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white/70" style={{ animationDelay: "0.15s" }} />
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white/70" style={{ animationDelay: "0.3s" }} />
                   </span>
                 </div>
               </div>
@@ -205,7 +218,7 @@ export default function MatchChat({
             {done && !gated && (
               <div className="flex justify-center pt-2">
                 <div
-                  className="px-5 py-3 rounded-2xl text-center font-bold uppercase tracking-[0.3em] text-[12px] border animate-scale-in"
+                  className="animate-scale-in rounded-2xl border px-5 py-3 text-center text-[12px] font-bold uppercase tracking-[0.3em]"
                   style={{
                     background: `${s.accent}30`,
                     borderColor: `${s.accent}90`,
@@ -217,7 +230,7 @@ export default function MatchChat({
               </div>
             )}
             {error && (
-              <div className="text-center text-[11px] text-rose-300/90 bg-rose-500/10 border border-rose-400/30 rounded-lg px-3 py-2">
+              <div className="rounded-lg border border-rose-400/30 bg-rose-500/10 px-3 py-2 text-center text-[11px] text-rose-300/90">
                 {error}
               </div>
             )}
@@ -226,7 +239,7 @@ export default function MatchChat({
           {!gated && (
             <form
               onSubmit={send}
-              className="flex items-center gap-2 pl-4 pr-2 h-14 rounded-full bg-white/[0.07] backdrop-blur-xl border border-white/10 shadow-2xl"
+              className="flex h-14 items-center gap-2 rounded-full border border-white/10 bg-white/[0.07] pl-4 pr-2 shadow-2xl backdrop-blur-xl"
             >
               <input
                 ref={inputRef}
@@ -239,43 +252,42 @@ export default function MatchChat({
               <button
                 type="submit"
                 disabled={busy || !input.trim()}
-                className="w-10 h-10 rounded-full flex items-center justify-center disabled:opacity-30 hover:scale-105 transition shrink-0 text-white"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white transition hover:scale-105 disabled:opacity-30"
                 style={{ background: `linear-gradient(135deg, hsl(var(--primary-v2)), ${s.accent})` }}
               >
-                {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
               </button>
             </form>
           )}
         </div>
       </div>
 
-      {/* Paywall gate */}
       {gated && (
-        <div className="absolute inset-0 z-50 bg-black/85 backdrop-blur-2xl flex items-center justify-center px-6 animate-fade-in">
-          <div className="max-w-sm w-full rounded-3xl border border-white/15 bg-white/[0.06] p-7 text-center space-y-5 shadow-2xl">
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/85 px-6 backdrop-blur-2xl animate-fade-in">
+          <div className="w-full max-w-sm space-y-5 rounded-3xl border border-white/15 bg-white/[0.06] p-7 text-center shadow-2xl">
             <div
-              className="mx-auto w-14 h-14 rounded-full flex items-center justify-center"
+              className="mx-auto flex h-14 w-14 items-center justify-center rounded-full"
               style={{ background: `${s.accent}30`, border: `2px solid ${s.accent}` }}
             >
-              <Lock className="w-6 h-6 text-white" />
+              <Lock className="h-6 w-6 text-white" />
             </div>
-            <h2 className="text-2xl font-black text-white leading-tight">
+            <h2 className="text-2xl font-black leading-tight text-white">
               {s.name} is waiting for your next move
             </h2>
-            <p className="text-sm text-white/70 leading-relaxed">
+            <p className="text-sm leading-relaxed text-white/70">
               Unlock unlimited messages, voice notes & private photos.
               Your chat is saved.
             </p>
             <button
               onClick={() => (window.location.href = "/pricing")}
-              className="w-full h-14 rounded-full font-bold text-white text-sm uppercase tracking-[0.25em] shadow-[0_0_40px_hsl(var(--primary-v2)/0.5)] hover:scale-[1.02] active:scale-95 transition"
+              className="h-14 w-full rounded-full text-sm font-bold uppercase tracking-[0.25em] text-white shadow-[0_0_40px_hsl(var(--primary-v2)/0.5)] transition hover:scale-[1.02] active:scale-95"
               style={{ background: `linear-gradient(135deg, hsl(var(--primary-v2)), ${s.accent})` }}
             >
               Continue with {s.name}
             </button>
             <button
               onClick={onBack}
-              className="text-[11px] uppercase tracking-[0.25em] text-white/45 hover:text-white/80 transition"
+              className="text-[11px] uppercase tracking-[0.25em] text-white/45 transition hover:text-white/80"
             >
               Back to matches
             </button>
