@@ -1,31 +1,80 @@
-import { useState } from "react";
-import { Heart, X, Flame, Info } from "lucide-react";
-import { SCENARIOS, type ScenarioId } from "./scenarios";
+import { useMemo, useState } from "react";
+import { Heart, X, Info, Sparkles, Clapperboard } from "lucide-react";
+import {
+  CREATE_CARDS,
+  SCENARIOS,
+  type CreateCardId,
+  type ScenarioId,
+} from "./scenarios";
+
+type DeckItem =
+  | { type: "scenario"; id: ScenarioId }
+  | { type: "create"; id: CreateCardId };
+
+const DECK: DeckItem[] = [
+  { type: "scenario", id: "mai-roommate" },
+  { type: "scenario", id: "cleo-app" },
+  { type: "create", id: "create-image" },
+  { type: "scenario", id: "anna-rescue" },
+  { type: "scenario", id: "abby-boss" },
+  { type: "create", id: "create-video" },
+  { type: "scenario", id: "bo-ex" },
+];
 
 export default function MatchDeck({
   onMatch,
   onPreview,
+  onCreate,
 }: {
   onMatch: (id: ScenarioId) => void;
   onPreview: (id: ScenarioId) => void;
+  onCreate: (id: CreateCardId) => void;
 }) {
-
   const [index, setIndex] = useState(0);
   const [drag, setDrag] = useState(0);
   const [startX, setStartX] = useState<number | null>(null);
 
-  const current = SCENARIOS[index];
-  const next = SCENARIOS[(index + 1) % SCENARIOS.length];
+  const current = DECK[index];
+  const next = DECK[(index + 1) % DECK.length];
 
-  if (!current) return null;
+  const currentData = useMemo(() => {
+    if (!current) return null;
+    if (current.type === "scenario") {
+      return SCENARIOS.find((s) => s.id === current.id) ?? null;
+    }
+    return CREATE_CARDS.find((card) => card.id === current.id) ?? null;
+  }, [current]);
+
+  const nextData = useMemo(() => {
+    if (!next) return null;
+    if (next.type === "scenario") {
+      return SCENARIOS.find((s) => s.id === next.id) ?? null;
+    }
+    return CREATE_CARDS.find((card) => card.id === next.id) ?? null;
+  }, [next]);
+
+  if (!current || !currentData) return null;
+
+  const advance = () => {
+    setDrag(0);
+    setIndex((i) => Math.min(DECK.length - 1, i + 1));
+  };
 
   const swipe = (dir: "left" | "right") => {
-    if (dir === "right") {
-      onMatch(current.id);
+    if (current.type === "scenario") {
+      if (dir === "right") {
+        onMatch(current.id);
+        return;
+      }
+      advance();
       return;
     }
-    setDrag(0);
-    setIndex((i) => Math.min(SCENARIOS.length - 1, i + 1));
+
+    if (dir === "right") {
+      onCreate(current.id);
+    } else {
+      advance();
+    }
   };
 
   const onPointerDown = (e: React.PointerEvent) => setStartX(e.clientX);
@@ -43,95 +92,115 @@ export default function MatchDeck({
   const rot = drag / 20;
   const likeOpacity = Math.max(0, Math.min(1, drag / 100));
   const nopeOpacity = Math.max(0, Math.min(1, -drag / 100));
+  const isScenario = current.type === "scenario";
+  const isCreate = current.type === "create";
 
   return (
-    <div className="relative min-h-[100dvh] bg-black text-white overflow-hidden">
-      {/* Deck — fullscreen */}
+    <div className="relative min-h-[100dvh] overflow-hidden bg-black text-white">
       <div className="absolute inset-0">
-        {/* Behind card */}
-        {index + 1 < SCENARIOS.length && (
+        {index + 1 < DECK.length && nextData && (
           <div className="absolute inset-0 overflow-hidden opacity-70">
-            <img src={next.hero} alt="" className="w-full h-full object-cover" />
+            <img
+              src={nextData.imageUrl ?? nextData.hero}
+              alt=""
+              className="h-full w-full object-cover"
+            />
             <div className="absolute inset-0 bg-black/40" />
           </div>
         )}
 
-        {/* Current card */}
         <div
-          className="absolute inset-0 overflow-hidden cursor-grab active:cursor-grabbing select-none touch-none"
+          className="absolute inset-0 cursor-grab select-none overflow-hidden touch-none active:cursor-grabbing"
           style={{
             transform: `translateX(${drag}px) rotate(${rot * 0.3}deg)`,
-            transition: startX === null ? "transform 0.35s cubic-bezier(0.16,1,0.3,1)" : "none",
+            transition:
+              startX === null ? "transform 0.35s cubic-bezier(0.16,1,0.3,1)" : "none",
           }}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerCancel={onPointerUp}
         >
-          <img src={current.hero} alt={current.name} className="absolute inset-0 w-full h-full object-cover" draggable={false} />
+          <img
+            src={currentData.imageUrl ?? currentData.hero}
+            alt={currentData.title ?? currentData.name}
+            className="absolute inset-0 h-full w-full object-cover"
+            draggable={false}
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
 
-          {/* LIKE / NOPE stamps */}
           <div
-            className="absolute top-10 left-6 px-4 py-2 border-4 border-emerald-400 rounded-xl text-emerald-400 font-black text-3xl uppercase tracking-wider -rotate-12"
+            className="absolute top-10 left-6 rounded-xl border-4 border-emerald-400 px-4 py-2 text-3xl font-black uppercase tracking-wider text-emerald-400 -rotate-12"
             style={{ opacity: likeOpacity }}
           >
-            Match
+            {isCreate ? "Build" : "Match"}
           </div>
           <div
-            className="absolute top-10 right-6 px-4 py-2 border-4 border-rose-500 rounded-xl text-rose-500 font-black text-3xl uppercase tracking-wider rotate-12"
+            className="absolute top-10 right-6 rounded-xl border-4 border-rose-500 px-4 py-2 text-3xl font-black uppercase tracking-wider text-rose-500 rotate-12"
             style={{ opacity: nopeOpacity }}
           >
-            Nope
+            Skip
           </div>
 
-          {/* Card body */}
-          <div className="absolute bottom-32 left-0 right-0 p-6 space-y-1">
-            <div className="flex items-baseline justify-between gap-2">
-              <div className="flex items-baseline gap-2">
-                <h2 className="text-4xl font-black tracking-tight">{current.name}</h2>
-                <span className="text-2xl font-light text-white/80">{current.age}</span>
-              </div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onPreview(current.id);
-                }}
-                onPointerDown={(e) => e.stopPropagation()}
-                className="w-11 h-11 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition"
-                aria-label="View profile"
-              >
-                <Info className="w-5 h-5" />
-              </button>
-            </div>
-            <p className="pt-2 text-sm leading-relaxed text-white/85">
-              {current.roleplay}
-            </p>
-
-
+          <div className="absolute bottom-32 left-0 right-0 space-y-2 p-6">
+            {isScenario ? (
+              <>
+                <div className="flex items-baseline justify-between gap-2">
+                  <div className="flex items-baseline gap-2">
+                    <h2 className="text-4xl font-black tracking-tight">{currentData.name}</h2>
+                    <span className="text-2xl font-light text-white/80">{currentData.age}</span>
+                  </div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onPreview(current.id);
+                    }}
+                    onPointerDown={(e) => e.stopPropagation()}
+                    className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md transition hover:bg-white/20"
+                    aria-label="View profile"
+                  >
+                    <Info className="h-5 w-5" />
+                  </button>
+                </div>
+                <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/12 bg-white/[0.08] px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-white/75 backdrop-blur-md">
+                  {currentData.mode === "live" ? <Clapperboard className="h-3.5 w-3.5" /> : <Sparkles className="h-3.5 w-3.5" />}
+                  {currentData.modeLabel}
+                </div>
+                <p className="pt-1 text-sm leading-relaxed text-white/85">{currentData.roleplay}</p>
+              </>
+            ) : (
+              <>
+                <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/12 bg-white/[0.08] px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-white/75 backdrop-blur-md">
+                  {current.id === "create-video" ? <Clapperboard className="h-3.5 w-3.5" /> : <Sparkles className="h-3.5 w-3.5" />}
+                  {currentData.badge}
+                </div>
+                <h2 className="max-w-[280px] text-4xl font-black tracking-tight">{currentData.title}</h2>
+                <p className="max-w-[320px] pt-1 text-sm leading-relaxed text-white/85">
+                  {currentData.description}
+                </p>
+              </>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Action buttons — floating */}
-      <div className="absolute bottom-8 left-0 right-0 flex items-center justify-center gap-8 z-10">
+      <div className="absolute bottom-8 left-0 right-0 z-10 flex items-center justify-center gap-8">
         <button
           onClick={() => swipe("left")}
-          className="w-16 h-16 rounded-full bg-white/5 backdrop-blur-xl border border-white/15 flex items-center justify-center text-rose-400 hover:scale-110 active:scale-95 transition"
-          aria-label="Nope"
+          className="flex h-16 w-16 items-center justify-center rounded-full border border-white/15 bg-white/5 text-rose-400 backdrop-blur-xl transition hover:scale-110 active:scale-95"
+          aria-label="Skip"
         >
-          <X className="w-8 h-8" strokeWidth={3} />
+          <X className="h-8 w-8" strokeWidth={3} />
         </button>
         <button
           onClick={() => swipe("right")}
-          className="w-20 h-20 rounded-full flex items-center justify-center text-white hover:scale-110 active:scale-95 transition shadow-[0_0_40px_hsl(var(--primary-v2)/0.6)]"
-          style={{ background: "linear-gradient(135deg, hsl(var(--primary-v2)), #ec4899)" }}
-          aria-label="Match"
+          className="flex h-20 w-20 items-center justify-center rounded-full text-white shadow-[0_0_40px_hsl(var(--primary-v2)/0.6)] transition hover:scale-110 active:scale-95"
+          style={{ background: "linear-gradient(135deg, hsl(var(--primary-v2)), #22d3ee)" }}
+          aria-label={isCreate ? "Build" : "Match"}
         >
-          <Heart className="w-10 h-10 fill-white" />
+          {isCreate ? <Sparkles className="h-9 w-9" /> : <Heart className="h-10 w-10 fill-white" />}
         </button>
       </div>
     </div>
   );
 }
-
