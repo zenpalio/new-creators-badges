@@ -264,7 +264,7 @@ export const SCENARIOS: Scenario[] = [
     roleplay: "It's almost 2am. She texted first. She knows what she's doing. So do you. The question is who folds first.",
     slides: [boBg.url, boWarm.url, boWin.url, boPortrait.url],
     mode: "simple",
-    modeLabel: "Quick chat",
+    modeLabel: "Trending babe",
   },
 ];
 
