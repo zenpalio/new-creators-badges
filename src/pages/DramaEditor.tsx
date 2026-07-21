@@ -100,11 +100,9 @@ function EpisodesTab({ dramaId, episodes, onChanged }: { dramaId: string; episod
 
   async function create() {
     if (!form.title.trim()) return toast.error("Title required");
-    const { data: user } = await supabase.auth.getUser();
-    if (!user.user) return;
     const nextIndex = (episodes[episodes.length - 1]?.index ?? 0) + 1;
     const { error, data } = await supabase.from("episodes").insert({
-      user_id: user.user.id, drama_id: dramaId, index: nextIndex,
+      drama_id: dramaId, index: nextIndex,
       title: form.title, hook: form.hook || null, synopsis: form.synopsis || null,
     }).select().single();
     if (error) return toast.error(error.message);
@@ -114,6 +112,7 @@ function EpisodesTab({ dramaId, episodes, onChanged }: { dramaId: string; episod
     if (data) setSelected(data.id);
     onChanged();
   }
+
 
   async function remove(id: string) {
     if (!confirm("Delete this episode and all its scenes?")) return;
@@ -184,15 +183,14 @@ function EpisodeDetail({ episodeId }: { episodeId: string }) {
   }
 
   async function addScene() {
-    const { data: user } = await supabase.auth.getUser();
-    if (!user.user) return;
     const nextIndex = (scenes[scenes.length - 1]?.order_index ?? 0) + 1;
     const { error } = await supabase.from("scenes").insert({
-      user_id: user.user.id, episode_id: episodeId, order_index: nextIndex, shot_prompt: "New scene", camera: "medium", duration_seconds: 6,
+      episode_id: episodeId, order_index: nextIndex, shot_prompt: "New scene", camera: "medium", duration_seconds: 6,
     });
     if (error) return toast.error(error.message);
     load();
   }
+
 
   async function updateScene(id: string, patch: Partial<Scene>) {
     const { error } = await supabase.from("scenes").update(patch).eq("id", id);

@@ -72,10 +72,7 @@ function DramasTab({ dramas, onCreated }: { dramas: Drama[]; onCreated: () => vo
 
   async function create() {
     if (!form.title.trim()) return toast.error("Title required");
-    const { data: user } = await supabase.auth.getUser();
-    if (!user.user) return toast.error("Sign in first");
     const { error } = await supabase.from("dramas").insert({
-      user_id: user.user.id,
       title: form.title,
       logline: form.logline || null,
       genre: form.genre || null,
@@ -87,6 +84,7 @@ function DramasTab({ dramas, onCreated }: { dramas: Drama[]; onCreated: () => vo
     setForm({ title: "", logline: "", genre: "", target_episode_seconds: 75 });
     onCreated();
   }
+
 
   return (
     <>
@@ -143,15 +141,14 @@ function CastTab({ cast, onChanged }: { cast: Cast[]; onChanged: () => void }) {
 
   async function save() {
     if (!form.name.trim()) return toast.error("Name required");
-    const { data: user } = await supabase.auth.getUser();
-    if (!user.user) return toast.error("Sign in first");
-    const { error } = await supabase.from("cast_members").insert({ user_id: user.user.id, ...form, element_id: form.element_id || null, preview_url: form.preview_url || null, voice_id: form.voice_id || null, personality: form.personality || null });
+    const { error } = await supabase.from("cast_members").insert({ ...form, element_id: form.element_id || null, preview_url: form.preview_url || null, voice_id: form.voice_id || null, personality: form.personality || null });
     if (error) return toast.error(error.message);
     toast.success("Cast member added");
     setOpen(false);
     setForm({ name: "", role: "supporting", element_id: "", preview_url: "", voice_id: "", personality: "" });
     onChanged();
   }
+
 
   async function remove(id: string) {
     if (!confirm("Delete this cast member?")) return;
@@ -218,10 +215,7 @@ function LocationsTab({ locs, onChanged }: { locs: Loc[]; onChanged: () => void 
 
   async function save() {
     if (!form.name.trim()) return toast.error("Name required");
-    const { data: user } = await supabase.auth.getUser();
-    if (!user.user) return toast.error("Sign in first");
     const { error } = await supabase.from("locations").insert({
-      user_id: user.user.id,
       name: form.name,
       description: form.description || null,
       element_id: form.element_id || null,
@@ -234,6 +228,7 @@ function LocationsTab({ locs, onChanged }: { locs: Loc[]; onChanged: () => void 
     setForm({ name: "", description: "", element_id: "", preview_url: "", mood_tags: "" });
     onChanged();
   }
+
 
   async function remove(id: string) {
     if (!confirm("Delete this location?")) return;
