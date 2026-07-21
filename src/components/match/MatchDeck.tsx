@@ -150,6 +150,11 @@ export default function MatchDeck({
   const currentIsStory = currentCreate ? isStoryCard(currentCreate.id) : false;
   const nextImage = nextScenario?.hero ?? nextCreate?.imageUrl;
   const experienceTone = getExperienceTone(currentScenario, currentCreate);
+  const cardDescriptionLines = currentScenario
+    ? currentScenario.pitch.slice(0, 3)
+    : currentCreate
+      ? [currentCreate.description, ...currentCreate.benefits].slice(0, 3)
+      : [];
 
   return (
     <div className="relative min-h-[100dvh] overflow-hidden bg-black text-white">
@@ -217,21 +222,29 @@ export default function MatchDeck({
             ) : null}
           </div>
 
-          <div className="absolute bottom-32 left-0 right-0 space-y-2 p-6">
+          <div className="absolute bottom-32 left-0 right-0 space-y-3 p-6">
             {currentScenario ? (
               <div className="flex items-end justify-between gap-3">
-                <div className="min-w-0">
+                <div className="min-w-0 max-w-[320px]">
                   <div className="flex flex-wrap items-baseline gap-2">
                     <h2 className="text-4xl font-black tracking-tight">{currentScenario.name}</h2>
                     <span className="text-2xl font-light text-white/80">{currentScenario.age}</span>
                   </div>
-                  <p className="pt-1 text-base text-white/80">{currentScenario.hook}</p>
+                  <div className="pt-2 space-y-1.5 text-sm leading-5 text-white/85">
+                    {cardDescriptionLines.map((line) => (
+                      <p key={line}>{line}</p>
+                    ))}
+                  </div>
                 </div>
               </div>
             ) : currentCreate ? (
               <div className="max-w-[320px]">
                 <h2 className="text-4xl font-black tracking-tight">{currentCreate.title}</h2>
-                <p className="pt-1 text-base text-white/80">{currentCreate.badge}</p>
+                <div className="pt-2 space-y-1.5 text-sm leading-5 text-white/85">
+                  {cardDescriptionLines.map((line) => (
+                    <p key={line}>{line}</p>
+                  ))}
+                </div>
               </div>
             ) : null}
           </div>
