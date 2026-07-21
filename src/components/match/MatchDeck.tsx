@@ -235,21 +235,13 @@ export default function MatchDeck({
                     <h2 className="text-4xl font-black tracking-tight">{currentScenario.name}</h2>
                     <span className="text-2xl font-light text-white/80">{currentScenario.age}</span>
                   </div>
-                  <div className="pt-2 space-y-1.5 text-sm leading-5 text-white/85">
-                    {cardDescriptionLines.map((line) => (
-                      <p key={line}>{line}</p>
-                    ))}
-                  </div>
+                  <p className="pt-2 text-sm leading-5 text-white/85">{cardDescription}</p>
                 </div>
               </div>
             ) : currentCreate ? (
               <div className="max-w-[320px]">
                 <h2 className="text-4xl font-black tracking-tight">{currentCreate.title}</h2>
-                <div className="pt-2 space-y-1.5 text-sm leading-5 text-white/85">
-                  {cardDescriptionLines.map((line) => (
-                    <p key={line}>{line}</p>
-                  ))}
-                </div>
+                <p className="pt-2 text-sm leading-5 text-white/85">{cardDescription}</p>
               </div>
             ) : null}
           </div>
