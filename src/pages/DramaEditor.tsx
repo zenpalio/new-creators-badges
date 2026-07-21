@@ -130,19 +130,23 @@ function EpisodesTab({ dramaId, episodes, onChanged }: { dramaId: string; episod
       <aside>
         <div className="mb-3 flex items-center justify-between">
           <div className="text-[10px] uppercase tracking-[0.2em] text-white/40">Episodes</div>
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild><Button size="sm" variant="ghost"><Plus className="h-4 w-4" /></Button></DialogTrigger>
-            <DialogContent className="bg-neutral-950 border-white/10 text-white">
-              <DialogHeader><DialogTitle>New episode</DialogTitle></DialogHeader>
-              <div className="space-y-3">
-                <Input placeholder="Title" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} />
-                <Input placeholder="Hook (one-line teaser)" value={form.hook} onChange={e => setForm({ ...form, hook: e.target.value })} />
-                <Textarea placeholder="Synopsis / beat sheet" value={form.synopsis} onChange={e => setForm({ ...form, synopsis: e.target.value })} />
-              </div>
-              <DialogFooter><Button onClick={create}>Add episode</Button></DialogFooter>
-            </DialogContent>
-          </Dialog>
+          <div className="flex gap-1">
+            <AiDraftEpisodesButton dramaId={dramaId} onDone={onChanged} />
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild><Button size="sm" variant="ghost"><Plus className="h-4 w-4" /></Button></DialogTrigger>
+              <DialogContent className="bg-neutral-950 border-white/10 text-white">
+                <DialogHeader><DialogTitle>New episode</DialogTitle></DialogHeader>
+                <div className="space-y-3">
+                  <Input placeholder="Title" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} />
+                  <Input placeholder="Hook (one-line teaser)" value={form.hook} onChange={e => setForm({ ...form, hook: e.target.value })} />
+                  <Textarea placeholder="Synopsis / beat sheet" value={form.synopsis} onChange={e => setForm({ ...form, synopsis: e.target.value })} />
+                </div>
+                <DialogFooter><Button onClick={create}>Add episode</Button></DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
+
         <div className="space-y-1">
           {episodes.map(ep => (
             <button key={ep.id} onClick={() => setSelected(ep.id)} className={`group w-full rounded-lg border px-3 py-2 text-left text-sm transition ${selected === ep.id ? "border-primary-v2 bg-primary-v2/10" : "border-white/10 bg-white/[0.02] hover:bg-white/[0.05]"}`}>
