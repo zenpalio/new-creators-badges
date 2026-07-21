@@ -193,6 +193,69 @@ function CastTab({ cast, onChanged }: { cast: Cast[]; onChanged: () => void }) {
   );
 }
 
+function CastCard({ c, onChanged, onDelete }: { c: Cast; onChanged: () => void; onDelete: () => void }) {
+  const [busy, setBusy] = useState(false);
+  const [prompt, setPrompt] = useState("");
+  const [open, setOpen] = useState(false);
+
+  async function generate() {
+    const p = prompt.trim() || `${c.name}, ${c.personality ?? "cinematic character portrait"}`;
+    setBusy(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("studio-generate-portrait", {
+        body: { name: c.name, role: c.role, personality: c.personality, portrait_prompt: p, existing_id: c.id },
+      });
+      if (error) throw error;
+      if ((data as any)?.error) throw new Error((data as any).error);
+      const url = (data as any)?.cast?.preview_url;
+      if (url) {
+        await supabase.from("cast_members").update({ preview_url: url }).eq("id", c.id);
+      }
+      toast.success("Portrait generated");
+      setOpen(false);
+      onChanged();
+    } catch (e: any) {
+      toast.error(e?.message ?? "Failed");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <Card className="overflow-hidden border-white/10 bg-white/[0.03]">
+      <div className="relative aspect-square bg-white/5">
+        {c.preview_url ? (
+          <img src={c.preview_url} alt={c.name} className="h-full w-full object-cover" />
+        ) : (
+          <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center">
+            <div className="text-[10px] uppercase tracking-widest text-white/30">No portrait</div>
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <Button size="sm" className="bg-primary-v2 hover:bg-primary-v2/90">Generate</Button>
+              </DialogTrigger>
+              <DialogContent className="bg-neutral-950 border-white/10 text-white">
+                <DialogHeader><DialogTitle>Portrait for {c.name}</DialogTitle></DialogHeader>
+                <Textarea rows={4} placeholder="Describe the look — outfit, setting, mood…" value={prompt} onChange={e => setPrompt(e.target.value)} />
+                <DialogFooter><Button disabled={busy} onClick={generate}>{busy ? "Generating…" : "Generate portrait"}</Button></DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
+        )}
+      </div>
+      <div className="p-3">
+        <div className="flex items-center justify-between">
+          <div className="font-semibold">{c.name}</div>
+          <span className="text-[9px] uppercase tracking-widest text-white/40">{c.role}</span>
+        </div>
+        <div className="mt-1 text-[10px] text-white/40">
+          {c.element_id ? "🔒 element" : "no element"} · {c.voice_id ? "🎙 voice" : "no voice"}
+        </div>
+        <button onClick={onDelete} className="mt-2 text-[10px] text-white/40 hover:text-red-400">Delete</button>
+      </div>
+    </Card>
+  );
+}
+
 function LocationsTab({ locs, onChanged }: { locs: Loc[]; onChanged: () => void }) {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ name: "", description: "", element_id: "", preview_url: "", mood_tags: "" });
