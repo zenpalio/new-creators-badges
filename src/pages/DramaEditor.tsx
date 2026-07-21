@@ -178,7 +178,7 @@ function EpisodeDetail({ episodeId }: { episodeId: string }) {
       supabase.from("locations").select("id,name"),
     ]);
     if (e.data) setEp(e.data as Episode);
-    if (s.data) setScenes(s.data as Scene[]);
+    if (s.data) setScenes(s.data as unknown as Scene[]);
     if (c.data) setCast(c.data as { id: string; name: string }[]);
     if (l.data) setLocs(l.data as { id: string; name: string }[]);
   }
