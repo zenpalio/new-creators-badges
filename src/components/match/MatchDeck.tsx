@@ -24,10 +24,10 @@ const DECK: DeckItem[] = [
   { type: "scenario", id: "cleo-app" },
   { type: "create", id: "story-island-escape" },
   { type: "create", id: "create-image" },
+  { type: "create", id: "create-video" },
   { type: "scenario", id: "anna-rescue" },
   { type: "scenario", id: "abby-boss" },
   { type: "create", id: "story-tokyo-after-dark" },
-  { type: "create", id: "create-video" },
   { type: "scenario", id: "bo-ex" },
   { type: "create", id: "story-velvet-hours" },
 ];
