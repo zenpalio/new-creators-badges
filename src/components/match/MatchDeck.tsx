@@ -158,8 +158,8 @@ export default function MatchDeck({
             Skip
           </div>
 
-          {badgeLabel ? (
-            <div className="absolute right-6 top-24 z-10 max-w-[78vw] sm:max-w-[360px]">
+          <div className="absolute right-6 top-24 z-10 flex max-w-[78vw] items-center gap-2 sm:max-w-[360px]">
+            {badgeLabel ? (
               <div
                 className="inline-flex w-fit items-center gap-2 rounded-full border px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-white shadow-[0_8px_30px_rgba(0,0,0,0.28)] backdrop-blur-xl"
                 style={{
@@ -171,8 +171,21 @@ export default function MatchDeck({
                 {badgeIcon}
                 {badgeLabel}
               </div>
-            </div>
-          ) : null}
+            ) : null}
+            {currentScenario ? (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onPreview(currentScenario.id);
+                }}
+                onPointerDown={(e) => e.stopPropagation()}
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/35 text-white backdrop-blur-md transition hover:bg-white/20"
+                aria-label="View profile"
+              >
+                <Info className="h-4.5 w-4.5" />
+              </button>
+            ) : null}
+          </div>
 
           <div className="absolute bottom-32 left-0 right-0 space-y-2 p-6">
             {currentScenario ? (
