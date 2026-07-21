@@ -111,7 +111,7 @@ export const SCENARIOS: Scenario[] = [
     roleplay: "You just moved in. Shared bathroom, thin walls, one shared kitchen. Tonight she 'accidentally' walked into your room in a hoodie and didn't leave.",
     slides: [maiHero.url, maiPortrait.url, maiHero.url],
     mode: "story",
-    modeLabel: "Story intro",
+    modeLabel: "Interactive shorts",
     introSlides: [
       {
         media: maiHero.url,
