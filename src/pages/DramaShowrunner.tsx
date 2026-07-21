@@ -74,7 +74,7 @@ export default function DramaShowrunner() {
     } finally { setBusy(false); }
   }
 
-  async function applyConcept(p: Extract<Proposal, { type: "concept" }>) {
+  async function applyConcept(p: Extract<Proposal, { type: "concept" }>): Promise<void> {
     const patch: any = {};
     if (p.title) patch.title = p.title;
     if (p.logline) patch.logline = p.logline;
@@ -82,7 +82,7 @@ export default function DramaShowrunner() {
     if (p.genre) patch.genre = p.genre;
     if (p.tone) patch.tone = p.tone;
     const { error } = await supabase.from("dramas").update(patch).eq("id", id!);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Concept applied");
     refresh();
   }
