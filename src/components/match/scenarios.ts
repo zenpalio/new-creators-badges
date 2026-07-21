@@ -237,7 +237,7 @@ export const SCENARIOS: Scenario[] = [
     roleplay: "It's the office holiday party. Everyone's gone home except her — and she just locked your office door behind her. Bad idea. Very bad idea.",
     slides: [abbyBg.url, abbyWarm.url, abbyWin.url, abbyPortrait.url],
     mode: "simple",
-    modeLabel: "Quick chat",
+    modeLabel: "Trending babe",
   },
   {
     id: "bo-ex",
