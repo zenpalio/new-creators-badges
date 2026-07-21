@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Heart, X, Info, Sparkles, Clapperboard, BookOpen } from "lucide-react";
+import { Heart, X, Info, Sparkles, Clapperboard, BookOpen, ImageIcon } from "lucide-react";
 import {
   CREATE_CARDS,
   SCENARIOS,
@@ -12,6 +12,12 @@ import {
 type DeckItem =
   | { type: "scenario"; id: ScenarioId }
   | { type: "create"; id: CreateCardId };
+
+type ExperienceTone = {
+  label: string;
+  color: string;
+  icon: JSX.Element;
+};
 
 const DECK: DeckItem[] = [
   { type: "scenario", id: "mai-roommate" },
@@ -33,6 +39,53 @@ const getCreateCard = (id: CreateCardId): CreateCard =>
   CREATE_CARDS.find((card) => card.id === id)!;
 
 const isStoryCard = (id: CreateCardId) => id.startsWith("story-");
+
+const getExperienceTone = (
+  scenario: Scenario | null,
+  createCard: CreateCard | null,
+): ExperienceTone | null => {
+  if (scenario?.mode === "story") {
+    return {
+      label: "Interactive shorts",
+      color: "#14b8a6",
+      icon: <Sparkles className="h-3.5 w-3.5" />,
+    };
+  }
+
+  if (scenario?.mode === "live") {
+    return {
+      label: "Live roleplay",
+      color: "#f97316",
+      icon: <Clapperboard className="h-3.5 w-3.5" />,
+    };
+  }
+
+  if (scenario?.mode === "simple") {
+    return {
+      label: "Trending babe",
+      color: "#eab308",
+      icon: <Heart className="h-3.5 w-3.5 fill-current" />,
+    };
+  }
+
+  if (createCard) {
+    if (isStoryCard(createCard.id)) {
+      return {
+        label: "Trending story",
+        color: "#8b5cf6",
+        icon: <BookOpen className="h-3.5 w-3.5" />,
+      };
+    }
+
+    return {
+      label: "Image & video model",
+      color: "#38bdf8",
+      icon: <ImageIcon className="h-3.5 w-3.5" />,
+    };
+  }
+
+  return null;
+};
 
 export default function MatchDeck({
   onMatch,
@@ -93,27 +146,10 @@ export default function MatchDeck({
 
   const rot = drag / 20;
   const likeOpacity = Math.max(0, Math.min(1, drag / 100));
-  const nopeOpacity = Math.max(0, Math.min(1, -drag / 100));
   const isScenario = current.type === "scenario";
   const currentIsStory = currentCreate ? isStoryCard(currentCreate.id) : false;
   const nextImage = nextScenario?.hero ?? nextCreate?.imageUrl;
-  const badgeLabel = currentScenario?.modeLabel ?? currentCreate?.badge ?? "";
-  const badgeColor = currentScenario?.accent ?? currentCreate?.accent ?? "#ffffff";
-  const badgeIcon = currentScenario ? (
-    currentScenario.mode === "live" ? (
-      <Clapperboard className="h-3.5 w-3.5" />
-    ) : currentScenario.mode === "story" ? (
-      <Sparkles className="h-3.5 w-3.5" />
-    ) : (
-      <Info className="h-3.5 w-3.5" />
-    )
-  ) : currentIsStory ? (
-    <BookOpen className="h-3.5 w-3.5" />
-  ) : currentCreate?.id === "create-video" ? (
-    <Clapperboard className="h-3.5 w-3.5" />
-  ) : (
-    <Sparkles className="h-3.5 w-3.5" />
-  );
+  const experienceTone = getExperienceTone(currentScenario, currentCreate);
 
   return (
     <div className="relative min-h-[100dvh] overflow-hidden bg-black text-white">
@@ -151,18 +187,19 @@ export default function MatchDeck({
           >
             {isScenario ? "Match" : currentIsStory ? "Read" : "Build"}
           </div>
-          <div className="absolute right-6 top-6 z-10 flex max-w-[78vw] items-center gap-2 sm:max-w-[360px]">
-            {badgeLabel ? (
+
+          <div className="absolute right-3 top-3 z-10 flex max-w-[80vw] items-start gap-2 sm:right-4 sm:top-4 sm:max-w-[360px]">
+            {experienceTone ? (
               <div
                 className="inline-flex w-fit items-center gap-2 rounded-full border px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-white shadow-[0_8px_30px_rgba(0,0,0,0.28)] backdrop-blur-xl"
                 style={{
-                  borderColor: `${badgeColor}55`,
-                  backgroundColor: `${badgeColor}26`,
-                  boxShadow: `0 10px 30px ${badgeColor}30`,
+                  borderColor: `${experienceTone.color}55`,
+                  backgroundColor: `${experienceTone.color}26`,
+                  boxShadow: `0 10px 30px ${experienceTone.color}30`,
                 }}
               >
-                {badgeIcon}
-                {badgeLabel}
+                {experienceTone.icon}
+                {experienceTone.label}
               </div>
             ) : null}
             {currentScenario ? (
