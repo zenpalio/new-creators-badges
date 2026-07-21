@@ -306,7 +306,7 @@ export const CREATE_CARDS: CreateCard[] = [
     title: "Make her move on screen",
     badge: "Generate videos",
     description: "Turn your custom character into idle loops, cinematic intros, and story clips before the chat even starts.",
-    imageUrl: pricingHero,
+    imageUrl: pricingHero.url,
     accent: "#22d3ee",
     benefits: [
       "Generate idle and intro scenes",
