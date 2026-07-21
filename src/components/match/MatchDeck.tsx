@@ -141,13 +141,22 @@ export default function MatchDeck({
             Skip
           </div>
 
-          <div className="absolute bottom-32 left-0 right-0 space-y-2 p-6">
+          <div className="absolute right-6 top-24 z-10 max-w-[78vw] sm:max-w-[360px]">
             {currentScenario ? (
-              <>
-                <div className="flex items-baseline justify-between gap-2">
-                  <div className="flex items-baseline gap-2">
-                    <h2 className="text-4xl font-black tracking-tight">{currentScenario.name}</h2>
-                    <span className="text-2xl font-light text-white/80">{currentScenario.age}</span>
+              <div className="space-y-3 rounded-[28px] border border-white/12 bg-black/45 p-4 backdrop-blur-xl">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="space-y-2">
+                    <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/12 bg-white/[0.08] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.24em] text-white/85">
+                      {currentScenario.mode === "live" ? (
+                        <Clapperboard className="h-3.5 w-3.5" />
+                      ) : (
+                        <Sparkles className="h-3.5 w-3.5" />
+                      )}
+                      {currentScenario.modeLabel}
+                    </div>
+                    <p className="text-xs font-medium uppercase tracking-[0.22em] text-white/65">
+                      {currentScenario.tag}
+                    </p>
                   </div>
                   <button
                     onClick={(e) => {
@@ -155,39 +164,62 @@ export default function MatchDeck({
                       onPreview(currentScenario.id);
                     }}
                     onPointerDown={(e) => e.stopPropagation()}
-                    className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md transition hover:bg-white/20"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md transition hover:bg-white/20"
                     aria-label="View profile"
                   >
                     <Info className="h-5 w-5" />
                   </button>
                 </div>
-                <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/12 bg-white/[0.08] px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-white/75 backdrop-blur-md">
-                  {currentScenario.mode === "live" ? (
-                    <Clapperboard className="h-3.5 w-3.5" />
-                  ) : (
-                    <Sparkles className="h-3.5 w-3.5" />
-                  )}
-                  {currentScenario.modeLabel}
+                <div className="space-y-1.5">
+                  <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-white/55">
+                    What this card is about
+                  </p>
+                  <p className="text-sm leading-relaxed text-white/90">{currentScenario.roleplay}</p>
                 </div>
-                <p className="pt-1 text-sm leading-relaxed text-white/85">{currentScenario.roleplay}</p>
-              </>
+              </div>
             ) : currentCreate ? (
-              <>
-                <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/12 bg-white/[0.08] px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-white/75 backdrop-blur-md">
-                  {currentIsStory ? (
-                    <BookOpen className="h-3.5 w-3.5" />
-                  ) : currentCreate.id === "create-video" ? (
-                    <Clapperboard className="h-3.5 w-3.5" />
-                  ) : (
-                    <Sparkles className="h-3.5 w-3.5" />
-                  )}
-                  {currentCreate.badge}
+              <div className="space-y-3 rounded-[28px] border border-white/12 bg-black/45 p-4 backdrop-blur-xl">
+                <div className="space-y-2">
+                  <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/12 bg-white/[0.08] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.24em] text-white/85">
+                    {currentIsStory ? (
+                      <BookOpen className="h-3.5 w-3.5" />
+                    ) : currentCreate.id === "create-video" ? (
+                      <Clapperboard className="h-3.5 w-3.5" />
+                    ) : (
+                      <Sparkles className="h-3.5 w-3.5" />
+                    )}
+                    {currentCreate.badge}
+                  </div>
+                  <p className="text-xs font-medium uppercase tracking-[0.22em] text-white/65">
+                    {currentIsStory ? "Production story" : "Custom experience"}
+                  </p>
                 </div>
-                <h2 className="max-w-[320px] text-4xl font-black tracking-tight">{currentCreate.title}</h2>
-                <p className="max-w-[340px] pt-1 text-sm leading-relaxed text-white/85">
-                  {currentCreate.description}
-                </p>
-              </>
+                <div className="space-y-1.5">
+                  <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-white/55">
+                    What this card is about
+                  </p>
+                  <p className="text-sm leading-relaxed text-white/90">{currentCreate.description}</p>
+                </div>
+              </div>
+            ) : null}
+          </div>
+
+          <div className="absolute bottom-32 left-0 right-0 space-y-2 p-6">
+            {currentScenario ? (
+              <div className="flex items-end justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-baseline gap-2">
+                    <h2 className="text-4xl font-black tracking-tight">{currentScenario.name}</h2>
+                    <span className="text-2xl font-light text-white/80">{currentScenario.age}</span>
+                  </div>
+                  <p className="pt-1 text-base text-white/80">{currentScenario.hook}</p>
+                </div>
+              </div>
+            ) : currentCreate ? (
+              <div className="max-w-[320px]">
+                <h2 className="text-4xl font-black tracking-tight">{currentCreate.title}</h2>
+                <p className="pt-1 text-base text-white/80">{currentCreate.badge}</p>
+              </div>
             ) : null}
           </div>
         </div>
