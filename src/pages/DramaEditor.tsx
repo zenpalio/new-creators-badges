@@ -318,6 +318,78 @@ function SceneRow({ scene, cast, locs, onChange, onDelete, onGenerated }: { scen
           {dialog.length === 0 && <div className="text-xs text-white/30">No dialog yet.</div>}
         </div>
       </div>
+
+      <div className="mt-4 border-t border-white/5 pt-3">
+        <div className="mb-2 flex items-center justify-between">
+          <div className="text-[10px] uppercase tracking-[0.2em] text-white/40">Shot variants ({(scene.variants ?? []).length})</div>
+          <GenerateShotButton sceneId={scene.id} onDone={onGenerated} />
+        </div>
+        {(scene.variants ?? []).length > 0 ? (
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            {(scene.variants ?? []).map((v, i) => (
+              <a key={i} href={v.url} target="_blank" rel="noreferrer" className="block overflow-hidden rounded-md border border-white/10 bg-white/5">
+                <img src={v.url} alt="" className="aspect-[9/16] w-full object-cover" />
+              </a>
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-md border border-dashed border-white/10 p-3 text-center text-[11px] text-white/30">No shots generated yet. Click Generate to render this scene with cast + location references.</div>
+        )}
+      </div>
     </Card>
   );
 }
+
+function AiDraftEpisodesButton({ dramaId, onDone }: { dramaId: string; onDone: () => void }) {
+  const [busy, setBusy] = useState(false);
+  async function go() {
+    setBusy(true);
+    const { data, error } = await supabase.functions.invoke("studio-draft-episodes", { body: { drama_id: dramaId, count: 10 } });
+    setBusy(false);
+    if (error || (data as any)?.error) return toast.error((data as any)?.error ?? error?.message ?? "Failed");
+    toast.success(`Drafted ${(data as any)?.inserted ?? 0} episodes`);
+    onDone();
+  }
+  return (
+    <Button size="sm" variant="ghost" onClick={go} disabled={busy} title="Draft 10 episodes with AI">
+      {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4 text-primary-v2" />}
+    </Button>
+  );
+}
+
+function AiDraftScenesButton({ episodeId, onDone }: { episodeId: string; onDone: () => void }) {
+  const [busy, setBusy] = useState(false);
+  async function go() {
+    setBusy(true);
+    const { data, error } = await supabase.functions.invoke("studio-draft-scenes", { body: { episode_id: episodeId, count: 8 } });
+    setBusy(false);
+    if (error || (data as any)?.error) return toast.error((data as any)?.error ?? error?.message ?? "Failed");
+    toast.success(`Drafted ${(data as any)?.inserted ?? 0} scenes`);
+    onDone();
+  }
+  return (
+    <Button size="sm" variant="outline" onClick={go} disabled={busy} className="border-primary-v2/40 text-primary-v2 hover:bg-primary-v2/10">
+      {busy ? <Loader2 className="mr-1 h-3 w-3 animate-spin" /> : <Wand2 className="mr-1 h-3 w-3" />}
+      Draft scenes
+    </Button>
+  );
+}
+
+function GenerateShotButton({ sceneId, onDone }: { sceneId: string; onDone: () => void }) {
+  const [busy, setBusy] = useState(false);
+  async function go() {
+    setBusy(true);
+    const { data, error } = await supabase.functions.invoke("studio-generate-shot", { body: { scene_id: sceneId } });
+    setBusy(false);
+    if (error || (data as any)?.error) return toast.error((data as any)?.error ?? error?.message ?? "Failed");
+    toast.success("Shot generated");
+    onDone();
+  }
+  return (
+    <Button size="sm" variant="ghost" onClick={go} disabled={busy} className="text-primary-v2 hover:bg-primary-v2/10">
+      {busy ? <Loader2 className="mr-1 h-3 w-3 animate-spin" /> : <ImageIcon className="mr-1 h-3 w-3" />}
+      Generate shot
+    </Button>
+  );
+}
+
