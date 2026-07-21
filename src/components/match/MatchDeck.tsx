@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Heart, X, Info, Sparkles, Clapperboard } from "lucide-react";
+import { Heart, X, Info, Sparkles, Clapperboard, BookOpen } from "lucide-react";
 import {
   CREATE_CARDS,
   SCENARIOS,
@@ -16,11 +16,14 @@ type DeckItem =
 const DECK: DeckItem[] = [
   { type: "scenario", id: "mai-roommate" },
   { type: "scenario", id: "cleo-app" },
+  { type: "create", id: "story-island-escape" },
   { type: "create", id: "create-image" },
   { type: "scenario", id: "anna-rescue" },
   { type: "scenario", id: "abby-boss" },
+  { type: "create", id: "story-tokyo-after-dark" },
   { type: "create", id: "create-video" },
   { type: "scenario", id: "bo-ex" },
+  { type: "create", id: "story-velvet-hours" },
 ];
 
 const getScenario = (id: ScenarioId): Scenario =>
@@ -28,6 +31,8 @@ const getScenario = (id: ScenarioId): Scenario =>
 
 const getCreateCard = (id: CreateCardId): CreateCard =>
   CREATE_CARDS.find((card) => card.id === id)!;
+
+const isStoryCard = (id: CreateCardId) => id.startsWith("story-");
 
 export default function MatchDeck({
   onMatch,
@@ -90,6 +95,7 @@ export default function MatchDeck({
   const likeOpacity = Math.max(0, Math.min(1, drag / 100));
   const nopeOpacity = Math.max(0, Math.min(1, -drag / 100));
   const isScenario = current.type === "scenario";
+  const currentIsStory = currentCreate ? isStoryCard(currentCreate.id) : false;
   const nextImage = nextScenario?.hero ?? nextCreate?.imageUrl;
 
   return (
@@ -126,7 +132,7 @@ export default function MatchDeck({
             className="absolute top-10 left-6 rounded-xl border-4 border-emerald-400 px-4 py-2 text-3xl font-black uppercase tracking-wider text-emerald-400 -rotate-12"
             style={{ opacity: likeOpacity }}
           >
-            {isScenario ? "Match" : "Build"}
+            {isScenario ? "Match" : currentIsStory ? "Read" : "Build"}
           </div>
           <div
             className="absolute top-10 right-6 rounded-xl border-4 border-rose-500 px-4 py-2 text-3xl font-black uppercase tracking-wider text-rose-500 rotate-12"
@@ -168,15 +174,17 @@ export default function MatchDeck({
             ) : currentCreate ? (
               <>
                 <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/12 bg-white/[0.08] px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-white/75 backdrop-blur-md">
-                  {currentCreate.id === "create-video" ? (
+                  {currentIsStory ? (
+                    <BookOpen className="h-3.5 w-3.5" />
+                  ) : currentCreate.id === "create-video" ? (
                     <Clapperboard className="h-3.5 w-3.5" />
                   ) : (
                     <Sparkles className="h-3.5 w-3.5" />
                   )}
                   {currentCreate.badge}
                 </div>
-                <h2 className="max-w-[280px] text-4xl font-black tracking-tight">{currentCreate.title}</h2>
-                <p className="max-w-[320px] pt-1 text-sm leading-relaxed text-white/85">
+                <h2 className="max-w-[320px] text-4xl font-black tracking-tight">{currentCreate.title}</h2>
+                <p className="max-w-[340px] pt-1 text-sm leading-relaxed text-white/85">
                   {currentCreate.description}
                 </p>
               </>
@@ -197,9 +205,15 @@ export default function MatchDeck({
           onClick={() => swipe("right")}
           className="flex h-20 w-20 items-center justify-center rounded-full text-white shadow-[0_0_40px_hsl(var(--primary-v2)/0.6)] transition hover:scale-110 active:scale-95"
           style={{ background: "linear-gradient(135deg, hsl(var(--primary-v2)), #22d3ee)" }}
-          aria-label={isScenario ? "Match" : "Build"}
+          aria-label={isScenario ? "Match" : currentIsStory ? "Read" : "Build"}
         >
-          {isScenario ? <Heart className="h-10 w-10 fill-white" /> : <Sparkles className="h-9 w-9" />}
+          {isScenario ? (
+            <Heart className="h-10 w-10 fill-white" />
+          ) : currentIsStory ? (
+            <BookOpen className="h-9 w-9" />
+          ) : (
+            <Sparkles className="h-9 w-9" />
+          )}
         </button>
       </div>
     </div>

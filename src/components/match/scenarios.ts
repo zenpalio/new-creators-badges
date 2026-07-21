@@ -21,6 +21,9 @@ import annaChatBg from "@/assets/anna-chat-bg.mp4.asset.json";
 import sagaPov1Video from "@/assets/saga-pov-1.mp4.asset.json";
 import sagaPov2Video from "@/assets/saga-pov-2.mp4.asset.json";
 import pricingHero from "@/assets/pricing-hero.jpeg.asset.json";
+import storyIsland from "@/assets/story-island.jpg";
+import storyTokyo from "@/assets/story-tokyo.jpg";
+import storyVelvet from "@/assets/story-velvet.jpg";
 
 export type ScenarioId =
   | "mai-roommate"
@@ -63,7 +66,12 @@ export type Scenario = {
   introSlides?: IntroSlide[];
 };
 
-export type CreateCardId = "create-image" | "create-video";
+export type CreateCardId =
+  | "create-image"
+  | "create-video"
+  | "story-island-escape"
+  | "story-tokyo-after-dark"
+  | "story-velvet-hours";
 
 export type CreateCard = {
   id: CreateCardId;
@@ -278,11 +286,27 @@ export const CREATE_CARDS: CreateCard[] = [
     ctaUrl: "https://mybabes.ai/babes/create",
   },
   {
+    id: "story-island-escape",
+    title: "Island Escape",
+    badge: "Read stories",
+    description: "Stranded on a tropical paradise with a beautiful stranger, every day brings new temptation.",
+    imageUrl: storyIsland,
+    accent: "#f59e0b",
+    benefits: [
+      "4 episodes to binge",
+      "18 illustrated scenes",
+      "Cinematic pacing and reveals",
+      "Jump straight into production stories",
+    ],
+    ctaLabel: "Open story",
+    ctaUrl: "https://mybabes.ai/stories",
+  },
+  {
     id: "create-video",
     title: "Make her move on screen",
     badge: "Generate videos",
     description: "Turn your custom character into idle loops, cinematic intros, and story clips before the chat even starts.",
-    imageUrl: pricingHero.url,
+    imageUrl: pricingHero,
     accent: "#22d3ee",
     benefits: [
       "Generate idle and intro scenes",
@@ -292,6 +316,38 @@ export const CREATE_CARDS: CreateCard[] = [
     ],
     ctaLabel: "Start with video",
     ctaUrl: "https://mybabes.ai/babes/create",
+  },
+  {
+    id: "story-tokyo-after-dark",
+    title: "Tokyo After Dark",
+    badge: "Read stories",
+    description: "Neon-lit alleys, late trains, and a chance meeting that changes everything.",
+    imageUrl: storyTokyo,
+    accent: "#06b6d4",
+    benefits: [
+      "3 episodes to unlock",
+      "14 atmospheric scenes",
+      "Late-night urban romance",
+      "Built for direct story entry",
+    ],
+    ctaLabel: "Open story",
+    ctaUrl: "https://mybabes.ai/stories",
+  },
+  {
+    id: "story-velvet-hours",
+    title: "Velvet Hours",
+    badge: "Read stories",
+    description: "Slow-burn elegance behind closed velvet curtains.",
+    imageUrl: storyVelvet,
+    accent: "#dc2626",
+    benefits: [
+      "1 premium episode",
+      "5 polished story scenes",
+      "Luxury, tension, and payoff",
+      "Perfect for readers over chat",
+    ],
+    ctaLabel: "Open story",
+    ctaUrl: "https://mybabes.ai/stories",
   },
 ];
 
