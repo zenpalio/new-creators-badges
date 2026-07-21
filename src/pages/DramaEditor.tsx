@@ -7,13 +7,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { ArrowLeft, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Sparkles, Wand2, ImageIcon, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+
 
 type Drama = { id: string; title: string; logline: string | null; description: string | null; genre: string | null; tone: string | null; target_episode_seconds: number; aspect_ratio: string; status: string };
 type Episode = { id: string; index: number; title: string; hook: string | null; synopsis: string | null; status: string };
-type Scene = { id: string; order_index: number; shot_prompt: string | null; camera: string; duration_seconds: number; location_id: string | null; cast_ids: string[] | null; dialog: DialogLine[]; status: string };
+type Scene = { id: string; order_index: number; shot_prompt: string | null; camera: string; duration_seconds: number; location_id: string | null; cast_ids: string[] | null; dialog: DialogLine[]; variants: Variant[]; status: string };
 type DialogLine = { cast_id: string; text: string; delivery?: string };
+type Variant = { url: string; path: string; mime: string; prompt?: string; created_at?: string };
+
 
 export default function DramaEditor() {
   const { id } = useParams<{ id: string }>();
@@ -127,19 +130,23 @@ function EpisodesTab({ dramaId, episodes, onChanged }: { dramaId: string; episod
       <aside>
         <div className="mb-3 flex items-center justify-between">
           <div className="text-[10px] uppercase tracking-[0.2em] text-white/40">Episodes</div>
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild><Button size="sm" variant="ghost"><Plus className="h-4 w-4" /></Button></DialogTrigger>
-            <DialogContent className="bg-neutral-950 border-white/10 text-white">
-              <DialogHeader><DialogTitle>New episode</DialogTitle></DialogHeader>
-              <div className="space-y-3">
-                <Input placeholder="Title" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} />
-                <Input placeholder="Hook (one-line teaser)" value={form.hook} onChange={e => setForm({ ...form, hook: e.target.value })} />
-                <Textarea placeholder="Synopsis / beat sheet" value={form.synopsis} onChange={e => setForm({ ...form, synopsis: e.target.value })} />
-              </div>
-              <DialogFooter><Button onClick={create}>Add episode</Button></DialogFooter>
-            </DialogContent>
-          </Dialog>
+          <div className="flex gap-1">
+            <AiDraftEpisodesButton dramaId={dramaId} onDone={onChanged} />
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild><Button size="sm" variant="ghost"><Plus className="h-4 w-4" /></Button></DialogTrigger>
+              <DialogContent className="bg-neutral-950 border-white/10 text-white">
+                <DialogHeader><DialogTitle>New episode</DialogTitle></DialogHeader>
+                <div className="space-y-3">
+                  <Input placeholder="Title" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} />
+                  <Input placeholder="Hook (one-line teaser)" value={form.hook} onChange={e => setForm({ ...form, hook: e.target.value })} />
+                  <Textarea placeholder="Synopsis / beat sheet" value={form.synopsis} onChange={e => setForm({ ...form, synopsis: e.target.value })} />
+                </div>
+                <DialogFooter><Button onClick={create}>Add episode</Button></DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
+
         <div className="space-y-1">
           {episodes.map(ep => (
             <button key={ep.id} onClick={() => setSelected(ep.id)} className={`group w-full rounded-lg border px-3 py-2 text-left text-sm transition ${selected === ep.id ? "border-primary-v2 bg-primary-v2/10" : "border-white/10 bg-white/[0.02] hover:bg-white/[0.05]"}`}>
@@ -216,20 +223,24 @@ function EpisodeDetail({ episodeId }: { episodeId: string }) {
 
       <div className="mb-3 flex items-center justify-between">
         <div className="text-[10px] uppercase tracking-[0.2em] text-white/40">Scenes ({scenes.length})</div>
-        <Button size="sm" onClick={addScene} className="bg-primary-v2 hover:bg-primary-v2/90"><Plus className="mr-1 h-3 w-3" /> Scene</Button>
+        <div className="flex gap-2">
+          <AiDraftScenesButton episodeId={episodeId} onDone={load} />
+          <Button size="sm" onClick={addScene} className="bg-primary-v2 hover:bg-primary-v2/90"><Plus className="mr-1 h-3 w-3" /> Scene</Button>
+        </div>
       </div>
 
       <div className="space-y-3">
         {scenes.map(s => (
-          <SceneRow key={s.id} scene={s} cast={cast} locs={locs} onChange={p => updateScene(s.id, p)} onDelete={() => removeScene(s.id)} />
+          <SceneRow key={s.id} scene={s} cast={cast} locs={locs} onChange={p => updateScene(s.id, p)} onDelete={() => removeScene(s.id)} onGenerated={load} />
         ))}
-        {scenes.length === 0 && <div className="rounded-xl border border-dashed border-white/10 p-8 text-center text-xs text-white/40">No scenes yet — add your first shot.</div>}
+        {scenes.length === 0 && <div className="rounded-xl border border-dashed border-white/10 p-8 text-center text-xs text-white/40">No scenes yet — draft with AI or add manually.</div>}
       </div>
     </div>
   );
 }
 
-function SceneRow({ scene, cast, locs, onChange, onDelete }: { scene: Scene; cast: { id: string; name: string }[]; locs: { id: string; name: string }[]; onChange: (p: Partial<Scene>) => void; onDelete: () => void }) {
+
+function SceneRow({ scene, cast, locs, onChange, onDelete, onGenerated }: { scene: Scene; cast: { id: string; name: string }[]; locs: { id: string; name: string }[]; onChange: (p: Partial<Scene>) => void; onDelete: () => void; onGenerated: () => void }) {
   const [prompt, setPrompt] = useState(scene.shot_prompt ?? "");
   const dialog: DialogLine[] = Array.isArray(scene.dialog) ? scene.dialog : [];
 
@@ -307,6 +318,78 @@ function SceneRow({ scene, cast, locs, onChange, onDelete }: { scene: Scene; cas
           {dialog.length === 0 && <div className="text-xs text-white/30">No dialog yet.</div>}
         </div>
       </div>
+
+      <div className="mt-4 border-t border-white/5 pt-3">
+        <div className="mb-2 flex items-center justify-between">
+          <div className="text-[10px] uppercase tracking-[0.2em] text-white/40">Shot variants ({(scene.variants ?? []).length})</div>
+          <GenerateShotButton sceneId={scene.id} onDone={onGenerated} />
+        </div>
+        {(scene.variants ?? []).length > 0 ? (
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            {(scene.variants ?? []).map((v, i) => (
+              <a key={i} href={v.url} target="_blank" rel="noreferrer" className="block overflow-hidden rounded-md border border-white/10 bg-white/5">
+                <img src={v.url} alt="" className="aspect-[9/16] w-full object-cover" />
+              </a>
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-md border border-dashed border-white/10 p-3 text-center text-[11px] text-white/30">No shots generated yet. Click Generate to render this scene with cast + location references.</div>
+        )}
+      </div>
     </Card>
   );
 }
+
+function AiDraftEpisodesButton({ dramaId, onDone }: { dramaId: string; onDone: () => void }) {
+  const [busy, setBusy] = useState(false);
+  async function go() {
+    setBusy(true);
+    const { data, error } = await supabase.functions.invoke("studio-draft-episodes", { body: { drama_id: dramaId, count: 10 } });
+    setBusy(false);
+    if (error || (data as any)?.error) return toast.error((data as any)?.error ?? error?.message ?? "Failed");
+    toast.success(`Drafted ${(data as any)?.inserted ?? 0} episodes`);
+    onDone();
+  }
+  return (
+    <Button size="sm" variant="ghost" onClick={go} disabled={busy} title="Draft 10 episodes with AI">
+      {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4 text-primary-v2" />}
+    </Button>
+  );
+}
+
+function AiDraftScenesButton({ episodeId, onDone }: { episodeId: string; onDone: () => void }) {
+  const [busy, setBusy] = useState(false);
+  async function go() {
+    setBusy(true);
+    const { data, error } = await supabase.functions.invoke("studio-draft-scenes", { body: { episode_id: episodeId, count: 8 } });
+    setBusy(false);
+    if (error || (data as any)?.error) return toast.error((data as any)?.error ?? error?.message ?? "Failed");
+    toast.success(`Drafted ${(data as any)?.inserted ?? 0} scenes`);
+    onDone();
+  }
+  return (
+    <Button size="sm" variant="outline" onClick={go} disabled={busy} className="border-primary-v2/40 text-primary-v2 hover:bg-primary-v2/10">
+      {busy ? <Loader2 className="mr-1 h-3 w-3 animate-spin" /> : <Wand2 className="mr-1 h-3 w-3" />}
+      Draft scenes
+    </Button>
+  );
+}
+
+function GenerateShotButton({ sceneId, onDone }: { sceneId: string; onDone: () => void }) {
+  const [busy, setBusy] = useState(false);
+  async function go() {
+    setBusy(true);
+    const { data, error } = await supabase.functions.invoke("studio-generate-shot", { body: { scene_id: sceneId } });
+    setBusy(false);
+    if (error || (data as any)?.error) return toast.error((data as any)?.error ?? error?.message ?? "Failed");
+    toast.success("Shot generated");
+    onDone();
+  }
+  return (
+    <Button size="sm" variant="ghost" onClick={go} disabled={busy} className="text-primary-v2 hover:bg-primary-v2/10">
+      {busy ? <Loader2 className="mr-1 h-3 w-3 animate-spin" /> : <ImageIcon className="mr-1 h-3 w-3" />}
+      Generate shot
+    </Button>
+  );
+}
+
