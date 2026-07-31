@@ -54,10 +54,12 @@ export const BUILDER_STEPS: BuilderStep[] = [
     title: "Body type",
     subtitle: "Pick the silhouette you like most.",
     options: [
+      { id: "petite", label: "Petite", poster: herRealStory },
       { id: "slim", label: "Slim", poster: herAnimeImage },
       { id: "athletic", label: "Athletic", poster: himRealImage },
       { id: "curvy", label: "Curvy", poster: herRealCreate },
     ],
+
   },
   {
     id: "hair",
