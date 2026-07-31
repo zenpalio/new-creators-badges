@@ -23,7 +23,7 @@ export default function Builder() {
   return (
     <div className="relative min-h-svh w-full overflow-hidden bg-[hsl(0_0%_0%)] font-onest text-foreground-v2">
       {/* Character preview: full-bleed on mobile, contained card on desktop */}
-      <div className="fixed inset-0 md:inset-y-6 md:left-1/2 md:w-[420px] md:-translate-x-1/2 md:overflow-hidden md:rounded-3xl md:border md:border-white/10">
+      <div className="fixed inset-0 md:inset-y-6 md:left-1/2 md:w-[420px] md:-translate-x-[calc(100%+1rem)] md:overflow-hidden md:rounded-3xl">
         <img src={previewOption.poster} alt="" className="h-full w-full object-cover" />
         <video
           key={previewOption.videoUrl || BUILDER_IDLE_VIDEO}
@@ -39,11 +39,12 @@ export default function Builder() {
       </div>
 
 
-      <div className="relative mx-auto flex min-h-svh w-full max-w-md flex-col px-3 pb-4 pt-3 md:max-w-[420px] md:pb-8">
-        <div className="flex-1" />
+      <div className="relative mx-auto flex min-h-svh w-full max-w-md flex-col px-3 pb-4 pt-3 md:mx-0 md:ml-[calc(50%+1rem)] md:max-w-[400px] md:justify-center md:pb-6">
+        <div className="flex-1 md:hidden" />
 
-        {/* Bottom glass sheet with parts + options */}
+        {/* Controls: bottom sheet on mobile, side panel on desktop */}
         <section className={`rounded-3xl p-3 ${GLASS}`}>
+
           <nav className="-mx-1 mb-3 overflow-x-auto px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div className="flex w-max gap-2">
               {BUILDER_STEPS.map((s, i) => {
