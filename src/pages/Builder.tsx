@@ -39,11 +39,12 @@ export default function Builder() {
       </div>
 
 
-      <div className="relative mx-auto flex min-h-svh w-full max-w-md flex-col px-3 pb-4 pt-3 md:max-w-[420px] md:pb-8">
-        <div className="flex-1" />
+      <div className="relative mx-auto flex min-h-svh w-full max-w-md flex-col px-3 pb-4 pt-3 md:mx-0 md:ml-[calc(50%+1rem)] md:max-w-[400px] md:justify-center md:pb-6">
+        <div className="flex-1 md:hidden" />
 
-        {/* Bottom glass sheet with parts + options */}
+        {/* Controls: bottom sheet on mobile, side panel on desktop */}
         <section className={`rounded-3xl p-3 ${GLASS}`}>
+
           <nav className="-mx-1 mb-3 overflow-x-auto px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div className="flex w-max gap-2">
               {BUILDER_STEPS.map((s, i) => {
