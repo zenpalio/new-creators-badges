@@ -13,12 +13,13 @@ export default function Builder() {
 
   const part = BUILDER_STEPS[partIdx];
   const selectedId = choices[part.id];
-  const done = BUILDER_STEPS.filter((s) => choices[s.id]).length;
+  const done = BUILDER_STEPS.filter((s) => choices[s.id]?.trim()).length;
 
   const previewOption =
     part.options.find((o) => o.id === selectedId) ??
     BUILDER_STEPS.map((s) => s.options.find((o) => o.id === choices[s.id])).filter(Boolean).pop() ??
-    part.options[0];
+    BUILDER_STEPS[0].options[0];
+
 
   return (
     <div className="relative min-h-svh w-full overflow-hidden bg-[hsl(0_0%_0%)] font-onest text-foreground-v2">
