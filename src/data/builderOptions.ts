@@ -1,4 +1,8 @@
 import builderIdle from "../assets/builder/builder-idle.mp4.asset.json";
+import bodySlim from "../assets/builder/body-slim.mp4.asset.json";
+import bodyAthletic from "../assets/builder/body-athletic.mp4.asset.json";
+import bodyCurvy from "../assets/builder/body-curvy.mp4.asset.json";
+
 import herRealCreate from "../assets/funnel/her-real-create.jpg";
 import herRealImage from "../assets/funnel/her-real-image.jpg";
 import herRealStory from "../assets/funnel/her-real-story.jpg";
