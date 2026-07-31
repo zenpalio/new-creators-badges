@@ -39,39 +39,39 @@ export default function Builder() {
       </div>
 
       <div className="relative mx-auto flex min-h-svh w-full max-w-md flex-col px-3 pb-4 pt-3">
-        {/* Part chips */}
-        <nav className="-mx-3 overflow-x-auto px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <div className="flex w-max gap-2">
-            {BUILDER_STEPS.map((s, i) => {
-              const active = i === partIdx;
-              const picked = !!choices[s.id];
-              return (
-                <button
-                  key={s.id}
-                  type="button"
-                  onClick={() => setPartIdx(i)}
-                  className={`flex items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-2 text-xs font-medium backdrop-blur-xl transition-colors ${
-                    active
-                      ? "border border-white/50 bg-white/25 text-white"
-                      : "border border-white/15 bg-white/10 text-white/70"
-                  }`}
-                >
-                  {s.title}
-                  {picked && <Check className="h-3 w-3 text-primary-v2" strokeWidth={3} />}
-                </button>
-              );
-            })}
-          </div>
-        </nav>
-
         <div className="flex-1" />
 
-        {/* Bottom glass sheet with options */}
+        {/* Bottom glass sheet with parts + options */}
         <section className={`rounded-3xl p-3 ${GLASS}`}>
+          <nav className="-mx-1 mb-3 overflow-x-auto px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div className="flex w-max gap-2">
+              {BUILDER_STEPS.map((s, i) => {
+                const active = i === partIdx;
+                const picked = !!choices[s.id];
+                return (
+                  <button
+                    key={s.id}
+                    type="button"
+                    onClick={() => setPartIdx(i)}
+                    className={`flex items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
+                      active
+                        ? "border border-white/50 bg-white/25 text-white"
+                        : "border border-white/15 bg-white/10 text-white/70"
+                    }`}
+                  >
+                    {s.title}
+                    {picked && <Check className="h-3 w-3 text-primary-v2" strokeWidth={3} />}
+                  </button>
+                );
+              })}
+            </div>
+          </nav>
+
           <div className="mb-2 flex items-baseline justify-between gap-2">
             <p className="text-sm font-semibold text-white">{part.title}</p>
             <p className="truncate text-[11px] text-white/60">{part.subtitle}</p>
           </div>
+
 
           <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {part.options.map((o) => (
