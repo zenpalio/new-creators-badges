@@ -21,9 +21,9 @@ export default function Builder() {
     part.options[0];
 
   return (
-    <div className="relative min-h-svh w-full overflow-hidden bg-background-v2 font-onest text-foreground-v2">
-      {/* Full-bleed character preview */}
-      <div className="fixed inset-0">
+    <div className="relative min-h-svh w-full overflow-hidden bg-[hsl(0_0%_0%)] font-onest text-foreground-v2">
+      {/* Character preview: full-bleed on mobile, contained card on desktop */}
+      <div className="fixed inset-0 md:inset-y-6 md:left-1/2 md:w-[420px] md:-translate-x-1/2 md:overflow-hidden md:rounded-3xl md:border md:border-white/10">
         <img src={previewOption.poster} alt="" className="h-full w-full object-cover" />
         <video
           key={previewOption.videoUrl || BUILDER_IDLE_VIDEO}
@@ -38,7 +38,8 @@ export default function Builder() {
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/55 via-transparent to-black/80" />
       </div>
 
-      <div className="relative mx-auto flex min-h-svh w-full max-w-md flex-col px-3 pb-4 pt-3">
+
+      <div className="relative mx-auto flex min-h-svh w-full max-w-md flex-col px-3 pb-4 pt-3 md:max-w-[420px] md:pb-8">
         <div className="flex-1" />
 
         {/* Bottom glass sheet with parts + options */}
