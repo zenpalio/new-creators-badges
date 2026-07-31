@@ -94,3 +94,19 @@ export const BUILDER_STEPS: BuilderStep[] = [
 ];
 
 
+
+export interface BuilderVoice {
+  id: string;
+  label: string;
+  hint: string;
+}
+
+/** Voice choices shown alongside the name step. */
+export const BUILDER_VOICES: BuilderVoice[] = [
+  { id: "soft", label: "Soft", hint: "warm, breathy" },
+  { id: "sultry", label: "Sultry", hint: "low, slow" },
+  { id: "bright", label: "Bright", hint: "playful, upbeat" },
+  { id: "husky", label: "Husky", hint: "raspy, close" },
+  { id: "cute", label: "Cute", hint: "light, sweet" },
+  { id: "commanding", label: "Commanding", hint: "firm, cool" },
+];
