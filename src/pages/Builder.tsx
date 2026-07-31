@@ -39,7 +39,7 @@ export default function Builder() {
       </div>
 
 
-      <div className="relative mx-auto flex min-h-svh w-full max-w-md flex-col px-3 pb-4 pt-3">
+      <div className="relative mx-auto flex min-h-svh w-full max-w-md flex-col px-3 pb-4 pt-3 md:max-w-[420px] md:pb-8">
         <div className="flex-1" />
 
         {/* Bottom glass sheet with parts + options */}
