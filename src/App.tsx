@@ -56,6 +56,7 @@ const App = () => (
           <Route path="/mina/auth" element={<MinaAuth />} />
           <Route path="/admin/ads-studio" element={<AdsStudio />} />
           <Route path="/match" element={<Match />} />
+          <Route path="/builder" element={<Builder />} />
           <Route path="/studio" element={<DramaStudio />} />
           <Route path="/studio/drama/:id" element={<DramaShowrunner />} />
           <Route path="/studio/drama/:id/legacy" element={<DramaEditor />} />
