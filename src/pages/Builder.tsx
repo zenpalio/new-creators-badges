@@ -23,7 +23,7 @@ export default function Builder() {
   return (
     <div className="relative min-h-svh w-full overflow-hidden bg-[hsl(0_0%_0%)] font-onest text-foreground-v2">
       {/* Character preview: full-bleed on mobile, contained card on desktop */}
-      <div className="fixed inset-0 md:inset-y-6 md:left-1/2 md:w-[420px] md:-translate-x-1/2 md:overflow-hidden md:rounded-3xl md:border md:border-white/10">
+      <div className="fixed inset-0 md:inset-y-6 md:left-1/2 md:w-[420px] md:-translate-x-[calc(100%+1rem)] md:overflow-hidden md:rounded-3xl">
         <img src={previewOption.poster} alt="" className="h-full w-full object-cover" />
         <video
           key={previewOption.videoUrl || BUILDER_IDLE_VIDEO}
