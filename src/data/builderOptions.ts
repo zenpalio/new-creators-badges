@@ -1,4 +1,8 @@
 import builderIdle from "../assets/builder/builder-idle.mp4.asset.json";
+import bodySlim from "../assets/builder/body-slim.mp4.asset.json";
+import bodyAthletic from "../assets/builder/body-athletic.mp4.asset.json";
+import bodyCurvy from "../assets/builder/body-curvy.mp4.asset.json";
+
 import herRealCreate from "../assets/funnel/her-real-create.jpg";
 import herRealImage from "../assets/funnel/her-real-image.jpg";
 import herRealStory from "../assets/funnel/her-real-story.jpg";
@@ -56,9 +60,10 @@ export const BUILDER_STEPS: BuilderStep[] = [
     subtitle: "Pick the silhouette you like most.",
     options: [
       { id: "petite", label: "Petite", poster: herRealStory },
-      { id: "slim", label: "Slim", poster: herAnimeImage },
-      { id: "athletic", label: "Athletic", poster: himRealImage },
-      { id: "curvy", label: "Curvy", poster: herRealCreate },
+      { id: "slim", label: "Slim", poster: herAnimeImage, videoUrl: bodySlim.url },
+      { id: "athletic", label: "Athletic", poster: himRealImage, videoUrl: bodyAthletic.url },
+      { id: "curvy", label: "Curvy", poster: herRealCreate, videoUrl: bodyCurvy.url },
+
     ],
   },
   {
