@@ -1,3 +1,4 @@
+import builderIdle from "../assets/builder/builder-idle.mp4.asset.json";
 import herRealCreate from "../assets/funnel/her-real-create.jpg";
 import herRealImage from "../assets/funnel/her-real-image.jpg";
 import herRealStory from "../assets/funnel/her-real-story.jpg";
@@ -23,6 +24,9 @@ export interface BuilderStep {
   subtitle: string;
   options: BuilderOption[];
 }
+
+/** Default looped clip shown in the preview before/while nothing else has a video. */
+export const BUILDER_IDLE_VIDEO = builderIdle.url;
 
 export const BUILDER_STEPS: BuilderStep[] = [
   {

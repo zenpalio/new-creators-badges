@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ArrowRight, Check, Sparkles } from "lucide-react";
-import { BUILDER_STEPS } from "../data/builderOptions";
+import { BUILDER_IDLE_VIDEO, BUILDER_STEPS } from "../data/builderOptions";
 
 const CTA_URL = "https://mybabes.ai/babes/create";
 
@@ -74,9 +74,9 @@ export default function Builder() {
                 alt=""
                 className="absolute inset-0 h-full w-full object-cover"
               />
-              {previewOption.videoUrl && (
+              {(previewOption.videoUrl || BUILDER_IDLE_VIDEO) && (
                 <video
-                  src={previewOption.videoUrl}
+                  src={previewOption.videoUrl || BUILDER_IDLE_VIDEO}
                   poster={previewOption.poster}
                   autoPlay
                   muted
