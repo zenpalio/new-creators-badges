@@ -31,6 +31,7 @@ import Match from "./pages/Match.tsx";
 import DramaStudio from "./pages/DramaStudio.tsx";
 import DramaEditor from "./pages/DramaEditor.tsx";
 import DramaShowrunner from "./pages/DramaShowrunner.tsx";
+import Builder from "./pages/Builder.tsx";
 
 
 
