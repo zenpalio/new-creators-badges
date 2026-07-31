@@ -77,14 +77,42 @@ export default function Builder() {
 
 
           {part.input === "text" ? (
-            <input
-              type="text"
-              value={choices[part.id] ?? ""}
-              onChange={(e) => setChoices((c) => ({ ...c, [part.id]: e.target.value }))}
-              placeholder="Her name"
-              maxLength={24}
-              className="w-full rounded-2xl border border-white/25 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none backdrop-blur-xl focus:border-white/50"
-            />
+            <div className="space-y-3">
+              <input
+                type="text"
+                value={choices[part.id] ?? ""}
+                onChange={(e) => setChoices((c) => ({ ...c, [part.id]: e.target.value }))}
+                placeholder="Her name"
+                maxLength={24}
+                className="w-full rounded-2xl border border-white/25 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none backdrop-blur-xl focus:border-white/50"
+              />
+              <div>
+                <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wide text-white/60">
+                  Voice
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {BUILDER_VOICES.map((v) => {
+                    const active = choices.voice === v.id;
+                    return (
+                      <button
+                        key={v.id}
+                        type="button"
+                        onClick={() => setChoices((c) => ({ ...c, voice: v.id }))}
+                        aria-pressed={active}
+                        className={`rounded-full border px-3.5 py-1.5 text-left text-xs font-medium transition-colors ${
+                          active
+                            ? "border-primary-v2 bg-primary-v2/20 text-white"
+                            : "border-white/20 bg-white/10 text-white/70 hover:border-white/40"
+                        }`}
+                      >
+                        {v.label}
+                        <span className="ml-1.5 text-[10px] text-white/45">{v.hint}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
           ) : (
             <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {part.options.map((o) => (
