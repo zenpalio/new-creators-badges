@@ -26,6 +26,8 @@ export interface BuilderStep {
   id: string;
   title: string;
   subtitle: string;
+  /** "options" (default) shows a thumbnail picker, "text" shows a name input. */
+  input?: "options" | "text";
   options: BuilderOption[];
 }
 
@@ -36,69 +38,59 @@ export const BUILDER_STEPS: BuilderStep[] = [
   {
     id: "style",
     title: "Style",
-    subtitle: "This sets the whole look. You can change it later.",
+    subtitle: "Realistic or anime.",
     options: [
       { id: "realistic", label: "Realistic", poster: herRealCreate },
       { id: "anime", label: "Anime", poster: herAnimeCreate },
     ],
   },
   {
-    id: "ethnicity",
-    title: "Ethnicity",
-    subtitle: "Her origin and features.",
+    id: "persona",
+    title: "Persona",
+    subtitle: "Her overall look and attitude.",
     options: [
-      { id: "caucasian", label: "Caucasian", poster: herRealCreate },
-      { id: "asian", label: "Asian", poster: herAnimeImage },
-      { id: "latina", label: "Latina", poster: herRealImage },
-      { id: "black", label: "Black", poster: herRealStory },
-      { id: "arab", label: "Arab", poster: herAnimeStory },
+      { id: "natural", label: "Natural", poster: herRealCreate },
+      { id: "bimbo", label: "Bimbo", poster: gayRealCreate },
+      { id: "goth", label: "Goth", poster: herRealStory },
+      { id: "egirl", label: "E-Girl", poster: herAnimeImage },
+      { id: "dominatrix", label: "Dominatrix", poster: himRealCreate },
+      { id: "cyberpunk", label: "Cyberpunk", poster: herAnimeCreate },
+      { id: "altgirl", label: "Alt Girl", poster: herAnimeStory },
+      { id: "hipster", label: "Hipster", poster: himRealImage },
+      { id: "instachick", label: "Instachick", poster: herRealImage },
+      { id: "punk", label: "Punk", poster: gayAnimeCreate },
     ],
   },
   {
-    id: "body",
-    title: "Body",
-    subtitle: "Pick the silhouette you like most.",
+    id: "roleplayType",
+    title: "Roleplay type",
+    subtitle: "How your story plays out.",
     options: [
-      { id: "petite", label: "Petite", poster: herRealStory },
-      { id: "slim", label: "Slim", poster: herAnimeImage, videoUrl: bodySlim.url },
-      { id: "athletic", label: "Athletic", poster: himRealImage, videoUrl: bodyAthletic.url },
-      { id: "curvy", label: "Curvy", poster: herRealCreate, videoUrl: bodyCurvy.url },
-
+      { id: "romance", label: "Romance", poster: herRealCreate },
+      { id: "adventure", label: "Adventure", poster: herAnimeCreate },
+      { id: "drama", label: "Drama", poster: herRealStory },
+      { id: "comedy", label: "Comedy", poster: herAnimeImage },
     ],
   },
   {
-    id: "hairColor",
-    title: "Hair color",
-    subtitle: "Pick her shade.",
+    id: "scenario",
+    title: "Scenario",
+    subtitle: "Where your first scene starts.",
     options: [
-      { id: "blonde", label: "Blonde", poster: gayRealCreate },
-      { id: "brunette", label: "Brunette", poster: herRealStory },
-      { id: "black", label: "Black", poster: himRealCreate },
-      { id: "red", label: "Red", poster: herRealImage },
-      { id: "colored", label: "Colored", poster: gayAnimeCreate },
+      { id: "coffee", label: "Coffee shop", poster: herRealImage },
+      { id: "roadtrip", label: "Road trip", poster: himRealImage },
+      { id: "party", label: "House party", poster: herRealStory },
+      { id: "office", label: "Late at the office", poster: himRealCreate },
+      { id: "beach", label: "Beach town", poster: herAnimeImage },
     ],
   },
   {
-    id: "hair",
-    title: "Hair",
-    subtitle: "Length and style.",
-    options: [
-      { id: "long", label: "Long", poster: herRealCreate },
-      { id: "short", label: "Short", poster: himRealImage },
-      { id: "curly", label: "Curly", poster: herAnimeStory },
-      { id: "ponytail", label: "Ponytail", poster: herAnimeImage },
-    ],
-  },
-  {
-    id: "vibe",
-    title: "Vibe",
-    subtitle: "How she carries herself when you walk in.",
-    options: [
-      { id: "sweet", label: "Sweet", poster: herRealStory },
-      { id: "flirty", label: "Flirty", poster: herRealImage },
-      { id: "dominant", label: "Dominant", poster: himRealCreate },
-      { id: "shy", label: "Shy", poster: herAnimeStory },
-    ],
+    id: "name",
+    title: "Name",
+    subtitle: "What should she be called?",
+    input: "text",
+    options: [],
   },
 ];
+
 

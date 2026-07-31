@@ -13,12 +13,13 @@ export default function Builder() {
 
   const part = BUILDER_STEPS[partIdx];
   const selectedId = choices[part.id];
-  const done = BUILDER_STEPS.filter((s) => choices[s.id]).length;
+  const done = BUILDER_STEPS.filter((s) => choices[s.id]?.trim()).length;
 
   const previewOption =
     part.options.find((o) => o.id === selectedId) ??
     BUILDER_STEPS.map((s) => s.options.find((o) => o.id === choices[s.id])).filter(Boolean).pop() ??
-    part.options[0];
+    BUILDER_STEPS[0].options[0];
+
 
   return (
     <div className="relative min-h-svh w-full overflow-hidden bg-[hsl(0_0%_0%)] font-onest text-foreground-v2">
@@ -75,34 +76,46 @@ export default function Builder() {
           </div>
 
 
-          <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {part.options.map((o) => (
-              <button
-                key={o.id}
-                type="button"
-                onClick={() => setChoices((c) => ({ ...c, [part.id]: o.id }))}
-                aria-pressed={selectedId === o.id}
-                className={`relative w-[88px] shrink-0 overflow-hidden rounded-2xl border transition-all ${
-                  selectedId === o.id
-                    ? "border-primary-v2 ring-2 ring-primary-v2/60"
-                    : "border-white/25 hover:border-white/50"
-                }`}
-              >
-                <div className="relative aspect-[3/4] w-full bg-white/10">
-                  <img
-                    src={o.poster}
-                    alt=""
-                    loading="lazy"
-                    className="absolute inset-0 h-full w-full object-cover"
-                  />
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/85 to-transparent" />
-                  <span className="absolute inset-x-0 bottom-0 block px-1.5 pb-1.5 text-left text-[11px] font-medium text-white">
-                    {o.label}
-                  </span>
-                </div>
-              </button>
-            ))}
-          </div>
+          {part.input === "text" ? (
+            <input
+              type="text"
+              value={choices[part.id] ?? ""}
+              onChange={(e) => setChoices((c) => ({ ...c, [part.id]: e.target.value }))}
+              placeholder="Her name"
+              maxLength={24}
+              className="w-full rounded-2xl border border-white/25 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none backdrop-blur-xl focus:border-white/50"
+            />
+          ) : (
+            <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {part.options.map((o) => (
+                <button
+                  key={o.id}
+                  type="button"
+                  onClick={() => setChoices((c) => ({ ...c, [part.id]: o.id }))}
+                  aria-pressed={selectedId === o.id}
+                  className={`relative w-[88px] shrink-0 overflow-hidden rounded-2xl border transition-all ${
+                    selectedId === o.id
+                      ? "border-primary-v2 ring-2 ring-primary-v2/60"
+                      : "border-white/25 hover:border-white/50"
+                  }`}
+                >
+                  <div className="relative aspect-[3/4] w-full bg-white/10">
+                    <img
+                      src={o.poster}
+                      alt=""
+                      loading="lazy"
+                      className="absolute inset-0 h-full w-full object-cover"
+                    />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/85 to-transparent" />
+                    <span className="absolute inset-x-0 bottom-0 block px-1.5 pb-1.5 text-left text-[11px] font-medium text-white">
+                      {o.label}
+                    </span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+
 
           <div className="mt-3 flex items-center gap-2">
             <button
