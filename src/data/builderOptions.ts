@@ -31,7 +31,7 @@ export const BUILDER_IDLE_VIDEO = builderIdle.url;
 export const BUILDER_STEPS: BuilderStep[] = [
   {
     id: "style",
-    title: "Pick her style",
+    title: "Style",
     subtitle: "This sets the whole look. You can change it later.",
     options: [
       { id: "realistic", label: "Realistic", poster: herRealCreate },
@@ -39,8 +39,54 @@ export const BUILDER_STEPS: BuilderStep[] = [
     ],
   },
   {
+    id: "ethnicity",
+    title: "Ethnicity",
+    subtitle: "Her origin and features.",
+    options: [
+      { id: "caucasian", label: "Caucasian", poster: herRealCreate },
+      { id: "asian", label: "Asian", poster: herAnimeImage },
+      { id: "latina", label: "Latina", poster: herRealImage },
+      { id: "black", label: "Black", poster: herRealStory },
+      { id: "arab", label: "Arab", poster: herAnimeStory },
+    ],
+  },
+  {
+    id: "body",
+    title: "Body",
+    subtitle: "Pick the silhouette you like most.",
+    options: [
+      { id: "petite", label: "Petite", poster: herRealStory },
+      { id: "slim", label: "Slim", poster: herAnimeImage },
+      { id: "athletic", label: "Athletic", poster: himRealImage },
+      { id: "curvy", label: "Curvy", poster: herRealCreate },
+    ],
+  },
+  {
+    id: "hairColor",
+    title: "Hair color",
+    subtitle: "Pick her shade.",
+    options: [
+      { id: "blonde", label: "Blonde", poster: gayRealCreate },
+      { id: "brunette", label: "Brunette", poster: herRealStory },
+      { id: "black", label: "Black", poster: himRealCreate },
+      { id: "red", label: "Red", poster: herRealImage },
+      { id: "colored", label: "Colored", poster: gayAnimeCreate },
+    ],
+  },
+  {
+    id: "hair",
+    title: "Hair",
+    subtitle: "Length and style.",
+    options: [
+      { id: "long", label: "Long", poster: herRealCreate },
+      { id: "short", label: "Short", poster: himRealImage },
+      { id: "curly", label: "Curly", poster: herAnimeStory },
+      { id: "ponytail", label: "Ponytail", poster: herAnimeImage },
+    ],
+  },
+  {
     id: "vibe",
-    title: "Choose her vibe",
+    title: "Vibe",
     subtitle: "How she carries herself when you walk in.",
     options: [
       { id: "sweet", label: "Sweet", poster: herRealStory },
@@ -49,37 +95,5 @@ export const BUILDER_STEPS: BuilderStep[] = [
       { id: "shy", label: "Shy", poster: herAnimeStory },
     ],
   },
-  {
-    id: "body",
-    title: "Body type",
-    subtitle: "Pick the silhouette you like most.",
-    options: [
-      { id: "petite", label: "Petite", poster: herRealStory },
-      { id: "slim", label: "Slim", poster: herAnimeImage },
-      { id: "athletic", label: "Athletic", poster: himRealImage },
-      { id: "curvy", label: "Curvy", poster: herRealCreate },
-    ],
-
-  },
-  {
-    id: "hair",
-    title: "Hair",
-    subtitle: "Colour and length.",
-    options: [
-      { id: "blonde", label: "Blonde", poster: gayRealCreate },
-      { id: "brunette", label: "Brunette", poster: herRealStory },
-      { id: "black", label: "Black", poster: himRealCreate },
-      { id: "colored", label: "Colored", poster: gayAnimeCreate },
-    ],
-  },
-  {
-    id: "scene",
-    title: "Where do you meet?",
-    subtitle: "Your first scene together.",
-    options: [
-      { id: "apartment", label: "Her apartment", poster: herRealImage },
-      { id: "bar", label: "Late-night bar", poster: herRealStory },
-      { id: "beach", label: "Beach house", poster: herAnimeImage },
-    ],
-  },
 ];
+
