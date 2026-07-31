@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowRight, Check, Sparkles } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { BUILDER_IDLE_VIDEO, BUILDER_STEPS } from "../data/builderOptions";
 
 const CTA_URL = "https://mybabes.ai/babes/create";
@@ -39,19 +39,8 @@ export default function Builder() {
       </div>
 
       <div className="relative mx-auto flex min-h-svh w-full max-w-md flex-col px-3 pb-4 pt-3">
-        {/* Top bar */}
-        <header className={`flex items-center justify-between gap-2 rounded-2xl px-3 py-2 ${GLASS}`}>
-          <span className="flex items-center gap-1.5 text-sm font-semibold text-white">
-            <Sparkles className="h-4 w-4 text-primary-v2" />
-            Build her
-          </span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/70">
-            {done}/{BUILDER_STEPS.length}
-          </span>
-        </header>
-
         {/* Part chips */}
-        <nav className="-mx-3 mt-2 overflow-x-auto px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <nav className="-mx-3 overflow-x-auto px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <div className="flex w-max gap-2">
             {BUILDER_STEPS.map((s, i) => {
               const active = i === partIdx;
