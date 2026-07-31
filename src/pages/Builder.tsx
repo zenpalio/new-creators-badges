@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ArrowRight, Check } from "lucide-react";
-import { BUILDER_IDLE_VIDEO, BUILDER_STEPS } from "../data/builderOptions";
+import { BUILDER_IDLE_VIDEO, BUILDER_STEPS, BUILDER_VOICES } from "../data/builderOptions";
 
 const CTA_URL = "https://mybabes.ai/babes/create";
 
